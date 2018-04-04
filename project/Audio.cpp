@@ -2,8 +2,9 @@
 #include "Audio.h"
 
 
-Audio::Audio()
+Audio::Audio(int id, char * name):Resourse(id, name)
 {
+	
 }
 
 

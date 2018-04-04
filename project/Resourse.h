@@ -11,8 +11,7 @@ public:
 	virtual bool unload();
 	virtual ~Resourse();
 private:
-	unsigned int ref_counter = 0;
+	unsigned int ref_counter;
 	char * full_name;
 	unsigned int ID;
 };
-

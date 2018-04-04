@@ -1,21 +1,24 @@
 #pragma once
-#include <vector>
 #include "Resourse.h"
-#include <SFML\Audio.hpp>
-#include <SFML\Graphics.hpp>
-template<class T>
+#include "Picture.h"
 class ResourseManager
 {
 public:
 	ResourseManager();
-	void addResourse(Resourse res);
-	void removeResourse(int id);
-	Resourse getResourse();
-	int ReleaseResourse();
+	Resourse getResourse(int id);
+	void ReleaseResourse(int id);
 	~ResourseManager();
 
-private:
-	std::vector<T> res;	//Массив всех имеющихся ресурсов
-	std::vector::iterator it;
+//private:
+	void addResourse(Resourse res);
+	void ReleaseMemory();
+	std::vector<Resourse*> all_res;	//Массив всех имеющихся ресурсов
+	std::vector<std::string> paths;	//
+
+	enum res_type {Picture_type, Audio_type, Unknown_type};
+	std::map<std::string, res_type> extentToType;
+
+public: 
+	res_type getTypeByFilename(std::string name);
 };
 

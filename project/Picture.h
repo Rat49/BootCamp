@@ -4,7 +4,10 @@ class Picture :
 	public Resourse
 {
 public:
-	Picture();
+	Picture(int id, char * name);
+	sf::Image getStaff();
 	~Picture();
+private:
+	sf::Image img;
 };
 

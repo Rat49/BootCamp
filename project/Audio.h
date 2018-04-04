@@ -4,7 +4,7 @@ class Audio :
 	public Resourse
 {
 public:
-	Audio();
+	Audio(int id, char * name);
 	~Audio();
 };
 

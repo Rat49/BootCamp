@@ -2,9 +2,6 @@
 #include "Resourse.h"
 
 
-Resourse::Resourse()
-{
-}
 
 void Resourse::incRc()
 {
@@ -18,6 +15,7 @@ void Resourse::decRc()
 
 int Resourse::getRc()
 {
+	
 	return ref_counter;
 }
 

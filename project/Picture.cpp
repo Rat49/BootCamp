@@ -2,11 +2,17 @@
 #include "Picture.h"
 
 
-Picture::Picture()
+Picture::Picture(int id, char * name):Resourse(id, name)
 {
+}
+
+sf::Image Picture::getStaff()
+{
+	return img;
 }
 
 
 Picture::~Picture()
 {
+
 }
