@@ -5,13 +5,14 @@
 template<class T>
 ResourseManager<T>::ResourseManager()
 {
+	res.reserve(100);
+	it = res.begin();
 }
 
 template<class T>
-void ResourseManager<T>::addResourse(char * path)
+void ResourseManager<T>::addResourse(Resourse res)
 {
-
-}
+	it
 
 
 template<class T>
