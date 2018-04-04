@@ -2,11 +2,19 @@
 #include "ResourseManager.h"
 
 
-ResourseManager::ResourseManager()
+template<class T>
+ResourseManager<T>::ResourseManager()
 {
 }
 
+template<class T>
+void ResourseManager<T>::addResourse(char * path)
+{
 
-ResourseManager::~ResourseManager()
+}
+
+
+template<class T>
+ResourseManager<T>::~ResourseManager()
 {
 }
