@@ -1,3 +1,6 @@
 .vs
-Debug
-Release
+Bin
+Temp
+**/*.user
+*.db
+*.opendb
