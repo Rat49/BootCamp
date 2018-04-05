@@ -38,39 +38,47 @@ ResourseManager::res_type ResourseManager::getTypeByFilename(std::string name)
 	}
 		
 }
-//
-//Resourse ResourseManager::getResourse(int id)
-//{
-//	if (all_res[id]->getRc == 0) 
-//	{
-//		all_res[id]->load();
-//		all_res[id]->incRc();
-//	}
-//	all_res[id]->incRc();
-//	return *all_res[id];
-//}
-//
-//void ResourseManager::ReleaseResourse(int id)
-//{
-//	if (all_res[id]->getRc == 0)
-//	{
-//		return;
-//	}
-//	all_res[id]->decRc();
-//	
-//}
+
+Resourse ResourseManager::getResourse(int id)
+{
+	if (id >= all_res.size())
+	{
+		//error invalid ID
+		return;
+	}
+	if (ResourseManager::all_res[id]->getRc() == 0)
+	{
+		ResourseManager::all_res[id]->load();
+		ResourseManager::all_res[id]->incRc();
+	}
+	else
+	{
+		ResourseManager::all_res[id]->incRc();
+	}
+	return *all_res[id];
+}
+
+void ResourseManager::releaseResourse(int id)
+{
+	if (all_res[id]->getRc() == 0)
+	{
+		return;
+	}
+	all_res[id]->decRc();
+	
+}
 
 ResourseManager::~ResourseManager()
 {
 }
-//
-//void ResourseManager::ReleaseMemory()
-//{
-//	for (auto i : all_res) 
-//	{
-//		if (i->getRc == 0)
-//		{
-//			i->unload();
-//		}
-//	}
-//}
+
+void ResourseManager::releaseMemory()
+{
+	for (auto i : all_res) 
+	{
+		if (i->getRc() == 0)
+		{
+			i->unload();
+		}
+	}
+}
