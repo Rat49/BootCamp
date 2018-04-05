@@ -1,4 +1,0 @@
-id=value
-0="/images/picture1.bmp"
-1="/images/picture2.bmp"
-2="/audio/piupiu.wav"

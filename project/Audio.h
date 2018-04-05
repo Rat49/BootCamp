@@ -8,7 +8,7 @@ public:
 
 	void load();
 	void unload();
-	sf::Music const getStaff();
+	//sf::Music const getStaff();
 
 	~Audio();	
 

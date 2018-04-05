@@ -15,7 +15,6 @@ void Resourse::decRc()
 
 int Resourse::getRc()
 {
-	
 	return ref_counter;
 }
 
