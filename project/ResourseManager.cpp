@@ -2,13 +2,13 @@
 #include "ResourseManager.h"
 ResourseManager::ResourseManager()
 {
-	all_res.reserve(100);
+	/*all_res.reserve(100);
 	paths.emplace_back("/images/picture1.bmp");
 	paths.emplace_back("/images/picture2.bmp");
 	paths.emplace_back("/audio/piupiu.wav");
 
 	extentToType = { { "bmp", Picture_type },
-					 { "wav", Audio_type   } };
+					 { "wav", Audio_type   } };*/
 
 }
 //
@@ -17,21 +17,21 @@ ResourseManager::ResourseManager()
 //	all_res.emplace_back(res);
 //}
 
-ResourseManager::res_type ResourseManager::getTypeByFilename(std::string name)
-{
-	std::string::reverse_iterator it = name.rbegin();
-	while (it != name.rend() && *it != '.')
-	{
-		it++;	
-	}
+//ResourseManager::res_type ResourseManager::getTypeByFilename(std::string name)
+//{
+//	std::string::reverse_iterator it = name.rbegin();
+//	while (it != name.rend() && *it != '.')
+//	{
+//		it++;	
+//	}
+//
+//	std::string extent = name.substr(abs(std::distance(name.rend(), it)), abs(std::distance(name.rbegin(), it)));
+//	auto t = extentToType.find(extent);
+//
+//	return t == extentToType.end() ? ResourseManager::res_type::Unknown_type : t->second;		
+//}
 
-	std::string extent = name.substr(abs(std::distance(name.rend(), it)), abs(std::distance(name.rbegin(), it)));
-	auto t = extentToType.find(extent);
-
-	return t == extentToType.end() ? ResourseManager::res_type::Unknown_type : t->second;		
-}
-
-Resourse ResourseManager::getResourse(int id)
+Resourse ResourseManager::getResourse()
 {
 	if (id >= all_res.size())
 	{
