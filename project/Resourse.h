@@ -2,16 +2,17 @@
 class Resourse
 {
 public:
-	Resourse(int id, char * full_name) :ID(id),full_name(full_name),ref_counter(0) {
+	Resourse(std::string id, std::string full_name) :ID(id),full_name(full_name),ref_counter(0) {
 	};
 	void incRc();
 	void decRc();
 	int getRc();
-	virtual bool load();
-	virtual bool unload();
+	virtual void load();
+	virtual void unload();
 	virtual ~Resourse();
+	std::string full_name;
 private:
 	unsigned int ref_counter;
-	char * full_name;
-	unsigned int ID;
+	
+	std::string ID;
 };

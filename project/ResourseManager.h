@@ -3,18 +3,19 @@
 #include "Picture.h"
 class ResourseManager
 {
+private:
+	enum res_type { Picture_type, Audio_type, Unknown_type };
+
 public:
 	ResourseManager();
-	void parseInitFile(std::string path);
-	Resourse getResourse(int id);
-	void releaseResourse(int id);
+	std::map<std::string, Resourse*> resourses;
+
+	Resourse getResourse(std::string key, std::string path, ResourseManager::res_type type);
+	void releaseResourse(std::string key);
 	~ResourseManager();
 
 private:
-//	void addResourse(Resourse * res);
 	void releaseMemory();
-	std::map<std::string, Resourse*> resources;	
-	enum res_type {Picture_type, Audio_type, Unknown_type};
-
+	
 };
 

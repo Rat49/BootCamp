@@ -1,62 +1,51 @@
 #include "stdafx.h"
 #include "ResourseManager.h"
+#include "Resourse.h"
+#include "Audio.h"
+#include "Picture.h"
+
 ResourseManager::ResourseManager()
 {
-	/*all_res.reserve(100);
-	paths.emplace_back("/images/picture1.bmp");
-	paths.emplace_back("/images/picture2.bmp");
-	paths.emplace_back("/audio/piupiu.wav");
-
-	extentToType = { { "bmp", Picture_type },
-					 { "wav", Audio_type   } };*/
+	
 
 }
-//
-//void ResourseManager::addResourse(Resourse * res)
-//{
-//	all_res.emplace_back(res);
-//}
 
-//ResourseManager::res_type ResourseManager::getTypeByFilename(std::string name)
-//{
-//	std::string::reverse_iterator it = name.rbegin();
-//	while (it != name.rend() && *it != '.')
-//	{
-//		it++;	
-//	}
-//
-//	std::string extent = name.substr(abs(std::distance(name.rend(), it)), abs(std::distance(name.rbegin(), it)));
-//	auto t = extentToType.find(extent);
-//
-//	return t == extentToType.end() ? ResourseManager::res_type::Unknown_type : t->second;		
-//}
-
-Resourse ResourseManager::getResourse()
+Resourse ResourseManager::getResourse(std::string key, std::string path, ResourseManager::res_type type)
 {
-	if (id >= all_res.size())
+	if (ResourseManager::resourses.find(key) != resourses.end())
 	{
-		//error invalid ID
-		return;
-	}
-	if (ResourseManager::all_res[id]->getRc() == 0)
-	{
-		ResourseManager::all_res[id]->load();
-		ResourseManager::all_res[id]->incRc();
+		ResourseManager::resourses[key]->incRc();
 	}
 	else
 	{
-		ResourseManager::all_res[id]->incRc();
+		Resourse* resourse;
+
+		switch (type)
+		{
+		case ResourseManager::Audio_type:
+			*resourse = Audio(key, path);
+			break;
+		case ResourseManager::Picture_type:
+			*resourse = Picture(key, path);
+			break;
+		default:
+			break;
+		}
+
+		resourse->load();
+		ResourseManager::resourses.insert(std::pair<std::string, Resourse*>(key, resourse));
+		ResourseManager::resourses[key]->incRc();
 	}
-	return *all_res[id];
+	return *resourses[key];
 }
 
-void ResourseManager::releaseResourse(int id)
+void ResourseManager::releaseResourse(std::string key)
 {
-	if (all_res[id]->getRc() == 0)
+	if (resourses[key]->getRc == 0)
 	{
 		return;
 	}
-	all_res[id]->decRc();
+	resourses[key]->decRc();
 	
 }
 
@@ -66,11 +55,11 @@ ResourseManager::~ResourseManager()
 
 void ResourseManager::releaseMemory()
 {
-	for (auto i : all_res) 
+	for (auto i : resourses) 
 	{
-		if (i->getRc() == 0)
+		if (i.second->getRc() == 0)
 		{
-			i->unload();
+			i.second->unload();
 		}
 	}
 }

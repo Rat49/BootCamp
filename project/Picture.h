@@ -4,8 +4,12 @@ class Picture :
 	public Resourse
 {
 public:
-	Picture(int id, char * name);
+	Picture(std::string id, std::string full_name);
+
+	void load();
+	void unload();
 	sf::Image getStaff();
+
 	~Picture();
 private:
 	sf::Image img;

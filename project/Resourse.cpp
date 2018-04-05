@@ -19,14 +19,14 @@ int Resourse::getRc()
 	return ref_counter;
 }
 
-bool Resourse::load()
+void Resourse::load()
 {
-	return false;
+	
 }
 
-bool Resourse::unload()
+void Resourse::unload()
 {
-	return false;
+	
 }
 
 
