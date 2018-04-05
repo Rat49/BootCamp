@@ -14,10 +14,14 @@ ResourseManager::ResourseManager()
 		resources.insert(std::pair(key, resource));
 	}*/
 
-	resourses.insert("piupiu", "C:\Projects\BootCamp\project\audio\piupiu.wav");
-	resourses.insert("booom", "C:\Projects\BootCamp\project\audio\booom.wav");
-	resourses.insert("asteroid", "C:\Projects\BootCamp\project\graphics\asteroid.png");
-	resourses.insert("smallasteroid", "C:\Projects\BootCamp\project\graphics\smallasteroid.bmp");
+	resourses.insert(std::pair<std::string, Resourse*>
+		("piupiu", new Audio("piupiu", "C:\Projects\BootCamp\project\audio\piupiu.wav")));
+	resourses.insert(std::pair<std::string, Resourse*>
+		("booom", new Audio("booom", "C:\Projects\BootCamp\project\audio\booom.wav")));
+	resourses.insert(std::pair<std::string, Resourse*>
+		("asteroid", new Picture("asteroid", "C:\Projects\BootCamp\project\graphics\asteroid.png")));
+	resourses.insert(std::pair<std::string, Resourse*>
+		("smallasteroid", new Picture("smallasteroid", "C:\Projects\BootCamp\project\graphics\smallasteroid.bmp")));
 
 }
 
