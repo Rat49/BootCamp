@@ -1,9 +1,5 @@
 #include "stdafx.h"
 #include "ResourseManager.h"
-
-
-
-
 ResourseManager::ResourseManager()
 {
 	all_res.reserve(100);
@@ -12,34 +8,43 @@ ResourseManager::ResourseManager()
 	paths.emplace_back("/audio/piupiu.wav");
 
 	extentToType = { { "bmp", Picture_type },
-	{ "wav", Audio_type } };
+					 { "wav", Audio_type   } };
 
 }
-
-//inline void ResourseManager::addResourse(Resourse res)
+//
+//void ResourseManager::addResourse(Resourse * res)
 //{
 //	all_res.emplace_back(res);
-//	all_res.back();
-//
 //}
 
 ResourseManager::res_type ResourseManager::getTypeByFilename(std::string name)
 {
-	int exlength = 0;
 	std::string::reverse_iterator it = name.rbegin();
-	while (*it != '.') {//бесконечный цикл если нет точки!!!!!
-		exlength++;
-		it++;
+	while (*it != '.' && it != name.rend()) 
+	{
+		it++;	
 	}
-	std::string extent = name.substr(name.length() - exlength, exlength);
+	auto d1 = std::distance(name.rend(), it);
+	auto d2 = std::distance(name.rbegin(), it);
+	std::string extent = name.substr(abs(std::distance(name.rend(), it)), abs(std::distance(name.rbegin(), it)));
 	auto t = extentToType.find(extent);
-	if (t == extentToType.end()) return ResourseManager::res_type::Unknown_type;
+	if (t == extentToType.end())
+	{
+		return ResourseManager::res_type::Unknown_type;
+	}
+	else 
+	{
 		return t->second;
+	}
+		
 }
-
+//
 //Resourse ResourseManager::getResourse(int id)
 //{
-//	if (all_res[id]->getRc == 0) {
+//	if (all_res[id]->getRc == 0) 
+//	{
+//		all_res[id]->load();
+//		all_res[id]->incRc();
 //	}
 //	all_res[id]->incRc();
 //	return *all_res[id];
@@ -47,9 +52,25 @@ ResourseManager::res_type ResourseManager::getTypeByFilename(std::string name)
 //
 //void ResourseManager::ReleaseResourse(int id)
 //{
-//	if(all_res[id]->getRc != 0)	all_res[id]->decRc();
+//	if (all_res[id]->getRc == 0)
+//	{
+//		return;
+//	}
+//	all_res[id]->decRc();
+//	
 //}
 
 ResourseManager::~ResourseManager()
 {
 }
+//
+//void ResourseManager::ReleaseMemory()
+//{
+//	for (auto i : all_res) 
+//	{
+//		if (i->getRc == 0)
+//		{
+//			i->unload();
+//		}
+//	}
+//}

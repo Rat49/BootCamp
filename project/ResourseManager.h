@@ -10,15 +10,13 @@ public:
 	~ResourseManager();
 
 //private:
-	void addResourse(Resourse res);
+	void addResourse(Resourse * res);
 	void ReleaseMemory();
 	std::vector<Resourse*> all_res;	//Массив всех имеющихся ресурсов
 	std::vector<std::string> paths;	//
 
 	enum res_type {Picture_type, Audio_type, Unknown_type};
 	std::map<std::string, res_type> extentToType;
-
-public: 
 	res_type getTypeByFilename(std::string name);
 };
 

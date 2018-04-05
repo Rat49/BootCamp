@@ -2,7 +2,7 @@
 class Resourse
 {
 public:
-	Resourse(int id, char * full_name) :ID(id),full_name(full_name),ref_counter(1) {
+	Resourse(int id, char * full_name) :ID(id),full_name(full_name),ref_counter(0) {
 	};
 	void incRc();
 	void decRc();
