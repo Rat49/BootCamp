@@ -20,23 +20,15 @@ ResourseManager::ResourseManager()
 ResourseManager::res_type ResourseManager::getTypeByFilename(std::string name)
 {
 	std::string::reverse_iterator it = name.rbegin();
-	while (*it != '.' && it != name.rend()) 
+	while (it != name.rend() && *it != '.')
 	{
 		it++;	
 	}
-	auto d1 = std::distance(name.rend(), it);
-	auto d2 = std::distance(name.rbegin(), it);
+
 	std::string extent = name.substr(abs(std::distance(name.rend(), it)), abs(std::distance(name.rbegin(), it)));
 	auto t = extentToType.find(extent);
-	if (t == extentToType.end())
-	{
-		return ResourseManager::res_type::Unknown_type;
-	}
-	else 
-	{
-		return t->second;
-	}
-		
+
+	return t == extentToType.end() ? ResourseManager::res_type::Unknown_type : t->second;		
 }
 //
 //Resourse ResourseManager::getResourse(int id)
