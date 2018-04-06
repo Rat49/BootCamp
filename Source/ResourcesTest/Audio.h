@@ -7,9 +7,9 @@ class Audio :
 public:
 	Audio(std::string id, std::string full_name);
 
-	void load();
-	void unload();
-	//sf::Music const getStaff();
+	bool Load();
+	bool Unload();
+	sf::Music& GetStaff();
 
 	~Audio();	
 

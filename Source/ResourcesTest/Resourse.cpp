@@ -22,12 +22,12 @@ int Resourse::GetRc()
 
 bool Resourse::Load()
 {
-	
+	return false;
 }
 
 bool Resourse::Unload()
 {
-	
+	return false;
 }
 
 

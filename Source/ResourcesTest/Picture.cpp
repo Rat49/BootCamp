@@ -12,6 +12,7 @@ bool Picture::Load()
 bool Picture::Unload()
 {
 	img.~Image();
+	return true;
 }
 
 

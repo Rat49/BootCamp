@@ -13,6 +13,7 @@ bool Audio::Load()
 bool Audio::Unload()
 {
 	audio.~Music();
+	return true;
 }
 
 sf::Music& Audio::GetStaff()
