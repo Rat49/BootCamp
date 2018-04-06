@@ -1,5 +1,4 @@
 #include "Picture.h"
-#include "stdafx.h"
 
 Picture::Picture(std::string id, std::string name):Resourse(id, name)
 {

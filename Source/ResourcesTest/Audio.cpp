@@ -1,5 +1,4 @@
 #include "Audio.h"
-#include "stdafx.h"
 
 Audio::Audio(std::string id, std::string name):Resourse(id, name)
 {

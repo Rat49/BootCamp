@@ -3,9 +3,6 @@
 #include "Audio.h"
 #include "Picture.h"
 #include "Resourse.h"
-
-#include "stdafx.h"
-
 ResourseManager::ResourseManager()
 {
 	/*ConfigManager configManager = new ConfigManager();
