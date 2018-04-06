@@ -1,14 +1,15 @@
 #pragma once
 #include "Resourse.h"
+
 class Audio :
 	public Resourse
 {
 public:
-	Audio(std::string id, std::string full_name);
+	Audio(std::string id, std::string fullName);	
 
-	void load();
-	void unload();
-	//sf::Music const getStaff();
+	bool Load();
+	bool Unload();
+	sf::Music& GetStaff();
 
 	~Audio();	
 

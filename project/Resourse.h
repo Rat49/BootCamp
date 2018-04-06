@@ -2,15 +2,15 @@
 class Resourse
 {
 public:
-	Resourse(std::string id, std::string full_name);
-	void incRc();
-	void decRc();
-	int getRc();
-	virtual void load();
-	virtual void unload();
+	Resourse(std::string id, std::string fullName);
+	void IncRc();
+	void DecRc();
+	int GetRc();
+	virtual bool Load();
+	virtual bool Unload();
 	virtual ~Resourse();
-	std::string full_name;
+	std::string fullName;
 private:
-	unsigned int ref_counter;	
+	unsigned int refCounter;	
 	std::string ID;
 };

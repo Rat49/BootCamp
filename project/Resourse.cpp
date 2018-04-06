@@ -2,31 +2,31 @@
 #include "Resourse.h"
 
 
-Resourse::Resourse(std::string id, std::string full_name):ID(id), full_name(full_name), ref_counter(0) 
+Resourse::Resourse(std::string id, std::string fullName):ID(id), fullName(fullName), refCounter(0) 
 {
 }
 
-void Resourse::incRc()
+void Resourse::IncRc()
 {
-	++ref_counter;
+	++refCounter;
 }
 
-void Resourse::decRc()
+void Resourse::DecRc()
 {
-	--ref_counter;
+	--refCounter;
 }
 
-int Resourse::getRc()
+int Resourse::GetRc()
 {
-	return ref_counter;
+	return refCounter;
 }
 
-void Resourse::load()
+bool Resourse::Load()
 {
 	
 }
 
-void Resourse::unload()
+bool Resourse::Unload()
 {
 	
 }
@@ -34,4 +34,5 @@ void Resourse::unload()
 
 Resourse::~Resourse()
 {
+	Resourse::refCounter = 0;
 }

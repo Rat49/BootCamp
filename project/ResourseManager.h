@@ -5,15 +5,15 @@ class ResourseManager
 {
 public:
 	ResourseManager();
-	std::map<std::string, Resourse*> resourses;
-	enum res_type { Picture_type, Audio_type, Unknown_type };
 
-	Resourse* getResourse(std::string key);
-	void releaseResourse(std::string key);
+	Resourse* GetResourse(std::string key);
+	void ReleaseResourse(std::string key);
 	~ResourseManager();
 
 private:
-	void releaseMemory();
+	std::map<std::string, Resourse*> resourses;
+
+	void ReleaseMemory();
 	
 };
 

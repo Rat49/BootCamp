@@ -5,18 +5,18 @@ Picture::Picture(std::string id, std::string name):Resourse(id, name)
 {
 }
 
-void Picture::load()
+bool Picture::Load()
 {
-	img.loadFromFile(Picture::full_name);
+	return img.loadFromFile(Picture::fullName);
 }
 
-void Picture::unload()
+bool Picture::Unload()
 {
 	img.~Image();
 }
 
 
-sf::Image Picture::getStaff()
+sf::Image Picture::GetStaff()
 {
 	return img;
 }

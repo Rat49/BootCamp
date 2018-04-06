@@ -6,20 +6,20 @@ Audio::Audio(std::string id, std::string name):Resourse(id, name)
 	
 }
 
-void Audio::load()
+bool Audio::Load()
 {
-	audio.openFromFile(Audio::full_name);
+	return audio.openFromFile(Audio::fullName);
 }
 
-void Audio::unload()
+bool Audio::Unload()
 {
 	audio.~Music();
 }
 
-//sf::Music const Audio::getStaff()
-//{
-//
-//}
+sf::Music& Audio::GetStaff()
+{
+	return audio;
+}
 
 Audio::~Audio()
 {

@@ -27,25 +27,30 @@ ResourseManager::ResourseManager()
 
 }
 
-Resourse* ResourseManager::getResourse(std::string key)
+Resourse* ResourseManager::GetResourse(std::string key)
 {
-	if (resourses[key]->getRc() != 0)
+	if (resourses.find(key) != resourses.end())
 	{
-		ResourseManager::resourses[key]->incRc();
+		if (resourses[key]->GetRc() != 0)
+		{
+			ResourseManager::resourses[key]->IncRc();
+		}
+		else
+		{
+			resourses[key]->Load();
+			ResourseManager::resourses[key]->IncRc();
+		}
+		return resourses[key];
 	}
 	else
-	{
-		resourses[key]->load();
-		ResourseManager::resourses[key]->incRc();
-	}
-	return resourses[key];
+		return nullptr;
 }
 
-void ResourseManager::releaseResourse(std::string key)
+void ResourseManager::ReleaseResourse(std::string key)
 {
-	if (resourses[key]->getRc() != 0)
+	if (resourses.find(key) != resourses.end() && resourses[key]->GetRc() != 0)
 	{
-		resourses[key]->decRc();
+		resourses[key]->DecRc();
 	}	
 }
 
@@ -53,13 +58,13 @@ ResourseManager::~ResourseManager()
 {
 }
 
-void ResourseManager::releaseMemory()
+void ResourseManager::ReleaseMemory()
 {
 	for (auto i : resourses) 
 	{
-		if (i.second->getRc() == 0)
+		if (i.second->GetRc() == 0)
 		{
-			i.second->unload();
+			i.second->Unload();
 		}
 	}
 }

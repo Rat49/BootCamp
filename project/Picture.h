@@ -6,9 +6,9 @@ class Picture :
 public:
 	Picture(std::string id, std::string full_name);
 
-	void load();
-	void unload();
-	sf::Image getStaff();
+	bool Load();
+	bool Unload();
+	sf::Image GetStaff();
 
 	~Picture();
 private:
