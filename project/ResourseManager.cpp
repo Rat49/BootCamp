@@ -1,8 +1,10 @@
-#include "stdafx.h"
 #include "ResourseManager.h"
-#include "Resourse.h"
+
 #include "Audio.h"
 #include "Picture.h"
+#include "Resourse.h"
+
+#include "stdafx.h"
 
 ResourseManager::ResourseManager()
 {

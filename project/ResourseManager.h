@@ -1,6 +1,6 @@
 #pragma once
 #include "Resourse.h"
-#include "Picture.h"
+
 class ResourseManager
 {
 public:

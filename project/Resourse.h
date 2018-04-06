@@ -2,8 +2,7 @@
 class Resourse
 {
 public:
-	Resourse(std::string id, std::string full_name) :ID(id),full_name(full_name),ref_counter(0) {
-	};
+	Resourse(std::string id, std::string full_name);
 	void incRc();
 	void decRc();
 	int getRc();
@@ -12,7 +11,6 @@ public:
 	virtual ~Resourse();
 	std::string full_name;
 private:
-	unsigned int ref_counter;
-	
+	unsigned int ref_counter;	
 	std::string ID;
 };
