@@ -1,6 +1,6 @@
 #include "Audio.h"
 
-Audio::Audio(std::string id, std::string name):Resourse(id, name, AudioType)
+Audio::Audio(std::string id, std::string name):Resource(id, name)
 {
 	
 }

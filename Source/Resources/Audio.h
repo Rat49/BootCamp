@@ -1,8 +1,8 @@
 #pragma once
-#include "Resourse.h"
+#include "Resource.h"
 #include <SFML\Audio.hpp>
 class Audio :
-	public Resourse
+	public Resource
 {
 public:
 	Audio(std::string id, std::string full_name);

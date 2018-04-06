@@ -1,8 +1,8 @@
 #pragma once
-#include "Resourse.h"
+#include "Resource.h"
 #include <SFML\Graphics.hpp>
 class Picture :
-	public Resourse
+	public Resource
 {
 public:
 	Picture(std::string id, std::string full_name);

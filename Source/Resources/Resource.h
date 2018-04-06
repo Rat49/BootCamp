@@ -1,19 +1,18 @@
 #pragma once
 #include <string>
-class Resourse
+
+class Resource
 {
 public:
-	enum resourseType {PictureType, AudioType};
 	
-	Resourse(std::string id, std::string fullName, resourseType type);
+	Resource(std::string id, std::string fullName);
 	void IncRc();
 	void DecRc();
 	int GetRc();
 	virtual bool Load();
 	virtual bool Unload();
-	virtual ~Resourse();
+	virtual ~Resource();
 	std::string fullName;
-	resourseType type;
 
 private:
 	unsigned int refCounter;	

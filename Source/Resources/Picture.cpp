@@ -1,6 +1,6 @@
 #include "Picture.h"
 
-Picture::Picture(std::string id, std::string name):Resourse(id, name, PictureType)
+Picture::Picture(std::string id, std::string name):Resource(id, name)
 {
 }
 
