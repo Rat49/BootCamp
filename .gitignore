@@ -4,3 +4,6 @@ Temp
 **/*.user
 *.db
 *.opendb
+Debug/
+Release/
+project/

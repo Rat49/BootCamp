@@ -72,6 +72,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\Dispatcher.h" />
+    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\Event.h" />
+    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\EventIDStore.h" />
+    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\EventSystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\Dispatcher.cpp" />
+    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\Event.cpp" />
+    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\EventIDStore.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

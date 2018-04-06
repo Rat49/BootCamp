@@ -72,6 +72,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\FirstEvent.cpp" />
+    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\project.cpp" />
+    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\SecondEvent.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\FirstEvent.h" />
+    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\SecondEvent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
