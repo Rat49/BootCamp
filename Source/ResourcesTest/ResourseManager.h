@@ -9,12 +9,12 @@ public:
 
 	Resourse* GetResourse(std::string key);
 	void ReleaseResourse(std::string key);
+	void ReleaseMemory();
 	~ResourseManager();
 
 private:
 	std::map<std::string, Resourse*> resourses;
 
-	void ReleaseMemory();
 	
 };
 
