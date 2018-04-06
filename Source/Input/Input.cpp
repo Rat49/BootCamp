@@ -26,19 +26,14 @@ int InputManager::ChangeStateWhenPressed(int currentState) {
 	{
 	case ButtonsState::JustPressed:
 		return static_cast<int>(ButtonsState::Pressed);
-		break;
 	case ButtonsState::Pressed:
 		return static_cast<int>(ButtonsState::Pressed);
-		break;
 	case ButtonsState::JustReleased:
 		return static_cast<int>(ButtonsState::JustPressed);
-		break;
 	case ButtonsState::Released:
 		return static_cast<int>(ButtonsState::JustPressed);
-		break;
 	default:
 		return static_cast<int>(ButtonsState::Pressed);
-		break;
 	}
 	
 };
@@ -48,19 +43,14 @@ int InputManager::ChangeStateWhenRelease(int currentState) {
 	{
 	case ButtonsState::JustPressed:
 		return static_cast<int>(ButtonsState::JustReleased);
-		break;
 	case ButtonsState::Pressed:
 		return static_cast<int>(ButtonsState::JustReleased);
-		break;
 	case ButtonsState::JustReleased:
 		return static_cast<int>(ButtonsState::Released);
-		break;
 	case ButtonsState::Released:
 		return static_cast<int>(ButtonsState::Released);
-		break;
 	default:
 		return static_cast<int>(ButtonsState::Released);
-		break;
 	}
 
 };
