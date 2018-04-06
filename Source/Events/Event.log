@@ -1,0 +1,14 @@
+[Event][INFO][18:24:03] Hello world!
+[Event][WARNING][18:24:03] Hello world!
+[Event][INFO][18:24:49] Hello world!
+[Event][WARNING][18:24:49] Hello world!
+[Event][INFO][18:35:29] Hello world!
+[Event][WARNING][18:35:29] Hello world!
+[Event][INFO][18:39:10] [20]Hello world!
+[Event][WARNING][18:39:10] [20]Hello world!
+[Event][INFO][18:39:31][20] Hello world!
+[Event][WARNING][18:39:31][20] Hello world!
+[Event][INFO][18:40:03][400] Hello world!
+[Event][WARNING][18:40:03][400] Hello world!
+[Event][INFO][18:59:59][400] Hello world!
+[Event][WARNING][18:59:59][400] Hello world!
