@@ -14,17 +14,17 @@ ResourseManager::ResourseManager()
 	}*/
 
 	resourses.insert(std::pair<std::string, Resourse*>
-		("piupiu", new Audio("piupiu", "C:\Projects\BootCamp\project\audio\piupiu.wav")));
+		("piupiu", new Audio("piupiu", "audio\piupiu.wav")));
 	resourses.insert(std::pair<std::string, Resourse*>
-		("booom", new Audio("booom", "C:\Projects\BootCamp\project\audio\booom.wav")));
+		("booom", new Audio("booom", "audio\booom.wav")));
 	resourses.insert(std::pair<std::string, Resourse*>
-		("asteroid", new Picture("asteroid", "C:\Projects\BootCamp\project\graphics\asteroid.png")));
+		("asteroid", new Picture("asteroid", "graphics\aster.png")));
 	resourses.insert(std::pair<std::string, Resourse*>
-		("smallasteroid", new Picture("smallasteroid", "C:\Projects\BootCamp\project\graphics\smallasteroid.bmp")));
+		("smallasteroid", new Picture("smallasteroid", "graphics\smallasteroid.bmp")));
 
 }
 
-Resourse* ResourseManager::GetResourse(std::string key)
+Resourse* ResourseManager::GetGeneralResourse(std::string key)
 {
 	if (resourses.find(key) != resourses.end())
 	{

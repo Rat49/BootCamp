@@ -1,7 +1,7 @@
 #include "Resourse.h"
 
 
-Resourse::Resourse(std::string id, std::string fullName):ID(id), fullName(fullName), refCounter(0) 
+Resourse::Resourse(std::string id, std::string fullName, resourseType type):ID(id), fullName(fullName), type(type), refCounter(0)
 {
 }
 

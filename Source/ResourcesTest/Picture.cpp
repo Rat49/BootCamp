@@ -1,6 +1,6 @@
 #include "Picture.h"
 
-Picture::Picture(std::string id, std::string name):Resourse(id, name)
+Picture::Picture(std::string id, std::string name):Resourse(id, name, PictureType)
 {
 }
 
@@ -24,5 +24,5 @@ sf::Image Picture::GetStaff()
 
 Picture::~Picture()
 {
-
+	
 }
