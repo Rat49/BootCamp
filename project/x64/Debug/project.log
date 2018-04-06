@@ -1,0 +1,23 @@
+﻿  stdafx.cpp
+  Audio.cpp
+  Picture.cpp
+  Resourse.cpp
+  ResourseManager.cpp
+c:\project\bootcamp\project\resoursemanager.cpp(18): warning C4129: 'P': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(18): warning C4129: 'B': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(18): warning C4129: 'p': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(20): warning C4129: 'P': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(20): warning C4129: 'B': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(20): warning C4129: 'p': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(22): warning C4129: 'P': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(22): warning C4129: 'B': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(22): warning C4129: 'p': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(22): warning C4129: 'g': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(24): warning C4129: 'P': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(24): warning C4129: 'B': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(24): warning C4129: 'p': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(24): warning C4129: 'g': unrecognized character escape sequence
+c:\project\bootcamp\project\resoursemanager.cpp(24): warning C4129: 's': unrecognized character escape sequence
+  project.cpp
+  Generating Code...
+  project.vcxproj -> C:\Project\BootCamp\\Debug\project.exe
