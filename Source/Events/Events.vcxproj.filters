@@ -15,27 +15,27 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\Dispatcher.h">
+    <ClInclude Include="Event.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\Event.h">
+    <ClInclude Include="Dispatcher.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\EventIDStore.h">
+    <ClInclude Include="EventIDStore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\EventSystem.h">
+    <ClInclude Include="EventSystem.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\Dispatcher.cpp">
+    <ClCompile Include="Event.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\Event.cpp">
+    <ClCompile Include="EventIDStore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\EventIDStore.cpp">
+    <ClCompile Include="Dispatcher.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

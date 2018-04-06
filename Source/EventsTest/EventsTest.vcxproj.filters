@@ -15,21 +15,21 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\project.cpp">
+    <ClCompile Include="project.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\SecondEvent.cpp">
+    <ClCompile Include="SecondEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\FirstEvent.cpp">
+    <ClCompile Include="FirstEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\FirstEvent.h">
+    <ClInclude Include="FirstEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Users\aleksandr.klechenov\Desktop\eventSystem\SecondEvent.h">
+    <ClInclude Include="SecondEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

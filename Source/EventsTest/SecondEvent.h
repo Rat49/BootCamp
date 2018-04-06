@@ -1,5 +1,5 @@
 #pragma once
-#include "stdafx.h"
+#include "EventSystem.h"
 
 class SecondEvent : public Event
 {

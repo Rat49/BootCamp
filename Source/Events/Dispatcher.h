@@ -1,5 +1,8 @@
 #pragma once
-#include "stdafx.h"
+#include "Event.h"
+#include <map>
+#include <functional>
+#include <vector>
 
 class Dispatcher
 {

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+#include "SecondEvent.h"
 
 int SecondEvent::ID = 0;
 SecondEvent::SecondEvent()
