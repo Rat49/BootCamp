@@ -1,8 +1,9 @@
 #pragma once
+#include "EventTypes.h"
+
 class Event
 {
 public:
-	virtual int getID() = 0;
-
-	virtual ~Event();
+	EventID_t ID;
+	virtual ~Event() = 0 {};
 };

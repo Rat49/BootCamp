@@ -1,17 +1,9 @@
 #include "SecondEvent.h"
 
-int SecondEvent::ID = 0;
 SecondEvent::SecondEvent()
 {
+	this->ID = secondEventID;
 }
 SecondEvent::~SecondEvent()
 {
-}
-int SecondEvent::getID()
-{
-	if (ID == 0)
-	{
-		ID = ++EventIDStore::eventID;
-	}
-	return ID;
 }

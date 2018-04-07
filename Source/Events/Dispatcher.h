@@ -1,13 +1,17 @@
 #pragma once
 #include "Event.h"
+
 #include <map>
 #include <functional>
 #include <vector>
 
+using EventHandler_t = std::function<void(const Event&)>;
+using Token_t = int;
+
 class Dispatcher
 {
 private:
-	std::map <int, std::vector<std::function<void(const Event&)>>> m_listeners;
+	std::map <EventID_t, std::vector<EventHandler_t>> _listeners;
 
 	Dispatcher(Dispatcher const&) = delete;
 
@@ -21,9 +25,9 @@ public:
 
 	static Dispatcher& getInstance();
 
-	int Connect(const int eventID, const std::function<void(const Event&)>& func);
+	int Connect(const EventID_t eventID, const EventHandler_t& func);
 
-	void Send(Event& event);
+	void Send(const Event& event);
 
-	void Disconnect(const int eventID, const int token);
+	void Disconnect(const EventID_t eventID, const Token_t token);
 };

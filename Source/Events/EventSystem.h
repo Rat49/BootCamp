@@ -1,4 +1,4 @@
 #pragma once
-#include "EventIDStore.h"
+#include "EventTypes.h"
 #include "Event.h"
 #include "Dispatcher.h"

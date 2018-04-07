@@ -15,24 +15,24 @@ Dispatcher& Dispatcher::getInstance()
 	return instance;
 }
 
-int Dispatcher::Connect(const int eventID, const std::function<void(const Event&)>& func)
+int Dispatcher::Connect(const EventID_t eventID, const EventHandler_t& func)
 {
-	std::vector <std::function<void(const Event&)>>& functions = m_listeners[eventID];
+	std::vector <EventHandler_t>& functions = _listeners[eventID];
 
-	int tokenForCurrentListener = m_listeners[eventID].size();
+	Token_t tokenForCurrentListener = _listeners[eventID].size();
 
-	m_listeners[eventID].push_back(func);
+	_listeners[eventID].push_back(func);
 
 	return tokenForCurrentListener;
 }
 
-void Dispatcher::Send(Event& event)
+void Dispatcher::Send(const Event& event)
 {
-	auto id = event.getID();
+	EventID_t id = event.ID;
 
-	std::map<int, std::vector<std::function<void(const Event&)>>>::iterator listenersForCurrentEvent = m_listeners.find(id);
+	std::map<EventID_t, std::vector<EventHandler_t>>::iterator listenersForCurrentEvent = _listeners.find(id);
 
-	if (listenersForCurrentEvent == m_listeners.end())
+	if (listenersForCurrentEvent == _listeners.end())
 	{
 		return;
 	}
@@ -46,15 +46,18 @@ void Dispatcher::Send(Event& event)
 
 }
 
-void Dispatcher::Disconnect(const int eventID, const int token)
+void Dispatcher::Disconnect(const EventID_t eventID, const Token_t token)
 {
-	if (m_listeners.empty()) return;
+	if (_listeners.empty())
+	{
+		return;
+	}
 
-	std::vector <std::function<void(const Event&)>>& listenersForCurrentEvent = m_listeners.find(eventID)->second;
+	std::vector <EventHandler_t>& listenersForCurrentEvent = _listeners.find(eventID)->second;
 
 	if (token >= 0 && token < listenersForCurrentEvent.size())
 	{
-		std::vector<std::function<void(const Event&)>>::iterator listenerPosition = listenersForCurrentEvent.begin() + token;
+		std::vector<EventHandler_t>::iterator listenerPosition = listenersForCurrentEvent.begin() + token;
 
 		listenersForCurrentEvent.erase(listenerPosition);
 	}
