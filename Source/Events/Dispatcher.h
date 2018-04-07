@@ -19,7 +19,7 @@ private:
 
 public:
 
-	static Dispatcher& getInctance();
+	static Dispatcher& getInstance();
 
 	int Connect(const int eventID, const std::function<void(const Event&)>& func);
 
