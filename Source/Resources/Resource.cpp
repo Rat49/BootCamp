@@ -1,26 +1,22 @@
 #include "Resource.h"
 
 
-Resource::Resource(const std::string& id, const std::string& fullName):ID(id), fullName(fullName), refCounter(0)
+Resource::Resource(const std::string& id, const std::string& fullName):_ID(id), _fullName(fullName), _refCounter(0)
 {
 }
 
 void Resource::IncRefCounter()
 {
-	++refCounter;
+	++_refCounter;
 }
 
 void Resource::DecRefCounter()
 {
-	--refCounter;
+	--_refCounter;
 }
 
 int Resource::GetRefCounter()
 {
-	return refCounter;
-}
-
-Resource::~Resource()
-{
+	return _refCounter;
 }
 

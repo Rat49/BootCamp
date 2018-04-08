@@ -12,13 +12,16 @@ public:
 	ResourceManager();
 	
 	template <typename T> 
-	T& GetResource(const std::string& key)
+	T* GetResource(const std::string& key)
 	{
 		Resource* resource = GetGeneralResource(key);
 
 		assert(resource != nullptr && "Resource not found");
 
-		return dynamic_cast<T>(resource);
+		T* specificResource = dynamic_cast<T*>(resource);
+		assert(specificResource != nullptr && "Incorrect resource type");
+
+		return specificResource;
 	}
 
 	void ReleaseResource(const std::string& key);
@@ -26,7 +29,7 @@ public:
 	~ResourceManager();
 
 private:
-	std::map<std::string, Resource*> resources;
+	std::map<std::string, Resource*> _resources;
 	Resource * GetGeneralResource(const std::string& key);
 
 };

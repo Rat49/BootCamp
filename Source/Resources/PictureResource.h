@@ -7,12 +7,12 @@ class PictureResource :
 public:
 	PictureResource(const std::string& id,  const std::string& fullName);
 
-	void Load();
-	void Unload();
-	sf::Image Get();
+	void Load() override;
+	void Unload() override;
+	sf::Image& Get();
 
-	~PictureResource();
+	~PictureResource() override;
 private:
-	sf::Image* resource;
+	sf::Image* _resource;
 };
 

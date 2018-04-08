@@ -7,13 +7,13 @@ class AudioResource :
 public:
 	AudioResource(const std::string& id, const std::string& fullName);
 
-	void Load();
-	void Unload();
+	void Load() override;
+	void Unload() override;
 	sf::Music& Get();
 
-	~AudioResource();
+	~AudioResource() override;
 
 private:
-	sf::Music* resource;
+	sf::Music* _resource;
 };
 
