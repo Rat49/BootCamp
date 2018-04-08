@@ -63,7 +63,7 @@ void Dispatcher::Disconnect(const EventID_t eventID, const Token_t token)
 
 		listenersForCurrentEvent.erase(listenerPosition);
 
-
+		return;
 	}
 
 	std::cout << DispatcherErrorMessagesStore::disconectFailedWrongToken << std::endl;
