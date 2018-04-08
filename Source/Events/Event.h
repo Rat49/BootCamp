@@ -4,6 +4,5 @@
 class Event
 {
 public:
-	EventID_t ID;
 	virtual ~Event() = 0 {};
 };

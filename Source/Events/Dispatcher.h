@@ -1,8 +1,9 @@
 #pragma once
 #include "Event.h"
 
-#include <map>
 #include <functional>
+#include <iostream>
+#include <map>
 #include <vector>
 
 using EventHandler_t = std::function<void(const Event&)>;
@@ -25,9 +26,9 @@ public:
 
 	static Dispatcher& getInstance();
 
-	int Connect(const EventID_t eventID, const EventHandler_t& func);
+	int Connect(const EventID_t eventID, const EventHandler_t& handler);
 
-	void Send(const Event& event);
+	void Send(const Event& event, EventID_t eventId);
 
 	void Disconnect(const EventID_t eventID, const Token_t token);
 };

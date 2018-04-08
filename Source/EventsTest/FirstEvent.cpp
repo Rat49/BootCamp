@@ -2,7 +2,6 @@
 
 FirstEvent::FirstEvent()
 {
-	this->ID = firstEventID;
 }
 FirstEvent::~FirstEvent()
 {
