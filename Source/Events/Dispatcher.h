@@ -1,4 +1,5 @@
 #pragma once
+#include "EventTypes.h"
 #include "Event.h"
 
 #include <functional>
@@ -9,7 +10,7 @@
 using EventHandler_t = std::function<void(const Event&)>;
 using Token_t = int;
 
-class Dispatcher
+class Dispatcher final
 {
 private:
 	std::map <EventID_t, std::vector<EventHandler_t>> _listeners;
