@@ -1,31 +1,36 @@
 #pragma once
-#include "Audio.h"
-#include "Picture.h"
+#include "AudioResource.h"
+#include "PictureResource.h"
 #include "Resource.h"
-#include <string>
+#include <cassert>
 #include <map>
-class ResourceManager
+#include <string>
+
+class ResourceManager final
 {
 public:
 	ResourceManager();
-
-	Resource* GetGeneralResource(std::string key);
+	
 	template <typename T> 
-	T* GetResource(std::string key)
+	T* GetResource(const std::string& key)
 	{
-		Resource* resource = ResourceManager::GetGeneralResource(key);
-		if (resource == nullptr)
-			return nullptr;
-		
-		return dynamic_cast<T*>(resource);
+		Resource* resource = GetGeneralResource(key);
+
+		assert(resource != nullptr && "Resource not found");
+
+		T* specificResource = dynamic_cast<T*>(resource);
+		assert(specificResource != nullptr && "Uncorrect resource type");
+
+		return specificResource;
 	}
 
-	void ReleaseResource(std::string key);
-	void ReleaseMemory();
+	void ReleaseResource(const std::string& key);
+	void ReleaseAllResources();
 	~ResourceManager();
 
 private:
 	std::map<std::string, Resource*> resources;
-	
+	Resource * GetGeneralResource(const std::string& key);
+
 };
 

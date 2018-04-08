@@ -1,67 +1,67 @@
 #include "ResourceManager.h"
 
-#include "Audio.h"
-#include "Picture.h"
-#include "Resource.h"
 ResourceManager::ResourceManager()
 {
 	/*ConfigManager configManager = new ConfigManager();
 
-	for (const auto &key : configManager.getCategory("Audio").getKeys())
+	for (const auto& key : configManager.getCategory("Audio").getKeys())
 	{
 		Resource* resource = new Audio(key, key->GetValue());
 		resources.insert(std::pair(key, resource));
 	}*/
 
 	resources.insert(std::pair<std::string, Resource*>
-		("piupiu", new Audio("piupiu", "..\resources\audio\piupiu.wav")));
+		("piupiu", new AudioResource("piupiu", "Resources\\audio\\piupiu.wav")));
 	resources.insert(std::pair<std::string, Resource*>
-		("booom", new Audio("booom", "..\resources\audio\booom.wav")));
+		("booom", new AudioResource("booom", "Resources\\audio\\booom.wav")));
 	resources.insert(std::pair<std::string, Resource*>
-		("asteroid", new Picture("asteroid", "..\resources\graphics\aster.png")));
+		("asteroid", new PictureResource("asteroid", "Resources\\graphics\\aster.bmp")));
 	resources.insert(std::pair<std::string, Resource*>
-		("smallasteroid", new Picture("smallasteroid", "..\resources\graphics\smallasteroid.bmp")));
+		("smallasteroid", new PictureResource("smallasteroid", "Resources\\graphics\\smallasteroid.png")));
 
 }
 
-Resource* ResourceManager::GetGeneralResource(std::string key)
+Resource* ResourceManager::GetGeneralResource(const std::string& key)
 {
-	if (resources.find(key) != resources.end())
+	auto iter = resources.find(key);
+
+	assert(iter != resources.end() && "Resource not found");
+
+	Resource* resource = iter->second;
+	if (resource->GetRefCounter() != 0)
 	{
-		if (resources[key]->GetRc() != 0)
-		{
-			ResourceManager::resources[key]->IncRc();
-		}
-		else
-		{
-			resources[key]->Load();
-			ResourceManager::resources[key]->IncRc();
-		}
-		return resources[key];
+		resource->IncRefCounter();
 	}
 	else
-		return nullptr;
+	{
+		resource->Load();
+		resource->IncRefCounter();
+	}
+	return resource;
+
 }
 
-void ResourceManager::ReleaseResource(std::string key)
+void ResourceManager::ReleaseResource(const std::string& key)
 {
-	if (resources.find(key) != resources.end() && resources[key]->GetRc() != 0)
-	{
-		resources[key]->DecRc();
-	}	
+	auto iter = resources.find(key);
+
+	assert(iter != resources.end() && "Resource not found");
+	assert(iter->second->GetRefCounter() != 0 && "Resource already released");
+
+	iter->second->DecRefCounter();
+
 }
 
 ResourceManager::~ResourceManager()
 {
 }
 
-void ResourceManager::ReleaseMemory()
+void ResourceManager::ReleaseAllResources()
 {
-	for (auto i : resources) 
+	for (auto& i : resources) 
 	{
-		if (i.second->GetRc() == 0)
-		{
-			i.second->Unload();
-		}
+		assert(i.second->GetRefCounter() == 0 && "Resource reference still exist");
+
+		i.second->Unload();
 	}
 }
