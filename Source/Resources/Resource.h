@@ -6,12 +6,12 @@ class Resource
 public:
 	
 	Resource(const std::string& id, const std::string& fullName);
-	virtual void IncRefCounter();
-	virtual void DecRefCounter();
-	virtual int GetRefCounter();
+	void IncRefCounter();
+	void DecRefCounter();
+	int GetRefCounter();
 	virtual void Load() = 0;
 	virtual void Unload() = 0;
-	virtual ~Resource() = 0;
+	~Resource();
 
 	std::string fullName;
 

@@ -20,3 +20,7 @@ int Resource::GetRefCounter()
 	return refCounter;
 }
 
+Resource::~Resource()
+{
+}
+
