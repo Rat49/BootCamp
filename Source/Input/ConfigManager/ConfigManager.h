@@ -1,10 +1,10 @@
 #pragma once
-//#include<exception>
+
 #include<fstream>
 #include<iostream>
 #include<map>
-#include<regex>
 #include<string>
+#include<sstream>
 
 
 class LogCategory {
@@ -15,7 +15,7 @@ private:
 
 
 public:
-	LogCategory(std::map<const char*, const char*> params){/*...*/}
+	LogCategory() {}
 	const char* getValue(const char* configValue);
 };
 
@@ -35,7 +35,7 @@ public:
 
 	void readInputFile(std::string file_name);
 	void createCategories();
-	std::map<const char*, const char*>& createParameters(std::string categoryName);
+	std::pair<const char*, const char*>& createParameter(std::string line);
 	LogCategory& getCategory(const char* categoryName);
 
 };

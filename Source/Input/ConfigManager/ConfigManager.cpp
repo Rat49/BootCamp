@@ -36,25 +36,41 @@ void ConfigManager::readInputFile(std::string file_name) {
 void ConfigManager::createCategories() {
 
 	std::string line;
-	std::string value;
-	std::regex pattern("\[[A-Za-z]*\]");
 	
 	while (in_file.is_open()) {
 
-		std::getline(in_file, line);
-		if (std::regex_search(line, value, pattern)) {
-			
-			std::string categoryName = value.substr(1, value.size()-2);
+		if (!in_file.eof()){
+			std::getline(in_file, line);
+			if (line[0] == '[') {
 
-			//LogCategory category(createParameters(categoryName));
-			//logCategories.insert(std::pair<const char*, LogCategory>(categoryName.c_str(), category));
+				std::ostringstream os;
+
+				for (int i = 1; i < line.size() - 1, line[i] != ']'; ++i) {
+					os << line[i];
+				}
+
+				std::string categoryName = os.str();
+
+				//std::cout << categoryName << std::endl;
+				//system("PAUSE");
+
+				if (!in_file.eof()) {
+					std::getline(in_file, line);
+					while (line[0] != '[') {
+
+					}
+				}
+
+				//LogCategory category(createParameters(categoryName));
+				//logCategories.insert(std::pair<const char*, LogCategory>(categoryName.c_str(), category));
+			}
 		}
 	}
 }
 
-std::map<const char*, const char*>& ConfigManager::createParameters(std::string categoryName) {
+std::pair<const char*, const char*>& ConfigManager::createParameter(std::string line) {
 
-	std::map<const char*, const char*> params;
+	std::pair<const char*, const char*> param;
 
 	/*
 	while () {
@@ -65,7 +81,7 @@ std::map<const char*, const char*>& ConfigManager::createParameters(std::string 
 		params.insert(std::pair<const char*, const char*>(key, value));
 	}
 	*/
-	return params;
+	return param;
 }
 
 LogCategory& ConfigManager::getCategory(const char* categoryName) {
