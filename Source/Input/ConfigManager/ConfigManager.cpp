@@ -2,14 +2,13 @@
 
 
 const char* LogCategory::getValue(const char* configValue) {
-	
-	//if ( params.empty() )
-	//....
-
-	//if ( params[configValue] exist )
 
 	return params[configValue];
+}
 
+void LogCategory::addNewParam(std::pair < const char*, const char*> param) {
+
+	params.insert(param);
 }
 
 /*
@@ -43,26 +42,28 @@ void ConfigManager::createCategories() {
 			std::getline(in_file, line);
 			if (line[0] == '[') {
 
-				std::ostringstream os;
+				std::ostringstream oss;
 
 				for (int i = 1; i < line.size() - 1, line[i] != ']'; ++i) {
-					os << line[i];
+					oss << line[i];
 				}
 
-				std::string categoryName = os.str();
+				std::string categoryName = oss.str();
 
 				//std::cout << categoryName << std::endl;
 				//system("PAUSE");
+
+				LogCategory lc;
 
 				if (!in_file.eof()) {
 					std::getline(in_file, line);
 					while (line[0] != '[') {
 
+						lc.addNewParam(createParameter(line));
 					}
 				}
 
-				//LogCategory category(createParameters(categoryName));
-				//logCategories.insert(std::pair<const char*, LogCategory>(categoryName.c_str(), category));
+				logCategories.insert(std::pair<const char*, LogCategory>(categoryName.c_str(), lc));
 			}
 		}
 	}
@@ -70,18 +71,27 @@ void ConfigManager::createCategories() {
 
 std::pair<const char*, const char*>& ConfigManager::createParameter(std::string line) {
 
-	std::pair<const char*, const char*> param;
+	std::pair<const char*, const char*> p;
 
-	/*
-	while () {
+	std::string key;
+	std::string value;
 
-		const char* key;
-		const char* value;
+	std::istringstream iss(line);
 
-		params.insert(std::pair<const char*, const char*>(key, value));
+	for (int i=0; i<3; ++i){
+		std::string substr;
+		iss >> substr;
+
+		if (i == 0)
+			key = substr;
+		if (i == 2)
+			value = substr;
 	}
-	*/
-	return param;
+
+	p.first = key.c_str();
+	p.second = value.c_str();
+	
+	return p;
 }
 
 LogCategory& ConfigManager::getCategory(const char* categoryName) {

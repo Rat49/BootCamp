@@ -16,6 +16,7 @@ private:
 
 public:
 	LogCategory() {}
+	void addNewParam(std::pair < const char*, const char*>);
 	const char* getValue(const char* configValue);
 };
 
@@ -31,11 +32,12 @@ private:
 	std::ifstream in_file;
 	std::map<const char*, LogCategory> logCategories;
 
+	void createCategories();
+	std::pair<const char*, const char*>& createParameter(std::string line);
+
 public:
 
 	void readInputFile(std::string file_name);
-	void createCategories();
-	std::pair<const char*, const char*>& createParameter(std::string line);
 	LogCategory& getCategory(const char* categoryName);
 
 };
