@@ -13,7 +13,7 @@ using Token_t = int;
 class Dispatcher final
 {
 private:
-	std::map <EventID_t, std::vector<EventHandler_t>> _listeners;
+	std::map <EventID_t, std::vector<std::pair<Token_t, EventHandler_t>>> _listeners;
 
 	Dispatcher(Dispatcher const&) = delete;
 
