@@ -9,7 +9,6 @@ void PictureResource::Load()
 {
 	_resource = new sf::Image();
 	bool isLoadSuccess = _resource->loadFromFile(_fullName);
-
 	if (!isLoadSuccess)
 	{
 		_resource = nullptr;

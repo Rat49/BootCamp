@@ -10,6 +10,10 @@ void AudioResource::Load()
 {
 	_resource = new sf::Music();
 	bool isLoadSuccess = _resource->openFromFile(_fullName);
+	if (!isLoadSuccess)
+	{
+		_resource = nullptr;
+	}
 	assert(isLoadSuccess && "Resource can not be loaded");
 }
 
