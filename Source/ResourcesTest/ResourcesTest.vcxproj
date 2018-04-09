@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|x64">
@@ -11,20 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Audio.cpp" />
-    <ClCompile Include="Picture.cpp" />
-    <ClCompile Include="test.cpp" />
-    <ClCompile Include="Resourse.cpp" />
-    <ClCompile Include="ResourseManager.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Audio.h" />
-    <ClInclude Include="Picture.h" />
-    <ClInclude Include="Resourse.h" />
-    <ClInclude Include="ResourseManager.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="graphics\smallasteroid.bmp" />
+    <ClCompile Include="project.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
@@ -36,8 +23,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v141</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -72,20 +59,12 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Resources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;Resources_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)SFML\bin\openal32.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-audio-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-graphics-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-network-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-system-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -94,7 +73,7 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I</
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Bin;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -102,14 +81,6 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I</
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-network.lib;sfml-audio.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)SFML\bin\openal32.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-audio-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-graphics-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-network-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-system-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-window-2.dll" "$(OutDir)\*.*" /F /R /Y /I</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
