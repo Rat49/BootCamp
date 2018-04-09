@@ -3,6 +3,8 @@
 
 const char* LogCategory::getValue(const char* configValue) {
 
+	//std::cout << params[configValue] << std::endl;
+	//system("PAUSE");
 	return params[configValue];
 }
 
@@ -34,38 +36,38 @@ void ConfigManager::readInputFile(std::string file_name) {
 
 void ConfigManager::createCategories() {
 
-	std::string line;
+	std::string line = "";
 	
-	while (in_file.is_open()) {
+	while (!in_file.eof()) {
 
-		if (!in_file.eof()){
+		if (line == "") {
 			std::getline(in_file, line);
-			if (line[0] == '[') {
-
-				std::ostringstream oss;
-
-				for (int i = 1; i < line.size() - 1, line[i] != ']'; ++i) {
-					oss << line[i];
-				}
-
-				std::string categoryName = oss.str();
-
-				//std::cout << categoryName << std::endl;
-				//system("PAUSE");
-
-				LogCategory lc;
-
-				if (!in_file.eof()) {
-					std::getline(in_file, line);
-					while (line[0] != '[') {
-
-						lc.addNewParam(createParameter(line));
-					}
-				}
-
-				logCategories.insert(std::pair<const char*, LogCategory>(categoryName.c_str(), lc));
-			}
 		}
+		if (line[0] == '[') {
+
+			std::ostringstream oss;
+
+			for (int i = 1; i < line.size() - 1, line[i] != ']'; ++i) {
+				oss << line[i];
+			}
+
+			std::string categoryName = oss.str();
+
+			//std::cout << categoryName << std::endl;
+			//system("PAUSE");
+			
+			LogCategory lc;
+
+			while (std::getline(in_file, line) && (line[0] != '[')) {
+
+				std::pair<const char*, const char*> p = createParameter(line);
+				lc.addNewParam(p);
+				
+			}
+
+			logCategories.insert(std::pair<const char*, LogCategory>(categoryName.c_str(), lc));
+		}
+		
 	}
 }
 
