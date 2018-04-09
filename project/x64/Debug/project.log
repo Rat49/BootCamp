@@ -1,9 +1,0 @@
-﻿  stdafx.cpp
-  Dispatcher.cpp
-c:\projects\bootcamp\project\dispatcher.cpp(23): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-  Event.cpp
-  EventIDStore.cpp
-  ExampleEvent.cpp
-  project.cpp
-  Generating Code...
-  project.vcxproj -> C:\projects\BootCamp\\Debug\project.exe

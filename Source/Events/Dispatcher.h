@@ -8,12 +8,12 @@
 #include <vector>
 
 using EventHandler_t = std::function<void(const Event&)>;
-using Token_t = int;
+using Token_t = std::size_t;
 
 class Dispatcher final
 {
 private:
-	std::map <EventID_t, std::vector<std::pair<Token_t, EventHandler_t>>> _listeners;
+	std::map <EventID_t, std::map<Token_t, EventHandler_t>> _listeners;
 
 	Dispatcher(Dispatcher const&) = delete;
 
@@ -22,8 +22,6 @@ private:
 	Dispatcher();
 
 	~Dispatcher();
-
-	void findByTokenAndDelete(EventID_t ID, Token_t token);
 
 public:
 
