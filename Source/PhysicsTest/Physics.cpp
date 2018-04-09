@@ -100,7 +100,7 @@ void test(int);
 
 int main()
 {
-	test(10);
+	test(2);
 
 	getchar();
     return 0;
@@ -166,7 +166,6 @@ void draw(GameObject *gameObjectsFunc, int length) {
 				if (i != j) {
 					if (isCollide(gameObjectsFunc[i], gameObjectsFunc[j])) {
 						std::cout << "Collision!" << std::endl;
-						resolveCollision(gameObjectsFunc[i], gameObjectsFunc[j]);
 					}
 				}
 			}
@@ -219,7 +218,14 @@ void resolveCollision(GameObject go1, GameObject go2) {
 
 void test(int numOfObjects) {
 	GameObject* gameObjects = new GameObject[numOfObjects];
-	randomFill(gameObjects, numOfObjects);
+	//randomFill(gameObjects, numOfObjects);
+	gameObjects[0].setRadius(25);
+	gameObjects[0].setCoords({500, 500});
+	gameObjects[0].setSpeed({1, 0});
+
+	gameObjects[1].setRadius(25);
+	gameObjects[1].setCoords({ 551, 500 });
+	gameObjects[1].setSpeed({ -1, 0 });
 	draw(gameObjects, numOfObjects);
 	delete[] gameObjects;
 }
