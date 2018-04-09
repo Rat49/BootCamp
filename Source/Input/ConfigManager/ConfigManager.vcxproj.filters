@@ -18,7 +18,7 @@
     <ClCompile Include="ConfigManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
+    <ClCompile Include="..\Debug\ConfigManager\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
