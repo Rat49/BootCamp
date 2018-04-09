@@ -19,6 +19,7 @@ void PictureResource::Load()
 void PictureResource::Unload()
 {
 	delete(_resource);
+	_resource = nullptr;
 }
 
 sf::Image& PictureResource::Get()

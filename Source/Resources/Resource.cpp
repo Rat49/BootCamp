@@ -15,7 +15,7 @@ void Resource::DecRefCounter()
 	--_refCounter;
 }
 
-int Resource::GetRefCounter()
+unsigned int Resource::GetRefCounter() const
 {
 	return _refCounter;
 }

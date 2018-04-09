@@ -20,6 +20,7 @@ void AudioResource::Load()
 void AudioResource::Unload()
 {
 	delete(_resource);
+	_resource = nullptr;
 }
 
 sf::Music& AudioResource::Get()
