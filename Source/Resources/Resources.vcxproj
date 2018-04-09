@@ -78,12 +78,14 @@
     <ClInclude Include="PictureResource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="TextureResource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AudioResource.cpp" />
     <ClCompile Include="PictureResource.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="TextureResource.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
