@@ -1,6 +1,7 @@
 #pragma once
-#include "Resource.h"
 #include <SFML\Graphics.hpp>
+#include "Resource.h"
+
 class PictureResource :
 	public Resource
 {

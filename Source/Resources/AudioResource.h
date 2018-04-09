@@ -1,6 +1,7 @@
 #pragma once
-#include "Resource.h"
 #include <SFML\Audio.hpp>
+#include "Resource.h"
+
 class AudioResource :
 	public Resource
 {
