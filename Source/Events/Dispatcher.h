@@ -23,6 +23,8 @@ private:
 
 	~Dispatcher();
 
+	void findByTokenAndDelete(EventID_t ID, Token_t token);
+
 public:
 
 	static Dispatcher& getInstance();

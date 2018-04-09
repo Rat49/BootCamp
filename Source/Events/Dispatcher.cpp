@@ -3,32 +3,6 @@
 
 #include  <algorithm>
 
-typedef std::pair<Token_t, EventHandler_t> handlerPair;
-
-typedef std::vector<std::pair<Token_t, EventHandler_t> > vectorOfHandlerPair;
-
-struct Comp {
-
-
-
-	bool operator()(handlerPair p, Token_t t) const
-
-	{
-
-		return p.first < t;
-
-	}
-
-	bool operator()(Token_t t, handlerPair p) const
-
-	{
-
-		return t < p.first;
-
-	}
-
-};
-
 Dispatcher::Dispatcher()
 {
 }
@@ -94,37 +68,27 @@ void Dispatcher::Disconnect(const EventID_t eventID, const Token_t token)
 
 	std::vector <std::pair<Token_t, EventHandler_t>>& listenersForCurrentEvent = _listeners.find(eventID)->second;
 
-	std::pair<Token_t, EventHandler_t> listenerPosition = std::pair<Token_t, EventHandler_t>(token, nullptr);
+	std::pair<Token_t, EventHandler_t> requiredListener = std::pair<Token_t, EventHandler_t>(token, nullptr);
 
-	bool isTokenValid = std::binary_search(listenersForCurrentEvent.begin(),
+	auto positionOfRequiredListener = std::equal_range(listenersForCurrentEvent.begin(), 
 
-		listenersForCurrentEvent.end(),
-
-		listenerPosition,
-
+		listenersForCurrentEvent.end(), 
+			
+		requiredListener,
+			
 		[](const auto& lListener, const auto& rListener)
-		{
-			return lListener.first < rListener.first;
-		});
+			{
+				return lListener.first < rListener.first;
+			}
+	);
 
-	if (isTokenValid)
+	if (positionOfRequiredListener.first == listenersForCurrentEvent.cend())
 	{
-		auto p = std::equal_range(listenersForCurrentEvent.begin(), 
-
-			listenersForCurrentEvent.end(), 
-			
-			listenerPosition, 
-			
-			[](const auto& lListener, const auto& rListener)
-				{
-					return lListener.first < rListener.first;
-				});
-
-		listenersForCurrentEvent.erase(p.first);
-
-		return;
+		std::cout << DispatcherErrorMessagesStore::disconectFailedWrongToken << std::endl;
 	}
 
-	std::cout << DispatcherErrorMessagesStore::disconectFailedWrongToken << std::endl;
+	listenersForCurrentEvent.erase(positionOfRequiredListener.first);
+
+	return;
 }
 
