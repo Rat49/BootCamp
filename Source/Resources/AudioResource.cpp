@@ -1,7 +1,9 @@
 #include "AudioResource.h"
 #include <cassert>
 
-AudioResource::AudioResource(const std::string& id, const std::string& name):Resource(id, name), _resource(nullptr)
+AudioResource::AudioResource(const std::string& id, const std::string& name):
+	Resource(id, name), 
+	_resource(nullptr)
 {
 	
 }
