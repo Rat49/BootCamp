@@ -2,55 +2,57 @@
 #include <cassert>
 #include <iostream>
 
-InputManager::InputManager(const std::map<int, int>& buttonsKeyFromConfig)
+InputManager::InputManager(const std::map<Action_t, State_t>& buttonsKeyFromConfig)
 {
-	for (int action = static_cast<int> (GameActions::Up), lastAction = static_cast<int> (GameActions::Space); action <= lastAction; ++action)
+	for (auto actionIt = std::cbegin(buttonsKeyFromConfig); actionIt != std::cend(buttonsKeyFromConfig); ++actionIt)
 	{
-		buttonsState.insert(std::pair<int, int>(action, static_cast<int>(ButtonsState::Released)));
+		buttonsState[actionIt->first] = static_cast<State_t>(ButtonsState::Released);
 	}
-	buttonsKey.insert(buttonsKeyFromConfig.begin(), buttonsKeyFromConfig.end());
+	buttonsKey.insert(std::cbegin(buttonsKeyFromConfig), std::cend(buttonsKeyFromConfig));
 }
 
-
-InputManager::~InputManager()
-{
-
+bool InputManager::GetState(const Action_t searchAction, ButtonsState & result) const {
+	bool success = false;
+	for (auto actionIt = std::cbegin(buttonsState); actionIt != std::cend(buttonsState); ++actionIt)
+	{
+		if (actionIt->first == searchAction) {
+			result = static_cast<ButtonsState>(actionIt->second);
+		success = true;
+		}
+	}
+	return success;
 }
 
-std::map<int, int> InputManager::GetState() const {
-	return buttonsState;
-}
-
-int InputManager::ChangeStateWhenPressed(int currentState) {
+State_t InputManager::ChangeStateWhenPressed(State_t currentState) {
 	switch (static_cast<ButtonsState>(currentState))
 	{
 	case ButtonsState::JustPressed:
-		return static_cast<int>(ButtonsState::Pressed);
+		return static_cast<State_t>(ButtonsState::Pressed);
 	case ButtonsState::Pressed:
-		return static_cast<int>(ButtonsState::Pressed);
+		return static_cast<State_t>(ButtonsState::Pressed);
 	case ButtonsState::JustReleased:
-		return static_cast<int>(ButtonsState::JustPressed);
+		return static_cast<State_t>(ButtonsState::JustPressed);
 	case ButtonsState::Released:
-		return static_cast<int>(ButtonsState::JustPressed);
+		return static_cast<State_t>(ButtonsState::JustPressed);
 	default:
-		return static_cast<int>(ButtonsState::Pressed);
+		return static_cast<State_t>(ButtonsState::Pressed);
 	}
 	
 };
 
-int InputManager::ChangeStateWhenRelease(int currentState) {
+State_t InputManager::ChangeStateWhenRelease(State_t currentState) {
 	switch (static_cast<ButtonsState>(currentState))
 	{
 	case ButtonsState::JustPressed:
-		return static_cast<int>(ButtonsState::JustReleased);
+		return static_cast<State_t>(ButtonsState::JustReleased);
 	case ButtonsState::Pressed:
-		return static_cast<int>(ButtonsState::JustReleased);
+		return static_cast<State_t>(ButtonsState::JustReleased);
 	case ButtonsState::JustReleased:
-		return static_cast<int>(ButtonsState::Released);
+		return static_cast<State_t>(ButtonsState::Released);
 	case ButtonsState::Released:
-		return static_cast<int>(ButtonsState::Released);
+		return static_cast<State_t>(ButtonsState::Released);
 	default:
-		return static_cast<int>(ButtonsState::Released);
+		return static_cast<State_t>(ButtonsState::Released);
 	}
 
 };
@@ -58,21 +60,15 @@ int InputManager::ChangeStateWhenRelease(int currentState) {
 void InputManager::Update() {
 	for (auto &key : buttonsKey) 
 	{
+		std::map<Action_t, State_t>::iterator buttonState = buttonsState.find(key.first);
+
 		if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key.second))) {
-			std::map<int, int>::iterator endOfButtonsState = std::end(buttonsState);
-			std::map<int,int>::iterator pair = buttonsState.find(key.first);
-			
-			assert(pair != endOfButtonsState);
-			
-			pair->second = ChangeStateWhenPressed(pair->second);
+			assert(buttonState != std::cend(buttonsState));
+			buttonState->second = ChangeStateWhenPressed(buttonState->second);
 		}
 		else {
-			std::map<int, int>::iterator endOfButtonsState = std::end(buttonsState);
-			std::map<int, int>::iterator pair = buttonsState.find(key.first);
-
-			assert(pair != endOfButtonsState);
-
-			pair->second = ChangeStateWhenRelease(pair->second);
+			assert(buttonState != std::cend(buttonsState));
+			buttonState->second = ChangeStateWhenRelease(buttonState->second);
 		}
 	}
 

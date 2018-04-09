@@ -2,15 +2,9 @@
 #include <map>
 #include <SFML\Window.hpp>
 
-enum class GameActions {
-	Up,
-	Down,
-	Left,
-	Right,
-	Escape,
-	Enter,
-	Space
-};
+using Action_t = int;
+using State_t = int;
+using ButtonKey_t = int;
 
 enum class ButtonsState {
 	JustPressed,
@@ -19,16 +13,15 @@ enum class ButtonsState {
 	Released
 };
 
-class InputManager
+class InputManager final
 {
 private:
-	std::map<int, int> buttonsState;
+	std::map<Action_t, State_t> buttonsState;
 public:
-	std::map<int, int> GetState() const;
-	std::map<int,int> buttonsKey;
-	int ChangeStateWhenRelease(int);
-	int ChangeStateWhenPressed(int);
+	bool GetState(const Action_t searchAction, ButtonsState & result) const;
+	std::map<Action_t, ButtonKey_t> buttonsKey;
+	State_t ChangeStateWhenRelease(State_t);
+	State_t ChangeStateWhenPressed(State_t);
 	void Update();
-	InputManager(const std::map<int, int>& arr);
-	~InputManager();
+	InputManager(const std::map<Action_t, State_t>& arr);
 };
