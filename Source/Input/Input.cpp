@@ -2,13 +2,15 @@
 #include <cassert>
 #include <iostream>
 
-InputManager::InputManager(const std::map<Action_t, State_t>& buttonsKeyFromConfig)
+InputManager::InputManager(const std::map<Action_t, ButtonKey_t>& buttonsKeyFromConfig)
 {
 	for (auto actionIt = std::cbegin(buttonsKeyFromConfig); actionIt != std::cend(buttonsKeyFromConfig); ++actionIt)
 	{
 		buttonsState[actionIt->first] = static_cast<State_t>(ButtonsState::Released);
+		
+		buttonsKey[actionIt->first] = actionIt->second;
+		
 	}
-	buttonsKey.insert(std::cbegin(buttonsKeyFromConfig), std::cend(buttonsKeyFromConfig));
 }
 
 bool InputManager::GetState(const Action_t searchAction, ButtonsState & result) const {
@@ -17,7 +19,7 @@ bool InputManager::GetState(const Action_t searchAction, ButtonsState & result) 
 	{
 		if (actionIt->first == searchAction) {
 			result = static_cast<ButtonsState>(actionIt->second);
-		success = true;
+			success = true;
 		}
 	}
 	return success;
@@ -58,18 +60,22 @@ State_t InputManager::ChangeStateWhenRelease(State_t currentState) {
 };
 
 void InputManager::Update() {
-	for (auto &key : buttonsKey) 
+	for (auto &action : buttonsKey)
 	{
-		std::map<Action_t, State_t>::iterator buttonState = buttonsState.find(key.first);
+		std::map<Action_t, State_t>::iterator buttonState = buttonsState.find(action.first);
+		assert(buttonState != std::cend(buttonsState));
+		bool pressed = false;
+		for (auto &key : action.second) {
+			if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key)))
+			{
+				pressed = true;
+			}
+		}
 
-		if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key.second))) {
-			assert(buttonState != std::cend(buttonsState));
+		if (pressed)
 			buttonState->second = ChangeStateWhenPressed(buttonState->second);
-		}
-		else {
-			assert(buttonState != std::cend(buttonsState));
+		else
 			buttonState->second = ChangeStateWhenRelease(buttonState->second);
-		}
 	}
 
 }
