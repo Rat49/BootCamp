@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationResource.h" />
     <ClInclude Include="AudioResource.h" />
     <ClInclude Include="PictureResource.h" />
     <ClInclude Include="ResourceManager.h" />
@@ -81,6 +82,7 @@
     <ClInclude Include="TextureResource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationResource.cpp" />
     <ClCompile Include="AudioResource.cpp" />
     <ClCompile Include="PictureResource.cpp" />
     <ClCompile Include="Resource.cpp" />
