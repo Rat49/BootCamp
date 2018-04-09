@@ -3,8 +3,13 @@
 
 int main() {
 	
+	/*
+	ConfigManager cm;
 
-	//ConfigManager cm;
+	cm.readInputFile("config.INI");
 
-	//cm.createCategories();
+	cm.getCategory("Input").getValue("SHOOT");
+	*/
+
+	return 0;
 }
