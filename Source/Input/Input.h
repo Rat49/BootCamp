@@ -16,10 +16,10 @@ enum class ButtonsState {
 class InputManager final
 {
 private:
-	std::map<Action_t, State_t> buttonsState;
+	std::map<Action_t, State_t> _buttonsState;
 public:
 	bool GetState(const Action_t searchAction, ButtonsState & result) const;
-	std::map<Action_t, ButtonKey_t> buttonsKey;
+	std::map<Action_t, ButtonKey_t> _buttonsKey;
 	State_t ChangeStateWhenRelease(State_t);
 	State_t ChangeStateWhenPressed(State_t);
 	void Update();

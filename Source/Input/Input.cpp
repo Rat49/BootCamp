@@ -2,27 +2,27 @@
 #include <cassert>
 #include <iostream>
 
-InputManager::InputManager(const std::map<Action_t, ButtonKey_t>& buttonsKeyFromConfig)
+InputManager::InputManager(const std::map<Action_t, ButtonKey_t>& _buttonsKeyFromConfig)
 {
-	for (auto actionIt = std::cbegin(buttonsKeyFromConfig); actionIt != std::cend(buttonsKeyFromConfig); ++actionIt)
+	for (auto _actionIt = std::cbegin(_buttonsKeyFromConfig); _actionIt != std::cend(_buttonsKeyFromConfig); ++_actionIt)
 	{
-		buttonsState[actionIt->first] = static_cast<State_t>(ButtonsState::Released);
+		_buttonsState[_actionIt->first] = static_cast<State_t>(ButtonsState::Released);
 		
-		buttonsKey[actionIt->first] = actionIt->second;
+		_buttonsKey[_actionIt->first] = _actionIt->second;
 		
 	}
 }
 
-bool InputManager::GetState(const Action_t searchAction, ButtonsState & result) const {
-	bool success = false;
-	for (auto actionIt = std::cbegin(buttonsState); actionIt != std::cend(buttonsState); ++actionIt)
+bool InputManager::GetState(const Action_t _searchAction, ButtonsState & _result) const {
+	bool _success = false;
+	for (auto _actionIt = std::cbegin(_buttonsState); _actionIt != std::cend(_buttonsState); ++_actionIt)
 	{
-		if (actionIt->first == searchAction) {
-			result = static_cast<ButtonsState>(actionIt->second);
-			success = true;
+		if (_actionIt->first == _searchAction) {
+			_result = static_cast<ButtonsState>(_actionIt->second);
+			_success = true;
 		}
 	}
-	return success;
+	return _success;
 }
 
 State_t InputManager::ChangeStateWhenPressed(State_t currentState) {
@@ -60,22 +60,22 @@ State_t InputManager::ChangeStateWhenRelease(State_t currentState) {
 };
 
 void InputManager::Update() {
-	for (auto &action : buttonsKey)
+	for (auto &_action : _buttonsKey)
 	{
-		std::map<Action_t, State_t>::iterator buttonState = buttonsState.find(action.first);
-		assert(buttonState != std::cend(buttonsState));
-		bool pressed = false;
-		for (auto &key : action.second) {
-			if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(key)))
+		std::map<Action_t, State_t>::iterator _buttonState = _buttonsState.find(_action.first);
+		assert(_buttonState != std::cend(_buttonsState));
+		bool _pressed = false;
+		for (auto &_key : _action.second) {
+			if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(_key)))
 			{
-				pressed = true;
+				_pressed = true;
 			}
 		}
 
-		if (pressed)
-			buttonState->second = ChangeStateWhenPressed(buttonState->second);
+		if (_pressed)
+			_buttonState->second = ChangeStateWhenPressed(_buttonState->second);
 		else
-			buttonState->second = ChangeStateWhenRelease(buttonState->second);
+			_buttonState->second = ChangeStateWhenRelease(_buttonState->second);
 	}
 
 }
