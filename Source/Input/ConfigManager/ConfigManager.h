@@ -13,6 +13,7 @@ private:
 
 	std::map<const char*, const char*> params;
 
+	bool IfElementExists(const char* value);
 
 public:
 	LogCategory() {}
