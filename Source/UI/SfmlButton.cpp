@@ -18,7 +18,7 @@ bool SfmlButton::IsClicked(sf::Vector2i cursor_pos) const
 	}
 	else
 	{
-		std::cout << "clicked!! ";
+		std::cout << "clicked on " << this->_name << " ";
 		return true;
 	}
 }

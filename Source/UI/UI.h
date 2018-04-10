@@ -3,6 +3,15 @@
 #include <SFML\Graphics.hpp>
 #include <cassert>
 #include <memory>
+
+struct cmpByStringLength
+{
+	bool operator()(const std::string& a, const std::string& b) const
+	{
+		return a < b;
+	}
+};
+
 class UI
 {
 public:
@@ -16,13 +25,16 @@ public:
 		return specificWidget;
 	}
 
+	void Render();
+
 	sf::RenderWindow _space;
 	void addButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string &name);
 	
 	~UI();
 private:
-	Widget* GetWidget(const std::string &key) const;
-	std::map<std::string, Widget*> _widgets;
+	Widget* GetWidget(const std::string &key);
+	std::map<std::string, Widget*, cmpByStringLength> _widgets;
 	
 };
+
 

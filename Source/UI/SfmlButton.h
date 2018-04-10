@@ -7,7 +7,7 @@ class SfmlButton:
 public:
 	SfmlButton(const sf::Vector2f size, const sf::Vector2f pos,const std::string & name, sf::RenderWindow& caller);
 	bool IsClicked(sf::Vector2i cursor_pos) const;
-	void Draw();
+	void Draw() override;
 	~SfmlButton();
 private:
 	
