@@ -3,8 +3,7 @@
 #include <SFML\Window.hpp>
 
 using Action_t = int;
-using ButtonKey_t = std::vector<int>;
-using State_t = int;
+using ButtonKey_t = int;
 
 enum class ButtonsState {
 	JustPressed,
@@ -16,12 +15,19 @@ enum class ButtonsState {
 class InputManager final
 {
 private:
-	std::map<Action_t, State_t> _buttonsState;
+	struct localButtonsConfig {
+		Action_t action;
+		ButtonsState state;
+		ButtonKey_t primary;
+		ButtonKey_t alternatively;
+	};
+
+	std::vector<localButtonsConfig> buttonsState;
+	ButtonsState ChangeStateWhenReleased(ButtonsState);
+	ButtonsState ChangeStateWhenPressed(ButtonsState);
+
 public:
 	bool GetState(const Action_t searchAction, ButtonsState & result) const;
-	std::map<Action_t, ButtonKey_t> _buttonsKey;
-	State_t ChangeStateWhenRelease(State_t);
-	State_t ChangeStateWhenPressed(State_t);
 	void Update();
-	InputManager(const std::map<Action_t, ButtonKey_t>& arr);
+	InputManager(const std::multimap<Action_t, ButtonKey_t>& arr);
 };
