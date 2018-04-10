@@ -1,10 +1,23 @@
 #include "ConfigManager.h"
 
 
+bool LogCategory::IfElementExists(const char* keyValue) {
+
+	if (params.find(keyValue) != params.end()) {
+		return true;
+	}
+
+	return false;
+}
+
 const char* LogCategory::getValue(const char* configValue) {
 
-	//std::cout << params[configValue] << std::endl;
-	//system("PAUSE");
+
+	if (IfElementExists(configValue)) {
+		std::cout << params[configValue] << std::endl;
+		system("PAUSE");
+	}
+
 	return params[configValue];
 }
 
@@ -19,17 +32,14 @@ void LogCategory::addNewParam(std::pair < const char*, const char*> param) {
 
 void ConfigManager::readInputFile(std::string file_name) {
 
-	in_file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
+	in_file.open(file_name);
 
-	try {
-		in_file.open(file_name);
-
+	if (in_file.is_open()) {
 		createCategories();
-
 		in_file.close();
 	}
-	catch (const std::ifstream::failure&) {
-		std::cerr << "Cannon open/read file!" << std::endl;
+	else {
+		exit(1);
 	}
 
 }
@@ -37,7 +47,7 @@ void ConfigManager::readInputFile(std::string file_name) {
 void ConfigManager::createCategories() {
 
 	std::string line = "";
-	
+
 	while (!in_file.eof()) {
 
 		if (line == "") {
@@ -55,20 +65,23 @@ void ConfigManager::createCategories() {
 
 			//std::cout << categoryName << std::endl;
 			//system("PAUSE");
-			
+
 			LogCategory lc;
 
 			while (std::getline(in_file, line) && (line[0] != '[')) {
 
 				std::pair<const char*, const char*> p = createParameter(line);
 				lc.addNewParam(p);
-				
+
 			}
 
 			logCategories.insert(std::pair<const char*, LogCategory>(categoryName.c_str(), lc));
 		}
-		
+
 	}
+
+	std::cout << "ok" << std::endl;
+	system("PAUSE");
 }
 
 std::pair<const char*, const char*>& ConfigManager::createParameter(std::string line) {
@@ -80,7 +93,7 @@ std::pair<const char*, const char*>& ConfigManager::createParameter(std::string 
 
 	std::istringstream iss(line);
 
-	for (int i=0; i<3; ++i){
+	for (int i = 0; i<3; ++i) {
 		std::string substr;
 		iss >> substr;
 
@@ -92,11 +105,11 @@ std::pair<const char*, const char*>& ConfigManager::createParameter(std::string 
 
 	p.first = key.c_str();
 	p.second = value.c_str();
-	
+
 	return p;
 }
 
 LogCategory& ConfigManager::getCategory(const char* categoryName) {
-	
+
 	return logCategories[categoryName];
 }
