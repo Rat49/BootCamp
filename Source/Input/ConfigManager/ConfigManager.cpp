@@ -14,14 +14,11 @@ std::string LogCategory::getValue(std::string keyValue) {
 
 
 	if (IfElementExists(keyValue)) {
-		std::cout << params[keyValue] << std::endl;
-		system("PAUSE");
 
 		return params[keyValue];
 	}
 
-
-	std::cerr << "No key value" << std::endl;
+	std::cerr << "Key value not found" << std::endl;
 	system("PAUSE");
 	exit(1);
 }
@@ -131,7 +128,7 @@ LogCategory& ConfigManager::getCategory(std::string categoryName) {
 		return logCategories[categoryName];
 	}
 
-	std::cerr << "No category value" << std::endl;
+	std::cerr << "Category value not found" << std::endl;
 	system("PAUSE");
 	exit(1);
 }
