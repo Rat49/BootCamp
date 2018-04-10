@@ -3,13 +3,8 @@
 
 int main() {
 
-
-	ConfigManager cm;
-
-	cm.readInputFile("config.INI");
-
-	cm.getCategory("Input").getValue("SHOOT");
-
+	ConfigManager* configManager = ConfigManager::create("config.INI");
+	configManager->getCategory("Input").getValue("SHOOT");
 
 	return 0;
 }

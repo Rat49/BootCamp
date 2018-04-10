@@ -29,16 +29,18 @@ class ConfigManager {
 
 private:
 
-	std::ifstream in_file;
+	std::ifstream inFile;
 	std::map<std::string, LogCategory> logCategories;
 
+	ConfigManager() {}
+	void readInputFile(std::string fileName);
 	void createCategories();
-	std::pair<std::string, std::string> createParameter(std::string line);
+	void createParameter(std::string categoryName, std::string line);
 	bool IfCategoryExists(std::string keyValue);
 
 public:
 
-	void readInputFile(std::string file_name);
+	static ConfigManager* create(std::string fileName);
 	LogCategory& getCategory(std::string categoryName);
 
 };

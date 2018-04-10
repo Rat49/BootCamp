@@ -35,13 +35,20 @@ void LogCategory::addNewParam(std::pair <std::string, std::string> param) {
 ----------------------------------------------------------------------------
 */
 
-void ConfigManager::readInputFile(std::string file_name) {
+ConfigManager* ConfigManager::create(std::string fileName) {
+	ConfigManager* cm = new ConfigManager();
+	cm->readInputFile(fileName);
 
-	in_file.open(file_name);
+	return cm;
+}
 
-	if (in_file.is_open()) {
+void ConfigManager::readInputFile(std::string fileName) {
+
+	inFile.open(fileName);
+
+	if (inFile.is_open()) {
 		createCategories();
-		in_file.close();
+		inFile.close();
 	}
 	else {
 		std::cerr << "Cannot open file" << std::endl;
@@ -56,9 +63,9 @@ void ConfigManager::createCategories() {
 	std::string line;
 	std::string currentCategory;
 
-	while (!in_file.eof()) {
+	while (!inFile.eof()) {
 
-		std::getline(in_file, line);
+		std::getline(inFile, line);
 
 		if (line[0] == '[') {
 			std::ostringstream oss;
@@ -73,17 +80,14 @@ void ConfigManager::createCategories() {
 		}
 		
 		if (line[0] != '[') {
-			std::pair<std::string, std::string> p = createParameter(line);
-			logCategories[currentCategory].addNewParam(p);
+			createParameter(currentCategory, line);
 		}
 		
 	}
 
 }
 
-std::pair<std::string, std::string> ConfigManager::createParameter(std::string line) {
-
-	std::pair<std::string, std::string> p;
+void ConfigManager::createParameter(std::string categoryName, std::string line) {
 
 	std::string key;
 	std::string value;
@@ -100,10 +104,15 @@ std::pair<std::string, std::string> ConfigManager::createParameter(std::string l
 			value = substr;
 	}
 
-	p.first = key.c_str();
-	p.second = value.c_str();
+	if (!key.empty() && !value.empty()) {
 
-	return p;
+		std::pair<std::string, std::string> p;
+
+		p.first = key.c_str();
+		p.second = value.c_str();
+
+		logCategories[categoryName].addNewParam(p);
+	}
 }
 
 bool ConfigManager::IfCategoryExists(std::string keyValue) {
