@@ -22,15 +22,11 @@ Resource* ResourceManager::GetGeneralResource(const std::string& key)
 	assert(iter != _resources.end() && "Resource not found");
 
 	Resource* resource = iter->second;
-	if (resource->GetRefCounter() != 0)
-	{
-		resource->IncRefCounter();
-	}
-	else
+	if (resource->GetRefCounter() == 0)
 	{
 		resource->Load();
-		resource->IncRefCounter();
 	}
+	resource->IncRefCounter();
 	return resource;
 
 }

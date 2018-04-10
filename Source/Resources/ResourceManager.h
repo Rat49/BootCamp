@@ -1,4 +1,5 @@
 #pragma once
+#include "AnimationResource.h"
 #include "AudioResource.h"
 #include "PictureResource.h"
 #include "Resource.h"
