@@ -9,6 +9,7 @@ PictureResource::PictureResource(const std::string& id, const std::string& name)
 
 void PictureResource::Load() 
 {
+	IncRefCounter();
 	_resource = new sf::Image();
 	bool isLoadSuccess = _resource->loadFromFile(_fullName);
 	if (!isLoadSuccess)
@@ -24,10 +25,11 @@ void PictureResource::Unload()
 	_resource = nullptr;
 }
 
-sf::Image& PictureResource::Get()
+sf::Image* PictureResource::Get()
 {
 	assert(GetRefCounter() != 0 && "Resource references not found");
-	return *_resource;
+	assert(_resource != nullptr && "Resource not loaded");
+	return _resource;
 }
 
 

@@ -11,7 +11,7 @@ public:
 
 	void Load() override;
 	void Unload() override;
-	sf::Texture& Get();
+	sf::Texture* Get();
 
 	~TextureResource() override;
 private:

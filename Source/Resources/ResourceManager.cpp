@@ -28,8 +28,7 @@ Resource* ResourceManager::GetGeneralResource(const std::string& key)
 	}
 	else
 	{
-		resource->Load();
-		resource->IncRefCounter();
+		resource->Load();		
 	}
 	return resource;
 

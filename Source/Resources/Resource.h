@@ -9,8 +9,8 @@ public:
 	void IncRefCounter();
 	void DecRefCounter();
 	unsigned int GetRefCounter() const;
-	virtual void Load() = 0 {};
-	virtual void Unload() = 0 {};
+	virtual void Load() = 0;
+	virtual void Unload() = 0;
 	virtual ~Resource() = 0 {};
 
 	std::string _fullName;

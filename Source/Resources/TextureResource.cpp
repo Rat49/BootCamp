@@ -9,6 +9,7 @@ TextureResource::TextureResource(const std::string& id, const std::string& name)
 
 void TextureResource::Load()
 {
+	IncRefCounter();
 	_resource = new sf::Texture();
 	bool isLoadSuccess = _resource->loadFromFile(_fullName);
 
@@ -26,10 +27,11 @@ void TextureResource::Unload()
 	_resource = nullptr;
 }
 
-sf::Texture& TextureResource::Get()
+sf::Texture* TextureResource::Get()
 {
 	assert(GetRefCounter() != 0 && "Resource references not found");
-	return *_resource;
+	assert(_resource != nullptr && "Resource not loaded");
+	return _resource;
 }
 
 TextureResource::~TextureResource()

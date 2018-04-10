@@ -10,7 +10,7 @@ public:
 
 	void Load() override;
 	void Unload() override;
-	sf::Music& Get();
+	sf::Music* Get();
 
 	~AudioResource() override;
 
