@@ -10,133 +10,89 @@ float DEGTORAD = 0.017453f;
 const int W = 1200;
 const int H = 800;
 
-class GameObject {
+class RigidBody {
 private:
-	std::vector<float> coords;
-	std::vector<float> speed;
-	float radius;
-	float angle;
+	sf::Vector2<float> _coords;
+	sf::Vector2<float> _speed;
+	float _radius;
 
 public:
-	GameObject() {
+	RigidBody() {
 
 	}
 
-	GameObject(std::vector<float> c, std::vector<float> s, float r, float a) {
-		coords = c;
-		speed = s;
-		radius = r;
+	RigidBody(sf::Vector2<float> c, sf::Vector2<float> s, float r) {
+		_coords = c;
+		_speed = s;
+		_radius = r;
 	}
 
-	void update(float t) {
-		coords.at(0) += speed.at(0) * t;
-		coords.at(1) += speed.at(1) * t;
+	void Update(float t) {
+		_coords.x += _speed.x * t;
+		_coords.y += _speed.y * t;
 
-		if (coords.at(0) > W) {
-			coords.at(0) = 0;
+		if (_coords.x > W) {
+			_coords.x = 0;
 		}
-		if (coords.at(0) < 0) {
-			coords.at(0) = W;
+		if (_coords.x < 0) {
+			_coords.x = W;
 		}
-		if (coords.at(1) > H) {
-			coords.at(1) = 0;
+		if (_coords.y > H) {
+			_coords.y = 0;
 		}
-		if (coords.at(1) < 0) {
-			coords.at(1) = H;
+		if (_coords.y < 0) {
+			_coords.y = H;
 		}
 	}
 
-	void print() {
-		std::cout << "Coords:";
-		for (std::vector<float>::iterator it = coords.begin(); it != coords.end(); ++it) {
-			std::cout << ' ' << *it;
-		}
-		std::cout << std::endl;
-
-		std::cout << "Speed:";
-		for (std::vector<float>::iterator it = speed.begin(); it != speed.end(); ++it) {
-			std::cout << ' ' << *it;
-		}
-		std::cout << std::endl;
-
-		std::cout << "Radius: " << radius << std::endl;
+	void SetRadius(float r) {
+		_radius = r;
 	}
 
-	void reset() {
-
+	void SetCoordinates(sf::Vector2<float> c) {
+		_coords = c;
 	}
 
-	void setRadius(float r) {
-		radius = r;
+	void SetX(float arg) {
+		_coords.x = arg;
 	}
 
-	void setCoords(std::vector<float> c) {
-		coords = c;
+	void SetY(float arg) {
+		_coords.y = arg;
 	}
 
-	void setSpeed(std::vector<float> s) {
-		speed = s;
+	void SetSpeed(sf::Vector2<float> s) {
+		_speed = s;
 	}
 
-	float getRadius() {
-		return radius;
+	float GetRadius() {
+		return _radius;
 	}
 
-	float getX() {
-		return coords.at(0);
+	float GetX() {
+		return _coords.x;
 	}
 
-	float getY() {
-		return coords.at(1);
+	float GetY() {
+		return _coords.y;
 	}
 };
 
-void draw(GameObject);
-void draw(GameObject*, int);
-void randomFill(GameObject*, int);
-bool isCollide(GameObject, GameObject);
-void resolveCollision(GameObject, GameObject);
-void test(int);
+void Draw(RigidBody*, int);
+void RandomFill(RigidBody*, int);
+bool Collided(RigidBody, RigidBody);
+void ResolveCollision(RigidBody &, RigidBody &);
+void Test(int);
 
 int main()
 {
-	test(2);
+	Test(20);
 
 	getchar();
     return 0;
 }
 
-void draw(GameObject gameObjectFunc) {
-	sf::RenderWindow app(sf::VideoMode(W, H), "Asteroids!");
-	sf::CircleShape circle;
-	sf::Clock clock;
-	sf::Time deltaTime;
-
-	circle.setRadius(gameObjectFunc.getRadius());
-	circle.setPosition(gameObjectFunc.getX(), gameObjectFunc.getY());
-
-	while (app.isOpen()) {
-		deltaTime = clock.restart();
-		float deltaSeconds = deltaTime.asSeconds();
-
-		sf::Event event;
-
-		while (app.pollEvent(event)) {
-			if (event.type == sf::Event::Closed) {
-				app.close();
-			}
-		}
-
-		gameObjectFunc.update(deltaSeconds);
-		circle.setPosition(gameObjectFunc.getX(), gameObjectFunc.getY());
-
-		app.clear();
-		app.draw(circle);
-		app.display();
-	}
-}
-
-void draw(GameObject *gameObjectsFunc, int length) {
+void Draw(RigidBody *RigidBodysFunc, int length) {
 	sf::Clock clock;
 	sf::Time deltaTime;
 
@@ -145,8 +101,8 @@ void draw(GameObject *gameObjectsFunc, int length) {
 	sf::CircleShape* circles = new sf::CircleShape[length];
 
 	for (int i = 0; i < length; ++i) {
-		circles[i].setRadius(gameObjectsFunc[i].getRadius());
-		circles[i].setPosition(gameObjectsFunc[i].getX(), gameObjectsFunc[i].getY());
+		circles[i].setRadius(RigidBodysFunc[i].GetRadius());
+		circles[i].setPosition(RigidBodysFunc[i].GetX(), RigidBodysFunc[i].GetY());
 	}
 
 	while (app.isOpen()) {
@@ -164,16 +120,22 @@ void draw(GameObject *gameObjectsFunc, int length) {
 		for (int i = 0; i < length; ++i) {
 			for (int j = 0; j < length; ++j) {
 				if (i != j) {
-					if (isCollide(gameObjectsFunc[i], gameObjectsFunc[j])) {
-						std::cout << "Collision!" << std::endl;
+					if (Collided(RigidBodysFunc[i], RigidBodysFunc[j])) {
+						ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
+						circles[i].setFillColor(sf::Color::Red);
+						circles[j].setFillColor(sf::Color::Red);
+					}
+					else {
+						circles[i].setFillColor(sf::Color::White);
+						circles[j].setFillColor(sf::Color::White);
 					}
 				}
 			}
 		}
 
 		for (int i = 0; i < length; ++i) {
-			gameObjectsFunc[i].update(deltaSeconds);
-			circles[i].setPosition(gameObjectsFunc[i].getX(), gameObjectsFunc[i].getY());
+			RigidBodysFunc[i].Update(deltaSeconds);
+			circles[i].setPosition(RigidBodysFunc[i].GetX(), RigidBodysFunc[i].GetY());
 		}
 
 		app.clear();
@@ -186,46 +148,53 @@ void draw(GameObject *gameObjectsFunc, int length) {
 	delete[] circles;
 }
 
-void randomFill(GameObject *gameObjectsFunc, int length) {
+void RandomFill(RigidBody *RigidBodysFunc, int length) {
 	std::srand(std::time(nullptr));
 
 	for (int i = 0; i < length; ++i) {
-		gameObjectsFunc[i].setRadius(10 + std::rand() / ((RAND_MAX + 1u) / 30));
-		gameObjectsFunc[i].setCoords({ static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / W)), static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / H)) });
-		gameObjectsFunc[i].setSpeed({ static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)), static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)) });
-		gameObjectsFunc[i].print();
+		RigidBodysFunc[i].SetRadius(10 + std::rand() / ((RAND_MAX + 1u) / 30));
+		RigidBodysFunc[i].SetCoordinates({ static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / W)), static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / H)) });
+		RigidBodysFunc[i].SetSpeed({ static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)), static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)) });
 	}
 }
 
-bool isCollide(GameObject go1, GameObject go2) {
-	float distance = sqrt((go1.getX() - go2.getX())*(go1.getX() - go2.getX()) + (go1.getY() - go2.getY())*(go1.getY() - go2.getY()));
-
-	if (distance < go1.getRadius() + go2.getRadius()) {
-		return true;
-	}
-	else {
-		return false;
-	}
+bool Collided(RigidBody go1, RigidBody go2) {
+	float distance = (go1.GetX() - go2.GetX())*(go1.GetX() - go2.GetX()) + (go1.GetY() - go2.GetY())*(go1.GetY() - go2.GetY());
+	return (distance < (go1.GetRadius() + go2.GetRadius()) * (go1.GetRadius() + go2.GetRadius()));
 }
 
-void resolveCollision(GameObject go1, GameObject go2) {
-	float dist = sqrt((go1.getX() - go2.getX())*(go1.getX() - go2.getX()) + (go1.getY() - go2.getY())*(go1.getY() - go2.getY()));
-	float overlap = 0.5 * (dist - go1.getRadius() - go2.getRadius());
+void ResolveCollision(RigidBody &go1, RigidBody &go2) {
+	float x1 = go1.GetX();
+	float x2 = go2.GetX();
 
-	go1.setCoords({ go1.getX() -  (overlap * (go1.getX() - go2.getX()) / dist), go1.getY() - (overlap * (go1.getY() - go2.getY()) / dist)});
-	go2.setCoords({ go1.getX() + (overlap * (go1.getX() - go2.getX()) / dist), go1.getY() + (overlap * (go1.getY() - go2.getY()) / dist) });
+	float y1 = go1.GetY();
+	float y2 = go2.GetY();
+
+	float dist = sqrt((go1.GetX() - go2.GetX())*(go1.GetX() - go2.GetX()) + (go1.GetY() - go2.GetY())*(go1.GetY() - go2.GetY()));
+
+	float overlap = 0.5 * (dist - go1.GetRadius() - go2.GetRadius());
+
+	go1.SetX(x1 - (overlap * (x1 - x2) / dist));
+	go1.SetY(y1 - (overlap * (y1 - y2) / dist));
+
+	go2.SetX(x2 + (overlap * (x1 - x2) / dist));
+	go2.SetY(y2 + (overlap * (y1 - y2) / dist));
 }
 
-void test(int numOfObjects) {
-	GameObject* gameObjects = new GameObject[numOfObjects];
-	//randomFill(gameObjects, numOfObjects);
-	gameObjects[0].setRadius(25);
-	gameObjects[0].setCoords({500, 500});
-	gameObjects[0].setSpeed({1, 0});
+void Test(int numOfObjects) {
+	RigidBody* RigidBodys = new RigidBody[numOfObjects];
+	RandomFill(RigidBodys, numOfObjects);
 
-	gameObjects[1].setRadius(25);
-	gameObjects[1].setCoords({ 551, 500 });
-	gameObjects[1].setSpeed({ -1, 0 });
-	draw(gameObjects, numOfObjects);
-	delete[] gameObjects;
+	/*
+	RigidBodys[0].SetRadius(25);
+	RigidBodys[0].SetCoordinates({ 500, 500 });
+	RigidBodys[0].SetSpeed({ 10, 0 });
+
+	RigidBodys[1].SetRadius(25);
+	RigidBodys[1].SetCoordinates({ 751, 501 });
+	RigidBodys[1].SetSpeed({ -10, 0 });
+	*/
+
+	Draw(RigidBodys, numOfObjects);
+	delete[] RigidBodys;
 }
