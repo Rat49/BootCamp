@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilityTest", "Source\Utili
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Animation", "Source\Animation\Animation.vcxproj", "{32482588-87F1-4BF6-92F1-629905946951}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnimationTest", "Source\AnimationTest\AnimationTest.vcxproj", "{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -93,6 +95,14 @@ Global
 		{32482588-87F1-4BF6-92F1-629905946951}.Release|x64.Build.0 = Release|x64
 		{32482588-87F1-4BF6-92F1-629905946951}.Release|x86.ActiveCfg = Release|Win32
 		{32482588-87F1-4BF6-92F1-629905946951}.Release|x86.Build.0 = Release|Win32
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Debug|x64.ActiveCfg = Debug|x64
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Debug|x64.Build.0 = Debug|x64
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Debug|x86.ActiveCfg = Debug|Win32
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Debug|x86.Build.0 = Debug|Win32
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Release|x64.ActiveCfg = Release|x64
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Release|x64.Build.0 = Release|x64
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Release|x86.ActiveCfg = Release|Win32
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

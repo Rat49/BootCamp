@@ -1,24 +1,27 @@
 #include "AnimationPlayer.h"
 #include "ResourceManager.h"
 
-AnimationPlayer::AnimationPlayer(sf::Sprite* animatedSprite, const std::vector<sf::Texture>& spriteSheet, bool isLooped) :
+AnimationPlayer::AnimationPlayer(sf::Sprite* animatedSprite, const std::vector<sf::Texture>& spriteSheet, bool isLooped) : 
 	_animatedSprite(animatedSprite),
 	_spriteSheet(spriteSheet),
 	_isLooped(isLooped),
-	//_animationTime(animation.getAnimationTime()),
 	_currentFrame(0),
 	_isStoped(true),
 	_framesNumber(std::abs(std::distance(_spriteSheet.end(), _spriteSheet.begin()))),
 	_animationTime(sf::seconds(0.2)),
-	_frameTime(sf::seconds(_animationTime.asSeconds / static_cast<float>(_framesNumber)))
+	_frameTime(sf::seconds(_animationTime.asSeconds() / static_cast<float>(_framesNumber)))
 {
 	_clock.getElapsedTime();
 }
 
 
+//void AnimationPlayer::SetSpriteSheet(std::vector<sf::Texture> spriteSheet)
+//{
+//	_spriteSheet = spriteSheet;
+//}
+
 void AnimationPlayer::Start()
 {
-	//_animationTime = _animation.getAnimationTime();
 	_isStoped = false;
 	_clock.restart();
 }
@@ -46,7 +49,7 @@ void AnimationPlayer::Update()
 {
 	if (!_isStoped)
 	{
-		unsigned int frameNumber = _currentFrame + std::ceil(_clock.getElapsedTime().asSeconds / _frameTime.asSeconds());
+		unsigned int frameNumber = _currentFrame + std::ceil(_clock.getElapsedTime().asSeconds() / _frameTime.asSeconds());
 		if (_isLooped)
 		{
 			_currentFrame = frameNumber % _framesNumber;

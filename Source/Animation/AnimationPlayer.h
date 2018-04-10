@@ -2,13 +2,11 @@
 #include "SFML\Graphics.hpp"
 #include "ResourceManager.h"
 
-class AnimationPlayer : public sf::Drawable
+class AnimationPlayer 
 {
 public:
 	AnimationPlayer(sf::Sprite* animatedSprite, const std::vector<sf::Texture>& spriteSheet, bool isLooped);
 
-	//AnimationResource& GetAnimation() const;
-	//void SetAnimation(AnimationResource animation);
 	//void SetSpriteSheet();
 	void Start();
 	void Start(sf::Time AnimationTime);
@@ -20,7 +18,6 @@ public:
 	~AnimationPlayer();
 
 private:
-	//AnimationResource& _animation;
 	const std::vector<sf::Texture>& _spriteSheet;
 	sf::Sprite* _animatedSprite;
 	unsigned int _currentFrame;
