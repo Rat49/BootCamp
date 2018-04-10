@@ -16,7 +16,6 @@ private:
 	bool IfElementExists(std::string value);
 
 public:
-	LogCategory() {}
 	void addNewParam(std::pair < std::string, std::string>);
 	std::string getValue(std::string configValue);
 };
@@ -34,7 +33,7 @@ private:
 	std::map<std::string, LogCategory> logCategories;
 
 	void createCategories();
-	std::pair<std::string, std::string>& createParameter(std::string line);
+	std::pair<std::string, std::string> createParameter(std::string line);
 	bool IfCategoryExists(std::string keyValue);
 
 public:
