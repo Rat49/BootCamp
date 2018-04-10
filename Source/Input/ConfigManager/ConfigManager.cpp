@@ -1,7 +1,7 @@
 #include "ConfigManager.h"
 
 
-bool LogCategory::IfElementExists(const char* keyValue) {
+bool LogCategory::IfElementExists(std::string keyValue) {
 
 	if (params.find(keyValue) != params.end()) {
 		return true;
@@ -10,18 +10,23 @@ bool LogCategory::IfElementExists(const char* keyValue) {
 	return false;
 }
 
-const char* LogCategory::getValue(const char* configValue) {
+std::string LogCategory::getValue(std::string keyValue) {
 
 
-	if (IfElementExists(configValue)) {
-		std::cout << params[configValue] << std::endl;
+	if (IfElementExists(keyValue)) {
+		std::cout << params[keyValue] << std::endl;
 		system("PAUSE");
+
+		return params[keyValue];
 	}
 
-	return params[configValue];
+
+	std::cerr << "No key value" << std::endl;
+	system("PAUSE");
+	exit(1);
 }
 
-void LogCategory::addNewParam(std::pair < const char*, const char*> param) {
+void LogCategory::addNewParam(std::pair <std::string, std::string> param) {
 
 	params.insert(param);
 }
@@ -39,6 +44,8 @@ void ConfigManager::readInputFile(std::string file_name) {
 		in_file.close();
 	}
 	else {
+		std::cerr << "Cannot open file" << std::endl;
+		system("PAUSE");
 		exit(1);
 	}
 
@@ -46,47 +53,41 @@ void ConfigManager::readInputFile(std::string file_name) {
 
 void ConfigManager::createCategories() {
 
-	std::string line = "";
+	std::string line;
+	std::string currentCategory = "";
+	std::string previousCategory;
 
 	while (!in_file.eof()) {
 
-		if (line == "") {
-			std::getline(in_file, line);
-		}
-		if (line[0] == '[') {
+		std::getline(in_file, line);
 
+		if (line[0] == '[') {
 			std::ostringstream oss;
 
 			for (int i = 1; i < line.size() - 1, line[i] != ']'; ++i) {
 				oss << line[i];
 			}
 
-			std::string categoryName = oss.str();
-
-			//std::cout << categoryName << std::endl;
-			//system("PAUSE");
+			//previousCategory = currentCategory;
+			currentCategory = oss.str();
 
 			LogCategory lc;
+			logCategories.insert(std::pair<std::string, LogCategory>(currentCategory, lc));
 
-			while (std::getline(in_file, line) && (line[0] != '[')) {
-
-				std::pair<const char*, const char*> p = createParameter(line);
-				lc.addNewParam(p);
-
-			}
-
-			logCategories.insert(std::pair<const char*, LogCategory>(categoryName.c_str(), lc));
 		}
-
+		
+		if (line[0] != '[' || !isspace(line[0])) {
+			std::pair<std::string, std::string> p = createParameter(line);
+			logCategories[currentCategory].addNewParam(p);
+		}
+		
 	}
 
-	std::cout << "ok" << std::endl;
-	system("PAUSE");
 }
 
-std::pair<const char*, const char*>& ConfigManager::createParameter(std::string line) {
+std::pair<std::string, std::string>& ConfigManager::createParameter(std::string line) {
 
-	std::pair<const char*, const char*> p;
+	std::pair<std::string, std::string> p;
 
 	std::string key;
 	std::string value;
@@ -109,7 +110,25 @@ std::pair<const char*, const char*>& ConfigManager::createParameter(std::string 
 	return p;
 }
 
-LogCategory& ConfigManager::getCategory(const char* categoryName) {
+bool ConfigManager::IfCategoryExists(std::string keyValue) {
 
-	return logCategories[categoryName];
+	if (logCategories.find(keyValue) != logCategories.end()) {
+		return true;
+	}
+
+	return false;
+}
+
+LogCategory& ConfigManager::getCategory(std::string categoryName) {
+
+	if (IfCategoryExists(categoryName)) {
+
+		return logCategories[categoryName];
+	}
+
+
+	std::cerr << "No category value" << std::endl;
+	system("PAUSE");
+	exit(1);
+
 }

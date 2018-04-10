@@ -11,14 +11,14 @@ class LogCategory {
 
 private:
 
-	std::map<const char*, const char*> params;
+	std::map<std::string, std::string> params;
 
-	bool IfElementExists(const char* value);
+	bool IfElementExists(std::string value);
 
 public:
 	LogCategory() {}
-	void addNewParam(std::pair < const char*, const char*>);
-	const char* getValue(const char* configValue);
+	void addNewParam(std::pair < std::string, std::string>);
+	std::string getValue(std::string configValue);
 };
 
 
@@ -31,14 +31,15 @@ class ConfigManager {
 private:
 
 	std::ifstream in_file;
-	std::map<const char*, LogCategory> logCategories;
+	std::map<std::string, LogCategory> logCategories;
 
 	void createCategories();
-	std::pair<const char*, const char*>& createParameter(std::string line);
+	std::pair<std::string, std::string>& createParameter(std::string line);
+	bool IfCategoryExists(std::string keyValue);
 
 public:
 
 	void readInputFile(std::string file_name);
-	LogCategory& getCategory(const char* categoryName);
+	LogCategory& getCategory(std::string categoryName);
 
 };
