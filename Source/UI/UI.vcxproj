@@ -87,13 +87,8 @@
       <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)SFML\bin\openal32.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-audio-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-graphics-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-network-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-system-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -132,15 +127,21 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-network.lib;sfml-audio.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="myButton.cpp" />
+    <ClCompile Include="SfmlButton.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="UI.cpp" />
+    <ClCompile Include="Widget.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="myButton.h" />
+    <ClInclude Include="SfmlButton.h" />
     <ClInclude Include="UI.h" />
+    <ClInclude Include="Widget.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
