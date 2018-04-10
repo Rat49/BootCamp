@@ -30,7 +30,7 @@
     <ClInclude Include="TextureResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationResource.h">
+    <ClInclude Include="ImageSequenceResource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -50,7 +50,7 @@
     <ClCompile Include="TextureResource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationResource.cpp">
+    <ClCompile Include="ImageSequenceResource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

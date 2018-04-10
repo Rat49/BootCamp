@@ -81,16 +81,16 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="AnimationResource.h" />
     <ClInclude Include="AudioResource.h" />
+    <ClInclude Include="ImageSequenceResource.h" />
     <ClInclude Include="PictureResource.h" />
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="TextureResource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="AnimationResource.cpp" />
     <ClCompile Include="AudioResource.cpp" />
+    <ClCompile Include="ImageSequenceResource.cpp" />
     <ClCompile Include="PictureResource.cpp" />
     <ClCompile Include="Resource.cpp" />
     <ClCompile Include="ResourceManager.cpp" />

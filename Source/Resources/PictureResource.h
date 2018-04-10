@@ -10,7 +10,7 @@ public:
 
 	void Load() override;
 	void Unload() override;
-	sf::Image& Get();
+	sf::Image* Get();
 
 	~PictureResource() override;
 private:

@@ -3,6 +3,7 @@
 #include "AudioResource.h"
 #include "PictureResource.h"
 #include "Resource.h"
+#include "ImageSequenceResource.h"
 #include <cassert>
 #include <map>
 #include <string>
@@ -10,7 +11,7 @@
 class ResourceManager final
 {
 public:
-	ResourceManager();
+	ResourceManager(std::vector<float> _settings);
 	
 	template <typename T> 
 	T* GetResource(const std::string& key)

@@ -1,9 +1,7 @@
 #include "ResourceManager.h"
 
-ResourceManager::ResourceManager()
+ResourceManager::ResourceManager(std::vector<float> _settings)
 {
-	
-
 	_resources.insert(std::pair<std::string, Resource*>
 		("piupiu", new AudioResource("piupiu", "Resources\\audio\\piupiu.wav")));
 	_resources.insert(std::pair<std::string, Resource*>
@@ -12,7 +10,8 @@ ResourceManager::ResourceManager()
 		("asteroid", new PictureResource("asteroid", "Resources\\graphics\\aster.bmp")));
 	_resources.insert(std::pair<std::string, Resource*>
 		("smallasteroid", new PictureResource("smallasteroid", "Resources\\graphics\\smallasteroid.png")));
-
+	_resources.insert(std::pair<std::string, Resource*>
+		("girl", new ImageSequenceResource("girl", "Resources\\graphics\\girl.png", _settings)));
 }
 
 Resource* ResourceManager::GetGeneralResource(const std::string& key)
@@ -22,11 +21,15 @@ Resource* ResourceManager::GetGeneralResource(const std::string& key)
 	assert(iter != _resources.end() && "Resource not found");
 
 	Resource* resource = iter->second;
-	if (resource->GetRefCounter() == 0)
+	if (resource->GetRefCounter() != 0)
+	{
+		resource->IncRefCounter();
+	}
+	else
 	{
 		resource->Load();
 	}
-	resource->IncRefCounter();
+	//resource->IncRefCounter();
 	return resource;
 
 }
