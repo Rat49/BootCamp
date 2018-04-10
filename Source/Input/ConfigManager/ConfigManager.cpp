@@ -54,8 +54,7 @@ void ConfigManager::readInputFile(std::string file_name) {
 void ConfigManager::createCategories() {
 
 	std::string line;
-	std::string currentCategory = "";
-	std::string previousCategory;
+	std::string currentCategory;
 
 	while (!in_file.eof()) {
 
@@ -68,15 +67,12 @@ void ConfigManager::createCategories() {
 				oss << line[i];
 			}
 
-			//previousCategory = currentCategory;
 			currentCategory = oss.str();
 
-			LogCategory lc;
-			logCategories.insert(std::pair<std::string, LogCategory>(currentCategory, lc));
-
+			logCategories.insert(std::pair<std::string, LogCategory>(currentCategory, LogCategory()));
 		}
 		
-		if (line[0] != '[' || !isspace(line[0])) {
+		if (line[0] != '[') {
 			std::pair<std::string, std::string> p = createParameter(line);
 			logCategories[currentCategory].addNewParam(p);
 		}
@@ -85,7 +81,7 @@ void ConfigManager::createCategories() {
 
 }
 
-std::pair<std::string, std::string>& ConfigManager::createParameter(std::string line) {
+std::pair<std::string, std::string> ConfigManager::createParameter(std::string line) {
 
 	std::pair<std::string, std::string> p;
 
@@ -126,9 +122,7 @@ LogCategory& ConfigManager::getCategory(std::string categoryName) {
 		return logCategories[categoryName];
 	}
 
-
 	std::cerr << "No category value" << std::endl;
 	system("PAUSE");
 	exit(1);
-
 }
