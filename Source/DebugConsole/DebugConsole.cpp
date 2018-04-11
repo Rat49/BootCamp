@@ -2,47 +2,54 @@
 
 DebugConsole::DebugConsole(sf::RenderWindow& window)
 {
-	this->_consoleRectangle = sf::RectangleShape(sf::Vector2f(window.getSize().x, ((window.getSize().y) / 3)));
+	_consoleRectangle = sf::RectangleShape(sf::Vector2f(window.getSize().x, ((window.getSize().y) / 3)));
 	_consoleRectangle.setFillColor(sf::Color::Black);
-	this->_consoleFont.loadFromFile("clacon.ttf");
-	this->_inputText = sf::Text("]", _consoleFont, 16);
-	_inputText.setPosition(1, (_consoleRectangle.getSize().y - 20));
-	this->_outputText = sf::Text("", _consoleFont, 16);
-	_outputText.setPosition(1, (_consoleRectangle.getSize().y - 40));
+	
+	_consoleFont.loadFromFile("clacon.ttf");
+
+	_characterSize = (((window.getSize().y) / 3) / 10);
+
+	_inputText = sf::Text("]", _consoleFont, _characterSize);
+	_inputText.setPosition(1, (_consoleRectangle.getSize().y - _characterSize) - 5);
+	
+	_outputText = sf::Text("", _consoleFont, _characterSize);
 }
 
-void DebugConsole::Update(sf::Event event)
+void DebugConsole::consoleInputOutput()
+{
+	int moveCounter = 1;
+	for (auto& line : _outputLines)
+	{
+		line.setPosition(1, ((_consoleRectangle.getSize().y - _characterSize) - 5) - _characterSize*moveCounter);
+		moveCounter++;
+	}
+}
+
+void DebugConsole::Update(sf::Event& event)
 {
 	if (event.type == sf::Event::TextEntered)
 	{
-
 		if (event.text.unicode > 31 && event.text.unicode < 127)
 		{
-
-			std::cout << "ASCII character typed: " << event.text.unicode << std::endl;
-
 			_inputString += event.text.unicode;
-
 			_inputText.setString("] " + _inputString);
 		}
 
 		if (event.text.unicode == 8)
 		{
 			_inputString.clear();
-
 			_inputText.setString("] " + _inputString);
 		}
 
-	
 		if (event.text.unicode == 13)
 		{
-			_outputStrings.push_back(_inputString);
+			_outputText.setString("User: " + _inputString);
+			_outputLines.insert(_outputLines.begin(),_outputText);
 
 			_inputString.clear();
-
 			_inputText.setString("] " + _inputString);
 
-			_outputText.setString("User: " + _outputStrings[0]);
+			consoleInputOutput();
 		}
 
 	}
@@ -51,7 +58,10 @@ void DebugConsole::Update(sf::Event event)
 
 void DebugConsole::Draw(sf::RenderWindow& window)
 {
-	window.draw(this->_consoleRectangle);
-	window.draw(this->_inputText);
-	window.draw(this->_outputText);
+	window.draw(_consoleRectangle);
+	window.draw(_inputText);
+	for (auto& line : _outputLines)
+	{
+		window.draw(line);
+	}
 }

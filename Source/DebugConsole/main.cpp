@@ -3,7 +3,7 @@
 int main()
 {
 
-	sf::RenderWindow window(sf::VideoMode(800, 600), "DebugSystem");
+	sf::RenderWindow window(sf::VideoMode(800,600), "DebugSystem");
 	
 	DebugConsole debugConsole(window);
 
@@ -15,6 +15,11 @@ int main()
 		while (window.pollEvent(event))
 		{
 			debugConsole.Update(event);
+
+			if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::Escape)
+			{
+				window.close();
+			}
 		}
 
 		debugConsole.Draw(window);

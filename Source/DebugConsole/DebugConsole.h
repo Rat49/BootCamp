@@ -11,9 +11,11 @@ public:
 	sf::String _inputString;
 	sf::Text _inputText;
 	sf::Text _outputText;
-	std::vector<std::string> _outputStrings;
+	std::vector<sf::Text> _outputLines;
+	int _characterSize;
 
 	DebugConsole(sf::RenderWindow& window);
-	void Update(sf::Event event);
+	void consoleInputOutput();
+	void Update(sf::Event& event);
 	void Draw(sf::RenderWindow& window);
 };
