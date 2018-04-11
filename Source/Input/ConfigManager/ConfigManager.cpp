@@ -1,7 +1,7 @@
 #include "ConfigManager.h"
 
 
-bool LogCategory::IfElementExists(std::string keyValue) {
+bool LogCategory::IfElementExists(const std::string& keyValue) const {
 
 	if (params.find(keyValue) != params.end()) {
 		return true;
@@ -10,7 +10,7 @@ bool LogCategory::IfElementExists(std::string keyValue) {
 	return false;
 }
 
-std::string LogCategory::getValue(std::string keyValue) {
+std::string LogCategory::GetValue(std::string keyValue) {
 
 
 	if (IfElementExists(keyValue)) {
@@ -20,10 +20,11 @@ std::string LogCategory::getValue(std::string keyValue) {
 
 	std::cerr << "Key value not found" << std::endl;
 	system("PAUSE");
-	exit(1);
+
+	return std::string();
 }
 
-void LogCategory::addNewParam(std::pair <std::string, std::string> param) {
+void LogCategory::AddNewParam(std::pair <std::string, std::string> param) {
 
 	params.insert(param);
 }
@@ -32,30 +33,29 @@ void LogCategory::addNewParam(std::pair <std::string, std::string> param) {
 ----------------------------------------------------------------------------
 */
 
-ConfigManager* ConfigManager::create(std::string fileName) {
+ConfigManager* ConfigManager::Create(std::string fileName) {
 	ConfigManager* cm = new ConfigManager();
-	cm->readInputFile(fileName);
+	cm->ReadInputFile(fileName);
 
 	return cm;
 }
 
-void ConfigManager::readInputFile(std::string fileName) {
+void ConfigManager::ReadInputFile(std::string fileName) {
 
 	inFile.open(fileName);
 
 	if (inFile.is_open()) {
-		createCategories();
+		CreateCategories();
 		inFile.close();
 	}
 	else {
 		std::cerr << "Cannot open file" << std::endl;
 		system("PAUSE");
-		exit(1);
 	}
 
 }
 
-void ConfigManager::createCategories() {
+void ConfigManager::CreateCategories() {
 
 	std::string line;
 	std::string currentCategory;
@@ -67,24 +67,25 @@ void ConfigManager::createCategories() {
 		if (line[0] == '[') {
 			std::ostringstream oss;
 
-			for (int i = 1; i < line.size() - 1, line[i] != ']'; ++i) {
-				oss << line[i];
+			for (int i = 1; i < line.size() - 1; ++i) {
+				if (line[i] != ']')
+					oss << line[i];
 			}
-
 			currentCategory = oss.str();
 
-			logCategories.insert(std::pair<std::string, LogCategory>(currentCategory, LogCategory()));
+			logCategories[currentCategory] = LogCategory();
 		}
-		
+
 		if (line[0] != '[') {
-			createParameter(currentCategory, line);
+			CreateParameter(currentCategory, line);
 		}
-		
+
 	}
 
+	logCategories["Invalid_category"] = LogCategory();
 }
 
-void ConfigManager::createParameter(std::string categoryName, std::string line) {
+void ConfigManager::CreateParameter(std::string categoryName, std::string line) {
 
 	std::string key;
 	std::string value;
@@ -105,14 +106,14 @@ void ConfigManager::createParameter(std::string categoryName, std::string line) 
 
 		std::pair<std::string, std::string> p;
 
-		p.first = key.c_str();
-		p.second = value.c_str();
+		p.first = key;
+		p.second = value;
 
-		logCategories[categoryName].addNewParam(p);
+		logCategories[categoryName].AddNewParam(p);
 	}
 }
 
-bool ConfigManager::IfCategoryExists(std::string keyValue) {
+bool ConfigManager::IfCategoryExists(const std::string &keyValue) const {
 
 	if (logCategories.find(keyValue) != logCategories.end()) {
 		return true;
@@ -121,7 +122,7 @@ bool ConfigManager::IfCategoryExists(std::string keyValue) {
 	return false;
 }
 
-LogCategory& ConfigManager::getCategory(std::string categoryName) {
+LogCategory& ConfigManager::GetCategory(std::string categoryName) {
 
 	if (IfCategoryExists(categoryName)) {
 
@@ -130,5 +131,6 @@ LogCategory& ConfigManager::getCategory(std::string categoryName) {
 
 	std::cerr << "Category value not found" << std::endl;
 	system("PAUSE");
-	exit(1);
+
+	return logCategories["Invalid_category"];
 }
