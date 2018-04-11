@@ -7,7 +7,7 @@ public:
 	Widget(const std::string & name, sf::Vector2f position);
 	const std::string _name;
 	
-	virtual void SetPosition(float x, float y);
+	void SetPosition(float x, float y);
 
 	sf::Vector2f GetPosition() const;
 	
