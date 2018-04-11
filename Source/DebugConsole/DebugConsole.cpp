@@ -4,33 +4,47 @@ DebugConsole::DebugConsole(sf::RenderWindow& window)
 {
 	_consoleRectangle = sf::RectangleShape(sf::Vector2f(window.getSize().x, ((window.getSize().y) / 3)));
 	_consoleRectangle.setFillColor(sf::Color::Black);
-	
+
 	_consoleFont.loadFromFile("clacon.ttf");
 
 	_characterSize = (((window.getSize().y) / 3) / 10);
 
 	_inputText = sf::Text("]", _consoleFont, _characterSize);
 	_inputText.setPosition(1, (_consoleRectangle.getSize().y - _characterSize) - 5);
-	
+
 	_outputText = sf::Text("", _consoleFont, _characterSize);
+	
 }
 
-void DebugConsole::consoleInputOutput()
-{
-	int moveCounter = 1;
-	for (auto& line : _outputLines)
-	{
-		line.setPosition(1, ((_consoleRectangle.getSize().y - _characterSize) - 5) - _characterSize*moveCounter);
-		moveCounter++;
-	}
-}
+int DebugConsole::_currentFirstHistoryLine = 0;
+
+//struct RawInputEvent
+//{
+//	uint32_t _keycode;
+//};
 
 void DebugConsole::Update(sf::Event& event)
 {
+	if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::PageDown)
+	{
+		if (_currentFirstHistoryLine > 0)
+		{
+			--_currentFirstHistoryLine;
+		}
+	}
+
+	if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::PageUp)
+	{
+		++_currentFirstHistoryLine;
+	}
+	
 	if (event.type == sf::Event::TextEntered)
 	{
 		if (event.text.unicode > 31 && event.text.unicode < 127)
 		{
+			//RawInputEvent e;
+			//e._keycode = event.text.unicode;
+		
 			_inputString += event.text.unicode;
 			_inputText.setString("] " + _inputString);
 		}
@@ -44,24 +58,47 @@ void DebugConsole::Update(sf::Event& event)
 		if (event.text.unicode == 13)
 		{
 			_outputText.setString("User: " + _inputString);
-			_outputLines.insert(_outputLines.begin(),_outputText);
+			_outputLines.insert(_outputLines.begin(), _outputText);
 
 			_inputString.clear();
 			_inputText.setString("] " + _inputString);
 
-			consoleInputOutput();
 		}
-
+		
 	}
 
 }
 
+//if (tilda)
+//{
+//	active = !active;
+//}
+
 void DebugConsole::Draw(sf::RenderWindow& window)
 {
+	/*if (!active)
+		return;*/
+	
 	window.draw(_consoleRectangle);
 	window.draw(_inputText);
-	for (auto& line : _outputLines)
+	
+	std::size_t start = _currentFirstHistoryLine;
+	std::size_t end = _currentFirstHistoryLine + 9;
+	
+	std::vector<sf::Text>::iterator firstLine = _outputLines.begin();
+	std::vector<sf::Text>::iterator lastLine = _outputLines.begin();
+	
+	std::advance(firstLine, std::min(start, _outputLines.size()));
+	std::advance(lastLine, std::min(end, _outputLines.size()));
+
+	int positionStep = 1;
+
+	for (; firstLine != lastLine; ++firstLine)
 	{
-		window.draw(line);
+		firstLine->setPosition(1, ((_consoleRectangle.getSize().y - _characterSize) - 5) - _characterSize * positionStep);
+		++positionStep;
+
+		window.draw(*firstLine);
 	}
+	
 }

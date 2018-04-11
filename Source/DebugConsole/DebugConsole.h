@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <algorithm>
 
 class DebugConsole final
 {
@@ -13,9 +14,9 @@ public:
 	sf::Text _outputText;
 	std::vector<sf::Text> _outputLines;
 	int _characterSize;
-
+	static int _currentFirstHistoryLine;
+	
 	DebugConsole(sf::RenderWindow& window);
-	void consoleInputOutput();
 	void Update(sf::Event& event);
 	void Draw(sf::RenderWindow& window);
 };
