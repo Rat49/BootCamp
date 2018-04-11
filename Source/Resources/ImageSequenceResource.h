@@ -9,6 +9,7 @@ public:
 	void Load() override;
 	void Unload() override;
 	std::vector<sf::Texture>& Get();
+	sf::Time& GetTime();
 	void SetMaskFromColor(sf::Image* image, sf::Color color);
 	~ImageSequenceResource() override;
 private:

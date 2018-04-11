@@ -16,21 +16,44 @@ int main()
 	window.clear();
 	sf::Sprite* sprite = new sf::Sprite();
 
-	AnimationPlayer* animationPlayer = new AnimationPlayer(sprite, _texturesGirl, true);
+	sf::Time time = girl->GetTime();
 
-	animationPlayer->Start(sf::seconds(28.0));
+	AnimationPlayer* animationPlayer = new AnimationPlayer(sprite, _texturesGirl, time, true);
+
+	animationPlayer->Start(sf::milliseconds(10.0f));
+	sf::Clock clock;
 	while (window.isOpen())
 	{
-		animationPlayer->Update();
+		sf::Event event;
+		while (window.pollEvent(event))
+		{
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
+			{
+				animationPlayer->Pause();
+				animationPlayer->DefaultAnimationTime();
+				animationPlayer->Start();
+			}
+
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
+			{
+				animationPlayer->Reset();
+			}
+
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace)
+			{
+				animationPlayer->Reset();
+				animationPlayer->SetLooped(false);
+				animationPlayer->Start();
+			}
+		}
+
+		animationPlayer->Update(clock.getElapsedTime());
 	
 		window.clear();
 		window.draw(*sprite);
 		window.display();
+		clock.restart();
 	}
-
-	//sprite->setTexture(_texturesGirl[1]);
-	//window.draw(*sprite);
-	//window.display();
 
 	return 0;
 }

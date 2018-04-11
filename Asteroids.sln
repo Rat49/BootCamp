@@ -24,6 +24,10 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Animation", "Source\Animation\Animation.vcxproj", "{32482588-87F1-4BF6-92F1-629905946951}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnimationTest", "Source\AnimationTest\AnimationTest.vcxproj", "{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63699642-DBD0-482A-B14F-4F95763D1E10} = {63699642-DBD0-482A-B14F-4F95763D1E10}
+		{32482588-87F1-4BF6-92F1-629905946951} = {32482588-87F1-4BF6-92F1-629905946951}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

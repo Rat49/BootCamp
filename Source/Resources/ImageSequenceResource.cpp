@@ -5,7 +5,7 @@ ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::s
 	_widthFrame = settings[0];
 	_heightFrame = settings[1];
 	_countFrames = static_cast<size_t>(settings[2]);
-	_timeAnimation = sf::seconds(settings[3]);
+	_timeAnimation = sf::milliseconds(settings[3]);
 	size_t _validSettingsForColors = (settings.size() - 4) % 3;
 
 	if (_validSettingsForColors == 0)
@@ -44,6 +44,11 @@ void ImageSequenceResource::Unload()
 std::vector<sf::Texture>& ImageSequenceResource::Get()
 {
 	return _textures;
+}
+
+sf::Time& ImageSequenceResource::GetTime()
+{
+	return _timeAnimation;
 }
 
 ImageSequenceResource::~ImageSequenceResource()

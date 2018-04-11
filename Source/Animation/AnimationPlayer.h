@@ -5,15 +5,15 @@
 class AnimationPlayer 
 {
 public:
-	AnimationPlayer(sf::Sprite* animatedSprite, const std::vector<sf::Texture>& spriteSheet, bool isLooped);
+	AnimationPlayer(sf::Sprite* animatedSprite, const std::vector<sf::Texture>& spriteSheet, sf::Time animationTime, bool isLooped);
 
-	//void SetSpriteSheet();
 	void Start();
 	void Start(sf::Time AnimationTime);
 	void Pause();
 	void Reset();
-	void Update();
+	void Update(sf::Time deltaTime);
 	void SetLooped(bool isLooped);
+	void DefaultAnimationTime();
 
 	~AnimationPlayer();
 
@@ -23,9 +23,9 @@ private:
 	int64_t _currentFrame;
 	bool _isLooped;
 	bool _isStoped;
-	int64_t _framesNumber;
+	int64_t _framesCount;
+	sf::Time _defaultAnimationTime;
 	sf::Time _animationTime;
 	sf::Time _frameTime;
-	sf::Time _currentTime;
-	sf::Clock _clock;
+	sf::Time _playingTime;
 };
