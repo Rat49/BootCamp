@@ -5,6 +5,16 @@
 UI::UI(sf::VideoMode screen,const std::string &name):
 	_space(screen,name,sf::Style::Default)
 {
+	
+}
+
+void UI::onResized()
+{
+	for (auto it : _widgets)
+	{
+		it.second->Update();
+	}
+	Render();
 }
 
 void UI::Render()
@@ -20,12 +30,21 @@ void UI::Render()
 
 void UI::SetPostion(const std::string & key, float x, float y)
 {
-	_widgets[key]->SetPosition(_space.getSize().x/100*x, _space.getSize().y / 100 * y);
+	if (x > 0 && x < 100 && y > 0 && y < 100)
+	{
+		_widgets[key]->SetPosition(_space.getSize().x/100*x, _space.getSize().y / 100 * y);
+	}
+	else
+	{
+		assert(false);//This is place for Log
+	}
+	
 }
 
-void UI::addButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string &name)
+void UI::Add(Widget * wid, const std::string &key)
 {
-	_widgets[name] = new SfmlButton(size, pos, name, _space);
+	wid->AddOwner(&_space);
+	_widgets[key] = wid;
 }
 
 Widget* UI::GetWidget(const std::string &key)

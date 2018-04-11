@@ -4,15 +4,23 @@
 class Widget
 {
 public:
-	Widget(const std::string & name, sf::Vector2f position, sf::RenderWindow& caller);
+	Widget(const std::string & name, sf::Vector2f position);
 	const std::string _name;
+	
+	virtual void SetPosition(float x, float y);
+
 	sf::Vector2f GetPosition() const;
-	void SetPosition(float x, float y);
-	sf::RenderWindow& GetOwner();
+	
+	void AddOwner(sf::RenderWindow * host);
+
+	virtual void Update() {};
+
 	virtual void Draw() {};
+
 	virtual ~Widget();
 private:
 	sf::Vector2f _position;
-	sf::RenderWindow& _owner;
+protected:
+	sf::RenderWindow * _owner;
 };
 

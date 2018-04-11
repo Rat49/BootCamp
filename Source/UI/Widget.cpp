@@ -2,8 +2,8 @@
 
 
 
-Widget::Widget(const std::string & name, sf::Vector2f position, sf::RenderWindow& caller) :
-	_owner(caller),
+Widget::Widget(const std::string & name, sf::Vector2f position) :
+	_owner(nullptr),
 	_name(name),
 	_position(position)
 {
@@ -21,11 +21,17 @@ void Widget::SetPosition(float x, float y)
 	_position = sf::Vector2f(x, y);
 }
 
-sf::RenderWindow & Widget::GetOwner()
+void Widget::AddOwner(sf::RenderWindow * host)
 {
-	return _owner;
+	if (_owner == nullptr)
+	{
+		_owner = host;
+	}
+	else
+	{
+		//This is place for log
+	}
 }
-
 
 Widget::~Widget()
 {

@@ -2,13 +2,12 @@
 
 #include <iostream>
 
-SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name, sf::RenderWindow& caller) :
+SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name) :
 	
-	Widget(name,pos,caller)
+	Widget(name,pos)
 {	
 	_body = sf::RectangleShape(size);
 	_body.setPosition(pos);
-	Draw();
 }
 
 bool SfmlButton::IsClicked(sf::Vector2i cursor_pos) const
@@ -24,15 +23,32 @@ bool SfmlButton::IsClicked(sf::Vector2i cursor_pos) const
 	}
 }
 
-sf::RectangleShape & SfmlButton::GetBody()
+void SfmlButton::SetColor(const sf::Color & color)
 {
-	return _body;
+	_body.setFillColor(color);
+}
+
+void SfmlButton::SetSize(const sf::Vector2f size)
+{
+	_body.setSize(size);
+}
+
+void SfmlButton::Update()
+{
+	SetPosition(_body.getPosition().x, _body.getPosition().y);
 }
 
 void SfmlButton::Draw()
 {
-	_body.setPosition(GetPosition());
-	GetOwner().draw(_body);
+	if (_owner != nullptr)
+	{
+		_body.setPosition(GetPosition());
+		_owner->draw(_body);
+	}
+	else
+	{
+		//This is place for Log
+	}
 }
 
 SfmlButton::~SfmlButton()

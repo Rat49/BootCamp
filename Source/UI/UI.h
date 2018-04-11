@@ -1,5 +1,6 @@
 #include "SfmlButton.h"
-
+#include "Label.h"
+#include "ScrollBar.h"
 #include <SFML\Graphics.hpp>
 #include <cassert>
 #include <memory>
@@ -25,13 +26,12 @@ public:
 		return specificWidget;
 	}
 
+	void onResized();
 	void Render();
 
 	void SetPostion(const std::string& key, float x, float y);
-
 	sf::RenderWindow _space;
-	void addButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string &name);
-	
+	void Add(Widget * wid, const std::string &name);
 	~UI();
 private:
 	Widget* GetWidget(const std::string &key);

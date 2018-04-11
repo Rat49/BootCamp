@@ -133,12 +133,16 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Label.cpp" />
+    <ClCompile Include="ScrollBar.cpp" />
     <ClCompile Include="SfmlButton.cpp" />
     <ClCompile Include="test.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Widget.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Label.h" />
+    <ClInclude Include="ScrollBar.h" />
     <ClInclude Include="SfmlButton.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Widget.h" />

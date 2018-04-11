@@ -5,9 +5,11 @@ class SfmlButton:
 	public Widget
 {
 public:
-	SfmlButton(const sf::Vector2f size, const sf::Vector2f pos,const std::string & name, sf::RenderWindow& caller);
+	SfmlButton(const sf::Vector2f size, const sf::Vector2f pos,const std::string & name);
 	bool IsClicked(sf::Vector2i cursor_pos) const;
-	sf::RectangleShape& GetBody();
+	void SetColor(const sf::Color & color);
+	void SetSize(const sf::Vector2f size);
+	void Update();
 	void Draw() override;
 	~SfmlButton();
 private:
