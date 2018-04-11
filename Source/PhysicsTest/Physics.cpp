@@ -1,95 +1,74 @@
+
 #include "stdafx.h"
-#include <vector>
-#include <iostream>
-#define _USE_MATH_DEFINES
-#include <math.h>
-#include <SFML/Graphics.hpp>
+#include "Physics.h"
 
-float DEGTORAD = 0.017453f;
+RigidBody::RigidBody() {
 
-const int W = 1200;
-const int H = 800;
+}
 
-class RigidBody {
-private:
-	sf::Vector2<float> _coords;
-	sf::Vector2<float> _speed;
-	float _radius;
+RigidBody::RigidBody(sf::Vector2f c, sf::Vector2f s, float r) {
+	_coords = c;
+	_speed = s;
+	_radius = r;
+}
 
-public:
-	RigidBody() {
+void RigidBody::Update(float t) {
+	_coords.x += _speed.x * t;
+	_coords.y += _speed.y * t;
 
+	if (_coords.x > W) {
+		_coords.x = 0;
 	}
-
-	RigidBody(sf::Vector2<float> c, sf::Vector2<float> s, float r) {
-		_coords = c;
-		_speed = s;
-		_radius = r;
+	if (_coords.x < 0) {
+		_coords.x = W;
 	}
-
-	void Update(float t) {
-		_coords.x += _speed.x * t;
-		_coords.y += _speed.y * t;
-
-		if (_coords.x > W) {
-			_coords.x = 0;
-		}
-		if (_coords.x < 0) {
-			_coords.x = W;
-		}
-		if (_coords.y > H) {
-			_coords.y = 0;
-		}
-		if (_coords.y < 0) {
-			_coords.y = H;
-		}
+	if (_coords.y > H) {
+		_coords.y = 0;
 	}
-
-	void SetRadius(float r) {
-		_radius = r;
+	if (_coords.y < 0) {
+		_coords.y = H;
 	}
+}
 
-	void SetCoordinates(sf::Vector2<float> c) {
-		_coords = c;
-	}
+void RigidBody::SetRadius(float r) {
+	_radius = r;
+}
 
-	void SetX(float arg) {
-		_coords.x = arg;
-	}
+void RigidBody::SetCoordinates(sf::Vector2f c) {
+	_coords = c;
+}
 
-	void SetY(float arg) {
-		_coords.y = arg;
-	}
+void RigidBody::SetX(float arg) {
+	_coords.x = arg;
+}
 
-	void SetSpeed(sf::Vector2<float> s) {
-		_speed = s;
-	}
+void RigidBody::SetY(float arg) {
+	_coords.y = arg;
+}
 
-	float GetRadius() {
-		return _radius;
-	}
+void RigidBody::SetSpeed(sf::Vector2f s) {
+	_speed = s;
+}
 
-	float GetX() {
-		return _coords.x;
-	}
+float RigidBody::GetRadius() {
+	return _radius;
+}
 
-	float GetY() {
-		return _coords.y;
-	}
-};
+float RigidBody::GetX() {
+	return _coords.x;
+}
 
-void Draw(RigidBody*, int);
-void RandomFill(RigidBody*, int);
-bool Collided(RigidBody, RigidBody);
-void ResolveCollision(RigidBody &, RigidBody &);
-void Test(int);
+float RigidBody::GetY() {
+	return _coords.y;
+}
 
 int main()
 {
+
 	Test(20);
 
 	getchar();
-    return 0;
+	return 0;
 }
 
 void Draw(RigidBody *RigidBodysFunc, int length) {
