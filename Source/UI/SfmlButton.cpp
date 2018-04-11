@@ -3,16 +3,17 @@
 #include <iostream>
 
 SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name, sf::RenderWindow& caller) :
-	RectangleShape(size),
-	Widget(name,caller)
+	
+	Widget(name,pos,caller)
 {	
-	setPosition(pos);
+	_body = sf::RectangleShape(size);
+	_body.setPosition(pos);
 	Draw();
 }
 
 bool SfmlButton::IsClicked(sf::Vector2i cursor_pos) const
 {
-	if (!getGlobalBounds().contains(static_cast<sf::Vector2f>(cursor_pos)))
+	if (!_body.getGlobalBounds().contains(static_cast<sf::Vector2f>(cursor_pos)))
 	{
 		return false;
 	}
@@ -23,9 +24,15 @@ bool SfmlButton::IsClicked(sf::Vector2i cursor_pos) const
 	}
 }
 
+sf::RectangleShape & SfmlButton::GetBody()
+{
+	return _body;
+}
+
 void SfmlButton::Draw()
 {
-	this->GetOwner().draw(*this);
+	_body.setPosition(GetPosition());
+	GetOwner().draw(_body);
 }
 
 SfmlButton::~SfmlButton()

@@ -14,7 +14,13 @@ void UI::Render()
 	{
 		it.second->Draw();
 	}
+	
 	_space.display();
+}
+
+void UI::SetPostion(const std::string & key, float x, float y)
+{
+	_widgets[key]->SetPosition(_space.getSize().x/100*x, _space.getSize().y / 100 * y);
 }
 
 void UI::addButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string &name)
