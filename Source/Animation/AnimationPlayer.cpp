@@ -8,7 +8,7 @@ AnimationPlayer::AnimationPlayer(sf::Sprite* animatedSprite, const std::vector<s
 	_currentFrame(0),
 	_isStoped(true),
 	_framesNumber(std::abs(std::distance(_spriteSheet.end(), _spriteSheet.begin()))),
-	_animationTime(sf::seconds(0.2)),
+	_animationTime(sf::seconds(0.2f)),
 	_frameTime(sf::seconds(_animationTime.asSeconds() / static_cast<float>(_framesNumber)))
 {
 	_clock.getElapsedTime();
@@ -41,7 +41,7 @@ void AnimationPlayer::Pause()
 
 void AnimationPlayer::Reset()
 {
-	_currentFrame = 0;
+	_currentFrame = 1;
 	_isStoped = true;
 }
 
@@ -49,7 +49,7 @@ void AnimationPlayer::Update()
 {
 	if (!_isStoped)
 	{
-		unsigned int frameNumber = _currentFrame + std::ceil(_clock.getElapsedTime().asSeconds() / _frameTime.asSeconds());
+		int64_t frameNumber = static_cast<int64_t>(_currentFrame + std::ceil(_clock.getElapsedTime().asSeconds() / _frameTime.asSeconds()));
 		if (_isLooped)
 		{
 			_currentFrame = frameNumber % _framesNumber;
@@ -61,6 +61,7 @@ void AnimationPlayer::Update()
 			{
 				_currentFrame = frameNumber;
 				_animatedSprite->setTexture(_spriteSheet[_currentFrame]);
+				
 			}
 			else
 			{

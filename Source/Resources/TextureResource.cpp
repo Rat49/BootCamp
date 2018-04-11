@@ -9,6 +9,7 @@ TextureResource::TextureResource(const std::string& id, const std::string& name)
 
 void TextureResource::Load()
 {
+	IncRefCounter();
 	_resource = new sf::Texture();
 	bool isLoadSuccess = _resource->loadFromFile(_fullName);
 

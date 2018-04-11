@@ -20,10 +20,10 @@ public:
 private:
 	const std::vector<sf::Texture>& _spriteSheet;
 	sf::Sprite* _animatedSprite;
-	unsigned int _currentFrame;
+	int64_t _currentFrame;
 	bool _isLooped;
 	bool _isStoped;
-	unsigned int _framesNumber;
+	int64_t _framesNumber;
 	sf::Time _animationTime;
 	sf::Time _frameTime;
 	sf::Time _currentTime;

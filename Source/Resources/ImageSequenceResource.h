@@ -14,10 +14,11 @@ public:
 private:
 	float _widthFrame;
 	float _heightFrame;
-	int _countFrames;
-	sf::Color* _colorForMask;
+	size_t _countFrames;
+	sf::Time _timeAnimation;
+	std::vector<sf::Color*> _colorForMask;
 	sf::Image* _image;
 	sf::Texture _texture;
 	std::vector<sf::Texture> _textures;
-	void CreateFrames();
+	void CreateFrames(sf::Image* image);
 };

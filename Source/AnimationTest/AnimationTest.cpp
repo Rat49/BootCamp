@@ -3,7 +3,7 @@
 
 int main()
 {
-	std::vector<float> _settingsForFrame = { 110, 151, 27, 150, 1, 1 };
+	std::vector<float> _settingsForFrame = { 110, 151, 27, 28, 150, 2, 2 };
 	ResourceManager *rm = new ResourceManager(_settingsForFrame);
 	int counterPicture = 0;
 	int counterImageSequence = 0;
@@ -22,6 +22,7 @@ int main()
 	while (window.isOpen())
 	{
 		animationPlayer->Update();
+	
 		window.clear();
 		window.draw(*sprite);
 		window.display();

@@ -10,6 +10,7 @@ AudioResource::AudioResource(const std::string& id, const std::string& name):
 
 void AudioResource::Load()
 {
+	IncRefCounter();
 	_resource = new sf::Music();
 	bool isLoadSuccess = _resource->openFromFile(_fullName);
 	if (!isLoadSuccess)
