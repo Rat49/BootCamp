@@ -13,11 +13,11 @@ private:
 
 	std::map<std::string, std::string> params;
 
-	bool IfElementExists(std::string value);
+	bool IfElementExists(const std::string& keyValue) const;
 
 public:
-	void addNewParam(std::pair < std::string, std::string>);
-	std::string getValue(std::string configValue);
+	void AddNewParam(std::pair < std::string, std::string>);
+	std::string GetValue(std::string configValue);
 };
 
 
@@ -25,7 +25,7 @@ public:
 ---------------------------------------------
 */
 
-class ConfigManager {
+class ConfigManager final {
 
 private:
 
@@ -33,14 +33,14 @@ private:
 	std::map<std::string, LogCategory> logCategories;
 
 	ConfigManager() {}
-	void readInputFile(std::string fileName);
-	void createCategories();
-	void createParameter(std::string categoryName, std::string line);
-	bool IfCategoryExists(std::string keyValue);
+	void ReadInputFile(std::string fileName);
+	void CreateCategories();
+	void CreateParameter(std::string categoryName, std::string line);
+	bool IfCategoryExists(const std::string &keyValue) const;
 
 public:
 
-	static ConfigManager* create(std::string fileName);
-	LogCategory& getCategory(std::string categoryName);
+	static ConfigManager* Create(std::string fileName);
+	LogCategory& GetCategory(std::string categoryName);
 
 };
