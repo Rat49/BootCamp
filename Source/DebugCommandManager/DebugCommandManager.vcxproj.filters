@@ -21,7 +21,7 @@
     <ClInclude Include="Parser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="ConsoleCommandsStore.h">
+    <ClInclude Include="ConsoleCommands.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -32,7 +32,7 @@
     <ClCompile Include="Parser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="ConsoleCommandsStore.cpp">
+    <ClCompile Include="ConsoleCommands.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

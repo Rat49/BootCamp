@@ -124,12 +124,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="ConsoleCommandsStore.h" />
+    <ClInclude Include="ConsoleCommands.h" />
     <ClInclude Include="DebugCommandManager.h" />
     <ClInclude Include="Parser.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="ConsoleCommandsStore.cpp" />
+    <ClCompile Include="ConsoleCommands.cpp" />
     <ClCompile Include="DebugCommandManager.cpp" />
     <ClCompile Include="Parser.cpp" />
   </ItemGroup>

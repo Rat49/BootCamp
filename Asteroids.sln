@@ -27,6 +27,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DebugCommandManager", "Source\DebugCommandManager\DebugCommandManager.vcxproj", "{774A8ED8-82D0-442C-A565-D1FA3C1255E6}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DebugCommandManagerTest", "Source\DebugCommandManagerTest\DebugCommandManagerTest.vcxproj", "{22429D6B-07F8-4196-B263-DD3A27FFB2E6}"
+	ProjectSection(ProjectDependencies) = postProject
+		{774A8ED8-82D0-442C-A565-D1FA3C1255E6} = {774A8ED8-82D0-442C-A565-D1FA3C1255E6}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
