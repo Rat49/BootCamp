@@ -21,7 +21,7 @@ std::string LogCategory::GetValue(std::string keyValue) {
 	std::cerr << "Key value not found" << std::endl;
 	system("PAUSE");
 
-	return std::string();
+	return "invalid";
 }
 
 void LogCategory::AddNewParam(std::pair <std::string, std::string> param) {
@@ -45,8 +45,10 @@ void ConfigManager::ReadInputFile(std::string fileName) {
 	inFile.open(fileName);
 
 	if (inFile.is_open()) {
+		std::cerr << "File opened" << std::endl;
 		CreateCategories();
 		inFile.close();
+		std::cerr << "File closed" << std::endl;
 	}
 	else {
 		std::cerr << "Cannot open file" << std::endl;
