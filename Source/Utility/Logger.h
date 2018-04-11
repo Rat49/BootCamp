@@ -4,10 +4,36 @@
 #include <fstream>
 #include <sstream>
 #include <ctime>
+#include <vector>
 enum LogLevel {
-	FATAL, ERROR, WARNING, INFO, DEBUG
+	DEBUG, INFO, WARNING, ERROR, FATAL
 };
+
 class OutputTarget {
+protected:
+	LogLevel _severity;
+	std::vector<std::string> _channels;
+
+public:
+	void SetSeverity(LogLevel severity) {
+		_severity = severity;
+	}
+	std::vector<std::string> _channels;
+	void includeChannel(std::string channel) {
+		_channels.insert(_channels.begin(), channel);
+
+	}
+	void excludeChannel(std::string channel) {
+		for (auto it = std::cbegin(_channels); it != std::cend(_channels); ++it)
+			if (it->compare(channel) == 0)
+			{
+				_channels.erase(it);
+				break;
+			}
+	}
+	int severity() {
+		return static_cast<int>(_severity);
+	}
 	virtual void write(char *buffer) = 0;
 };
 
@@ -25,50 +51,102 @@ public:
 
 class CmdTarget : public OutputTarget {
 private:
-	std::ofstream _stream;
 public:
 	void write(char *buffer) {
-		_stream << buffer << std::endl;
+		std::cout << buffer << std::endl;
 	}
 };
 
 class Logger final {
 private:
 	std::ostringstream _os;
+	std::vector<OutputTarget*> _outputTargets;
+	char *buffer = new char[256];
 	std::ostringstream& GetStaringInfo(LogLevel level)
 	{
 		struct tm newtime;
 		time_t now = time(0);
 		localtime_s(&newtime, &now);
-		_os << "- " << newtime.tm_hour << ":" << newtime.tm_min << ":" << newtime.tm_sec;
-		_os << " " << std::to_string(level) << ": ";
+		_os << "[" << std::to_string(level) << "]";
+		_os << "[" << newtime.tm_hour << ":" << newtime.tm_min << ":" << newtime.tm_sec<< "]";
 		return _os;
 	}
-public:
-	void warning(const char* msg, ...) {
+	void formatMessage(va_list args, const char* msg) {
 
-		GetStaringInfo(LogLevel::logWARNING) << msg << std::endl;
-		std::cout << os.str();
-			const char *s;
+		std::size_t constexpr max_buffer_size = 256;
+		::strncpy_s(buffer, max_buffer_size, _os.str().c_str(), max_buffer_size);
+		std::size_t const prefix_len = std::strlen(buffer);
+		::vsnprintf(buffer + prefix_len, max_buffer_size - prefix_len, msg, args);
+		_os.str("");
+	}
+	void notifyTargets(LogLevel level) {
+		for (auto target : _outputTargets)
+			if (target->severity() <= static_cast<int>(level))
+				target->write(buffer);
+	}
+
+public:
+	
+	FileTarget* AddFileTarget(std::string path) {
+		FileTarget *ft = new FileTarget(path);
+		_outputTargets.insert(_outputTargets.begin(), ft);
+		return ft;
+	}
+
+	CmdTarget* AddCmdTarget() {
+		CmdTarget *cmdTarget = new CmdTarget();
+		_outputTargets.insert(_outputTargets.begin(), cmdTarget);
+		return cmdTarget;
+	}
+	
+	void Fatal(const char* msg, ...) {
+
+		GetStaringInfo(LogLevel::FATAL);
+
 		::va_list args;
 		va_start(args, msg);
-		std::size_t constexpr max_buffer_size = 256;
-		char buffer[max_buffer_size];
-		//::strncpy(buffer, fatal_error_prefix, max_buffer_size);
-		std::size_t const prefix_len = std::strlen(buffer);
-		vsnprintf(buffer, max_buffer_size, msg, args);
+		formatMessage(args, msg);
+		notifyTargets(LogLevel::FATAL);
 		va_end(args);
-		//throw std::runtime_error(buffer);
-//		printf("nSize: %d, buff: %ls\n", 8, buffer);
-		std::cout << buffer << std::endl;
-		os << std::endl;
+	}
+	void Error(const char* msg, ...) {
 
-		FileTarget *ft = new FileTarget("application.log");
-		ft->write(buffer);
-		CmdTarget *cmdT = new CmdTarget();
-		cmdT->write(buffer);
-		
-		//std::ofstream fout("application.log");
-//		fout.write((char *)buffer, sizeof(buffer));
+		GetStaringInfo(LogLevel::ERROR);
+
+		::va_list args;
+		va_start(args, msg);
+		formatMessage(args, msg);
+		notifyTargets(LogLevel::ERROR);
+		va_end(args);
+	}
+	void Warning(const char* msg, ...) {
+
+		GetStaringInfo(LogLevel::WARNING);
+
+		::va_list args;
+		va_start(args, msg);
+		formatMessage(args, msg);
+		notifyTargets(LogLevel::WARNING);
+		va_end(args);
+	}
+	void Info(const char* msg, ...) {
+
+		GetStaringInfo(LogLevel::INFO);
+
+		::va_list args;
+		va_start(args, msg);
+		formatMessage(args, msg);
+		notifyTargets(LogLevel::INFO);
+		va_end(args);
+	}
+	void Debug(const char* msg, ...) {
+
+		GetStaringInfo(LogLevel::DEBUG);
+
+		::va_list args;
+		va_start(args, msg);
+		formatMessage(args, msg);
+		notifyTargets(LogLevel::DEBUG);
+		va_end(args);
 	}
 };
