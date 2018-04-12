@@ -1,0 +1,5 @@
+﻿  Physics.cpp
+c:\users\nikita.kaverin\desktop\physics\bootcamp\source\physics\physics.cpp(121): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+c:\users\nikita.kaverin\desktop\physics\bootcamp\source\physics\physics.cpp(124): warning C4244: 'argument': conversion from 'unsigned int' to 'float', possible loss of data
+c:\users\nikita.kaverin\desktop\physics\bootcamp\source\physics\physics.cpp(144): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Physics.vcxproj -> C:\Users\nikita.kaverin\Desktop\physics\BootCamp\Bin\Physics_d.lib
