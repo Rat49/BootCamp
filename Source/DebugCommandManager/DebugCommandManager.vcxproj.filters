@@ -24,6 +24,9 @@
     <ClInclude Include="ConsoleCommands.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="DebugCommandManagerEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DebugCommandManager.cpp">
@@ -33,6 +36,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="ConsoleCommands.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugCommandManagerEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

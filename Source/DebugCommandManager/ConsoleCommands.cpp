@@ -17,7 +17,7 @@ static CommandHandler_t Pause = [](const std::vector<std::string>& args)
 	return 0;
 };
 
-std::vector<consoleCommand_t>	Commands =
+std::vector<ConsoleCommand>	Commands =
 {
 	{ "setGameSpeed", SetGameSpeed },
 	{ "pause", Pause }

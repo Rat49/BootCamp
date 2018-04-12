@@ -4,9 +4,10 @@
 #include <vector>
 #include <string>
 
-using CommandHandler_t = std::function<void(std::vector<std::string>&)>;
+using CommandHandler_t = std::function<void(const std::vector<std::string>&)>;
 
-using consoleCommand_t = struct {
+struct ConsoleCommand
+{
 	const char* commandName;
 	CommandHandler_t handler;
 };

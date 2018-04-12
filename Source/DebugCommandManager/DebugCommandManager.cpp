@@ -1,21 +1,38 @@
 #include "ConsoleCommands.h"
 #include "DebugCommandManager.h"
+#include "DebugCommandManagerEvent.h"
+#include "EventSystem.h"
 
-extern std::vector<consoleCommand_t> Commands;
+extern std::vector<ConsoleCommand> Commands;
 
-
-void DebugCommandManager::handleConsoleCommand(std::string consoleCommand)
+DebugCommandManager::DebugCommandManager()
 {
+	Dispatcher & dispatcher = Dispatcher::getInstance();
+	_token = dispatcher.Connect(debugCommandManagerEventID, 
+		[&](const Event& event)
+		{
+			const DebugCommandManagerEvent& debugCommandManagerEvent = static_cast<const DebugCommandManagerEvent&>(event);
+			std::string incomingCommand = debugCommandManagerEvent._consoleCommand;
+			handleConsoleCommand(incomingCommand);
+	});
+};
+
+DebugCommandManager::~DebugCommandManager()
+{
+	Dispatcher & dispatcher = Dispatcher::getInstance();
+	dispatcher.Disconnect(debugCommandManagerEventID, _token);
+};
+
+void DebugCommandManager::handleConsoleCommand(std::string& incomingConsoleCommand)
+{
+	std::string consoleCommand = incomingConsoleCommand;
+	const std::string delimiter = " ";
+
 	_parser.Trim(consoleCommand);
-	std::string delimiter = " ";
+
 	std::vector<std::string> args = _parser.Split(consoleCommand, delimiter);
 
-	if (args.empty())
-	{
-		return;
-	}
-
-	consoleCommand_t requiredCommand;
+	ConsoleCommand requiredCommand;
 	requiredCommand.commandName = args[0].c_str();
 
 	auto command = std::find_if(Commands.begin(), 
@@ -37,17 +54,7 @@ void DebugCommandManager::handleConsoleCommand(std::string consoleCommand)
 }
 
 
-void  DebugCommandManager::Run()
-{
-	while (true)
-	{
-		std::string command;
-		std::getline(std::cin, command);
-		handleConsoleCommand(command);
-	}
-}
-
-void DebugCommandManager::addConsoleCommand(const consoleCommand_t& newConsoleCommand)
+void DebugCommandManager::addConsoleCommand(const ConsoleCommand& newConsoleCommand)
 {
 	auto retrievedPositionOfNewConsoleCommand = std::find_if(Commands.begin(),
 		Commands.end(),
