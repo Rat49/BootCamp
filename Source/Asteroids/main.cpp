@@ -1,6 +1,8 @@
 #include <SFML/Graphics.hpp>
-#include "EventSystem.h"
 #include "Events.h"
+#include "EventSystem.h"
+#include "Input.h"
+
 
 int main()
 {
