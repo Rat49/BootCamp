@@ -23,14 +23,24 @@ int main()
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 			{
 				animationPlayer->Reset();
 			}
 
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::BackSpace)
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
 			{
-				animationPlayer->Reset();
+				animationPlayer->Pause();
+			}
+
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::RAlt)
+			{
+				animationPlayer->SetLooped(true);
+				animationPlayer->Start();
+			}
+
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::RControl)
+			{
 				animationPlayer->SetLooped(false);
 				animationPlayer->Start();
 			}
