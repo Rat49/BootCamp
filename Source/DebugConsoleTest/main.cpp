@@ -1,17 +1,19 @@
 #include "DebugConsole.h"
 #include "EventSystem.h"
+#include "SFML\Graphics.hpp"
+
 int main()
 {
 
-	sf::RenderWindow window(sf::VideoMode(1280,800), "DebugSystem");
-	
+	sf::RenderWindow window(sf::VideoMode(1280, 800), "DebugSystem");
+
 	DebugConsole debugConsole(window);
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	sf::Event event;
 	while (window.isOpen())
 	{
 		window.clear(sf::Color::Blue);
-		
+
 		while (window.pollEvent(event))
 		{
 			debugConsole.Update(event);
