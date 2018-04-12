@@ -10,7 +10,7 @@
 class ResourceManager final
 {
 public:
-	ResourceManager(std::vector<float> _settings);
+	ResourceManager();
 	
 	template <typename T> 
 	T* GetResource(const std::string& key)

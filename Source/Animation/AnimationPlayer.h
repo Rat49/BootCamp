@@ -2,7 +2,7 @@
 #include "SFML\Graphics.hpp"
 #include "ResourceManager.h"
 
-class AnimationPlayer 
+class AnimationPlayer final
 {
 public:
 	AnimationPlayer(sf::Sprite* animatedSprite, const std::vector<sf::Texture>& spriteSheet, sf::Time animationTime, bool isLooped);
@@ -13,7 +13,6 @@ public:
 	void Reset();
 	void Update(sf::Time deltaTime);
 	void SetLooped(bool isLooped);
-	void DefaultAnimationTime();
 
 	~AnimationPlayer();
 
@@ -22,7 +21,7 @@ private:
 	sf::Sprite* _animatedSprite;
 	int64_t _currentFrame;
 	bool _isLooped;
-	bool _isStoped;
+	bool _isStopped;
 	int64_t _framesCount;
 	sf::Time _defaultAnimationTime;
 	sf::Time _animationTime;

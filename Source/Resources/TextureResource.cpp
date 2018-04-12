@@ -15,6 +15,7 @@ void TextureResource::Load()
 
 	if (!isLoadSuccess)
 	{
+		delete _resource;
 		_resource = nullptr;
 	}
 
@@ -23,7 +24,7 @@ void TextureResource::Load()
 
 void TextureResource::Unload()
 {
-	delete(_resource);
+	delete _resource;
 	_resource = nullptr;
 }
 

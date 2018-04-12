@@ -1,11 +1,13 @@
 #pragma once
 #include <string>
+#include <vector>
 
 class Resource
 {
 public:
 	
 	Resource(const std::string& id, const std::string& fullName);
+	Resource(const std::string& id, const std::string& fullName, std::vector<float>* settings);
 	void IncRefCounter();
 	void DecRefCounter();
 	unsigned int GetRefCounter() const;
@@ -18,4 +20,5 @@ public:
 private:
 	unsigned int _refCounter;	
 	std::string _ID;
+	std::vector<float>* _settings;
 };

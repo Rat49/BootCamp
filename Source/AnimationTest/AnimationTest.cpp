@@ -3,8 +3,7 @@
 
 int main()
 {
-	std::vector<float> _settingsForFrame = { 110, 151, 27, 28, 150, 2, 2 };
-	ResourceManager *rm = new ResourceManager(_settingsForFrame);
+	ResourceManager *rm = new ResourceManager();
 	int counterPicture = 0;
 	int counterImageSequence = 0;
 
@@ -27,13 +26,6 @@ int main()
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
-			{
-				animationPlayer->Pause();
-				animationPlayer->DefaultAnimationTime();
-				animationPlayer->Start();
-			}
-
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
 			{
 				animationPlayer->Reset();

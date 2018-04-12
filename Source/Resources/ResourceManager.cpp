@@ -1,7 +1,9 @@
 #include "ResourceManager.h"
 
-ResourceManager::ResourceManager(std::vector<float> _settings)
+
+ResourceManager::ResourceManager()
 {
+	std::vector<float> _settingsForFrame = { 110, 151, 27, 28, 150, 2, 2 };
 	_resources.insert(std::pair<std::string, Resource*>
 		("piupiu", new AudioResource("piupiu", "Resources\\audio\\piupiu.wav")));
 	_resources.insert(std::pair<std::string, Resource*>
@@ -11,7 +13,7 @@ ResourceManager::ResourceManager(std::vector<float> _settings)
 	_resources.insert(std::pair<std::string, Resource*>
 		("smallasteroid", new PictureResource("smallasteroid", "Resources\\graphics\\smallasteroid.png")));
 	_resources.insert(std::pair<std::string, Resource*>
-		("girl", new ImageSequenceResource("girl", "Resources\\graphics\\girl.png", _settings)));
+		("girl", new ImageSequenceResource("girl", "Resources\\graphics\\girl.png", _settingsForFrame)));
 }
 
 Resource* ResourceManager::GetGeneralResource(const std::string& key)
@@ -29,7 +31,6 @@ Resource* ResourceManager::GetGeneralResource(const std::string& key)
 	{
 		resource->Load();
 	}
-	//resource->IncRefCounter();
 	return resource;
 
 }

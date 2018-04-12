@@ -1,19 +1,21 @@
+#include "PictureResource.h"
 #include "ImageSequenceResource.h"
 
-ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::string& name, const std::vector<float>& settings):PictureResource(id, name)
+ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::string& name, std::map<std::string, std::string>* settings):PictureResource(id, name)
 {
-	_widthFrame = settings[0];
-	_heightFrame = settings[1];
-	_countFrames = static_cast<size_t>(settings[2]);
-	_timeAnimation = sf::milliseconds(settings[3]);
-	size_t _validSettingsForColors = (settings.size() - 4) % 3;
+	_widthFrame = static_cast<int>(settings->find["Width"]->second);
+	_heightFrame = static_cast<int>(settings->find["Height"]->second);
+	_countFrames = static_cast<size_t>(settings->find["FrameCount"]->second);
+	_timeAnimation = sf::milliseconds(settings->find["AnimationTime"]->second);
+
+	size_t _validSettingsForColors = (settings - (static_cast<int>(ImageSequenceResource::Settings::EnumSize))) % 3;
 
 	if (_validSettingsForColors == 0)
 	{
-		size_t _countColors = ((settings.size() - 4) / 3);
+		size_t _countColors = ((settings.size() - (static_cast<int>(ImageSequenceResource::Settings::EnumSize))) / 3);
 		for (size_t currentColor = 0; currentColor < _countColors; currentColor += 1)
 		{
-			int colorStart = currentColor * 3 + 4;
+			int colorStart = currentColor * 3 + (static_cast<int>(ImageSequenceResource::Settings::EnumSize));
 			_colorForMask.push_back(new sf::Color(static_cast<size_t>(settings[colorStart]), static_cast<size_t>(settings[colorStart +1]), static_cast<size_t>(settings[colorStart +2]),255));
 		}
 	}
@@ -25,7 +27,7 @@ void ImageSequenceResource::Load()
 	_image = PictureResource::Get();
 	if (_colorForMask.empty())
 	{
-		sf::Color* _colorFirstPixel = new sf::Color(_image->getPixel(0, 0));
+		_colorFirstPixel = new sf::Color(_image->getPixel(0, 0));
 		SetMaskFromColor(_image, *_colorFirstPixel);
 	}
 	else
@@ -39,6 +41,7 @@ void ImageSequenceResource::Load()
 void ImageSequenceResource::Unload()
 {
 	PictureResource::Unload();
+	delete _colorFirstPixel;
 }
 
 std::vector<sf::Texture>& ImageSequenceResource::Get()

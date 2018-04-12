@@ -15,6 +15,7 @@ void AudioResource::Load()
 	bool isLoadSuccess = _resource->openFromFile(_fullName);
 	if (!isLoadSuccess)
 	{
+		delete _resource;
 		_resource = nullptr;
 	}
 	assert(isLoadSuccess && "Resource can not be loaded");
@@ -22,7 +23,7 @@ void AudioResource::Load()
 
 void AudioResource::Unload()
 {
-	delete(_resource);
+	delete _resource;
 	_resource = nullptr;
 }
 

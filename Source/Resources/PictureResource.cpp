@@ -1,8 +1,8 @@
 #include "PictureResource.h"
 #include <cassert>
 
-PictureResource::PictureResource(const std::string& id, const std::string& name):
-	Resource(id, name),
+PictureResource::PictureResource(const std::string& id, const std::string& name)
+	: Resource(id, name),
 	_resource(nullptr)
 {
 }
@@ -14,6 +14,7 @@ void PictureResource::Load()
 	bool isLoadSuccess = _resource->loadFromFile(_fullName);
 	if (!isLoadSuccess)
 	{
+		delete _resource;
 		_resource = nullptr;
 	}
 	assert(isLoadSuccess && "Resource can not be loaded");
@@ -21,7 +22,7 @@ void PictureResource::Load()
 
 void PictureResource::Unload()
 {
-	delete(_resource);
+	delete _resource;
 	_resource = nullptr;
 }
 
