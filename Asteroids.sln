@@ -12,6 +12,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Input", "Source\Input\Input.vcxproj", "{DF8196A1-1785-40E5-949C-4A4E51D368CB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InputTest", "Source\InputTest\InputTest.vcxproj", "{2F15964B-A426-4115-ABB8-69706298B171}"
+	ProjectSection(ProjectDependencies) = postProject
+		{DF8196A1-1785-40E5-949C-4A4E51D368CB} = {DF8196A1-1785-40E5-949C-4A4E51D368CB}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Resources", "Source\Resources\Resources.vcxproj", "{63699642-DBD0-482A-B14F-4F95763D1E10}"
 EndProject
