@@ -5,7 +5,7 @@
 class AnimationPlayer final
 {
 public:
-	AnimationPlayer(sf::Sprite* animatedSprite, const std::vector<sf::Texture>& spriteSheet, sf::Time animationTime, bool isLooped);
+	AnimationPlayer(sf::Sprite* animatedSprite, ImageSequenceResource* animation, bool isLooped);
 
 	void Start();
 	void Start(sf::Time AnimationTime);
@@ -17,8 +17,9 @@ public:
 	~AnimationPlayer();
 
 private:
-	const std::vector<sf::Texture>& _spriteSheet;
 	sf::Sprite* _animatedSprite;
+	ImageSequenceResource* _animation;
+	const std::vector<sf::Texture>& _spriteSheet;
 	int64_t _currentFrame;
 	bool _isLooped;
 	bool _isStopped;

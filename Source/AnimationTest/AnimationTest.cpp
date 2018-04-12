@@ -9,15 +9,12 @@ int main()
 
 	ImageSequenceResource* girl = rm->GetResource<ImageSequenceResource>("girl");
 	counterImageSequence = girl->GetRefCounter();
-	std::vector<sf::Texture> _texturesGirl = girl->Get();
 
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 	window.clear();
 	sf::Sprite* sprite = new sf::Sprite();
 
-	sf::Time time = girl->GetTime();
-
-	AnimationPlayer* animationPlayer = new AnimationPlayer(sprite, _texturesGirl, time, true);
+	AnimationPlayer* animationPlayer = new AnimationPlayer(sprite, girl, true);
 
 	animationPlayer->Start(sf::milliseconds(10.0f));
 	sf::Clock clock;

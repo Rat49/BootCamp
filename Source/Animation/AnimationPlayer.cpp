@@ -1,18 +1,18 @@
 #include "AnimationPlayer.h"
 #include "ResourceManager.h"
 
-AnimationPlayer::AnimationPlayer(sf::Sprite* animatedSprite, const std::vector<sf::Texture>& spriteSheet, sf::Time animationTime, bool isLooped) 
-	: _animatedSprite(animatedSprite)
-	, _spriteSheet(spriteSheet)
+AnimationPlayer::AnimationPlayer(sf::Sprite* animatedSprite, ImageSequenceResource* animation, bool isLooped)
+	: _animation(animation)
+	, _animatedSprite(animatedSprite)
+	, _spriteSheet(_animation->Get())
 	, _isLooped(isLooped)
 	, _currentFrame(0)
 	, _isStopped(true)
-	, _framesCount(spriteSheet.size())
-	, _animationTime(animationTime)
+	, _framesCount(_spriteSheet.size())
+	, _animationTime(_animation->GetTime())
 	, _frameTime(_animationTime / static_cast<float>(_framesCount))
 	, _playingTime(sf::seconds(0.0f))
-	, _defaultAnimationTime(animationTime)
-
+	, _defaultAnimationTime(_animationTime)
 {
 
 }
@@ -86,5 +86,5 @@ void AnimationPlayer::SetLooped(bool isLooped)
 
 AnimationPlayer::~AnimationPlayer()
 {
-
+	_animation->DecRefCounter();
 }
