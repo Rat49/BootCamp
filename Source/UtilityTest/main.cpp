@@ -38,18 +38,18 @@ namespace LoggerTest
 	
 	void Test()
 	{
-		Logger& log = Logger::getInstance();
-		log.setFrame(400);
+		Logger& log = Logger::GetInstance();
+		log.SetFrame(400);
 		auto cmdTarget = log.AddCmdTarget();
 		auto fileTarget = log.AddFileTarget("../Events/Event.log");
-		fileTarget->includeChannel("Event");
+		fileTarget->IncludeChannel("Event");
 		cmdTarget->SetSeverity(LogLevel::WARNING);
 		fileTarget->SetSeverity(LogLevel::INFO);
-		cmdTarget->includeChannel("All");
+		cmdTarget->IncludeChannel("All");
 		log("Audio").Debug("%s %s!", "Hello", "world");
 		log("Event").Info("%s %s!", "Hello", "world");
-		cmdTarget->excludeChannel("All");
-		cmdTarget->includeChannel("Audio");
+		cmdTarget->ExcludeChannel("All");
+		cmdTarget->IncludeChannel("Audio");
 		log("Audio").Error("%s %s!", "Hello", "world");
 		log("Event").Warning("%s %s!", "Hello", "world");
 	}

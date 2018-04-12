@@ -23,11 +23,11 @@ public:
 		_severity = severity;
 	}
 	std::vector<std::string> _channels;
-	void includeChannel(std::string channel) {
+	void IncludeChannel(std::string channel) {
 		_channels.insert(_channels.begin(), channel);
 
 	}
-	bool containsChannel(std::string channel) {
+	bool ContainsChannel(std::string channel) {
 		for (auto it = std::cbegin(_channels); it != std::cend(_channels); ++it)
 			if (it->compare(channel) == 0 || it->compare("All") == 0)
 			{
@@ -35,7 +35,7 @@ public:
 			}
 		return false;
 	}
-	void excludeChannel(std::string channel) {
+	void ExcludeChannel(std::string channel) {
 		for (auto it = std::cbegin(_channels); it != std::cend(_channels); ++it)
 			if (it->compare(channel) == 0)
 			{
@@ -43,10 +43,10 @@ public:
 				break;
 			}
 	}
-	int severity() {
+	int Severity() {
 		return static_cast<int>(_severity);
 	}
-	virtual void write(char *buffer) = 0;
+	virtual void Write(char *buffer) = 0;
 };
 
 class FileTarget : public OutputTarget {
@@ -56,7 +56,7 @@ public:
 	FileTarget(std::string path) {
 		_stream.open(path, std::ofstream::app);
 	}
-	void write(char *buffer) {
+	void Write(char *buffer) {
 		_stream<< buffer << std::endl;
 	}
 };
@@ -64,7 +64,7 @@ public:
 class CmdTarget : public OutputTarget {
 private:
 public:
-	void write(char *buffer) {
+	void Write(char *buffer) {
 		std::cout << buffer << std::endl;
 	}
 };
@@ -77,7 +77,7 @@ private:
 	Logger* p_instance;
 public:
 	~LoggerDestroyer();
-	void initialize(Logger* p);
+	void Initialize(Logger* p);
 };
 
 
@@ -90,10 +90,10 @@ private:
 	char *buffer = new char[256];
 	std::ostringstream& GetStaringInfo(LogLevel level);
 	void formatMessage(va_list args, const char* msg);
-	void notifyTargets(LogLevel level);
+	void NotifyTargets(LogLevel level);
 	static Logger* p_instance;
-	static LoggerDestroyer destroyer;
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	static LoggerDestroyer _destroyer;
+	HANDLE _hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	std::string GetLevelName(LogLevel level);
 protected:
 	Logger() {};
@@ -101,8 +101,8 @@ protected:
 	~Logger() {};
 	friend class LoggerDestroyer;
 public:
-	void setFrame(__int64 frame);
-	static Logger& getInstance();
+	void SetFrame(__int64 frame);
+	static Logger& GetInstance();
 	FileTarget* AddFileTarget(std::string path);
 	CmdTarget* AddCmdTarget();
 	void Fatal(const char* msg, ...);
@@ -111,5 +111,5 @@ public:
 	void Info(const char* msg, ...);
 	void Debug(const char* msg, ...);
 	Logger& operator () (std::string channel);
-	void impl(const char * msg, va_list args, LogLevel level);
+	void Impl(const char * msg, va_list args, LogLevel level);
 };

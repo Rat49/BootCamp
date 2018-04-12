@@ -4,7 +4,7 @@
 int levelColors[] = { 15,11,14,12,79 };
 
 Logger* Logger::p_instance = 0;
-LoggerDestroyer Logger::destroyer;
+LoggerDestroyer Logger::_destroyer;
 std::string Logger::GetLevelName(LogLevel level){
 	switch (level)
 	{
@@ -29,7 +29,7 @@ std::string Logger::GetLevelName(LogLevel level){
 	}
 	
 }
-void Logger::setFrame(__int64 frame) {
+void Logger::SetFrame(__int64 frame) {
 	_frame = frame;
 }
 
@@ -58,27 +58,27 @@ void Logger::formatMessage(va_list args, const char* msg) {
 	_os.str("");
 }
 
-void Logger::notifyTargets(LogLevel level) {
+void Logger::NotifyTargets(LogLevel level) {
 
 	for (auto target : _outputTargets){
-		if (target->severity() <= static_cast<int>(level) &&  target->containsChannel(_currentChannel))
-			target->write(buffer);
+		if (target->Severity() <= static_cast<int>(level) &&  target->ContainsChannel(_currentChannel))
+			target->Write(buffer);
 	}
-	SetConsoleTextAttribute(hConsole, 15);
+	SetConsoleTextAttribute(_hConsole, 15);
 }
 
 LoggerDestroyer::~LoggerDestroyer(){
 	delete p_instance;
 };
 
-void LoggerDestroyer::initialize(Logger* p){
+void LoggerDestroyer::Initialize(Logger* p){
 	p_instance = p;
 };
 
-Logger& Logger::getInstance(){
+Logger& Logger::GetInstance(){
 	if (!p_instance)     {
 		p_instance = new Logger();
-		destroyer.initialize(p_instance);
+		_destroyer.Initialize(p_instance);
 	}
 	return *p_instance;
 };
@@ -98,48 +98,48 @@ Logger& Logger::operator () (std::string channel)
 	_currentChannel = channel;
 	return (*this);
 }
-void Logger::impl(const char* msg, va_list args, LogLevel level)
+void Logger::Impl(const char* msg, va_list args, LogLevel level)
 {
 	GetStaringInfo(level);
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, levelColors[level]);
+	HANDLE _hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	SetConsoleTextAttribute(_hConsole, levelColors[level]);
 	formatMessage(args, msg);
-	notifyTargets(LogLevel::FATAL);
+	NotifyTargets(LogLevel::FATAL);
 }
 
 void Logger::Fatal(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	impl(msg, args, LogLevel::FATAL);
+	Impl(msg, args, LogLevel::FATAL);
 	va_end(args);
 }
 void  Logger::Error(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	impl(msg, args, LogLevel::LogLevelERROR);
+	Impl(msg, args, LogLevel::LogLevelERROR);
 	va_end(args);
 }
 void  Logger::Warning(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	impl(msg, args, LogLevel::WARNING);
+	Impl(msg, args, LogLevel::WARNING);
 	va_end(args);
 }
 void  Logger::Info(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	impl(msg, args, LogLevel::INFO);
+	Impl(msg, args, LogLevel::INFO);
 	va_start(args, msg);
 }
 void  Logger::Debug(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	impl(msg, args, LogLevel::DEBUG);
+	Impl(msg, args, LogLevel::DEBUG);
 	va_end(args);
 }
 
