@@ -69,7 +69,6 @@ void AnimationPlayer::Update(sf::Time deltaTime)
 			{
 				_currentFrame = frameNumber;
 				_animatedSprite->setTexture(_spriteSheet[_currentFrame]);
-
 			}
 			else
 			{

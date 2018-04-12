@@ -1,5 +1,4 @@
 #include "Resource.h"
-#include <vector>
 
 
 Resource::Resource(const std::string& id, const std::string& fullName)
@@ -11,7 +10,7 @@ Resource::Resource(const std::string& id, const std::string& fullName)
 
 }
 
-Resource::Resource(const std::string& id, const std::string& fullName, std::vector<float>* settings) 
+Resource::Resource(const std::string& id, const std::string& fullName, std::multimap<std::string,std::string>* settings) 
 	: _ID(id)
 	, _fullName(fullName)
 	, _refCounter(0)
