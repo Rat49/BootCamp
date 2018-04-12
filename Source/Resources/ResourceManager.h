@@ -2,6 +2,7 @@
 #include "AudioResource.h"
 #include "PictureResource.h"
 #include "Resource.h"
+#include "ImageSequenceResource.h"
 #include <cassert>
 #include <map>
 #include <string>

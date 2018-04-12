@@ -15,6 +15,7 @@ void TextureResource::Load()
 
 	if (!isLoadSuccess)
 	{
+		delete _resource;
 		_resource = nullptr;
 	}
 
@@ -23,15 +24,14 @@ void TextureResource::Load()
 
 void TextureResource::Unload()
 {
-	delete(_resource);
+	delete _resource;
 	_resource = nullptr;
 }
 
-sf::Texture* TextureResource::Get()
+sf::Texture& TextureResource::Get()
 {
 	assert(GetRefCounter() != 0 && "Resource references not found");
-	assert(_resource != nullptr && "Resource not loaded");
-	return _resource;
+	return *_resource;
 }
 
 TextureResource::~TextureResource()
