@@ -6,9 +6,12 @@
 #include <ctime>
 #include <vector>
 #include <windows.h>
+
 enum LogLevel {
-	DEBUG, INFO, WARNING, LogLevelERROR, FATAL
+	DEBUG = 0, INFO, WARNING, LogLevelERROR, FATAL
 };
+
+
 
 
 class OutputTarget {
@@ -24,9 +27,9 @@ public:
 		_channels.insert(_channels.begin(), channel);
 
 	}
-	bool containsChannel(std::string channel){
+	bool containsChannel(std::string channel) {
 		for (auto it = std::cbegin(_channels); it != std::cend(_channels); ++it)
-			if (it->compare(channel) == 0 || it->compare("All")==0)
+			if (it->compare(channel) == 0 || it->compare("All") == 0)
 			{
 				return true;
 			}
@@ -54,7 +57,7 @@ public:
 		_stream.open(path, std::ofstream::app);
 	}
 	void write(char *buffer) {
-		std::cout << buffer << std::endl;
+		_stream<< buffer << std::endl;
 	}
 };
 
@@ -80,6 +83,7 @@ public:
 
 class Logger final {
 private:
+	__int64 _frame =20;
 	std::ostringstream _os;
 	std::string _currentChannel;
 	std::vector<OutputTarget*> _outputTargets;
@@ -92,11 +96,12 @@ private:
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	std::string GetLevelName(LogLevel level);
 protected:
-	Logger() { }
-	Logger(const Logger&);
-	~Logger() {}
+	Logger() {};
+	Logger(const Logger&) = delete;
+	~Logger() {};
 	friend class LoggerDestroyer;
 public:
+	void setFrame(__int64 frame);
 	static Logger& getInstance();
 	FileTarget* AddFileTarget(std::string path);
 	CmdTarget* AddCmdTarget();
@@ -106,4 +111,5 @@ public:
 	void Info(const char* msg, ...);
 	void Debug(const char* msg, ...);
 	Logger& operator () (std::string channel);
+	void impl(const char * msg, va_list args, LogLevel level);
 };

@@ -1,6 +1,8 @@
 #include "Logger.h"
 #include <iostream>
 
+int levelColors[] = { 15,11,14,12,79 };
+
 Logger* Logger::p_instance = 0;
 LoggerDestroyer Logger::destroyer;
 std::string Logger::GetLevelName(LogLevel level){
@@ -27,6 +29,9 @@ std::string Logger::GetLevelName(LogLevel level){
 	}
 	
 }
+void Logger::setFrame(__int64 frame) {
+	_frame = frame;
+}
 
 std::ostringstream& Logger::GetStaringInfo(LogLevel level)
 {
@@ -36,10 +41,11 @@ std::ostringstream& Logger::GetStaringInfo(LogLevel level)
 	_os << "[" << _currentChannel << "]";
 	_os << "[" << GetLevelName(level) << "]";
 	char buff[100];
-	strftime(buff, 100, "%H:%M:%S", localtime(&now));
-
-	_os << "[" << buff << "] ";
-	//_os << "[" << newtime.tm_hour << ":" << newtime.tm_min << ":" << newtime.tm_sec << "]";
+	strftime(buff, 100, "%H:%M:%S", &newtime);
+	_os << "[" << buff << "]";
+	char fr[16];
+	sprintf_s(fr,"%u", _frame);
+	_os << "[" << fr << "] ";
 	return _os;
 }
 
@@ -92,58 +98,48 @@ Logger& Logger::operator () (std::string channel)
 	_currentChannel = channel;
 	return (*this);
 }
-void Logger::Fatal(const char* msg, ...) {
-
-	GetStaringInfo(LogLevel::FATAL);
+void Logger::impl(const char* msg, va_list args, LogLevel level)
+{
+	GetStaringInfo(level);
 	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, 79);
-	::va_list args;
-	va_start(args, msg);
+	SetConsoleTextAttribute(hConsole, levelColors[level]);
 	formatMessage(args, msg);
 	notifyTargets(LogLevel::FATAL);
+}
+
+void Logger::Fatal(const char* msg, ...) {
+
+	::va_list args;
+	va_start(args, msg);
+	impl(msg, args, LogLevel::FATAL);
 	va_end(args);
 }
 void  Logger::Error(const char* msg, ...) {
 
-	GetStaringInfo(LogLevel::LogLevelERROR);
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole,12);
 	::va_list args;
 	va_start(args, msg);
-	formatMessage(args, msg);
-	notifyTargets(LogLevel::LogLevelERROR);
+	impl(msg, args, LogLevel::LogLevelERROR);
 	va_end(args);
 }
 void  Logger::Warning(const char* msg, ...) {
 
-	GetStaringInfo(LogLevel::WARNING);
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, 14);
 	::va_list args;
 	va_start(args, msg);
-	formatMessage(args, msg);
-	notifyTargets(LogLevel::WARNING);
+	impl(msg, args, LogLevel::WARNING);
 	va_end(args);
 }
 void  Logger::Info(const char* msg, ...) {
 
-	GetStaringInfo(LogLevel::INFO);
-	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(hConsole, 11);
 	::va_list args;
 	va_start(args, msg);
-	formatMessage(args, msg);
-	notifyTargets(LogLevel::INFO);
-	va_end(args);
+	impl(msg, args, LogLevel::INFO);
+	va_start(args, msg);
 }
 void  Logger::Debug(const char* msg, ...) {
 
-	GetStaringInfo(LogLevel::DEBUG);
-	SetConsoleTextAttribute(hConsole, 15);
 	::va_list args;
 	va_start(args, msg);
-	formatMessage(args, msg);
-	notifyTargets(LogLevel::DEBUG);
+	impl(msg, args, LogLevel::DEBUG);
 	va_end(args);
 }
 
