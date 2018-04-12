@@ -24,6 +24,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Utility", "Source\Utility\U
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UtilityTest", "Source\UtilityTest\UtilityTest.vcxproj", "{8337EB34-71FA-4F03-B210-6F8467F03795}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConfigManager", "Source\Input\ConfigManager\ConfigManager.vcxproj", "{6578FC88-0AFC-434A-9BCF-251B60C43D35}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConfigManagerTest", "Source\InputTest\ConfigManagerTest\ConfigManagerTest.vcxproj", "{2D23F964-9BEF-4DDF-9CC0-3FEC7F71E729}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -66,6 +70,14 @@ Global
 		{8337EB34-71FA-4F03-B210-6F8467F03795}.Debug|x64.Build.0 = Debug|x64
 		{8337EB34-71FA-4F03-B210-6F8467F03795}.Release|x64.ActiveCfg = Release|x64
 		{8337EB34-71FA-4F03-B210-6F8467F03795}.Release|x64.Build.0 = Release|x64
+		{6578FC88-0AFC-434A-9BCF-251B60C43D35}.Debug|x64.ActiveCfg = Debug|x64
+		{6578FC88-0AFC-434A-9BCF-251B60C43D35}.Debug|x64.Build.0 = Debug|x64
+		{6578FC88-0AFC-434A-9BCF-251B60C43D35}.Release|x64.ActiveCfg = Release|x64
+		{6578FC88-0AFC-434A-9BCF-251B60C43D35}.Release|x64.Build.0 = Release|x64
+		{2D23F964-9BEF-4DDF-9CC0-3FEC7F71E729}.Debug|x64.ActiveCfg = Debug|x64
+		{2D23F964-9BEF-4DDF-9CC0-3FEC7F71E729}.Debug|x64.Build.0 = Debug|x64
+		{2D23F964-9BEF-4DDF-9CC0-3FEC7F71E729}.Release|x64.ActiveCfg = Release|x64
+		{2D23F964-9BEF-4DDF-9CC0-3FEC7F71E729}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
