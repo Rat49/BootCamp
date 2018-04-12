@@ -60,12 +60,12 @@ void DebugConsole::Update(sf::Event& event)
 		if (event.text.unicode == 8)
 		{
 			_inputString.clear();
-			_inputText.setString("] " + _inputString);
+			_inputText.setString("> " + _inputString);
 		}
 
 		if (event.text.unicode == 13)
 		{
-			_outputText.setString("User: " + _inputString);
+			_outputText.setString("> " + _inputString);
 			_outputLines.insert(_outputLines.begin(), _outputText);
 
 			_inputString.clear();
