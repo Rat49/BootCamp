@@ -1,18 +1,19 @@
 #pragma once
-#include  <iostream>
+#include <iostream>
 #include <stdarg.h>
 #include <fstream>
 #include <sstream>
 #include <ctime>
 #include <vector>
+#include <windows.h>
 enum LogLevel {
-	DEBUG, INFO, WARNING, ERROR, FATAL
+	DEBUG, INFO, WARNING, LogLevelERROR, FATAL
 };
+
 
 class OutputTarget {
 protected:
 	LogLevel _severity;
-	std::vector<std::string> _channels;
 
 public:
 	void SetSeverity(LogLevel severity) {
@@ -22,6 +23,14 @@ public:
 	void includeChannel(std::string channel) {
 		_channels.insert(_channels.begin(), channel);
 
+	}
+	bool containsChannel(std::string channel){
+		for (auto it = std::cbegin(_channels); it != std::cend(_channels); ++it)
+			if (it->compare(channel) == 0 || it->compare("All")==0)
+			{
+				return true;
+			}
+		return false;
 	}
 	void excludeChannel(std::string channel) {
 		for (auto it = std::cbegin(_channels); it != std::cend(_channels); ++it)
@@ -57,96 +66,44 @@ public:
 	}
 };
 
+class Logger;
+
+class LoggerDestroyer
+{
+private:
+	Logger* p_instance;
+public:
+	~LoggerDestroyer();
+	void initialize(Logger* p);
+};
+
+
 class Logger final {
 private:
 	std::ostringstream _os;
+	std::string _currentChannel;
 	std::vector<OutputTarget*> _outputTargets;
 	char *buffer = new char[256];
-	std::ostringstream& GetStaringInfo(LogLevel level)
-	{
-		struct tm newtime;
-		time_t now = time(0);
-		localtime_s(&newtime, &now);
-		_os << "[" << std::to_string(level) << "]";
-		_os << "[" << newtime.tm_hour << ":" << newtime.tm_min << ":" << newtime.tm_sec<< "]";
-		return _os;
-	}
-	void formatMessage(va_list args, const char* msg) {
-
-		std::size_t constexpr max_buffer_size = 256;
-		::strncpy_s(buffer, max_buffer_size, _os.str().c_str(), max_buffer_size);
-		std::size_t const prefix_len = std::strlen(buffer);
-		::vsnprintf(buffer + prefix_len, max_buffer_size - prefix_len, msg, args);
-		_os.str("");
-	}
-	void notifyTargets(LogLevel level) {
-		for (auto target : _outputTargets)
-			if (target->severity() <= static_cast<int>(level))
-				target->write(buffer);
-	}
-
+	std::ostringstream& GetStaringInfo(LogLevel level);
+	void formatMessage(va_list args, const char* msg);
+	void notifyTargets(LogLevel level);
+	static Logger* p_instance;
+	static LoggerDestroyer destroyer;
+	HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+	std::string GetLevelName(LogLevel level);
+protected:
+	Logger() { }
+	Logger(const Logger&);
+	~Logger() {}
+	friend class LoggerDestroyer;
 public:
-	
-	FileTarget* AddFileTarget(std::string path) {
-		FileTarget *ft = new FileTarget(path);
-		_outputTargets.insert(_outputTargets.begin(), ft);
-		return ft;
-	}
-
-	CmdTarget* AddCmdTarget() {
-		CmdTarget *cmdTarget = new CmdTarget();
-		_outputTargets.insert(_outputTargets.begin(), cmdTarget);
-		return cmdTarget;
-	}
-	
-	void Fatal(const char* msg, ...) {
-
-		GetStaringInfo(LogLevel::FATAL);
-
-		::va_list args;
-		va_start(args, msg);
-		formatMessage(args, msg);
-		notifyTargets(LogLevel::FATAL);
-		va_end(args);
-	}
-	void Error(const char* msg, ...) {
-
-		GetStaringInfo(LogLevel::ERROR);
-
-		::va_list args;
-		va_start(args, msg);
-		formatMessage(args, msg);
-		notifyTargets(LogLevel::ERROR);
-		va_end(args);
-	}
-	void Warning(const char* msg, ...) {
-
-		GetStaringInfo(LogLevel::WARNING);
-
-		::va_list args;
-		va_start(args, msg);
-		formatMessage(args, msg);
-		notifyTargets(LogLevel::WARNING);
-		va_end(args);
-	}
-	void Info(const char* msg, ...) {
-
-		GetStaringInfo(LogLevel::INFO);
-
-		::va_list args;
-		va_start(args, msg);
-		formatMessage(args, msg);
-		notifyTargets(LogLevel::INFO);
-		va_end(args);
-	}
-	void Debug(const char* msg, ...) {
-
-		GetStaringInfo(LogLevel::DEBUG);
-
-		::va_list args;
-		va_start(args, msg);
-		formatMessage(args, msg);
-		notifyTargets(LogLevel::DEBUG);
-		va_end(args);
-	}
+	static Logger& getInstance();
+	FileTarget* AddFileTarget(std::string path);
+	CmdTarget* AddCmdTarget();
+	void Fatal(const char* msg, ...);
+	void Error(const char* msg, ...);
+	void Warning(const char* msg, ...);
+	void Info(const char* msg, ...);
+	void Debug(const char* msg, ...);
+	Logger& operator () (std::string channel);
 };
