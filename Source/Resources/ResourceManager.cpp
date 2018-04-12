@@ -1,8 +1,16 @@
 #include "ResourceManager.h"
 
+
 ResourceManager::ResourceManager()
 {
-	
+	std::multimap<std::string, std::string> _settingsForFrame;
+	_settingsForFrame.insert(std::make_pair("Width", "110"));
+	_settingsForFrame.insert(std::make_pair("Height", "151"));
+	_settingsForFrame.insert(std::make_pair("FrameCount", "27"));
+	_settingsForFrame.insert(std::make_pair("AnimationTime", "28"));
+	_settingsForFrame.insert(std::make_pair("Color", "150 2 2"));
+	_settingsForFrame.insert(std::make_pair("Color", "255 255 255"));
+	_settingsForFrame.insert(std::make_pair("Color", "0 0 0"));
 
 	_resources.insert(std::pair<std::string, Resource*>
 		("piupiu", new AudioResource("piupiu", "Resources\\audio\\piupiu.wav")));
@@ -12,7 +20,8 @@ ResourceManager::ResourceManager()
 		("asteroid", new PictureResource("asteroid", "Resources\\graphics\\aster.bmp")));
 	_resources.insert(std::pair<std::string, Resource*>
 		("smallasteroid", new PictureResource("smallasteroid", "Resources\\graphics\\smallasteroid.png")));
-
+	_resources.insert(std::pair<std::string, Resource*>
+		("girl", new ImageSequenceResource("girl", "Resources\\graphics\\girl.png", &_settingsForFrame)));
 }
 
 Resource* ResourceManager::GetGeneralResource(const std::string& key)
@@ -28,7 +37,7 @@ Resource* ResourceManager::GetGeneralResource(const std::string& key)
 	}
 	else
 	{
-		resource->Load();		
+		resource->Load();
 	}
 	return resource;
 
