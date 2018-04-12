@@ -1,5 +1,4 @@
 #pragma once
-#include <iostream>
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <algorithm>
@@ -13,11 +12,13 @@ public:
 	sf::Text _inputText;
 	sf::Text _outputText;
 	std::vector<sf::Text> _outputLines;
+	int _windowWidth;
+	int _windowHeight;
 	int _characterSize;
 	static int _currentFirstHistoryLine;
-	int _windowWidth;
 	
 	DebugConsole(sf::RenderWindow& window);
 	void Update(sf::Event& event);
 	void Draw(sf::RenderWindow& window);
+	void logMessageOutput(const std::string&);
 };
