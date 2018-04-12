@@ -92,6 +92,7 @@ void ImageSequenceResource::SetMaskFromColor(sf::Image* image, sf::Color color)
 
 void ImageSequenceResource::CreateFrames(sf::Image* image)
 {
+	_textures.clear();
 	int _currentCountFrames = 0;
 	for (int heightFrame = 0; heightFrame < static_cast<int>(_image->getSize().y); heightFrame += _heightFrame)
 	{

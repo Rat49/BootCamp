@@ -24,8 +24,8 @@ private:
 	bool _isLooped;
 	bool _isStopped;
 	int64_t _framesCount;
-	sf::Time _defaultAnimationTime;
 	sf::Time _animationTime;
+	sf::Time _defaultAnimationTime;
 	sf::Time _frameTime;
 	sf::Time _playingTime;
 };
