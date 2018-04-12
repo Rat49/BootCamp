@@ -1,5 +1,7 @@
 #include <SFML/Graphics.hpp>
-#include "iostream"
+#include "EventSystem.h"
+#include "Events.h"
+
 int main()
 {
 	std::cout << "hello";
@@ -12,6 +14,12 @@ int main()
 			if (sysEvent.type == sysEvent.KeyPressed && sysEvent.key.code == sf::Keyboard::Escape)
 			{
 				rw.close();
+			}
+			if (sysEvent.type == sysEvent.Resized)
+			{
+				FirstEvent firstEvent;
+				Dispatcher& dispatcher = Dispatcher::getInstance();
+				dispatcher.Send(firstEvent, firstEventID);
 			}
 		}
 

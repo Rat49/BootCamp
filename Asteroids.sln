@@ -14,6 +14,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Asteroids", "Source\Asteroi
 		{1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82} = {1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82}
 		{774A8ED8-82D0-442C-A565-D1FA3C1255E6} = {774A8ED8-82D0-442C-A565-D1FA3C1255E6}
 	EndProjectSection
+	ProjectSection(ProjectDependencies) = postProject
+		{1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82} = {1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Animation", "Source\Animation\Animation.vcxproj", "{32482588-87F1-4BF6-92F1-629905946951}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -116,7 +119,9 @@ EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{EC36BC08-A0CE-44C3-A47D-99DF70476154}.Debug|x64.ActiveCfg = Debug|x64
@@ -153,8 +158,8 @@ Global
 		{63699642-DBD0-482A-B14F-4F95763D1E10}.Release|x64.Build.0 = Debug|x64
 		{D00C46E5-CA48-4D84-8F26-9E4881F61FC5}.Debug|x64.ActiveCfg = Debug|x64
 		{D00C46E5-CA48-4D84-8F26-9E4881F61FC5}.Debug|x64.Build.0 = Debug|x64
-		{D00C46E5-CA48-4D84-8F26-9E4881F61FC5}.Release|x64.ActiveCfg = Debug|x64
-		{D00C46E5-CA48-4D84-8F26-9E4881F61FC5}.Release|x64.Build.0 = Debug|x64
+		{D00C46E5-CA48-4D84-8F26-9E4881F61FC5}.Release|x64.ActiveCfg = Release|x64
+		{D00C46E5-CA48-4D84-8F26-9E4881F61FC5}.Release|x64.Build.0 = Release|x64
 		{E3962BCA-52AF-4987-8971-C0EB4BB22601}.Debug|x64.ActiveCfg = Debug|x64
 		{E3962BCA-52AF-4987-8971-C0EB4BB22601}.Debug|x64.Build.0 = Debug|x64
 		{E3962BCA-52AF-4987-8971-C0EB4BB22601}.Release|x64.ActiveCfg = Debug|x64
