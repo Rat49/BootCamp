@@ -11,16 +11,23 @@ public:
 
 	sf::Vector2f GetPosition() const;
 	
+	void SetScale(sf::Vector2f scale);
+
+	sf::Vector2f GetScale() const;
+
+
 	void AddOwner(sf::RenderWindow * host);
 
-	virtual void Update() {};
+	void Update();
 
 	virtual void Draw() {};
 
 	virtual ~Widget();
 private:
 	sf::Vector2f _position;
+	sf::Vector2f _scale;
 protected:
+	virtual void UpdateControl() {};
 	sf::RenderWindow * _owner;
 };
 

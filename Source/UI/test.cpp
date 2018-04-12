@@ -6,6 +6,7 @@ int main()
 	mui.Add(new SfmlButton(sf::Vector2f(100, 50), sf::Vector2f(200, 200),"start"), "start");
 	mui.Add(new SfmlButton(sf::Vector2f(20, 30), sf::Vector2f(300, 300),"test"), "test");
 	//mui.addLabel("helllowworld", sf::Vector2f(0, 0), "label");
+	
 	while (mui._space.isOpen())
 	{
 		sf::Event curEvent;
@@ -25,10 +26,12 @@ int main()
 					}
 					break;
 				case sf::Event::Resized:
-					mui.onResized();
+						//mui._space.setSize(sf::Vector2u(1200,600));
+						mui.onResized();
+					break;
 				default:
 					break;
-			}			
+			}		
 		}
 		mui.Render();
 	}

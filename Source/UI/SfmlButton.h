@@ -9,7 +9,7 @@ public:
 	bool IsClicked(sf::Vector2i cursor_pos) const;
 	void SetColor(const sf::Color & color);
 	void SetSize(const sf::Vector2f size);
-	void Update();
+	void UpdateControl() override;
 	void Draw() override;
 	~SfmlButton();
 private:

@@ -13,7 +13,8 @@ struct cmpByStringLength
 	}
 };
 
-class UI
+class UI //:
+	//public sf::RenderWindow
 {
 public:
 	UI(sf::VideoMode screen,const std::string & name);
@@ -26,7 +27,7 @@ public:
 		return specificWidget;
 	}
 
-	void onResized();
+	void onResize();
 	void Render();
 
 	void SetPostion(const std::string& key, float x, float y);
@@ -34,6 +35,7 @@ public:
 	void Add(Widget * wid, const std::string &name);
 	~UI();
 private:
+	sf::Vector2u _oldSize;
 	Widget* GetWidget(const std::string &key);
 	std::map<std::string, Widget*, cmpByStringLength> _widgets;
 	

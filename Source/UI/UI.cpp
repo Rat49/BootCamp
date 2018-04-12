@@ -2,19 +2,24 @@
 
 
 
-UI::UI(sf::VideoMode screen,const std::string &name):
-	_space(screen,name,sf::Style::Default)
-{
+UI::UI(sf::VideoMode screen, const std::string &name) :
+	_space(screen, name, sf::Style::Default)
 	
+{
+	_oldSize = _space.getSize();
 }
 
-void UI::onResized()
+void UI::onResize()
 {
+	auto newSize = sf::Vector2f(_space.getSize().x, _space.getSize().y);
 	for (auto it : _widgets)
 	{
+		it.second->SetScale(sf::Vector2f(newSize.x/_oldSize.x, newSize.y / _oldSize.y));
 		it.second->Update();
 	}
+	//_space.setView(sf::View(_space.getDefaultView().getCenter(),newSize));
 	Render();
+	_oldSize = _space.getSize();
 }
 
 void UI::Render()
@@ -24,7 +29,6 @@ void UI::Render()
 	{
 		it.second->Draw();
 	}
-	
 	_space.display();
 }
 

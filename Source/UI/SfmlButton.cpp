@@ -12,6 +12,7 @@ SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const st
 
 bool SfmlButton::IsClicked(sf::Vector2i cursor_pos) const
 {
+	auto tmp = _body.getGlobalBounds();
 	if (!_body.getGlobalBounds().contains(static_cast<sf::Vector2f>(cursor_pos)))
 	{
 		return false;
@@ -33,9 +34,9 @@ void SfmlButton::SetSize(const sf::Vector2f size)
 	_body.setSize(size);
 }
 
-void SfmlButton::Update()
+void SfmlButton::UpdateControl()
 {
-	SetPosition(_body.getPosition().x, _body.getPosition().y);
+	_body.setScale(GetScale());
 }
 
 void SfmlButton::Draw()
