@@ -98,7 +98,7 @@ Logger& Logger::operator () (std::string channel)
 	_currentChannel = channel;
 	return (*this);
 }
-void Logger::Impl(const char* msg, va_list args, LogLevel level)
+void Logger::OutputMessageImpl(const char* msg, va_list args, LogLevel level)
 {
 	GetStaringInfo(level);
 	HANDLE _hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -111,35 +111,35 @@ void Logger::Fatal(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	Impl(msg, args, LogLevel::FATAL);
+	OutputMessageImpl(msg, args, LogLevel::FATAL);
 	va_end(args);
 }
 void  Logger::Error(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	Impl(msg, args, LogLevel::LogLevelERROR);
+	OutputMessageImpl(msg, args, LogLevel::LogLevelERROR);
 	va_end(args);
 }
 void  Logger::Warning(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	Impl(msg, args, LogLevel::WARNING);
+	OutputMessageImpl(msg, args, LogLevel::WARNING);
 	va_end(args);
 }
 void  Logger::Info(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	Impl(msg, args, LogLevel::INFO);
+	OutputMessageImpl(msg, args, LogLevel::INFO);
 	va_start(args, msg);
 }
 void  Logger::Debug(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	Impl(msg, args, LogLevel::DEBUG);
+	OutputMessageImpl(msg, args, LogLevel::DEBUG);
 	va_end(args);
 }
 

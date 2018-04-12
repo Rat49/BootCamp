@@ -12,8 +12,6 @@ enum LogLevel {
 };
 
 
-
-
 class OutputTarget {
 protected:
 	LogLevel _severity;
@@ -57,7 +55,7 @@ public:
 		_stream.open(path, std::ofstream::app);
 	}
 	void Write(char *buffer) {
-		_stream<< buffer << std::endl;
+		_stream << buffer << std::endl;
 	}
 };
 
@@ -95,11 +93,12 @@ private:
 	static LoggerDestroyer _destroyer;
 	HANDLE _hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	std::string GetLevelName(LogLevel level);
-protected:
 	Logger() {};
 	Logger(const Logger&) = delete;
 	~Logger() {};
 	friend class LoggerDestroyer;
+	void OutputMessageImpl(const char * msg, va_list args, LogLevel level);
+
 public:
 	void SetFrame(__int64 frame);
 	static Logger& GetInstance();
@@ -111,5 +110,4 @@ public:
 	void Info(const char* msg, ...);
 	void Debug(const char* msg, ...);
 	Logger& operator () (std::string channel);
-	void Impl(const char * msg, va_list args, LogLevel level);
 };
