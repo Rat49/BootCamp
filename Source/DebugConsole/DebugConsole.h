@@ -15,6 +15,7 @@ public:
 	std::vector<sf::Text> _outputLines;
 	int _characterSize;
 	static int _currentFirstHistoryLine;
+	int _windowWidth;
 	
 	DebugConsole(sf::RenderWindow& window);
 	void Update(sf::Event& event);

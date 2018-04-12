@@ -3,7 +3,7 @@
 int main()
 {
 
-	sf::RenderWindow window(sf::VideoMode(800,600), "DebugSystem");
+	sf::RenderWindow window(sf::VideoMode(1280,800), "DebugSystem");
 	
 	DebugConsole debugConsole(window);
 

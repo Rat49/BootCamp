@@ -6,14 +6,14 @@ DebugConsole::DebugConsole(sf::RenderWindow& window)
 	_consoleRectangle.setFillColor(sf::Color::Black);
 
 	_consoleFont.loadFromFile("clacon.ttf");
-
+	
+	_windowWidth = window.getSize().x;
 	_characterSize = (((window.getSize().y) / 3) / 10);
 
 	_inputText = sf::Text("]", _consoleFont, _characterSize);
 	_inputText.setPosition(1, (_consoleRectangle.getSize().y - _characterSize) - 5);
 
 	_outputText = sf::Text("", _consoleFont, _characterSize);
-	
 }
 
 int DebugConsole::_currentFirstHistoryLine = 0;
@@ -44,9 +44,17 @@ void DebugConsole::Update(sf::Event& event)
 		{
 			//RawInputEvent e;
 			//e._keycode = event.text.unicode;
-		
-			_inputString += event.text.unicode;
-			_inputText.setString("] " + _inputString);
+			
+			if (!(_inputText.getGlobalBounds().width > (_windowWidth - _characterSize)))
+			{
+				_inputString += event.text.unicode;
+				_inputText.setString("] " + _inputString);
+
+			}
+		/*
+			std::cout << "StringSize: " << _inputString.getSize() << std::endl;
+			std::cout << "getGlobalBounds width: " << _inputText.getGlobalBounds().width << std::endl;
+			std::cout << "getGlobalBounds height: " << _inputText.getGlobalBounds().height << std::endl;*/
 		}
 
 		if (event.text.unicode == 8)
