@@ -21,7 +21,7 @@ ResourceManager::ResourceManager()
 	_resources.insert(std::pair<std::string, Resource*>
 		("smallasteroid", new PictureResource("smallasteroid", "Resources\\graphics\\smallasteroid.png")));
 	_resources.insert(std::pair<std::string, Resource*>
-		("girl", new ImageSequenceResource("girl", "Resources\\graphics\\girl.png", &_settingsForFrame)));
+		("girl", new ImageSequenceResource("girl", "Resources\\graphics\\girl.png", _settingsForFrame)));
 }
 
 Resource* ResourceManager::GetGeneralResource(const std::string& key)

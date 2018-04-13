@@ -7,7 +7,7 @@ class Resource
 public:
 	
 	Resource(const std::string& id, const std::string& fullName);
-	Resource(const std::string& id, const std::string& fullName, std::multimap<std::string,std::string>* settings);
+	Resource(const std::string& id, const std::string& fullName, const std::multimap<std::string,std::string>& settings);
 	void IncRefCounter();
 	void DecRefCounter();
 	unsigned int GetRefCounter() const;
@@ -20,5 +20,5 @@ public:
 private:
 	unsigned int _refCounter;	
 	std::string _ID;
-	std::multimap<std::string, std::string>* _settings;
+	std::multimap<std::string, std::string> _settings;
 };

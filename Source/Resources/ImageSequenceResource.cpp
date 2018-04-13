@@ -1,48 +1,80 @@
 #include "PictureResource.h"
 #include "ImageSequenceResource.h"
 
-ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::string& name, std::multimap<std::string, std::string>* settings):PictureResource(id, name)
+enum class enumParams
 {
-	_widthFrame = std::stoi((settings->find("Width"))->second);
-	_heightFrame = std::stoi((settings->find("Height"))->second);
-	_countFrames = std::stoi((settings->find("FrameCount"))->second);
-	_timeAnimation = sf::milliseconds(std::stoi((settings->find("AnimationTime"))->second));
+	Width, 
+	Height, 
+	FrameCount, 
+	AnimationTime
+};
 
-	auto range = settings->equal_range("Color");
-	
-	for (auto currentColor = range.first; currentColor != range.second; ++currentColor)
+std::vector<std::string> settingsParams = { "Width", "Height", "FrameCount", "AnimationTime" };
+
+ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::string& name, const std::multimap<std::string, std::string>& settings):PictureResource(id, name)
+{
+	for (int param = 0; param < settingsParams.size(); ++param)
 	{
-	
-		std::string stringColor(currentColor->second);
-		std::string delimiter = " ";
-
-		size_t pos = 0;
-
-		int r = 0;
-		int g = 0;
-		int b = 0;
-
-		pos = stringColor.find(delimiter);
-
-		for (int counter = 0; counter < 3; ++counter) {
-		
-			switch (counter)
+		auto currentParam = settings.find(settingsParams[param]);
+		if (currentParam != settings.cend())
+		{
+			switch (param)
 			{
-			case 0:
-				r = std::stoi(stringColor.substr(0, pos));
+			case (enumParams::Width):
+				_widthFrame = std::stoi(currentParam->second);
 				break;
-			case 1:
-				g = std::stoi(stringColor.substr(0, pos));
+			case (enumParams::Height):
+				_heightFrame = std::stoi(currentParam->second);
 				break;
-			case 2:
-				b = std::stoi(stringColor.substr(0, pos));
+			case (enumParams::FrameCount):
+				_countFrames = std::stoi(currentParam->second);
+				break;
+			case (enumParams::AnimationTime):
+				_timeAnimation = sf::milliseconds(std::stoi(currentParam->second));
 				break;
 			}
-			stringColor.erase(0, pos + delimiter.length());
-			pos = stringColor.find(delimiter);
 		}
-		_colorForMask.push_back(new sf::Color(r, g, b, 255));
-	
+			
+	}
+
+	auto colors = settings.equal_range("Color");
+
+	if (colors.first != settings.cend())
+	{
+
+		for (auto currentColor = colors.first; currentColor != colors.second; ++currentColor)
+		{
+
+			std::string stringColor(currentColor->second);
+			std::string delimiter = " ";
+
+			size_t pos = 0;
+
+			int r = 0;
+			int g = 0;
+			int b = 0;
+
+			pos = stringColor.find(delimiter);
+
+			for (int counter = 0; counter < 3; ++counter) {
+
+				switch (counter)
+				{
+				case 0:
+					r = std::stoi(stringColor.substr(0, pos));
+					break;
+				case 1:
+					g = std::stoi(stringColor.substr(0, pos));
+					break;
+				case 2:
+					b = std::stoi(stringColor.substr(0, pos));
+					break;
+				}
+				stringColor.erase(0, pos + delimiter.length());
+				pos = stringColor.find(delimiter);
+			}
+			_colorForMask.push_back(sf::Color(r, g, b, 255));
+		}
 	}
 }
 
@@ -52,13 +84,13 @@ void ImageSequenceResource::Load()
 	_image = PictureResource::Get();
 	if (_colorForMask.empty())
 	{
-		_colorFirstPixel = new sf::Color(_image->getPixel(0, 0));
-		SetMaskFromColor(_image, *_colorFirstPixel);
+		sf::Color _colorFirstPixel(_image->getPixel(0, 0));
+		SetMaskFromColor(_image, _colorFirstPixel);
 	}
 	else
 	{
-		for (auto *color : _colorForMask) {
-			SetMaskFromColor(_image, *color);
+		for (auto &color : _colorForMask) {
+			SetMaskFromColor(_image, color);
 		}
 	}
 }

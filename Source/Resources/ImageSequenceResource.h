@@ -7,7 +7,7 @@ class ImageSequenceResource : public PictureResource
 {
 public:
 
-	ImageSequenceResource(const std::string& id, const std::string& name, std::multimap<std::string, std::string>* settings);
+	ImageSequenceResource(const std::string& id, const std::string& name, const std::multimap<std::string, std::string>& settings);
 
 	void Load() override;
 	void Unload() override;
@@ -23,7 +23,7 @@ private:
 	int _heightFrame;
 	int _countFrames;
 	sf::Time _timeAnimation;
-	std::vector<sf::Color*> _colorForMask;
+	std::vector<sf::Color> _colorForMask;
 	sf::Image* _image;
 	sf::Texture _texture;
 	std::vector<sf::Texture> _textures;

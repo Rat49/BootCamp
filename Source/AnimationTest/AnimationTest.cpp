@@ -4,7 +4,6 @@
 int main()
 {
 	ResourceManager *rm = new ResourceManager();
-	int counterPicture = 0;
 	int counterImageSequence = 0;
 
 	ImageSequenceResource* girl = rm->GetResource<ImageSequenceResource>("girl");
@@ -16,7 +15,7 @@ int main()
 
 	AnimationPlayer* animationPlayer = new AnimationPlayer(sprite, girl, true);
 
-	animationPlayer->Start(sf::milliseconds(10.0f));
+	animationPlayer->Start(sf::milliseconds(28.0f));
 	sf::Clock clock;
 	while (window.isOpen())
 	{
