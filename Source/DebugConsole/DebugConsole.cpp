@@ -35,7 +35,7 @@ DebugConsole::~DebugConsole()
 	dispatcher.Disconnect(EventTypes::DebugConsoleKeyEventID, _token);
 }
 
-void DebugConsole::Update(sf::Event& event)
+void DebugConsole::Update(const sf::Event& event)
 {
 	if (event.type == event.KeyPressed &&  event.key.code == sf::Keyboard::PageDown)
 	{

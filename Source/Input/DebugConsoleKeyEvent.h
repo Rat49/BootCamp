@@ -1,6 +1,6 @@
 #pragma once
-#include "SFML\Graphics.hpp"
 #include "EventSystem.h"
+#include "SFML\Graphics.hpp"
 #include <cstdint>
 
 class DebugConsoleKeyEvent : public Event

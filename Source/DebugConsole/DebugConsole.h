@@ -24,7 +24,7 @@ public:
 
 	DebugConsole(sf::RenderWindow& window);
 	~DebugConsole();
-	void Update(sf::Event& event);
+	void Update(const sf::Event& event);
 	void Draw(sf::RenderWindow& window);
-	void logMessageOutput(const std::string&);
+	void logMessageOutput(const std::string& string);
 };
