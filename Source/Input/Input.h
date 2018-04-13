@@ -1,6 +1,8 @@
 #pragma once
+#include "DebugConsoleKeyEvent.h"
 #include <map>
 #include <SFML\Window.hpp>
+#include <SFML\Graphics.hpp>
 
 using Action_t = int;
 using ButtonKey_t = int;
@@ -9,12 +11,21 @@ enum class ButtonsState {
 	JustPressed,
 	Pressed,
 	JustReleased,
-	Released
+	Released,
+	Block
+};
+
+enum class InputMode {
+	Normal,
+	Raw
 };
 
 class InputManager final
 {
 private:
+	InputMode _mode = InputMode::Normal;
+	sf::Event _keyEvent;
+	
 	struct localButtonsConfig {
 		Action_t action;
 		ButtonsState state;
@@ -28,6 +39,9 @@ private:
 
 public:
 	bool GetState(const Action_t searchAction, ButtonsState & result) const;
+	InputMode GetMode() const;
 	void Update();
+	void ConsoleMode();
+	void HandleRawEvent(sf::Event& event);
 	InputManager(const std::multimap<Action_t, ButtonKey_t>& arr);
 };

@@ -1,4 +1,6 @@
 #pragma once
+#include "EventSystem.h"
+#include "Input.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <algorithm>
@@ -13,11 +15,15 @@ public:
 	sf::Text _outputText;
 	std::vector<sf::Text> _outputLines;
 	int _windowWidth;
-	int _windowHeight;
+	int _consoleHeight;
 	int _characterSize;
 	static int _currentFirstHistoryLine;
+	bool _activeConsole;
 	
+	Token_t _token;
+
 	DebugConsole(sf::RenderWindow& window);
+	~DebugConsole();
 	void Update(sf::Event& event);
 	void Draw(sf::RenderWindow& window);
 	void logMessageOutput(const std::string&);

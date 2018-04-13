@@ -5,23 +5,39 @@ int DebugConsole::_currentFirstHistoryLine = 0;
 DebugConsole::DebugConsole(sf::RenderWindow& window)
 {
 	_windowWidth = window.getSize().x;
-	_windowHeight = ((window.getSize().y) / 3);
-	_characterSize = _windowHeight / 10;
+	_consoleHeight = ((window.getSize().y) / 3);
+	_characterSize = _consoleHeight / 10;
 
-	_consoleRectangle = sf::RectangleShape(sf::Vector2f(_windowWidth, _windowHeight));
+	_consoleRectangle = sf::RectangleShape(sf::Vector2f(_windowWidth, _consoleHeight));
 	_consoleRectangle.setFillColor(sf::Color::Black);
 
 	_consoleFont.loadFromFile("DroidSansMono.ttf");
 	
 	_inputText = sf::Text("]", _consoleFont, _characterSize);
 	_inputText.setPosition(1, (_consoleRectangle.getSize().y - _characterSize) - 5);
-
 	_outputText = sf::Text("", _consoleFont, _characterSize);
+
+	_activeConsole = false;
+
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	_token = dispatcher.Connect(EventTypes::DebugConsoleKeyEventID,
+		[&](const Event& event)
+	{
+		const DebugConsoleKeyEvent& currentEventKey = static_cast<const DebugConsoleKeyEvent&>(event);
+		sf::Event eventKey = currentEventKey._event;
+		DebugConsole::Update(eventKey);
+	});
+}
+
+DebugConsole::~DebugConsole()
+{
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	dispatcher.Disconnect(EventTypes::DebugConsoleKeyEventID, _token);
 }
 
 void DebugConsole::Update(sf::Event& event)
 {
-	if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::PageDown)
+	if (event.type == event.KeyPressed &&  event.key.code == sf::Keyboard::PageDown)
 	{
 		if (_currentFirstHistoryLine > 0)
 		{
@@ -33,16 +49,15 @@ void DebugConsole::Update(sf::Event& event)
 	{
 		++_currentFirstHistoryLine;
 	}
-	
+
 	if (event.type == sf::Event::TextEntered)
 	{
-		if (event.text.unicode > 31 && event.text.unicode < 127)
+		if (event.text.unicode > 31 && event.text.unicode < 127 && event.text.unicode != 96)
 		{
 			if (!(_inputText.getGlobalBounds().width > (_windowWidth - _characterSize)))
 			{
 				_inputString += event.text.unicode;
 				_inputText.setString("] " + _inputString);
-
 			}
 		}
 
@@ -61,16 +76,15 @@ void DebugConsole::Update(sf::Event& event)
 			_inputText.setString("] " + _inputString);
 
 		}
-		
 	}
-
+	
 }
 
 void DebugConsole::Draw(sf::RenderWindow& window)
 {
 	window.draw(_consoleRectangle);
 	window.draw(_inputText);
-	
+
 	std::size_t start = _currentFirstHistoryLine;
 	std::size_t end = _currentFirstHistoryLine + 9;
 	std::vector<sf::Text>::iterator firstLine = _outputLines.begin();
@@ -86,7 +100,6 @@ void DebugConsole::Draw(sf::RenderWindow& window)
 
 		window.draw(*firstLine);
 	}
-	
 }
 
 void DebugConsole::logMessageOutput(const std::string& logMessage)
@@ -100,11 +113,13 @@ void DebugConsole::logMessageOutput(const std::string& logMessage)
 
 	for (int character = 0; character < logMessage.size(); ++character)
 	{
+		
 		oneLineLogMessage.push_back(logMessage.at(character));
 		_outputText.setString("> " + oneLineLogMessage);
 
 		if (_outputText.getGlobalBounds().width > (_windowWidth-_characterSize))
 		{
+			
 			_outputLines.insert(_outputLines.begin(), _outputText);
 			oneLineLogMessage.clear();
 			_outputText.setString("> " + oneLineLogMessage);
