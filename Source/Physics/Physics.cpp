@@ -11,6 +11,8 @@ RigidBody::RigidBody(sf::Vector2f c, sf::Vector2f s, float r) {
 	_radius = r;
 }
 
+
+
 void RigidBody::Update(float t) {
 	_coords.x += _speed.x * t;
 	_coords.y += _speed.y * t;
@@ -64,11 +66,10 @@ float RigidBody::GetY() {
 void ResolveCollision(RigidBody &go1, RigidBody &go2) {
 	float x1 = go1.GetX();
 	float x2 = go2.GetX();
-
 	float y1 = go1.GetY();
 	float y2 = go2.GetY();
 
-	float dist = sqrt((go1.GetX() - go2.GetX())*(go1.GetX() - go2.GetX()) + (go1.GetY() - go2.GetY())*(go1.GetY() - go2.GetY()));
+	float dist =  sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
 
 	float overlap = 0.5 * (dist - go1.GetRadius() - go2.GetRadius());
 
@@ -80,8 +81,8 @@ void ResolveCollision(RigidBody &go1, RigidBody &go2) {
 }
 
 bool Collided(RigidBody go1, RigidBody go2) {
-	float distance = (go1.GetX() - go2.GetX())*(go1.GetX() - go2.GetX()) + (go1.GetY() - go2.GetY())*(go1.GetY() - go2.GetY());
-	return (distance < (go1.GetRadius() + go2.GetRadius()) * (go1.GetRadius() + go2.GetRadius()));
+	float distance = (go1.GetX() - go2.GetX()) * (go1.GetX() - go2.GetX()) + (go1.GetY() - go2.GetY()) * (go1.GetY() - go2.GetY());
+	return (distance <= (go1.GetRadius() + go2.GetRadius()) * (go1.GetRadius() + go2.GetRadius()));
 }
 
 void RandomFill(RigidBody *RigidBodysFunc, int length) {

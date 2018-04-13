@@ -14,19 +14,19 @@ void CollisionEvent::setObjs(RigidBody &o1, RigidBody &o2) {
 	obj2 = o2;
 }
 
-
-void Draw(RigidBody *RigidBodysFunc, int length) {
+constexpr size_t numOfObjects = 4;
+void MainLoop(RigidBody *RigidBodysFunc) {
 	sf::Clock clock;
 	sf::Time deltaTime;
-
+		
 	sf::RenderWindow app(sf::VideoMode(W, H), "Asteroids!");
 
-	sf::CircleShape* circles = new sf::CircleShape[length];
+	sf::CircleShape circles[numOfObjects];
 
 	CollisionEvent collisionEvent;
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 
-	for (int i = 0; i < length; ++i) {
+	for (int i = 0; i < numOfObjects; ++i) {
 		circles[i].setRadius(RigidBodysFunc[i].GetRadius());
 		circles[i].setPosition(RigidBodysFunc[i].GetX(), RigidBodysFunc[i].GetY());
 	}
@@ -42,9 +42,11 @@ void Draw(RigidBody *RigidBodysFunc, int length) {
 				app.close();
 			}
 		}
+		for (int i = 0; i < numOfObjects; ++i)
+			circles[i].setFillColor(sf::Color::White);
 
-		for (int i = 0; i < length; ++i) {
-			for (int j = 0; j < length; ++j) {
+		for (int i = 0; i < numOfObjects; ++i) {
+			for (int j = 0; j < numOfObjects; ++j) {
 				if (i != j) {
 					if (Collided(RigidBodysFunc[i], RigidBodysFunc[j])) {
 						circles[i].setFillColor(sf::Color::Red);
@@ -53,50 +55,48 @@ void Draw(RigidBody *RigidBodysFunc, int length) {
 						dispatcher.Send(collisionEvent, firstEventID);
 						ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
 					}
-					else {
-						circles[i].setFillColor(sf::Color::White);
-						circles[j].setFillColor(sf::Color::White);
-					}
 				}
 			}
 		}
 
-		for (int i = 0; i < length; ++i) {
+		for (int i = 0; i < numOfObjects; ++i) {
 			RigidBodysFunc[i].Update(deltaSeconds);
 			circles[i].setPosition(RigidBodysFunc[i].GetX(), RigidBodysFunc[i].GetY());
 		}
 
 		app.clear();
-		for (int i = 0; i < length; ++i) {
+		for (int i = 0; i < numOfObjects; ++i) {
 			app.draw(circles[i]);
 		}
 		app.display();
 	}
-
-	delete[] circles;
 }
 
-void Test(int numOfObjects) {
+void Test() {
 	RigidBody* RigidBodys = new RigidBody[numOfObjects];
-	RandomFill(RigidBodys, numOfObjects);
+	//RandomFill(RigidBodys, numOfObjects);
 
-	/*
-	RigidBodys[0].SetRadius(25);
-	RigidBodys[0].SetCoordinates({ 500, 500 });
-	RigidBodys[0].SetSpeed({ 10, 0 });
+	for (int i = 0; i < numOfObjects / 2; i++)
+	{
+		const int idx = i * 2;
+		RigidBodys[idx].SetRadius(100);
+		RigidBodys[idx].SetCoordinates({ 500, 200.f + 60 * i });
+		RigidBodys[idx].SetSpeed({ 50, 0 });
 
-	RigidBodys[1].SetRadius(25);
-	RigidBodys[1].SetCoordinates({ 751, 501 });
-	RigidBodys[1].SetSpeed({ -10, 0 });
-	*/
+		RigidBodys[idx + 1].SetRadius(25);
+		RigidBodys[idx + 1].SetCoordinates({ 751, 200.f + 60 * i });
+		RigidBodys[idx + 1].SetSpeed({ -50, 0 });
 
-	Draw(RigidBodys, numOfObjects);
+	}
+	
+
+	MainLoop(RigidBodys);
 	delete[] RigidBodys;
 }
 
 int main()
 {
-	Test(20);
+	Test();
 
 	return 0;
 }
