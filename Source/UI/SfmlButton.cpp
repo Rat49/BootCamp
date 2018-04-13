@@ -8,11 +8,11 @@ SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const st
 {	
 	_body = sf::RectangleShape(size);
 	_body.setPosition(pos);
+	_body.setOrigin(_body.getLocalBounds().width /2 , _body.getLocalBounds().height /2);
 }
 
 bool SfmlButton::IsClicked(sf::Vector2i cursor_pos) const
 {
-	auto tmp = _body.getGlobalBounds();
 	if (!_body.getGlobalBounds().contains(static_cast<sf::Vector2f>(cursor_pos)))
 	{
 		return false;
@@ -24,14 +24,34 @@ bool SfmlButton::IsClicked(sf::Vector2i cursor_pos) const
 	}
 }
 
-void SfmlButton::SetColor(const sf::Color & color)
+void SfmlButton::SetFillColor(const sf::Color & color)
 {
 	_body.setFillColor(color);
+}
+
+void SfmlButton::SetOutlineColor(const sf::Color & color)
+{
+	_body.setOutlineColor(color);
 }
 
 void SfmlButton::SetSize(const sf::Vector2f size)
 {
 	_body.setSize(size);
+}
+
+sf::Vector2f SfmlButton::GetSize() const
+{
+	return _body.getSize();
+}
+
+sf::Color SfmlButton::GetFillColor() const
+{
+	return _body.getFillColor();
+}
+
+sf::Color SfmlButton::GetOutlineColor() const
+{
+	return _body.getOutlineColor();
 }
 
 void SfmlButton::UpdateControl()

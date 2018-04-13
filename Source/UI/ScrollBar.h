@@ -1,10 +1,20 @@
 #pragma once
-#include "Widget.h"
+#include "SfmlButton.h"
+
 class ScrollBar :
-	public Widget
+	public SfmlButton
 {
 public:
-	ScrollBar(const std::string & name, sf::Vector2f position);
+	ScrollBar(const float length, const sf::Vector2f pos, const std::string & name);
+	void ChangeStateGrab(sf::Vector2i position);
+	void UpdatePosition();
+	//void UpdateControl() override;
+	void Draw() override;
+
+
 	~ScrollBar();
+private:
+	bool _isGrab;
+	std::pair<int, int> _bounds;
 };
 

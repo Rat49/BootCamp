@@ -6,20 +6,21 @@ UI::UI(sf::VideoMode screen, const std::string &name) :
 	_space(screen, name, sf::Style::Default)
 	
 {
-	_oldSize = _space.getSize();
+
 }
 
 void UI::onResize()
 {
+	
 	auto newSize = sf::Vector2f(_space.getSize().x, _space.getSize().y);
+	auto oldSize = _space.getView().getSize();
 	for (auto it : _widgets)
 	{
-		it.second->SetScale(sf::Vector2f(newSize.x/_oldSize.x, newSize.y / _oldSize.y));
+		it.second->SetScale(sf::Vector2f(newSize.x / oldSize.x, newSize.y / oldSize.y));
 		it.second->Update();
 	}
-	//_space.setView(sf::View(_space.getDefaultView().getCenter(),newSize));
+	_space.setView(sf::View(sf::FloatRect(0, 0, newSize.x, newSize.y)));
 	Render();
-	_oldSize = _space.getSize();
 }
 
 void UI::Render()

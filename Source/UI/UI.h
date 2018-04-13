@@ -35,7 +35,6 @@ public:
 	void Add(Widget * wid, const std::string &name);
 	~UI();
 private:
-	sf::Vector2u _oldSize;
 	Widget* GetWidget(const std::string &key);
 	std::map<std::string, Widget*, cmpByStringLength> _widgets;
 	
