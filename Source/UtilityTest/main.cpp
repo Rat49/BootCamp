@@ -41,10 +41,10 @@ namespace LoggerTest
 		Logger& log = Logger::GetInstance();
 		log.SetFrame(400);
 		auto cmdTarget = log.AddCmdTarget();
-		auto fileTarget = log.AddFileTarget("../Events/Event.log");
+		auto fileTarget = log.AddFileTarget("../Events/Events.log");
 		fileTarget->IncludeChannel("Event");
-		cmdTarget->SetSeverity(LogLevel::WARNING);
-		fileTarget->SetSeverity(LogLevel::INFO);
+		cmdTarget->SetSeverity(LogLevel::Warning);
+		fileTarget->SetSeverity(LogLevel::Info);
 		cmdTarget->IncludeChannel("All");
 		log("Audio").Debug("%s %s!", "Hello", "world");
 		log("Event").Info("%s %s!", "Hello", "world");
@@ -62,6 +62,5 @@ int main()
 
 	LoggerTest::Test();
 
-	system("pause");
 	return 0;
 }
