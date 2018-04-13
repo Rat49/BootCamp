@@ -1,4 +1,6 @@
 #include "UI.h"
+#include <iostream>
+
 
 int main()
 {
@@ -9,10 +11,13 @@ int main()
 	mui.Add(new SfmlButton(sf::Vector2f(20, 30), sf::Vector2f(300, 300),"test"), "test");
 	//mui.Add(new Label("helllowworld",font,sf::Vector2f(0, 0), "label"),"label");
 	mui.Add(new ScrollBar(100, sf::Vector2f(100, 100), "scroll"), "scroll");
-	
+
+	mui.Get<ScrollBar>("scroll")->SetFillColor(sf::Color::Green);
+	mui.Get<ScrollBar>("scroll")->SetLength(200);
 	while (mui._space.isOpen())
 	{
 		sf::Event curEvent;
+
 		while (mui._space.pollEvent(curEvent))
 		{
 			switch(curEvent.type)
@@ -30,7 +35,7 @@ int main()
 					}
 					break;
 				case sf::Event::MouseButtonReleased:
-					mui.Get<ScrollBar>("scroll")->ChangeStateGrab(sf::Vector2i(curEvent.mouseButton.x, curEvent.mouseButton.y));
+					mui.Get<ScrollBar>("scroll")->UnGrab();
 					break;
 				case sf::Event::Resized:  					
 					mui.onResize();
@@ -38,8 +43,9 @@ int main()
 				default:
 					break;
 			}		
+
+			mui.Render();
 		}
-		mui.Render();
 	}
 
 }
