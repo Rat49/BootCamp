@@ -4,3 +4,6 @@ Temp
 **/*.user
 *.db
 *.opendb
+/project
+/Asteroids.sln.orig
+/Source/Resources/Resources.vcxproj.orig
