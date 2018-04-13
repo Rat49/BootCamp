@@ -6,7 +6,8 @@ class SfmlButton:
 {
 public:
 	SfmlButton(const sf::Vector2f size, const sf::Vector2f pos,const std::string & name);
-	bool IsClicked(sf::Vector2i cursor_pos) const;
+	bool IsClicked(const sf::Vector2i cursor_pos) const;
+
 	virtual void SetFillColor(const sf::Color & color);
 	virtual void SetOutlineColor(const sf::Color & color);
 	virtual void SetSize(const sf::Vector2f size);
@@ -17,7 +18,7 @@ public:
 
 	void UpdateControl() override;
 	void Draw() override;
-	~SfmlButton();
+	virtual ~SfmlButton();
 protected:
 	sf::RectangleShape _body;
 	

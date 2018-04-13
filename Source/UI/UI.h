@@ -13,8 +13,7 @@ struct cmpByStringLength
 	}
 };
 
-class UI //:
-	//public sf::RenderWindow
+class UI
 {
 public:
 	UI(sf::VideoMode screen,const std::string & name);
@@ -31,8 +30,11 @@ public:
 	void Render();
 
 	void SetPostion(const std::string& key, float x, float y);
-	sf::RenderWindow _space;
+	sf::Vector2f GetPosition(const std::string& key);
+
+	sf::RenderWindow _space; 
 	void Add(Widget * wid, const std::string &name);
+
 	~UI();
 private:
 	Widget* GetWidget(const std::string &key);

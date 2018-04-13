@@ -4,12 +4,16 @@
 
 int main()
 {
-	sf::Font font;
-	font.loadFromFile("arial.ttf");
+	
 	UI mui(sf::VideoMode(800,600),"Space");	
+
 	mui.Add(new SfmlButton(sf::Vector2f(100, 50), sf::Vector2f(200, 200),"start"), "start");
 	mui.Add(new SfmlButton(sf::Vector2f(20, 30), sf::Vector2f(300, 300),"test"), "test");
-	//mui.Add(new Label("helllowworld",font,sf::Vector2f(0, 0), "label"),"label");
+
+	sf::Font font;
+	font.loadFromFile("arial.ttf");
+	mui.Add(new Label("helllowworld",font,sf::Vector2f(0, 0), "label"),"label");
+
 	mui.Add(new ScrollBar(100, sf::Vector2f(100, 100), "scroll"), "scroll");
 
 	mui.Get<ScrollBar>("scroll")->SetFillColor(sf::Color::Green);
@@ -43,7 +47,6 @@ int main()
 				default:
 					break;
 			}		
-
 			mui.Render();
 		}
 	}

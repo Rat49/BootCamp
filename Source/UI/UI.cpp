@@ -46,6 +46,11 @@ void UI::SetPostion(const std::string & key, float x, float y)
 	
 }
 
+sf::Vector2f UI::GetPosition(const std::string & key)
+{
+	return _widgets[key]->GetPosition();
+}
+
 void UI::Add(Widget * wid, const std::string &key)
 {
 	wid->AddOwner(&_space);

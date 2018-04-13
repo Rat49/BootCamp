@@ -11,7 +11,7 @@ SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const st
 	_body.setOrigin(_body.getLocalBounds().width /2 , _body.getLocalBounds().height /2);
 }
 
-bool SfmlButton::IsClicked(sf::Vector2i cursor_pos) const
+bool SfmlButton::IsClicked(const sf::Vector2i cursor_pos) const
 {
 	if (!_body.getGlobalBounds().contains(static_cast<sf::Vector2f>(cursor_pos)))
 	{

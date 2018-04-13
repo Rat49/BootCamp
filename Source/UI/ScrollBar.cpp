@@ -30,7 +30,7 @@ void ScrollBar::SetSliderPosition(const float position)
 		_body.setPosition(GetPosition());
 	}	
 }
-float ScrollBar::GetSliderPosition()
+float ScrollBar::GetSliderPosition() const
 {
 	return _sliderValue;
 }
@@ -43,7 +43,7 @@ void ScrollBar::SetLength(const float size)
 {
 	_rail.setSize(sf::Vector2f(size,5));
 }
-float ScrollBar::GetLength()
+float ScrollBar::GetLength() const
 {
 	return _rail.getSize().x;
 }

@@ -2,7 +2,7 @@
 
 
 
-Label::Label(const std::string & content,const sf::Font & font, sf::Vector2f position, const std::string & name):
+Label::Label(const std::string & content,const sf::Font & font, const sf::Vector2f position, const std::string & name):
 	Widget(name,position),
 	_content(content,font,32)
 {

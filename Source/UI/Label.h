@@ -4,7 +4,7 @@ class Label :
 	public Widget
 {
 public:
-	Label(const std::string & content, const sf::Font & font, sf::Vector2f position, const std::string& name);
+	Label(const std::string & content, const sf::Font & font, const sf::Vector2f position, const std::string& name);
 
 	void SetFillColor(const sf::Color & color);
 	void SetOutlineColor(const sf::Color & color);
