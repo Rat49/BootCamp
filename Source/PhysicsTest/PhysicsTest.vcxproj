@@ -125,6 +125,9 @@
   <ItemGroup>
     <ClCompile Include="Physics.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CollisionEvent.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

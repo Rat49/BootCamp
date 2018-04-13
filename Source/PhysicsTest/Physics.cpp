@@ -1,6 +1,18 @@
 #include "Physics.h"
 #include "EventSystem.h"
+#include "CollisionEvent.h"
 
+CollisionEvent::CollisionEvent() {
+
+}
+
+CollisionEvent::~CollisionEvent() {
+
+}
+void CollisionEvent::setObjs(RigidBody &o1, RigidBody &o2) {
+	obj1 = o1;
+	obj2 = o2;
+}
 
 
 void Draw(RigidBody *RigidBodysFunc, int length) {
@@ -10,6 +22,9 @@ void Draw(RigidBody *RigidBodysFunc, int length) {
 	sf::RenderWindow app(sf::VideoMode(W, H), "Asteroids!");
 
 	sf::CircleShape* circles = new sf::CircleShape[length];
+
+	CollisionEvent collisionEvent;
+	Dispatcher& dispatcher = Dispatcher::getInstance();
 
 	for (int i = 0; i < length; ++i) {
 		circles[i].setRadius(RigidBodysFunc[i].GetRadius());
@@ -32,9 +47,11 @@ void Draw(RigidBody *RigidBodysFunc, int length) {
 			for (int j = 0; j < length; ++j) {
 				if (i != j) {
 					if (Collided(RigidBodysFunc[i], RigidBodysFunc[j])) {
-						ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
 						circles[i].setFillColor(sf::Color::Red);
 						circles[j].setFillColor(sf::Color::Red);
+						collisionEvent.setObjs(RigidBodysFunc[i], RigidBodysFunc[j]);
+						dispatcher.Send(collisionEvent, firstEventID);
+						ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
 					}
 					else {
 						circles[i].setFillColor(sf::Color::White);
@@ -62,8 +79,6 @@ void Draw(RigidBody *RigidBodysFunc, int length) {
 void Test(int numOfObjects) {
 	RigidBody* RigidBodys = new RigidBody[numOfObjects];
 	RandomFill(RigidBodys, numOfObjects);
-
-	Dispatcher& dispatcher = Dispatcher::getInstance();
 
 	/*
 	RigidBodys[0].SetRadius(25);
