@@ -1,5 +1,4 @@
 #include "Logger.h"
-#include <iostream>
 
 int levelColors[] = { 15,11,14,12,79 };
 
@@ -8,32 +7,26 @@ LoggerDestroyer Logger::_destroyer;
 std::string Logger::GetLevelName(LogLevel level){
 	switch (level)
 	{
-	case DEBUG:
+	case LevelDEBUG:
 		return "DEBUG";
-		break;
-	case INFO:
+	case LevelINFO:
 		return "INFO";
-		break;
-	case WARNING:
+	case LevelWARNING:
 		return "WARNING";
-		break;
-	case LogLevelERROR:
+	case LevelERROR:
 		return "ERROR";
-		break;
-	case FATAL:
+	case LevelFATAL:
 		return "FATAL";
-		break;
 	default:
 		return "UNDEFINED";
-		break;
 	}
 	
 }
-void Logger::SetFrame(__int64 frame) {
+void Logger::SetFrame(uint64_t frame) {
 	_frame = frame;
 }
 
-std::ostringstream& Logger::GetStaringInfo(LogLevel level)
+void Logger::GetStaringInfo(LogLevel level)
 {
 	struct tm newtime;
 	time_t now = time(0);
@@ -46,7 +39,6 @@ std::ostringstream& Logger::GetStaringInfo(LogLevel level)
 	char fr[16];
 	sprintf_s(fr,"%u", _frame);
 	_os << "[" << fr << "] ";
-	return _os;
 }
 
 void Logger::formatMessage(va_list args, const char* msg) {
@@ -104,42 +96,42 @@ void Logger::OutputMessageImpl(const char* msg, va_list args, LogLevel level)
 	HANDLE _hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleTextAttribute(_hConsole, levelColors[level]);
 	formatMessage(args, msg);
-	NotifyTargets(LogLevel::FATAL);
+	NotifyTargets(level);
 }
 
 void Logger::Fatal(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	OutputMessageImpl(msg, args, LogLevel::FATAL);
+	OutputMessageImpl(msg, args, LogLevel::LevelFATAL);
 	va_end(args);
 }
 void  Logger::Error(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	OutputMessageImpl(msg, args, LogLevel::LogLevelERROR);
+	OutputMessageImpl(msg, args, LogLevel::LevelERROR);
 	va_end(args);
 }
 void  Logger::Warning(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	OutputMessageImpl(msg, args, LogLevel::WARNING);
+	OutputMessageImpl(msg, args, LogLevel::LevelWARNING);
 	va_end(args);
 }
 void  Logger::Info(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	OutputMessageImpl(msg, args, LogLevel::INFO);
+	OutputMessageImpl(msg, args, LogLevel::LevelINFO);
 	va_start(args, msg);
 }
 void  Logger::Debug(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	OutputMessageImpl(msg, args, LogLevel::DEBUG);
+	OutputMessageImpl(msg, args, LogLevel::LevelDEBUG);
 	va_end(args);
 }
 

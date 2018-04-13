@@ -1,21 +1,22 @@
 #pragma once
-#include <iostream>
-#include <stdarg.h>
-#include <fstream>
-#include <sstream>
+#include <algorithm>
+#include <cstdint>
 #include <ctime>
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <stdarg.h>
 #include <vector>
 #include <windows.h>
 
 enum LogLevel {
-	DEBUG = 0, INFO, WARNING, LogLevelERROR, FATAL
+	LevelDEBUG = 0, LevelINFO, LevelWARNING, LevelERROR, LevelFATAL
 };
 
 
 class OutputTarget {
 protected:
 	LogLevel _severity;
-
 public:
 	void SetSeverity(LogLevel severity) {
 		_severity = severity;
@@ -53,9 +54,14 @@ private:
 public:
 	FileTarget(std::string path) {
 		_stream.open(path, std::ofstream::app);
+		if (!_stream)
+		{
+			std::cout << "Unable to open file " << path << std::endl;
+		}
 	}
 	void Write(char *buffer) {
-		_stream << buffer << std::endl;
+		if(_stream)
+			_stream << buffer << std::endl;
 	}
 };
 
@@ -81,12 +87,12 @@ public:
 
 class Logger final {
 private:
-	__int64 _frame =20;
+	__int64 _frame = 0;
 	std::ostringstream _os;
 	std::string _currentChannel;
 	std::vector<OutputTarget*> _outputTargets;
-	char *buffer = new char[256];
-	std::ostringstream& GetStaringInfo(LogLevel level);
+	char buffer[256];
+	void GetStaringInfo(LogLevel level);
 	void formatMessage(va_list args, const char* msg);
 	void NotifyTargets(LogLevel level);
 	static Logger* p_instance;
@@ -100,7 +106,7 @@ private:
 	void OutputMessageImpl(const char * msg, va_list args, LogLevel level);
 
 public:
-	void SetFrame(__int64 frame);
+	void SetFrame(uint64_t frame);
 	static Logger& GetInstance();
 	FileTarget* AddFileTarget(std::string path);
 	CmdTarget* AddCmdTarget();
