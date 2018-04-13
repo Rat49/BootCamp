@@ -29,8 +29,8 @@ public:
 	float GetX();
 	float GetY();
 };
-void Draw(RigidBody*, int);
+
 void RandomFill(RigidBody*, int);
 bool Collided(RigidBody, RigidBody);
 void ResolveCollision(RigidBody &, RigidBody &);
-void Test(int);
+
