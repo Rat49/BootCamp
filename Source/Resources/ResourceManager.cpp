@@ -24,6 +24,12 @@ ResourceManager::ResourceManager()
 	_settingsForFire.insert(std::make_pair("FrameCount", "12"));
 	_settingsForFire.insert(std::make_pair("AnimationTime", "12"));
 
+	std::multimap<std::string, std::string> _settingsForSpace;
+	_settingsForSpace.insert(std::make_pair("Width", "500"));
+	_settingsForSpace.insert(std::make_pair("Height", "375"));
+	_settingsForSpace.insert(std::make_pair("FrameCount", "1"));
+	_settingsForSpace.insert(std::make_pair("AnimationTime", "60"));
+
 	_resources.insert(std::pair<std::string, Resource*>
 		("piupiu", new AudioResource("piupiu", "Resources\\audio\\piupiu.wav")));
 	_resources.insert(std::pair<std::string, Resource*>
@@ -38,6 +44,8 @@ ResourceManager::ResourceManager()
 		("cat", new ImageSequenceResource("cat", "Resources\\graphics\\cat.png", _settingsForCat)));
 	_resources.insert(std::pair<std::string, Resource*>
 		("fire", new ImageSequenceResource("fire", "Resources\\graphics\\fire.png", _settingsForFire)));
+	_resources.insert(std::pair<std::string, Resource*>
+		("space", new ImageSequenceResource("space", "Resources\\graphics\\universe.jpg", _settingsForSpace)));
 }
 
 Resource* ResourceManager::GetGeneralResource(const std::string& key)

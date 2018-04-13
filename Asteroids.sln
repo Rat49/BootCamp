@@ -38,6 +38,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnimationTest", "Source\Ani
 		{32482588-87F1-4BF6-92F1-629905946951} = {32482588-87F1-4BF6-92F1-629905946951}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AsteroidsLogicAndSpace", "Source\AsteroidsLogicAndSpace\AsteroidsLogicAndSpace.vcxproj", "{51C2844B-5299-428A-BE5E-382EFFEB5843}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AsteroidsLogicAndSpaceTest", "Source\AsteroidsLogicAndSpaceTest\AsteroidsLogicAndSpaceTest.vcxproj", "{A6F84BF9-8449-4761-9279-125B3C4A32E9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63699642-DBD0-482A-B14F-4F95763D1E10} = {63699642-DBD0-482A-B14F-4F95763D1E10}
+		{51C2844B-5299-428A-BE5E-382EFFEB5843} = {51C2844B-5299-428A-BE5E-382EFFEB5843}
+		{32482588-87F1-4BF6-92F1-629905946951} = {32482588-87F1-4BF6-92F1-629905946951}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -88,6 +97,14 @@ Global
 		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Debug|x64.Build.0 = Debug|x64
 		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Release|x64.ActiveCfg = Release|x64
 		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Release|x64.Build.0 = Release|x64
+		{51C2844B-5299-428A-BE5E-382EFFEB5843}.Debug|x64.ActiveCfg = Debug|x64
+		{51C2844B-5299-428A-BE5E-382EFFEB5843}.Debug|x64.Build.0 = Debug|x64
+		{51C2844B-5299-428A-BE5E-382EFFEB5843}.Release|x64.ActiveCfg = Release|x64
+		{51C2844B-5299-428A-BE5E-382EFFEB5843}.Release|x64.Build.0 = Release|x64
+		{A6F84BF9-8449-4761-9279-125B3C4A32E9}.Debug|x64.ActiveCfg = Debug|x64
+		{A6F84BF9-8449-4761-9279-125B3C4A32E9}.Debug|x64.Build.0 = Debug|x64
+		{A6F84BF9-8449-4761-9279-125B3C4A32E9}.Release|x64.ActiveCfg = Release|x64
+		{A6F84BF9-8449-4761-9279-125B3C4A32E9}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
