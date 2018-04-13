@@ -1,5 +1,6 @@
 #include "PictureResource.h"
 #include "ImageSequenceResource.h"
+#include <cassert>
 
 enum class enumParams
 {
@@ -20,18 +21,32 @@ ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::s
 		{
 			switch (param)
 			{
-			case (enumParams::Width):
+			case static_cast<int>(enumParams::Width):
 				_widthFrame = std::stoi(currentParam->second);
 				break;
-			case (enumParams::Height):
+			case static_cast<int>(enumParams::Height):
 				_heightFrame = std::stoi(currentParam->second);
 				break;
-			case (enumParams::FrameCount):
+			case static_cast<int>(enumParams::FrameCount):
 				_countFrames = std::stoi(currentParam->second);
 				break;
-			case (enumParams::AnimationTime):
+			case static_cast<int>(enumParams::AnimationTime):
 				_timeAnimation = sf::milliseconds(std::stoi(currentParam->second));
 				break;
+			}
+		}
+		else
+		{
+			switch (param)
+			{
+			case static_cast<int>(enumParams::Width) :
+				assert(false && "Failed: the Width of frame doesn't find in settings from Config!");
+			case static_cast<int>(enumParams::Height) :
+				assert(false && "Failed: the Height of frame doesn't find in settings from Config!");
+			case static_cast<int>(enumParams::FrameCount) :
+				assert(false && "Failed: the FrameCount doesn't find in settings from Config!");
+			case static_cast<int>(enumParams::AnimationTime) :
+				assert(false && "Failed: the AnimationTime doesn't find in settings from Config!");
 			}
 		}
 			

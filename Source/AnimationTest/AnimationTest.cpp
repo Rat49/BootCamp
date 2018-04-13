@@ -7,45 +7,65 @@ int main()
 	int counterImageSequence = 0;
 
 	ImageSequenceResource* girl = rm->GetResource<ImageSequenceResource>("girl");
-	counterImageSequence = girl->GetRefCounter();
+	ImageSequenceResource* cat = rm->GetResource<ImageSequenceResource>("cat");
+	ImageSequenceResource* fire = rm->GetResource<ImageSequenceResource>("fire");
 
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(512, 512), "SFML works!");
 	window.clear();
 	sf::Sprite* sprite = new sf::Sprite();
 
-	AnimationPlayer* animationPlayer = new AnimationPlayer(sprite, girl, true);
+	AnimationPlayer* girlAnimationPlayer = new AnimationPlayer(*sprite, *girl, true);
+	AnimationPlayer* catAnimationPlayer = new AnimationPlayer(*sprite, *cat, true);
 
-	animationPlayer->Start(sf::milliseconds(28.0f));
+	girlAnimationPlayer->Start(sf::milliseconds(10.0f));
 	sf::Clock clock;
 	while (window.isOpen())
 	{
 		sf::Event event;
-		while (window.pollEvent(event))
+   		while (window.pollEvent(event))
 		{
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
 			{
-				animationPlayer->Reset();
+				girlAnimationPlayer->Stop();
 			}
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Space)
 			{
-				animationPlayer->Pause();
+				girlAnimationPlayer->Pause();
 			}
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::RAlt)
 			{
-				animationPlayer->SetLooped(true);
-				animationPlayer->Start();
+				girlAnimationPlayer->SetLooped(true);
+				girlAnimationPlayer->Start();
 			}
 
 			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::RControl)
 			{
-				animationPlayer->SetLooped(false);
-				animationPlayer->Start();
+				girlAnimationPlayer->SetLooped(false);
+				girlAnimationPlayer->Start();
+			}
+
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::LControl)
+			{
+				girlAnimationPlayer->Reset();
+			}
+
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::A)
+			{
+				girlAnimationPlayer->Stop();
+				catAnimationPlayer->Start();
+			}
+
+			if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::S)
+			{
+				catAnimationPlayer->Stop();
+				girlAnimationPlayer->Start();
 			}
 		}
 
-		animationPlayer->Update(clock.getElapsedTime());
+		girlAnimationPlayer->Update(clock.getElapsedTime());
+		catAnimationPlayer->Update(clock.getElapsedTime());
 	
 		window.clear();
 		window.draw(*sprite);
