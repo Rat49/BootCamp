@@ -19,6 +19,8 @@ int main()
 
 	girlAnimationPlayer->Start(sf::milliseconds(10.0f));
 	sf::Clock clock;
+	sf::Time timer = clock.getElapsedTime();
+	sf::Time deltaTime;
 	while (window.isOpen())
 	{
 		sf::Event event;
@@ -64,13 +66,16 @@ int main()
 			}
 		}
 
-		girlAnimationPlayer->Update(clock.getElapsedTime());
-		catAnimationPlayer->Update(clock.getElapsedTime());
+		deltaTime = clock.getElapsedTime() - timer;		
+
+		girlAnimationPlayer->Update(deltaTime);
+		catAnimationPlayer->Update(deltaTime);
 	
 		window.clear();
 		window.draw(*sprite);
 		window.display();
-		clock.restart();
+
+		timer = clock.getElapsedTime();
 	}
 
 	return 0;
