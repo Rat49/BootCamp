@@ -10,7 +10,7 @@
 #include <windows.h>
 
 enum LogLevel {
-	LevelDEBUG = 0, LevelINFO, LevelWARNING, LevelERROR, LevelFATAL
+	Debug = 0, Info, Warning, Error, Fatal
 };
 
 

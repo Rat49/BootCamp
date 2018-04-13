@@ -7,15 +7,15 @@ LoggerDestroyer Logger::_destroyer;
 std::string Logger::GetLevelName(LogLevel level){
 	switch (level)
 	{
-	case LevelDEBUG:
+	case LogLevel::Debug:
 		return "DEBUG";
-	case LevelINFO:
+	case LogLevel::Info:
 		return "INFO";
-	case LevelWARNING:
+	case LogLevel::Warning:
 		return "WARNING";
-	case LevelERROR:
+	case LogLevel::Error:
 		return "ERROR";
-	case LevelFATAL:
+	case LogLevel::Fatal:
 		return "FATAL";
 	default:
 		return "UNDEFINED";
@@ -103,35 +103,35 @@ void Logger::Fatal(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	OutputMessageImpl(msg, args, LogLevel::LevelFATAL);
+	OutputMessageImpl(msg, args, LogLevel::Fatal);
 	va_end(args);
 }
 void  Logger::Error(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	OutputMessageImpl(msg, args, LogLevel::LevelERROR);
+	OutputMessageImpl(msg, args, LogLevel::Error);
 	va_end(args);
 }
 void  Logger::Warning(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	OutputMessageImpl(msg, args, LogLevel::LevelWARNING);
+	OutputMessageImpl(msg, args, LogLevel::Warning);
 	va_end(args);
 }
 void  Logger::Info(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	OutputMessageImpl(msg, args, LogLevel::LevelINFO);
+	OutputMessageImpl(msg, args, LogLevel::Info);
 	va_start(args, msg);
 }
 void  Logger::Debug(const char* msg, ...) {
 
 	::va_list args;
 	va_start(args, msg);
-	OutputMessageImpl(msg, args, LogLevel::LevelDEBUG);
+	OutputMessageImpl(msg, args, LogLevel::Debug);
 	va_end(args);
 }
 
