@@ -7,5 +7,4 @@ enum EventTypes : EventID_t
 	secondEventID,
 	debugCommandManagerEventID,
 	debugConsoleKeyEventID
-	//...
 };
