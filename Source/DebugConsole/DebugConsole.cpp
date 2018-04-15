@@ -6,7 +6,7 @@ DebugConsole::DebugConsole(sf::RenderWindow& window)
 {
 	_windowWidth = window.getSize().x;
 	_consoleHeight = ((window.getSize().y) / 3);
-	_characterSize = _consoleHeight / 10;
+	_characterSize = _consoleHeight / 12;
 
 	_consoleRectangle = sf::RectangleShape(sf::Vector2f(_windowWidth, _consoleHeight));
 	_consoleRectangle.setFillColor(sf::Color::Black);
@@ -47,7 +47,10 @@ void DebugConsole::Update(const sf::Event& event)
 
 	if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::PageUp)
 	{
-		++_currentFirstHistoryLine;
+		if(_currentFirstHistoryLine < (_outputLines.size() - 1))
+		{ 
+			++_currentFirstHistoryLine;
+		}
 	}
 
 	if (event.type == sf::Event::TextEntered)
@@ -86,7 +89,7 @@ void DebugConsole::Draw(sf::RenderWindow& window)
 	window.draw(_inputText);
 
 	std::size_t start = _currentFirstHistoryLine;
-	std::size_t end = _currentFirstHistoryLine + 9;
+	std::size_t end = _currentFirstHistoryLine + 10;
 	std::vector<sf::Text>::iterator firstLine = _outputLines.begin();
 	std::vector<sf::Text>::iterator lastLine = _outputLines.begin();
 	std::advance(firstLine, std::min(start, _outputLines.size()));
@@ -95,7 +98,7 @@ void DebugConsole::Draw(sf::RenderWindow& window)
 	int positionStep = 1;
 	for (; firstLine != lastLine; ++firstLine)
 	{
-		firstLine->setPosition(1, ((_consoleRectangle.getSize().y - _characterSize) - 5) - _characterSize * positionStep);
+		firstLine->setPosition(1, ((_consoleRectangle.getSize().y - _characterSize) - 25) - _characterSize * positionStep);
 		++positionStep;
 
 		window.draw(*firstLine);
