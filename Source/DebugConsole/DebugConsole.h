@@ -7,7 +7,7 @@
 
 class DebugConsole final
 {
-public:
+private:
 	sf::RectangleShape _consoleRectangle;
 	sf::Font _consoleFont;
 	sf::String _inputString;
@@ -17,14 +17,15 @@ public:
 	int _windowWidth;
 	int _consoleHeight;
 	int _characterSize;
-	static int _currentFirstHistoryLine;
+	int _currentFirstHistoryLine;
 	bool _activeConsole;
-	
 	Token_t _token;
-
+public:
 	DebugConsole(sf::RenderWindow& window);
 	~DebugConsole();
 	void Update(const sf::Event& event);
 	void Draw(sf::RenderWindow& window);
 	void logMessageOutput(const std::string& string);
+	bool getActiveConsoleStatus() const;
+	void setActiveConsoleStatus(bool activeConsoleStatus);
 };

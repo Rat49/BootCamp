@@ -1,7 +1,5 @@
 #include "DebugConsole.h"
 
-int DebugConsole::_currentFirstHistoryLine = 0;
-
 DebugConsole::DebugConsole(sf::RenderWindow& window)
 {
 	_windowWidth = window.getSize().x;
@@ -17,6 +15,8 @@ DebugConsole::DebugConsole(sf::RenderWindow& window)
 	_inputText.setPosition(1, (_consoleRectangle.getSize().y - _characterSize) - 5);
 	_outputText = sf::Text("", _consoleFont, _characterSize);
 
+	_currentFirstHistoryLine = 0;
+
 	_activeConsole = false;
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
@@ -27,6 +27,16 @@ DebugConsole::DebugConsole(sf::RenderWindow& window)
 		sf::Event eventKey = currentEventKey._event;
 		DebugConsole::Update(eventKey);
 	});
+}
+
+bool DebugConsole::getActiveConsoleStatus() const
+{
+	return _activeConsole;
+}
+
+void DebugConsole::setActiveConsoleStatus(bool activeConsoleStatus)
+{
+	_activeConsole = activeConsoleStatus;
 }
 
 DebugConsole::~DebugConsole()
@@ -96,9 +106,10 @@ void DebugConsole::Draw(sf::RenderWindow& window)
 	std::advance(lastLine, std::min(end, _outputLines.size()));
 
 	int positionStep = 1;
+	const int firstOutputLineYPosition = ((_consoleRectangle.getSize().y - _characterSize) - 25);
 	for (; firstLine != lastLine; ++firstLine)
 	{
-		firstLine->setPosition(1, ((_consoleRectangle.getSize().y - _characterSize) - 25) - _characterSize * positionStep);
+		firstLine->setPosition(1, firstOutputLineYPosition - (_characterSize * positionStep));
 		++positionStep;
 
 		window.draw(*firstLine);
@@ -116,13 +127,11 @@ void DebugConsole::logMessageOutput(const std::string& logMessage)
 
 	for (int character = 0; character < logMessage.size(); ++character)
 	{
-		
 		oneLineLogMessage.push_back(logMessage.at(character));
 		_outputText.setString("> " + oneLineLogMessage);
 
-		if (_outputText.getGlobalBounds().width > (_windowWidth-_characterSize))
+		if (_outputText.getGlobalBounds().width >= (_windowWidth-_characterSize))
 		{
-			
 			_outputLines.insert(_outputLines.begin(), _outputText);
 			oneLineLogMessage.clear();
 			_outputText.setString("> " + oneLineLogMessage);
