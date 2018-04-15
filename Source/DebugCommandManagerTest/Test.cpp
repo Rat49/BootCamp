@@ -13,12 +13,6 @@ int main()
 		return 0;
 	} });
 
-	manager.addConsoleCommand({ "help", [](const std::vector<std::string>& args)
-	{
-		std::cout << "Help" << std::endl;
-		return 0;
-	} });
-
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(newEvent, debugCommandManagerEventID);
 
