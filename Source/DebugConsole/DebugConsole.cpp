@@ -47,6 +47,8 @@ DebugConsole::~DebugConsole()
 
 void DebugConsole::Update(const sf::Event& event)
 {
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	
 	if (event.type == event.KeyPressed &&  event.key.code == sf::Keyboard::PageDown)
 	{
 		if (_currentFirstHistoryLine > 0)
@@ -83,6 +85,8 @@ void DebugConsole::Update(const sf::Event& event)
 		if (event.text.unicode == 13)
 		{
 			_outputText.setString("> " + _inputString);
+			DebugCommandManagerEvent sendEvent(_inputString);
+			dispatcher.Send(sendEvent, EventTypes::debugCommandManagerEventID);
 			_outputLines.insert(_outputLines.begin(), _outputText);
 
 			_inputString.clear();

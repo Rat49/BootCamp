@@ -1,6 +1,7 @@
 #pragma once
 #include "EventSystem.h"
 #include "Input.h"
+#include "DebugCommandManagerEvent.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <algorithm>
