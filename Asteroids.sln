@@ -1,9 +1,19 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2024
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Asteroids", "Source\Asteroids\Asteroids.vcxproj", "{EC36BC08-A0CE-44C3-A47D-99DF70476154}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Animation", "Source\Animation\Animation.vcxproj", "{32482588-87F1-4BF6-92F1-629905946951}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63699642-DBD0-482A-B14F-4F95763D1E10} = {63699642-DBD0-482A-B14F-4F95763D1E10}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnimationTest", "Source\AnimationTest\AnimationTest.vcxproj", "{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}"
+	ProjectSection(ProjectDependencies) = postProject
+		{63699642-DBD0-482A-B14F-4F95763D1E10} = {63699642-DBD0-482A-B14F-4F95763D1E10}
+		{32482588-87F1-4BF6-92F1-629905946951} = {32482588-87F1-4BF6-92F1-629905946951}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Events", "Source\Events\Events.vcxproj", "{1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82}"
 EndProject
@@ -104,6 +114,15 @@ Global
 		{D7A30D5C-B71D-4EC0-BDCF-64D4D5110679}.Debug|x64.Build.0 = Debug|x64
 		{D7A30D5C-B71D-4EC0-BDCF-64D4D5110679}.Release|x64.ActiveCfg = Release|x64
 		{D7A30D5C-B71D-4EC0-BDCF-64D4D5110679}.Release|x64.Build.0 = Release|x64
+		{32482588-87F1-4BF6-92F1-629905946951}.Debug|x64.ActiveCfg = Debug|x64
+		{32482588-87F1-4BF6-92F1-629905946951}.Debug|x64.Build.0 = Debug|x64
+		{32482588-87F1-4BF6-92F1-629905946951}.Release|x64.ActiveCfg = Release|x64
+		{32482588-87F1-4BF6-92F1-629905946951}.Release|x64.Build.0 = Release|x64
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Debug|x64.ActiveCfg = Debug|x64
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Debug|x64.Build.0 = Debug|x64
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Release|x64.ActiveCfg = Release|x64
+		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Release|x64.Build.0 = Release|x64
+
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
