@@ -7,7 +7,7 @@ ResourceManager::ResourceManager()
 	_settingsForGirl.insert(std::make_pair("Width", "110"));
 	_settingsForGirl.insert(std::make_pair("Height", "151"));
 	_settingsForGirl.insert(std::make_pair("FrameCount", "27"));
-	_settingsForGirl.insert(std::make_pair("AnimationTime", "28"));
+	_settingsForGirl.insert(std::make_pair("AnimationTime", "1350"));
 	_settingsForGirl.insert(std::make_pair("Color", "150 2 2"));
 	_settingsForGirl.insert(std::make_pair("Color", "255 255 255"));
 	_settingsForGirl.insert(std::make_pair("Color", "0 0 0"));
@@ -16,13 +16,13 @@ ResourceManager::ResourceManager()
 	_settingsForCat.insert(std::make_pair("Width", "512"));
 	_settingsForCat.insert(std::make_pair("Height", "256"));
 	_settingsForCat.insert(std::make_pair("FrameCount", "8"));
-	_settingsForCat.insert(std::make_pair("AnimationTime", "8"));
+	_settingsForCat.insert(std::make_pair("AnimationTime", "400"));
 
 	std::multimap<std::string, std::string> _settingsForFire;
 	_settingsForFire.insert(std::make_pair("Width", "192"));
 	_settingsForFire.insert(std::make_pair("Height", "192"));
 	_settingsForFire.insert(std::make_pair("FrameCount", "12"));
-	_settingsForFire.insert(std::make_pair("AnimationTime", "12"));
+	_settingsForFire.insert(std::make_pair("AnimationTime", "600"));
 
 	_resources.insert(std::pair<std::string, Resource*>
 		("piupiu", new AudioResource("piupiu", "Resources\\audio\\piupiu.wav")));
