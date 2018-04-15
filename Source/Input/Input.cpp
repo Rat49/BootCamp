@@ -117,5 +117,5 @@ void InputManager::HandleRawEvent(const sf::Event& event)
 	_keyEvent = event;
 	
 	DebugConsoleKeyEvent keyEvent(_keyEvent);
-	dispatcher.Send(keyEvent, EventTypes::DebugConsoleKeyEventID);
+	dispatcher.Send(keyEvent, EventTypes::debugConsoleKeyEventID);
 }

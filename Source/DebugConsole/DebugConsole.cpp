@@ -20,7 +20,7 @@ DebugConsole::DebugConsole(sf::RenderWindow& window)
 	_activeConsole = false;
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
-	_token = dispatcher.Connect(EventTypes::DebugConsoleKeyEventID,
+	_token = dispatcher.Connect(EventTypes::debugConsoleKeyEventID,
 		[&](const Event& event)
 	{
 		const DebugConsoleKeyEvent& currentEventKey = static_cast<const DebugConsoleKeyEvent&>(event);
@@ -42,7 +42,7 @@ void DebugConsole::setActiveConsoleStatus(bool activeConsoleStatus)
 DebugConsole::~DebugConsole()
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
-	dispatcher.Disconnect(EventTypes::DebugConsoleKeyEventID, _token);
+	dispatcher.Disconnect(EventTypes::debugConsoleKeyEventID, _token);
 }
 
 void DebugConsole::Update(const sf::Event& event)
