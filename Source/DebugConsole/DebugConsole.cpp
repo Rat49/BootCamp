@@ -130,13 +130,16 @@ void DebugConsole::logMessageOutput(const std::string& logMessage)
 		oneLineLogMessage.push_back(logMessage.at(character));
 		_outputText.setString("> " + oneLineLogMessage);
 
-		if (_outputText.getGlobalBounds().width >= (_windowWidth-_characterSize))
+		if (_outputText.getGlobalBounds().width >= (_windowWidth - _characterSize))
 		{
+			oneLineLogMessage.pop_back();
+			_outputText.setString("> " + oneLineLogMessage);
 			_outputLines.insert(_outputLines.begin(), _outputText);
 			oneLineLogMessage.clear();
+			--character;
 			_outputText.setString("> " + oneLineLogMessage);
 		}
-		
+
 	}
 	_outputLines.insert(_outputLines.begin(), _outputText);
 }
