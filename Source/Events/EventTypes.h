@@ -3,6 +3,8 @@ using EventID_t = int;
 
 enum EventTypes : EventID_t
 {
-	debugCommandManagerEventID = 1,
+	firstEventID = 1,
+	secondEventID,
+	debugCommandManagerEventID,
 	debugConsoleKeyEventID
 };
