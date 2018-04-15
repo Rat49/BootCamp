@@ -12,9 +12,6 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Input", "Source\Input\Input.vcxproj", "{DF8196A1-1785-40E5-949C-4A4E51D368CB}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "InputTest", "Source\InputTest\InputTest.vcxproj", "{2F15964B-A426-4115-ABB8-69706298B171}"
-	ProjectSection(ProjectDependencies) = postProject
-		{DF8196A1-1785-40E5-949C-4A4E51D368CB} = {DF8196A1-1785-40E5-949C-4A4E51D368CB}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Resources", "Source\Resources\Resources.vcxproj", "{63699642-DBD0-482A-B14F-4F95763D1E10}"
 EndProject
@@ -37,6 +34,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AnimationTest", "Source\Ani
 		{63699642-DBD0-482A-B14F-4F95763D1E10} = {63699642-DBD0-482A-B14F-4F95763D1E10}
 		{32482588-87F1-4BF6-92F1-629905946951} = {32482588-87F1-4BF6-92F1-629905946951}
 	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConfigManager", "Source\ConfigManager\ConfigManager.vcxproj", "{6578FC88-0AFC-434A-9BCF-251B60C43D35}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ConfigManagerTest", "Source\ConfigManagerTest\ConfigManagerTest.vcxproj", "{2D23F964-9BEF-4DDF-9CC0-3FEC7F71E729}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -88,6 +89,14 @@ Global
 		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Debug|x64.Build.0 = Debug|x64
 		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Release|x64.ActiveCfg = Release|x64
 		{2E1B984B-11D7-4009-BFEE-F10D2E7D56CF}.Release|x64.Build.0 = Release|x64
+		{6578FC88-0AFC-434A-9BCF-251B60C43D35}.Debug|x64.ActiveCfg = Debug|x64
+		{6578FC88-0AFC-434A-9BCF-251B60C43D35}.Debug|x64.Build.0 = Debug|x64
+		{6578FC88-0AFC-434A-9BCF-251B60C43D35}.Release|x64.ActiveCfg = Release|x64
+		{6578FC88-0AFC-434A-9BCF-251B60C43D35}.Release|x64.Build.0 = Release|x64
+		{2D23F964-9BEF-4DDF-9CC0-3FEC7F71E729}.Debug|x64.ActiveCfg = Debug|x64
+		{2D23F964-9BEF-4DDF-9CC0-3FEC7F71E729}.Debug|x64.Build.0 = Debug|x64
+		{2D23F964-9BEF-4DDF-9CC0-3FEC7F71E729}.Release|x64.ActiveCfg = Release|x64
+		{2D23F964-9BEF-4DDF-9CC0-3FEC7F71E729}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
