@@ -14,6 +14,9 @@ public:
 	void Reset();
 	void Update(sf::Time deltaTime);
 	void SetLooped(bool isLooped);
+	sf::Sprite* GetSprite();
+	const int GetWidth() const;
+	const int GetHeight() const;
 
 	~AnimationPlayer();
 
