@@ -58,6 +58,9 @@
       <SDLCheck>true</SDLCheck>
       <AdditionalIncludeDirectories>$(SolutionDir)\SFML\include</AdditionalIncludeDirectories>
     </ClCompile>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -72,7 +75,27 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
+    <Lib>
+      <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Lib>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="AudioResource.h" />
+    <ClInclude Include="ImageSequenceResource.h" />
+    <ClInclude Include="PictureResource.h" />
+    <ClInclude Include="ResourceManager.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="TextureResource.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AudioResource.cpp" />
+    <ClCompile Include="ImageSequenceResource.cpp" />
+    <ClCompile Include="PictureResource.cpp" />
+    <ClCompile Include="Resource.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
+    <ClCompile Include="TextureResource.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
