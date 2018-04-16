@@ -24,11 +24,23 @@ ResourceManager::ResourceManager()
 	_settingsForFire.insert(std::make_pair("FrameCount", "12"));
 	_settingsForFire.insert(std::make_pair("AnimationTime", "600"));
 
-	std::multimap<std::string, std::string> _settingsForSpaceship;
-	_settingsForSpaceship.insert(std::make_pair("Width", "100"));
-	_settingsForSpaceship.insert(std::make_pair("Height", "155"));
-	_settingsForSpaceship.insert(std::make_pair("FrameCount", "8"));
-	_settingsForSpaceship.insert(std::make_pair("AnimationTime", "800"));
+	std::multimap<std::string, std::string> _settingsForSpaceshipNormal;
+	_settingsForSpaceshipNormal.insert(std::make_pair("Width", "99"));
+	_settingsForSpaceshipNormal.insert(std::make_pair("Height", "154"));
+	_settingsForSpaceshipNormal.insert(std::make_pair("FrameCount", "4"));
+	_settingsForSpaceshipNormal.insert(std::make_pair("AnimationTime", "500"));
+
+	std::multimap<std::string, std::string> _settingsForSpaceshipAccelerate;
+	_settingsForSpaceshipAccelerate.insert(std::make_pair("Width", "99"));
+	_settingsForSpaceshipAccelerate.insert(std::make_pair("Height", "154"));
+	_settingsForSpaceshipAccelerate.insert(std::make_pair("FrameCount", "4"));
+	_settingsForSpaceshipAccelerate.insert(std::make_pair("AnimationTime", "500"));
+
+	std::multimap<std::string, std::string> _settingsForSpaceshipDecelerate;
+	_settingsForSpaceshipDecelerate.insert(std::make_pair("Width", "99"));
+	_settingsForSpaceshipDecelerate.insert(std::make_pair("Height", "154"));
+	_settingsForSpaceshipDecelerate.insert(std::make_pair("FrameCount", "4"));
+	_settingsForSpaceshipDecelerate.insert(std::make_pair("AnimationTime", "500"));
 
 	_resources.insert(std::pair<std::string, Resource*>
 		("piupiu", new AudioResource("piupiu", "Resources\\audio\\piupiu.wav")));
@@ -45,7 +57,11 @@ ResourceManager::ResourceManager()
 	_resources.insert(std::pair<std::string, Resource*>
 		("fire", new ImageSequenceResource("fire", "Resources\\graphics\\fire.png", _settingsForFire)));
 	_resources.insert(std::pair<std::string, Resource*>
-		("spaceship", new ImageSequenceResource("spaceship", "Resources\\graphics\\spaceship.png", _settingsForSpaceship)));
+		("spaceshipNormal", new ImageSequenceResource("spaceshipNormal", "Resources\\graphics\\spaceship.png", _settingsForSpaceshipNormal)));
+	_resources.insert(std::pair<std::string, Resource*>
+		("spaceshipAccelerate", new ImageSequenceResource("spaceshipAccelerate", "Resources\\graphics\\spaceshipAccelerate.png", _settingsForSpaceshipAccelerate)));
+	_resources.insert(std::pair<std::string, Resource*>
+		("spaceshipDecelerate", new ImageSequenceResource("spaceshipDecelerate", "Resources\\graphics\\spaceshipDecelerate.png", _settingsForSpaceshipDecelerate)));
 }
 
 Resource* ResourceManager::GetGeneralResource(const std::string& key)
