@@ -18,6 +18,7 @@ private:
 public:
 	void AddNewParam(std::pair <std::string, std::string>&);
 	std::string GetValue(const std::string& configValue);
+	std::map<const std::string, const std::string> getParams();
 };
 
 

@@ -28,6 +28,11 @@ void LogCategory::AddNewParam(std::pair <std::string, std::string>& param) {
 	params.insert(param);
 }
 
+std::map<const std::string, const std::string> LogCategory::getParams()
+{
+	return params;
+}
+
 /*
 ----------------------------------------------------------------------------
 */
