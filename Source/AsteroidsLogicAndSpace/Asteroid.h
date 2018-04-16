@@ -17,7 +17,8 @@ private:
 	sf::Rect<int> _borders;
 	int _radius;
 	float _rotation;
+	float _rotationSpeed;
 	sf::Vector2f _scale;
+	float _speed;
 
-	float  Asteroid::dot(sf::Vector2f v1, sf::Vector2f v2);
 };
