@@ -76,7 +76,6 @@ public:
 };
 
 class DebugConsoleTarget : public OutputTarget {
-private:
 public:
 	void Write(char *buffer) {
 		Dispatcher& dispatcher = Dispatcher::getInstance();
