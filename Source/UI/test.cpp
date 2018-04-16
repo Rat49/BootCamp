@@ -4,25 +4,22 @@
 
 int main()
 {
-	
-	UI mui(sf::VideoMode(800,600),"Space");	
-
-	mui.Add(new SfmlButton(sf::Vector2f(100, 50), sf::Vector2f(200, 200),"start"), "start");
-	mui.Add(new SfmlButton(sf::Vector2f(20, 30), sf::Vector2f(300, 300),"test"), "test");
-
+	sf::RenderWindow window(sf::VideoMode(800, 600), "Space");
+	UI mui(window);
+	mui.Add(mui.CreateButton(sf::Vector2f(100,100), sf::Vector2f(100, 100),"start"), "start");
+	mui.Add(mui.CreateButton(sf::Vector2f(20, 30), sf::Vector2f(200, 300), "test"), "test");
+	mui.Add(mui.CreateScrollBar(100, sf::Vector2f(400, 30), "scroll"), "scroll");
 	sf::Font font;
 	font.loadFromFile("arial.ttf");
-	mui.Add(new Label("helllowworld",font,sf::Vector2f(0, 0), "label"),"label");
-
-	mui.Add(new ScrollBar(100, sf::Vector2f(100, 100), "scroll"), "scroll");
-
+	mui.Add(mui.CreateLabel("hello",font,sf::Vector2f(1,1),"label"), "label");
 	mui.Get<ScrollBar>("scroll")->SetFillColor(sf::Color::Green);
 	mui.Get<ScrollBar>("scroll")->SetLength(200);
-	while (mui._space.isOpen())
+	while (window.isOpen())
 	{
+		window.clear();
 		sf::Event curEvent;
 
-		while (mui._space.pollEvent(curEvent))
+		while (window.pollEvent(curEvent))
 		{
 			switch(curEvent.type)
 			{
@@ -42,7 +39,7 @@ int main()
 					mui.Get<ScrollBar>("scroll")->UnGrab();
 					break;
 				case sf::Event::Resized:  					
-					mui.onResize();
+					mui.OnResize();
 					break;
 				default:
 					break;

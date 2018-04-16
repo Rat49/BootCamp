@@ -4,7 +4,8 @@ class Label :
 	public Widget
 {
 public:
-	Label(const std::string & content, const sf::Font & font, const sf::Vector2f position, const std::string& name);
+	Label(const std::string & content, const sf::Font & font, const sf::Vector2f position, const std::string& name, 
+		sf::RenderWindow & owner);
 
 	void SetFillColor(const sf::Color & color);
 	void SetOutlineColor(const sf::Color & color);
@@ -20,7 +21,7 @@ public:
 	sf::Text::Style GetStyle() const;
 	const std::string & GetContent() const;
 
-	void UpdateControl() override;
+	void OnResize() override;
 	void Draw() override;
 	~Label();
 private:

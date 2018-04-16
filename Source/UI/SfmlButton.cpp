@@ -2,9 +2,8 @@
 
 #include <iostream>
 
-SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name) :
-	
-	Widget(name,pos)
+SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name, sf::RenderWindow & owner) :	
+	Widget(name,pos,owner)
 {	
 	_body = sf::RectangleShape(size);
 	_body.setPosition(pos);
@@ -54,22 +53,15 @@ sf::Color SfmlButton::GetOutlineColor() const
 	return _body.getOutlineColor();
 }
 
-void SfmlButton::UpdateControl()
+void SfmlButton::OnResize()
 {
 	_body.setScale(GetScale());
 }
 
 void SfmlButton::Draw()
-{
-	if (_owner != nullptr)
-	{
-		_body.setPosition(GetPosition());
-		_owner->draw(_body);
-	}
-	else
-	{
-		//This is place for Log
-	}
+{	
+	_body.setPosition(GetPosition());
+	_window.draw(_body);	
 }
 
 SfmlButton::~SfmlButton()

@@ -5,8 +5,8 @@ class SfmlButton:
 	public Widget
 {
 public:
-	SfmlButton(const sf::Vector2f size, const sf::Vector2f pos,const std::string & name);
 	bool IsClicked(const sf::Vector2i cursor_pos) const;
+	SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name,sf::RenderWindow & owner);
 
 	virtual void SetFillColor(const sf::Color & color);
 	virtual void SetOutlineColor(const sf::Color & color);
@@ -16,10 +16,11 @@ public:
 	sf::Color GetFillColor() const;
 	sf::Color GetOutlineColor() const;
 
-	void UpdateControl() override;
+	void OnResize() override;
 	void Draw() override;
-	virtual ~SfmlButton();
+	virtual ~SfmlButton();	
 protected:
+	
 	sf::RectangleShape _body;
 	
 };

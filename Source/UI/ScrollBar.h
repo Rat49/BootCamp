@@ -5,7 +5,7 @@ class ScrollBar :
 	public SfmlButton
 {
 public:
-	ScrollBar(const float length, const sf::Vector2f pos, const std::string & name);
+	ScrollBar(const float length, const sf::Vector2f pos, const std::string & name,sf::RenderWindow & owner);
 	void ChangeStateGrab(const sf::Vector2i position);
 	void UnGrab();
 	void SetSliderPosition(const float position);
@@ -17,14 +17,14 @@ public:
 
 	float GetLength() const;
 
-	void UpdateControl() override;
+	void OnResize() override;
 	void Draw() override;
 
 	~ScrollBar();
 private:
 	float _sliderValue;
 	void UpdatePosition();
-	bool _isGrab;
+	bool _isGrabbed;
 	sf::RectangleShape _rail;
 };
 

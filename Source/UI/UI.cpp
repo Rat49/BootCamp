@@ -1,43 +1,39 @@
 #include "UI.h"
 
-
-
-UI::UI(sf::VideoMode screen, const std::string &name) :
-	_space(screen, name, sf::Style::Default)
-	
+UI::UI(sf::RenderWindow & window) :
+	_window(window)	
 {
 
 }
 
-void UI::onResize()
+void UI::OnResize()
 {
 	
-	auto newSize = sf::Vector2f(_space.getSize().x, _space.getSize().y);
-	auto oldSize = _space.getView().getSize();
+	auto newSize = sf::Vector2f(_window.getSize().x, _window.getSize().y);
+	auto oldSize = _window.getView().getSize();
 	for (auto it : _widgets)
 	{
 		it.second->SetScale(sf::Vector2f(newSize.x / oldSize.x, newSize.y / oldSize.y));
-		it.second->Update();
+		it.second->Resize();
 	}
-	_space.setView(sf::View(sf::FloatRect(0, 0, newSize.x, newSize.y)));
+	_window.setView(sf::View(sf::FloatRect(0, 0, newSize.x, newSize.y)));
 	Render();
 }
 
 void UI::Render()
 {
-	_space.clear(sf::Color::Black);
 	for (auto it : _widgets)
 	{
 		it.second->Draw();
 	}
-	_space.display();
+	_window.display();
 }
 
 void UI::SetPostion(const std::string & key, float x, float y)
 {
-	if (x > 0 && x < 100 && y > 0 && y < 100)
+	if (x >= 0 && x <= 100 && y >= 0 && y <= 100)
 	{
-		_widgets[key]->SetPosition(_space.getSize().x/100*x, _space.getSize().y / 100 * y);
+		_widgets[key]->SetPosition(_window.getSize().x/100*x, _window.getSize().y / 100 * y);
 	}
 	else
 	{
@@ -53,9 +49,27 @@ sf::Vector2f UI::GetPosition(const std::string & key)
 
 void UI::Add(Widget * wid, const std::string &key)
 {
-	wid->AddOwner(&_space);
 	_widgets[key] = wid;
 }
+
+Widget * UI::CreateButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name) const
+{
+	Widget * w = new SfmlButton(size, pos, name, _window);
+	return w;
+}
+
+Widget * UI::CreateLabel(const std::string & content, const sf::Font & font, const sf::Vector2f position, const std::string & name) const
+{
+	Widget * w = new Label(content, font, position, name, _window);
+	return w;
+}
+
+Widget * UI::CreateScrollBar(const float length, const sf::Vector2f pos, const std::string & name) const
+{
+	Widget * w = new ScrollBar(length, pos, name, _window);
+	return w;
+}
+
 
 Widget* UI::GetWidget(const std::string &key)
 {

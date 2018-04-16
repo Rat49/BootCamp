@@ -2,8 +2,8 @@
 
 
 
-Widget::Widget(const std::string & name, sf::Vector2f position) :
-	_owner(nullptr),
+Widget::Widget(const std::string & name, sf::Vector2f position,sf::RenderWindow &owner) :
+	_window(owner),
 	_name(name),
 	_position(position),
 	_scale(1,1)
@@ -32,23 +32,11 @@ sf::Vector2f Widget::GetScale() const
 	return _scale;
 }
 
-void Widget::AddOwner(sf::RenderWindow * host)
-{
-	if (_owner == nullptr)
-	{
-		_owner = host;
-	}
-	else
-	{
-		//This is place for log
-	}
-}
-
-void Widget::Update()
+void Widget::Resize()
 {
 	_position.x = _position.x*_scale.x;
 	_position.y = _position.y*_scale.y;
-	this->UpdateControl();
+	this->OnResize();
 }
 
 Widget::~Widget()

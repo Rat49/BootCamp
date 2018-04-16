@@ -2,12 +2,12 @@
 
 
 
-Label::Label(const std::string & content,const sf::Font & font, const sf::Vector2f position, const std::string & name):
-	Widget(name,position),
+Label::Label(const std::string & content,const sf::Font & font, const sf::Vector2f position, const std::string & name, 
+					sf::RenderWindow & owner):
+	Widget(name,position,owner),
 	_content(content,font,32)
 {
 	
-	Draw();
 }
 //
 //Setter
@@ -76,26 +76,17 @@ const std::string & Label::GetContent() const
 	return _content.getString();
 }
 //
-//Update
+//Resize
 //
-void Label::UpdateControl()
+void Label::OnResize()
 {
 	_content.setScale(GetScale());
 }
 
-
-
 void Label::Draw()
 {
-	if (_owner != nullptr)
-	{
-		_content.setPosition(GetPosition());
-		_owner->draw(_content);
-	}
-	else
-	{
-		//This is place for log
-	}
+	_content.setPosition(GetPosition());
+	_window.draw(_content);	
 }
 
 

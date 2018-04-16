@@ -3,23 +3,22 @@
 
 
 
-ScrollBar::ScrollBar(const float length, const sf::Vector2f pos, const std::string & name):
-	SfmlButton(sf::Vector2f(10,20), sf::Vector2f((pos.x + length/2),(pos.y - 10)),name),
-	_isGrab(false),
+ScrollBar::ScrollBar(const float length, const sf::Vector2f pos, const std::string & name, sf::RenderWindow & owner):
+	SfmlButton(sf::Vector2f(10,20), sf::Vector2f((pos.x + length/2),(pos.y - 10)),name,owner),
+	_isGrabbed(false),
 	_rail(sf::Vector2f(length,5))
 {
 	_rail.setPosition(GetPosition());
-	Draw();
 }
 
 void ScrollBar::ChangeStateGrab(sf::Vector2i position)
 {
-	_isGrab =  IsClicked(position);
-	std::cout << " _isGrab = " << _isGrab << " " ;
+	_isGrabbed =  IsClicked(position);
+	std::cout << " _isGrabbed = " << _isGrabbed << " " ;
 }
 void ScrollBar::UnGrab()
 {
-	_isGrab = false;
+	_isGrabbed = false;
 }
 void ScrollBar::SetSliderPosition(const float position)
 {
@@ -48,41 +47,25 @@ float ScrollBar::GetLength() const
 	return _rail.getSize().x;
 }
 void ScrollBar::UpdatePosition() 
-{
-	if (_owner != nullptr)
+{	
+	auto cursorPosition = sf::Mouse::getPosition(_window);
+	if (_isGrabbed)
 	{
-		auto cursorPosition = sf::Mouse::getPosition(*_owner);
-
-		if (_isGrab)
-		{
-			SetSliderPosition((cursorPosition.x - _rail.getPosition().x) / (_rail.getSize().x * _rail.getScale().x));
-		}		
-	}
-	else
-	{
-
-	}
+		SetSliderPosition((cursorPosition.x - _rail.getPosition().x) / (_rail.getSize().x * _rail.getScale().x));
+	}			
 }
 
-void ScrollBar::UpdateControl() 
+void ScrollBar::OnResize() 
 {
 	_body.scale(GetScale());
 	_rail.scale(GetScale());
 }
 
 void ScrollBar::Draw()
-{
-	
-	if (_owner != nullptr)
-	{		
-		UpdatePosition();
-		_owner->draw(_body);
-		_owner->draw(_rail);
-	}
-	else
-	{
-
-	}
+{		
+	UpdatePosition();
+	_window.draw(_body);
+	_window.draw(_rail);
 }
 
 

@@ -1,23 +1,21 @@
 #include "SfmlButton.h"
 #include "Label.h"
 #include "ScrollBar.h"
+#include "Widget.h"
 #include <SFML\Graphics.hpp>
 #include <cassert>
-#include <memory>
 
-struct cmpByStringLength
+struct cmpByString
 {
 	bool operator()(const std::string& a, const std::string& b) const
 	{
 		return a < b;
 	}
 };
-
-class UI
+class UI final
 {
 public:
-	UI(sf::VideoMode screen,const std::string & name);
-
+	UI(sf::RenderWindow & window);
 	template<typename T>
 	T* Get(const std::string& key)
 	{
@@ -26,19 +24,23 @@ public:
 		return specificWidget;
 	}
 
-	void onResize();
+	void OnResize();
 	void Render();
 
 	void SetPostion(const std::string& key, float x, float y);
 	sf::Vector2f GetPosition(const std::string& key);
 
-	sf::RenderWindow _space; 
-	void Add(Widget * wid, const std::string &name);
+	
+	void Add(Widget * wid, const std::string & key);
+	Widget * CreateButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name) const;
+	Widget * CreateLabel(const std::string & content, const sf::Font & font, const sf::Vector2f position, const std::string & name) const;
+	Widget * CreateScrollBar(const float length, const sf::Vector2f pos, const std::string & name) const;
 
 	~UI();
-private:
+private:	
+	sf::RenderWindow & _window;
 	Widget* GetWidget(const std::string &key);
-	std::map<std::string, Widget*, cmpByStringLength> _widgets;
+	std::map<std::string, Widget*, cmpByString> _widgets;
 	
 };
 
