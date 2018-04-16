@@ -14,7 +14,7 @@ void CollisionEvent::setObjs(RigidBody &o1, RigidBody &o2) {
 	obj2 = o2;
 }
 
-constexpr size_t numOfObjects = 4;
+constexpr size_t numOfObjects = 8;
 void MainLoop(RigidBody *RigidBodysFunc) {
 	sf::Clock clock;
 	sf::Time deltaTime;
@@ -22,6 +22,7 @@ void MainLoop(RigidBody *RigidBodysFunc) {
 	sf::RenderWindow app(sf::VideoMode(W, H), "Asteroids!");
 
 	sf::CircleShape circles[numOfObjects];
+	sf::CircleShape circlesCenters[numOfObjects];
 
 	CollisionEvent collisionEvent;
 	Dispatcher& dispatcher = Dispatcher::getInstance();
@@ -29,6 +30,10 @@ void MainLoop(RigidBody *RigidBodysFunc) {
 	for (int i = 0; i < numOfObjects; ++i) {
 		circles[i].setRadius(RigidBodysFunc[i].GetRadius());
 		circles[i].setPosition(RigidBodysFunc[i].GetX(), RigidBodysFunc[i].GetY());
+		circlesCenters[i].setPosition(RigidBodysFunc[i].GetX() + RigidBodysFunc[i].GetRadius(), 
+			RigidBodysFunc[i].GetY() + RigidBodysFunc[i].GetRadius());
+		circlesCenters[i].setRadius(1.f);
+		circlesCenters[i].setFillColor(sf::Color::Green);
 	}
 
 	while (app.isOpen()) {
@@ -62,11 +67,14 @@ void MainLoop(RigidBody *RigidBodysFunc) {
 		for (int i = 0; i < numOfObjects; ++i) {
 			RigidBodysFunc[i].Update(deltaSeconds);
 			circles[i].setPosition(RigidBodysFunc[i].GetX(), RigidBodysFunc[i].GetY());
+			circlesCenters[i].setPosition(RigidBodysFunc[i].GetX() + RigidBodysFunc[i].GetRadius(), 
+				RigidBodysFunc[i].GetY() + RigidBodysFunc[i].GetRadius());
 		}
 
 		app.clear();
 		for (int i = 0; i < numOfObjects; ++i) {
 			app.draw(circles[i]);
+			app.draw(circlesCenters[i]);
 		}
 		app.display();
 	}

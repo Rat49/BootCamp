@@ -81,7 +81,9 @@ void ResolveCollision(RigidBody &go1, RigidBody &go2) {
 }
 
 bool Collided(RigidBody go1, RigidBody go2) {
-	float distance = (go1.GetX() - go2.GetX()) * (go1.GetX() - go2.GetX()) + (go1.GetY() - go2.GetY()) * (go1.GetY() - go2.GetY());
+	float dx = (go1.GetX() + go1.GetRadius() - go2.GetX() - go2.GetRadius());
+	float dy = (go1.GetY() + go1.GetRadius() - go2.GetY() - go2.GetRadius());
+	float distance = dx * dx + dy * dy;
 	return (distance <= (go1.GetRadius() + go2.GetRadius()) * (go1.GetRadius() + go2.GetRadius()));
 }
 
