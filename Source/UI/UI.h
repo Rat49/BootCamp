@@ -2,7 +2,6 @@
 #include "Label.h"
 #include "ScrollBar.h"
 #include "Widget.h"
-#include <SFML\Graphics.hpp>
 #include <cassert>
 
 struct cmpByString
@@ -26,18 +25,16 @@ public:
 
 	void OnResize();
 	void Render();
+	void SetPostion(const std::string& key, sf::Vector2f relCoord);
+	sf::Vector2f GetPosition(const std::string& key);	
 
-	void SetPostion(const std::string& key, float x, float y);
-	sf::Vector2f GetPosition(const std::string& key);
-
-	
-	void Add(Widget * wid, const std::string & key);
-	Widget * CreateButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name) const;
-	Widget * CreateLabel(const std::string & content, const sf::Font & font, const sf::Vector2f position, const std::string & name) const;
-	Widget * CreateScrollBar(const float length, const sf::Vector2f pos, const std::string & name) const;
+	Widget * CreateButton(const sf::Vector2f size, const sf::Vector2f relativePos, const std::string & name);
+	Widget * CreateLabel(const std::string & content, const sf::Font & font, const sf::Vector2f relativePos, const std::string & name);
+	Widget * CreateScrollBar(const float length, const sf::Vector2f relativePos, const std::string & name);
 
 	~UI();
 private:	
+	sf::Vector2f RelativeCordToAbs(sf::Vector2f relCoord);
 	sf::RenderWindow & _window;
 	Widget* GetWidget(const std::string &key);
 	std::map<std::string, Widget*, cmpByString> _widgets;

@@ -25,7 +25,7 @@ void ScrollBar::SetSliderPosition(const float position)
 	_sliderValue = position;
 	if (0 <= position && position <= 1)
 	{
-		SetPosition(_rail.getPosition().x + _sliderValue * _rail.getSize().x * _rail.getScale().x,_rail.getPosition().y);
+		SetPosition(sf::Vector2f(_rail.getPosition().x + _sliderValue * _rail.getSize().x * _rail.getScale().x,_rail.getPosition().y));
 		_body.setPosition(GetPosition());
 	}	
 }

@@ -4,9 +4,9 @@
 class SfmlButton:
 	public Widget
 {
+	friend UI;
 public:
-	bool IsClicked(const sf::Vector2i cursor_pos) const;
-	SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name,sf::RenderWindow & owner);
+	bool IsClicked(const sf::Vector2i cursor_pos) const;	
 
 	virtual void SetFillColor(const sf::Color & color);
 	virtual void SetOutlineColor(const sf::Color & color);
@@ -20,7 +20,9 @@ public:
 	void Draw() override;
 	virtual ~SfmlButton();	
 protected:
-	
+	void operator=(const SfmlButton&) = delete;
+	SfmlButton(const SfmlButton&) = delete;
+	SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name, sf::RenderWindow & owner);
 	sf::RectangleShape _body;
 	
 };

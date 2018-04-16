@@ -29,45 +29,48 @@ void UI::Render()
 	_window.display();
 }
 
-void UI::SetPostion(const std::string & key, float x, float y)
+void UI::SetPostion(const std::string & key, sf::Vector2f relCoord)
+{	
+	_widgets[key]->SetPosition(RelativeCordToAbs(relCoord));	
+}
+
+
+sf::Vector2f UI::RelativeCordToAbs(sf::Vector2f relCoord)
 {
+	auto x = relCoord.x;
+	auto y = relCoord.y;
+	sf::Vector2f result(0, 0);
 	if (x >= 0 && x <= 100 && y >= 0 && y <= 100)
 	{
-		_widgets[key]->SetPosition(_window.getSize().x/100*x, _window.getSize().y / 100 * y);
+		result = sf::Vector2f(_window.getSize().x / 100 * x, _window.getSize().y / 100 * y);
 	}
 	else
-	{
-		assert(false);//This is place for Log
+	{		
+		assert(false);//Not Percent
 	}
-	
+	return result;
 }
+
 
 sf::Vector2f UI::GetPosition(const std::string & key)
 {
 	return _widgets[key]->GetPosition();
 }
 
-void UI::Add(Widget * wid, const std::string &key)
-{
-	_widgets[key] = wid;
+Widget * UI::CreateButton(const sf::Vector2f size, const sf::Vector2f relPos, const std::string & name) 
+{	
+
+	return _widgets[name] = new SfmlButton(size, RelativeCordToAbs(relPos), name, _window);
 }
 
-Widget * UI::CreateButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name) const
+Widget * UI::CreateLabel(const std::string & content, const sf::Font & font, const sf::Vector2f relPos, const std::string & name)
 {
-	Widget * w = new SfmlButton(size, pos, name, _window);
-	return w;
+	return _widgets[name] = new Label(content, font, RelativeCordToAbs(relPos), name, _window);
 }
 
-Widget * UI::CreateLabel(const std::string & content, const sf::Font & font, const sf::Vector2f position, const std::string & name) const
+Widget * UI::CreateScrollBar(const float length, const sf::Vector2f relPos, const std::string & name) 
 {
-	Widget * w = new Label(content, font, position, name, _window);
-	return w;
-}
-
-Widget * UI::CreateScrollBar(const float length, const sf::Vector2f pos, const std::string & name) const
-{
-	Widget * w = new ScrollBar(length, pos, name, _window);
-	return w;
+	return _widgets[name] = new ScrollBar(length, RelativeCordToAbs(relPos), name, _window);
 }
 
 
@@ -81,6 +84,7 @@ Widget* UI::GetWidget(const std::string &key)
 
 	return wid;
 }
+
 
 
 UI::~UI()

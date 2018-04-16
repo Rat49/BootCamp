@@ -22,9 +22,9 @@ void Widget::SetScale(sf::Vector2f scale)
 	_scale = scale;
 }
 
-void Widget::SetPosition(float x, float y)
+void Widget::SetPosition(sf::Vector2f position)
 {
-	_position = sf::Vector2f(x, y);
+	_position = position;
 }
 
 sf::Vector2f Widget::GetScale() const

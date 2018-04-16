@@ -1,11 +1,12 @@
 #pragma once
 #include "SfmlButton.h"
 
-class ScrollBar :
+class ScrollBar final :
 	public SfmlButton
 {
+	friend UI;
 public:
-	ScrollBar(const float length, const sf::Vector2f pos, const std::string & name,sf::RenderWindow & owner);
+	
 	void ChangeStateGrab(const sf::Vector2i position);
 	void UnGrab();
 	void SetSliderPosition(const float position);
@@ -22,6 +23,9 @@ public:
 
 	~ScrollBar();
 private:
+	void operator=(const ScrollBar&) = delete;
+	ScrollBar(const ScrollBar&) = delete;
+	ScrollBar(const float length, const sf::Vector2f pos, const std::string & name, sf::RenderWindow & owner);
 	float _sliderValue;
 	void UpdatePosition();
 	bool _isGrabbed;

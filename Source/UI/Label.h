@@ -1,11 +1,11 @@
 #pragma once
 #include "Widget.h"
-class Label :
+class Label final :
 	public Widget
 {
+	friend UI;
 public:
-	Label(const std::string & content, const sf::Font & font, const sf::Vector2f position, const std::string& name, 
-		sf::RenderWindow & owner);
+	
 
 	void SetFillColor(const sf::Color & color);
 	void SetOutlineColor(const sf::Color & color);
@@ -25,6 +25,11 @@ public:
 	void Draw() override;
 	~Label();
 private:
+	void operator=(const Label&) = delete;
+	Label(const Label&) = delete;
+	Label(const std::string & content, const sf::Font & font, const sf::Vector2f position, const std::string& name,
+		sf::RenderWindow & owner);
 	sf::Text _content;
+	
 };
 
