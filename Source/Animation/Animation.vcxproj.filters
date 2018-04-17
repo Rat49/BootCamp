@@ -18,9 +18,15 @@
     <ClCompile Include="AnimationPlayer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SceneContainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneContainer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
