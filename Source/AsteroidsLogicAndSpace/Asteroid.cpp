@@ -1,20 +1,5 @@
 #include "Asteroid.h"
 
-int GetRandomValue (int start, int end)
-{
-	return start + rand() % end;
-}
-
-float GetLenght(const sf::Vector2f &vector)
-{
-	return std::sqrt(vector.x * vector.x + vector.y * vector.y);
-}
-
-float Dot(sf::Vector2f a, sf::Vector2f b)
-{
-	return a.x * b.x + a.y * b.y;
-}
-
 Asteroid::Asteroid(sf::Sprite &sprite, sf::Rect<int> &borders, int id)
 	:_sprite(sprite)
 	, _borders(borders)
