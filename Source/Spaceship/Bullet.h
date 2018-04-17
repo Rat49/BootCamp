@@ -5,9 +5,9 @@
 class Bullet : public sf::Drawable
 {
 public:
-	sf::Vector2f _speed; // = _spaceshipDirection
+	float _speed; // = _spaceshipDirection
 	bool _life; //???
 
 	virtual ~Bullet() = 0 {};
-	virtual void Update() = 0;
+	virtual void Update(sf::Time deltaTime) = 0;
 };

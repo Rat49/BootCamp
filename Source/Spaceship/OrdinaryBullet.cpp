@@ -1,9 +1,9 @@
 #include "OrdinaryBullet.h"
 
-OrdinaryBullet::OrdinaryBullet(sf::Vector2f bulletSpeed, AnimationPlayer& bulletAnimation)
+OrdinaryBullet::OrdinaryBullet(sf::Vector2f bulletDirection, AnimationPlayer& bulletAnimation)
 	:_ordinaryBulletAnimation(bulletAnimation)
 {
-	_speed = bulletSpeed;
+	//body *= _speed
 }
 
 OrdinaryBullet::~OrdinaryBullet()
