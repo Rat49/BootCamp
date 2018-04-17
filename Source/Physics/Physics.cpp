@@ -5,10 +5,11 @@ RigidBody::RigidBody() {
 
 }
 
-RigidBody::RigidBody(sf::Vector2f c, sf::Vector2f s, float r) {
+RigidBody::RigidBody(sf::Vector2f c, sf::Vector2f s, float r, float m) {
 	_coords = c;
 	_speed = s;
 	_radius = r;
+	_mass = m;
 }
 
 
@@ -63,36 +64,73 @@ float RigidBody::GetY() {
 	return _coords.y;
 }
 
+float RigidBody::GetMass()
+{
+	return _mass;
+}
+float RigidBody::GetSpeedX()
+{
+	return _speed.x;
+}
+float RigidBody::GetSpeedY()
+{
+	return _speed.y;
+}
+
+void RigidBody::SetSpeedX(float arg)
+{
+	_speed.x = arg;
+}
+void RigidBody::SetSpeedY(float arg)
+{
+	_speed.y = arg;
+}
+void RigidBody::SetMass(float arg)
+{
+	_mass = arg;
+}
+
+
 void ResolveCollision(RigidBody &go1, RigidBody &go2) {
-	float x1 = go1.GetX();
-	float x2 = go2.GetX();
-	float y1 = go1.GetY();
-	float y2 = go2.GetY();
 
-	float dist =  sqrt((x1 - x2)*(x1 - x2) + (y1 - y2)*(y1 - y2));
+	float dx = (go1.GetX() + go1.GetRadius() - go2.GetX() - go2.GetRadius());
+	float dy = (go1.GetY() + go1.GetRadius() - go2.GetY() - go2.GetRadius());
+	
+	float dist = sqrt(dx * dx + dy * dy);
 
-	float overlap = 0.5 * (dist - go1.GetRadius() - go2.GetRadius());
+	float overlap = (dist - go1.GetRadius() - go2.GetRadius());
 
-	go1.SetX(x1 - (overlap * (x1 - x2) / dist));
-	go1.SetY(y1 - (overlap * (y1 - y2) / dist));
+	go1.SetX(go1.GetX() - (overlap * (go1.GetX() - go2.GetX()) / dist));
+	go1.SetY(go1.GetY() - (overlap * (go1.GetY() - go2.GetY()) / dist));
 
-	go2.SetX(x2 + (overlap * (x1 - x2) / dist));
-	go2.SetY(y2 + (overlap * (y1 - y2) / dist));
+	go2.SetX(go2.GetX() + (overlap * (go1.GetX() - go2.GetX()) / dist));
+	go2.SetY(go2.GetY() + (overlap * (go1.GetY() - go2.GetY()) / dist));
+
+	
+	go1.SetSpeedX(((go1.GetMass() - go2.GetMass()) * go1.GetSpeedX() + (2 * go2.GetMass() * go2.GetSpeedX())) / (go1.GetMass() + go2.GetMass()));
+	
+	go2.SetSpeedX(((go2.GetMass() - go1.GetMass()) * go2.GetSpeedX() + (2 * go1.GetMass() * go1.GetSpeedX())) / (go1.GetMass() + go2.GetMass()));
+	
+	go1.SetSpeedY(((go1.GetMass() - go2.GetMass()) * go1.GetSpeedY() + (2 * go2.GetMass() * go2.GetSpeedY())) / (go1.GetMass() + go2.GetMass()));
+	
+	go2.SetSpeedY(((go2.GetMass() - go1.GetMass()) * go2.GetSpeedY() + (2 * go1.GetMass() * go1.GetSpeedY())) / (go1.GetMass() + go2.GetMass()));
+
 }
 
 bool Collided(RigidBody go1, RigidBody go2) {
 	float dx = (go1.GetX() + go1.GetRadius() - go2.GetX() - go2.GetRadius());
 	float dy = (go1.GetY() + go1.GetRadius() - go2.GetY() - go2.GetRadius());
 	float distance = dx * dx + dy * dy;
-	return (distance <= (go1.GetRadius() + go2.GetRadius()) * (go1.GetRadius() + go2.GetRadius()));
+	return (distance < (go1.GetRadius() + go2.GetRadius()) * (go1.GetRadius() + go2.GetRadius()));
 }
 
 void RandomFill(RigidBody *RigidBodysFunc, int length) {
 	std::srand(std::time(nullptr));
 
 	for (int i = 0; i < length; ++i) {
-		RigidBodysFunc[i].SetRadius(10 + std::rand() / ((RAND_MAX + 1u) / 30));
+		RigidBodysFunc[i].SetRadius(10 + std::rand() / ((RAND_MAX + 1u) / 100));
 		RigidBodysFunc[i].SetCoordinates({ static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / W)), static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / H)) });
-		RigidBodysFunc[i].SetSpeed({ static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)), static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)) });
+		RigidBodysFunc[i].SetSpeed({ static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)), static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 15)) });
+		RigidBodysFunc[i].SetMass(10 + std::rand() / ((RAND_MAX + 1u) / 20));
 	}
 }

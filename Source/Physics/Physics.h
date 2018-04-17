@@ -14,11 +14,12 @@ private:
 	sf::Vector2f _coords;
 	sf::Vector2f _speed;
 	float _radius;
+	float _mass;
 
 public:
 
 	RigidBody();
-	RigidBody(sf::Vector2f, sf::Vector2f, float);
+	RigidBody(sf::Vector2f, sf::Vector2f, float, float);
 	void Update(float);
 	void SetRadius(float);
 	void SetCoordinates(sf::Vector2f);
@@ -28,6 +29,12 @@ public:
 	float GetRadius();
 	float GetX();
 	float GetY();
+	float GetMass();
+	float GetSpeedX();
+	float GetSpeedY();
+	void SetSpeedX(float);
+	void SetSpeedY(float);
+	void SetMass(float);
 };
 
 void RandomFill(RigidBody*, int);
