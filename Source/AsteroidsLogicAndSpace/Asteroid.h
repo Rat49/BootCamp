@@ -1,16 +1,14 @@
 #pragma once
-#include "SFML\Graphics.hpp"
+#include "Object.h"
 
-class Asteroid
+class Asteroid : public Object
 {
-	bool active = true;
 public:
 	Asteroid(sf::Sprite &sprite, sf::Rect<int> &borders, int id);
 
-	sf::Sprite GetSprite();
-	void Update(float time);
+	void Update(float time) override;
+	void Draw(sf::RenderWindow *window) override;
 
-	~Asteroid();
 private:
 	sf::Sprite _sprite;
 	sf::Vector2f _velocity;

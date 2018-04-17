@@ -19,11 +19,8 @@ Asteroid::Asteroid(sf::Sprite &sprite, sf::Rect<int> &borders, int id)
 	:_sprite(sprite)
 	, _borders(borders)
 {
-//	srand(id);
 	_velocity = sf::Vector2f(GetRandomValue(0,_borders.width), GetRandomValue(0,_borders.height));
 	_speed = GetRandomValue(-1, 1);
-	//_speed = -1;
-	//_velocity = sf::Vector2f(50,50);
 	_velocity.x *= _speed;
 	_velocity.y *= _speed;
 	_rotation = GetRandomValue(-15,15);
@@ -32,19 +29,13 @@ Asteroid::Asteroid(sf::Sprite &sprite, sf::Rect<int> &borders, int id)
 	_sprite.setScale(_scale);
 	_radius = _sprite.getLocalBounds().width / 2;
 	_sprite.setOrigin(_radius, _radius);
-	//_sprite.setPosition(200, 300);
 	_sprite.setPosition(GetRandomValue(0, _borders.width), GetRandomValue(0, _borders.height));
 	_sprite.setRotation(_rotation);
 	_rotationSpeed = GetRandomValue(1,80);
 	
 }
 
-sf::Sprite Asteroid::GetSprite()
-{
-	return _sprite;
-}
-
-void Asteroid::Update(float time)
+void Asteroid::Update(float time) 
 {
 	_rotation = _rotation + time * _rotationSpeed;
 	sf::Vector2f nextPosition = _sprite.getPosition() + _velocity * time;
@@ -103,9 +94,13 @@ void Asteroid::Update(float time)
 	_sprite.setRotation(_rotation);
 }
 
-Asteroid::~Asteroid()
+void Asteroid::Draw(sf::RenderWindow *window)
 {
-
+	window->draw(_sprite);
 }
+
+
+
+
 
 
