@@ -8,17 +8,17 @@ int main()
 	sf::VideoMode videoMode(800, 800);
 	sf::RenderWindow window(
 		sf::VideoMode(videoMode),
-		"Inside the Particle Storm");
+		"Particle");
 	window.setVerticalSyncEnabled(true);
 
-	sf::Text text;
-	text.setPosition(
-		static_cast<float>(window.getSize().x) * 0.01f,
-		static_cast<float>(window.getSize().y) * 0.01f);
-	ParticleSystem particles(1000, window.getSize());
+	ParticleSystem particles(4000, window.getSize());
 	particles.setEmitter(sf::Vector2f(500, 500));
-	particles.setForce(sf::Vector2f(50, -50));
-	particles.fuel();
+	particles.setForce(sf::Vector2f(-60, 60));
+	//particles.fuel();
+
+	ParticleSystem particles1(4000, window.getSize());
+	particles1.setEmitter(sf::Vector2f(550, 550));
+	particles1.setForce(sf::Vector2f(-60, 60));
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();
 	sf::Time deltaTime;
@@ -30,11 +30,12 @@ int main()
 		timer = now;
 
 		particles.update(deltaTime * 1.f);
-
+		particles1.update(deltaTime * 1.f);
 		
 		window.clear(sf::Color::Black);
-		window.draw(text);
 		window.draw(particles);
+
+		window.draw(particles1);
 		window.display();
 	}
 	system("pause");
