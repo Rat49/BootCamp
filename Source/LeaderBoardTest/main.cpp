@@ -3,7 +3,7 @@
 
 int main() {
 
-	LeaderBoard *leaderboard = LeaderBoard::Create();
+	Leaderboard *leaderboard = Leaderboard::Create();
 
 	if (leaderboard != NULL) {
 		delete leaderboard;
