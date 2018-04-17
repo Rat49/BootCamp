@@ -10,7 +10,7 @@ int main()
 	mui.CreateButton(sf::Vector2f(20, 30), PercentXY(21, 15), "test");
 	mui.CreateScrollBar(100, PercentXY(46, 30), "scroll");
 	sf::Font font;
-	font.loadFromFile("arial.ttf");
+	font.loadFromFile("font/arial.ttf");
 	mui.CreateLabel("hello",font, PercentXY(1,1),"label");
 	mui.Get<ScrollBar>("scroll")->SetFillColor(sf::Color::Green);
 	mui.Get<ScrollBar>("scroll")->SetLength(200);

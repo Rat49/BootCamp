@@ -20,7 +20,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Font Include="arial.ttf">
+    <Font Include="font\arial.ttf">
       <Filter>Resource Files</Filter>
     </Font>
   </ItemGroup>

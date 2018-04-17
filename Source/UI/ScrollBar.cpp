@@ -1,6 +1,4 @@
 #include "ScrollBar.h"
-#include <iostream>
-
 
 
 ScrollBar::ScrollBar(const float length, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner):
@@ -13,8 +11,7 @@ ScrollBar::ScrollBar(const float length, const sf::Vector2f position, const std:
 
 void ScrollBar::ChangeStateGrab(sf::Vector2i position)
 {
-	_isGrabbed =  IsClicked(position);
-	std::cout << " _isGrabbed = " << _isGrabbed << " " ;
+	_isGrabbed =  IsClicked(position);	
 }
 void ScrollBar::UnGrab()
 {

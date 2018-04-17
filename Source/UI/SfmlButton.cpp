@@ -1,6 +1,5 @@
 #include "SfmlButton.h"
 
-#include <iostream>
 
 SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner) :	
 	Widget(name,position,owner)
@@ -17,8 +16,7 @@ bool SfmlButton::IsClicked(const sf::Vector2i cursor_pos) const
 		return false;
 	}
 	else
-	{
-		std::cout << "clicked on " << this->_name << " ";
+	{		
 		return true;
 	}
 }
