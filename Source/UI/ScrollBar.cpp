@@ -3,8 +3,8 @@
 
 
 
-ScrollBar::ScrollBar(const float length, const sf::Vector2f pos, const std::string & name, sf::RenderWindow & owner):
-	SfmlButton(sf::Vector2f(10,20), sf::Vector2f((pos.x + length/2),(pos.y - 10)),name,owner),
+ScrollBar::ScrollBar(const float length, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner):
+	SfmlButton(sf::Vector2f(10,20), sf::Vector2f((position.x + length/2),(position.y - 10)),name,owner),
 	_isGrabbed(false),
 	_rail(sf::Vector2f(length,5))
 {

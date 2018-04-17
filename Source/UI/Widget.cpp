@@ -2,7 +2,7 @@
 
 
 
-Widget::Widget(const std::string & name, sf::Vector2f position,sf::RenderWindow &owner) :
+Widget::Widget(const std::string & name, const sf::Vector2f position,sf::RenderWindow &owner) :
 	_window(owner),
 	_name(name),
 	_position(position),
@@ -17,12 +17,12 @@ sf::Vector2f Widget::GetPosition() const
 	return _position;
 }
 
-void Widget::SetScale(sf::Vector2f scale)
+void Widget::SetScale(const sf::Vector2f scale)
 {
 	_scale = scale;
 }
 
-void Widget::SetPosition(sf::Vector2f position)
+void Widget::SetPosition(const sf::Vector2f position)
 {
 	_position = position;
 }

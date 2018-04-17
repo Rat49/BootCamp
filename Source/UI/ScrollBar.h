@@ -25,7 +25,7 @@ public:
 private:
 	void operator=(const ScrollBar&) = delete;
 	ScrollBar(const ScrollBar&) = delete;
-	ScrollBar(const float length, const sf::Vector2f pos, const std::string & name, sf::RenderWindow & owner);
+	ScrollBar(const float length, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner);
 	float _sliderValue;
 	void UpdatePosition();
 	bool _isGrabbed;

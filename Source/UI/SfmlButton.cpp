@@ -2,11 +2,11 @@
 
 #include <iostream>
 
-SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name, sf::RenderWindow & owner) :	
-	Widget(name,pos,owner)
+SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner) :	
+	Widget(name,position,owner)
 {	
 	_body = sf::RectangleShape(size);
-	_body.setPosition(pos);
+	_body.setPosition(position);
 	_body.setOrigin(_body.getLocalBounds().width /2 , _body.getLocalBounds().height /2);
 }
 

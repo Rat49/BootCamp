@@ -22,7 +22,7 @@ public:
 protected:
 	void operator=(const SfmlButton&) = delete;
 	SfmlButton(const SfmlButton&) = delete;
-	SfmlButton(const sf::Vector2f size, const sf::Vector2f pos, const std::string & name, sf::RenderWindow & owner);
+	SfmlButton(const sf::Vector2f size, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner);
 	sf::RectangleShape _body;
 	
 };

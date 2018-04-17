@@ -8,8 +8,8 @@ public:
 	
 	const std::string _name;
 	
-	void SetPosition(sf::Vector2f position);
-	void SetScale(sf::Vector2f scale);
+	void SetPosition(const sf::Vector2f position);
+	void SetScale(const sf::Vector2f scale);
 
 	sf::Vector2f GetPosition() const;	
 	sf::Vector2f GetScale() const;
@@ -25,7 +25,7 @@ private:
 protected:
 	void operator=(const Widget&) = delete;
 	Widget(const Widget&) = delete;
-	Widget(const std::string & name, sf::Vector2f position, sf::RenderWindow & owner);
+	Widget(const std::string & name, const sf::Vector2f position, sf::RenderWindow & owner);
 	virtual void OnResize() {};
 	sf::RenderWindow & _window;
 };
