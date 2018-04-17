@@ -96,6 +96,12 @@ void ResolveCollision(RigidBody &go1, RigidBody &go2) {
 	float dx = (go1.GetX() + go1.GetRadius() - go2.GetX() - go2.GetRadius());
 	float dy = (go1.GetY() + go1.GetRadius() - go2.GetY() - go2.GetRadius());
 	
+	float d1x = go1.GetX() + go1.GetRadius();
+	float d1y = go1.GetY() + go1.GetRadius();
+
+	float d2x = go2.GetX() + go2.GetRadius();
+	float d2y = go2.GetY() + go2.GetRadius();
+
 	float dist = sqrt(dx * dx + dy * dy);
 
 	float overlap = (dist - go1.GetRadius() - go2.GetRadius());
@@ -106,14 +112,33 @@ void ResolveCollision(RigidBody &go1, RigidBody &go2) {
 	go2.SetX(go2.GetX() + (overlap * (go1.GetX() - go2.GetX()) / dist));
 	go2.SetY(go2.GetY() + (overlap * (go1.GetY() - go2.GetY()) / dist));
 
+	//normal 
+	float nx = (d1x - d2x) / dist;
+	float ny = (d1y - d2y) / dist;
+	//Tanget
+	float tx = -ny;
+	float ty = nx;
+	float dpTan1 = go1.GetSpeedX() * tx + go1.GetSpeedY() * ty;
+	float dpTan2 = go2.GetSpeedX() * tx + go2.GetSpeedX() * ty;
 	
-	go1.SetSpeedX(((go1.GetMass() - go2.GetMass()) * go1.GetSpeedX() + (2 * go2.GetMass() * go2.GetSpeedX())) / (go1.GetMass() + go2.GetMass()));
+	float dpNorm1 = go1.GetSpeedX() * nx + go1.GetSpeedY() * ny;
+	float dpNorm2 = go2.GetSpeedX() * nx + go2.GetSpeedX() * ny;
+
+	float m1 = (dpNorm1 * (go1.GetMass() - go2.GetMass()) + 2.0f *go2.GetMass() * dpNorm2) / (go1.GetMass() + go2.GetMass());
+	float m2 = (dpNorm2 * (go2.GetMass() - go1.GetMass()) + 2.0f * go1.GetMass() * dpNorm1) / (go1.GetMass() + go2.GetMass());
+
+	// Update ball velocities
+	go1.SetSpeedX (tx * dpTan1 + nx * m1);
+	go1.SetSpeedY (ty * dpTan1 + ny * m1);
+	go2.SetSpeedX (tx * dpTan2 + nx * m2);
+	go2.SetSpeedY (ty * dpTan2 + ny * m2);
+	/*go1.SetSpeedX(((go1.GetMass() - go2.GetMass()) * go1.GetSpeedX() + (2 * go2.GetMass() * go2.GetSpeedX())) / (go1.GetMass() + go2.GetMass()));
 	
 	go2.SetSpeedX(((go2.GetMass() - go1.GetMass()) * go2.GetSpeedX() + (2 * go1.GetMass() * go1.GetSpeedX())) / (go1.GetMass() + go2.GetMass()));
 	
 	go1.SetSpeedY(((go1.GetMass() - go2.GetMass()) * go1.GetSpeedY() + (2 * go2.GetMass() * go2.GetSpeedY())) / (go1.GetMass() + go2.GetMass()));
 	
-	go2.SetSpeedY(((go2.GetMass() - go1.GetMass()) * go2.GetSpeedY() + (2 * go1.GetMass() * go1.GetSpeedY())) / (go1.GetMass() + go2.GetMass()));
+	go2.SetSpeedY(((go2.GetMass() - go1.GetMass()) * go2.GetSpeedY() + (2 * go1.GetMass() * go1.GetSpeedY())) / (go1.GetMass() + go2.GetMass()));*/
 
 }
 

@@ -14,7 +14,7 @@ void CollisionEvent::setObjs(RigidBody &o1, RigidBody &o2) {
 	obj2 = o2;
 }
 
-constexpr size_t numOfObjects = 8;
+constexpr size_t numOfObjects = 10;
 void MainLoop(RigidBody *RigidBodysFunc) {
 	sf::Clock clock;
 	sf::Time deltaTime;
@@ -90,12 +90,12 @@ void Test() {
 		RigidBodys[idx].SetRadius(10);
 		RigidBodys[idx].SetCoordinates({ 500, 200.f + 60 * i });
 		RigidBodys[idx].SetSpeed({ 60, 15 });
-		RigidBodys[idx].SetMass(0.5f);
+		RigidBodys[idx].SetMass(0.005f);
 
 		RigidBodys[idx + 1].SetRadius(25);
 		RigidBodys[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
-		RigidBodys[idx + 1].SetSpeed({ -40, 30 });
-		RigidBodys[idx + 1].SetMass(1.0f);
+		RigidBodys[idx + 1].SetSpeed({ -100, 40 });
+		RigidBodys[idx + 1].SetMass(0.01f);
 
 	}
 	
