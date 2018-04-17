@@ -2,7 +2,7 @@
 #include "ImageSequenceResource.h"
 #include "AnimationPlayer.h"
 
-class Bullet //: public Physics 
+class Bullet : public sf::Drawable
 {
 public:
 	sf::Vector2f _speed; // = _spaceshipDirection

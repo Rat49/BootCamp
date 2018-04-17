@@ -8,5 +8,6 @@ private:
 public:
 	OrdinaryBullet(sf::Vector2f bulletDirection, AnimationPlayer& bulletAnimation);
 	~OrdinaryBullet();
-	void Update(sf::Time deltaTime);
+	virtual void Update(sf::Time deltaTime) final;
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 };
