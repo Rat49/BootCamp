@@ -5,9 +5,9 @@ class Asteroid : public Object
 {
 public:
 	Asteroid();
-	void Init(sf::Sprite &sprite, sf::Rect<int> &borders, int id);
+	void Init(sf::Sprite &sprite);
 	void Update(float time) override;
-	void Draw(sf::RenderWindow *window) override;
+	void Draw() override;
 	void Reset() override;
 private:
 	sf::Sprite _sprite;
