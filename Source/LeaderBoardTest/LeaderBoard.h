@@ -1,25 +1,31 @@
 #pragma once
-#include"playfab\PlayFabAdminAPI.h"
-#include"playfab\PlayFabSettings.h"
+
+//#include"playfab\PlayFabAdminAPI.h"
+#include"playfab\PlayFabClientAPI.h"
+//#include"playfab\PlayFabSettings.h"
+
 #include<iostream>
-#include<map>
 
 
-class LeaderBoard final {
+class Leaderboard final {
 
 private:
 	
-	
-	std::map<std::string, std::string> scores;
 
-	LeaderBoard() {}
+	Leaderboard() {}
 
 
 public:
 
-	static LeaderBoard* Create();
-	void CreatePlayerStatisticDefinition();
-	void UpdatePlayerStatisticDefinition();
-	void GetPlayerStatisticDefinitions();
+	static Leaderboard* Create();
+
+	//void CreatePlayerStatisticDefinition();
+	//void UpdatePlayerStatisticDefinition();
+
+	//void Login(int method);
+	void LoginWithCustomID();
+	void LoginWithEmailAddress(std::string emailAddress);
+	void Register();
+	void GetLeaderboard();
 
 };
