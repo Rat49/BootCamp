@@ -1,7 +1,8 @@
 #pragma once
 #include "SFML/Graphics.hpp"
-
-class Object
+#include "Pool.h"
+class Object :
+	public PoolElement
 {
 public:
 	virtual void Draw(sf::RenderWindow *window) {
