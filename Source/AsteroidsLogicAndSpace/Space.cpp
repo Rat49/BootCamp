@@ -1,21 +1,30 @@
 #include "Space.h"
-#include "ParticleSpace.h"
 
-Space::Space(sf::Rect<int> &borders)
+Space::Space(sf::Sprite &sprite, sf::Rect<int> &borders)
 	:_borders(borders)
 {
-	_nElements = (borders.width / 50) * (borders.height / 50);
-	//_nElements = 10;
-	for (int currentElement = 0; currentElement < _nElements; ++currentElement)
+	_nParticleSpace = (borders.width / 50) * (borders.height / 50);
+	_nAsteroids = (borders.width / 200) * (borders.height / 200);
+	for (int i = 0; i < _nParticleSpace; ++i)
 	{
 		ParticleSpace* particle = new ParticleSpace(borders);
-		_elements.push_back(particle);
+		_stars.push_back(particle);
+	}
+	for (int i = 1; i <= _nAsteroids; ++i)
+	{
+		Asteroid* asteroid = new Asteroid(sprite, borders, i);
+		_asteroids.push_back(asteroid);
 	}
 }
 
-std::vector<ParticleSpace*> Space::GetElements()
+std::vector<ParticleSpace*> Space::GetStars()
 {
-	return _elements;
+	return _stars;
+}
+
+std::vector<Asteroid*> Space::GetAsteroids()
+{
+	return _asteroids;
 }
 
 Space::~Space()
