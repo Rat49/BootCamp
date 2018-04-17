@@ -40,11 +40,11 @@ void ParticleSpace::Update(float time)
 {
 	if (!active)
 		return;
-	std::cout << "_particle.getGlobalBounds() = " << _particle.getPosition().x << ", " << _particle.getPosition().y << std::endl;
+	//std::cout << "_particle.getGlobalBounds() = " << _particle.getPosition().x << ", " << _particle.getPosition().y << std::endl;
 	sf::Vector2f coordinates = sf::Vector2f(_particle.getPosition().x, _particle.getPosition().y);
 	sf::Vector2f velocity = 10.0f * GetNormalizedVelocity(coordinates);
 	sf::Vector2f nextPosition = coordinates + velocity * time;
-	std::cout << "nextPosition = " << nextPosition.x << ", " << nextPosition.y << std::endl;
+	//std::cout << "nextPosition = " << nextPosition.x << ", " << nextPosition.y << std::endl;
 	if ((nextPosition.x > _borders.width) || (nextPosition.x < 0) || (nextPosition.y > _borders.height) || (nextPosition.y < 0))
 	{
 		nextPosition = sf::Vector2f(GetRandomValue1(0, _borders.width), GetRandomValue1(0, _borders.height));

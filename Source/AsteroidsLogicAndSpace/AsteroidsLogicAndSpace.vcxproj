@@ -154,11 +154,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Asteroid.cpp" />
-    <ClCompile Include="AsteroidsLogicAndSpace.cpp" />
+    <ClCompile Include="ParticleSpace.cpp" />
     <ClCompile Include="Space.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroid.h" />
+    <ClInclude Include="ParticleSpace.h" />
     <ClInclude Include="Space.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
