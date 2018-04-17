@@ -82,9 +82,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="OrdinaryBullet.h" />
+    <ClInclude Include="Rocket.h" />
     <ClInclude Include="Spaceship.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="OrdinaryBullet.cpp" />
+    <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Spaceship.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
