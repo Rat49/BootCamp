@@ -1,9 +1,46 @@
 #include "Asteroid.h"
 
-Asteroid::Asteroid(sf::Sprite &sprite, sf::Rect<int> &borders, int id)
-	:_sprite(sprite)
-	, _borders(borders)
+Asteroid::Asteroid()	
 {
+	_sprite = sf::Sprite(sf::Texture::Texture());
+	_borders = sf::IntRect(sf::Vector2i(0,0),sf::Vector2i(0,0));
+	_velocity = sf::Vector2f(0,0);
+	_speed = 0;
+	_velocity.x *= _speed;
+	_velocity.y *= _speed;
+	_rotation = 0;
+	int startScale = 1;
+	_scale = sf::Vector2f(startScale, startScale);
+	_radius = 0;
+	_rotationSpeed =0;
+}
+
+void Asteroid::Reset()
+{
+	_sprite.setTexture(sf::Texture::Texture(), true);
+	_sprite.setScale(1, 1);
+	_sprite.setOrigin(0,0);
+	_sprite.setPosition(0,0);
+	_sprite.setRotation(0);
+	_borders.height = 0;
+	_borders.left = 0;
+	_borders.top = 0;
+	_borders.width = 0;
+	_velocity = sf::Vector2f(0, 0);
+	_speed = 0;
+	_velocity.x *= _speed;
+	_velocity.y *= _speed;
+	_rotation = 0;
+	int startScale = 1;
+	_scale = sf::Vector2f(startScale, startScale);
+	_radius = 0;
+	_rotationSpeed = 0;
+}
+
+void Asteroid::Init(sf::Sprite & sprite, sf::Rect<int>& borders, int id)
+{	
+	_sprite = sprite;
+	_borders = borders;
 	_velocity = sf::Vector2f(GetRandomValue(0,_borders.width), GetRandomValue(0,_borders.height));
 	_speed = GetRandomValue(-1, 1);
 	_velocity.x *= _speed;
@@ -17,7 +54,6 @@ Asteroid::Asteroid(sf::Sprite &sprite, sf::Rect<int> &borders, int id)
 	_sprite.setPosition(GetRandomValue(0, _borders.width), GetRandomValue(0, _borders.height));
 	_sprite.setRotation(_rotation);
 	_rotationSpeed = GetRandomValue(1,80);
-	
 }
 
 void Asteroid::Update(float time) 
@@ -83,6 +119,7 @@ void Asteroid::Draw(sf::RenderWindow *window)
 {
 	window->draw(_sprite);
 }
+
 
 
 

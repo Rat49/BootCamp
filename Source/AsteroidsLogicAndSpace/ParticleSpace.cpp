@@ -9,13 +9,34 @@ sf::Vector2f ParticleSpace::GetNormalizedVelocity(sf::Vector2f vector)
 	return normalizedVelocity;
 }
 
-ParticleSpace::ParticleSpace(sf::Rect<int> &borders)
-	:_borders(borders)
+ParticleSpace::ParticleSpace()
 {
+	_borders = sf::IntRect(sf::Vector2i(0, 0), sf::Vector2i(0, 0));
+	_particle = sf::CircleShape(0);
+	_particle.setFillColor(sf::Color(255, 255, 255, 255));
+	_particle.setPosition(0,0);
+	_depth = 5;
+}
+
+void ParticleSpace::Reset()
+{
+	_borders.height = 0;
+	_borders.left = 0;
+	_borders.top = 0;
+	_borders.width = 0;
+	_particle = sf::CircleShape(0);
+	_particle.setFillColor(sf::Color(255, 255, 255, 255));
+	_particle.setPosition(0, 0);
+	_depth = 5;
+}
+
+void ParticleSpace::Init(sf::Rect<int>& borders)
+{
+	_borders = borders;
 	_particle = sf::CircleShape(GetFloatRandomValue(1, 9));
 	_particle.setFillColor(sf::Color(255, 255, 255, GetRandomValue(10, 255)));
 	_particle.setPosition(GetRandomValue(0, borders.width), GetRandomValue(0, borders.height));
-	_depth = GetFloatRandomValue(5,9);
+	_depth = GetFloatRandomValue(5, 9);
 }
 
 void ParticleSpace::Update(float time)
@@ -36,3 +57,4 @@ void ParticleSpace::Draw(sf::RenderWindow *window)
 {
 	window->draw(_particle);
 }
+

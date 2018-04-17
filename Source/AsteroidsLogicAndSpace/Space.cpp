@@ -7,12 +7,12 @@ Space::Space(sf::Sprite &sprite, sf::Rect<int> &borders)
 	_nAsteroids = (borders.width / 200) * (borders.height / 200);
 	for (int i = 0; i < _nParticleSpace; ++i)
 	{
-		ParticleSpace* particle = new ParticleSpace(borders);
+		ParticleSpace* particle = new ParticleSpace();
 		_stars.push_back(particle);
 	}
 	for (int i = 1; i <= _nAsteroids; ++i)
 	{
-		Asteroid* asteroid = new Asteroid(sprite, borders, i);
+		Asteroid* asteroid = new Asteroid();
 		_asteroids.push_back(asteroid);
 	}
 }
