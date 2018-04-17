@@ -73,6 +73,12 @@ Widget * UI::CreateScrollBar(const float length, const sf::Vector2f relPos, cons
 	return _widgets[name] = new ScrollBar(length, RelativeCordToAbs(relPos), name, _window);
 }
 
+void UI::RemoveWidget(const std::string & key)
+{
+	delete _widgets[key];
+	_widgets.erase(key);
+}
+
 
 Widget* UI::GetWidget(const std::string &key)
 {
@@ -89,4 +95,9 @@ Widget* UI::GetWidget(const std::string &key)
 
 UI::~UI()
 {
+	for (auto it : _widgets)
+	{
+		delete it.second;
+	}
+	_widgets.clear();
 }

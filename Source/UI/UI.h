@@ -32,6 +32,8 @@ public:
 	Widget * CreateLabel(const std::string & content, const sf::Font & font, const sf::Vector2f relativePos, const std::string & name);
 	Widget * CreateScrollBar(const float length, const sf::Vector2f relativePos, const std::string & name);
 
+	void RemoveWidget(const std::string & key);
+
 	~UI();
 private:	
 	sf::Vector2f RelativeCordToAbs(sf::Vector2f relCoord);

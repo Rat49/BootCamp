@@ -5,8 +5,6 @@ class Label final :
 {
 	friend UI;
 public:
-	
-
 	void SetFillColor(const sf::Color & color);
 	void SetOutlineColor(const sf::Color & color);
 	void SetFont(const sf::Font & font);
