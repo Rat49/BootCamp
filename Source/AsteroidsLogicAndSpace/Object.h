@@ -9,7 +9,7 @@ public:
 
 	virtual void Draw() {}
 
-	virtual void Update(float time) {}
+	virtual void Update(sf::Time time) {}
 
 	virtual ~Object() 	{}
 protected:

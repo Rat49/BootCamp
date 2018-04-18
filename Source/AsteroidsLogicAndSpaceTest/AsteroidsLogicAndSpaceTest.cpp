@@ -11,6 +11,9 @@ std::vector<Object *> objects;
 int main()
 {
 	sf::Clock clock;
+	sf::Time timer = clock.getElapsedTime();
+	sf::Time deltaTime;
+
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Asteroid!");
 
 	ResourceManager *rm = new ResourceManager();
@@ -22,7 +25,7 @@ int main()
 
 	int nAsteroids = (WINDOW_WIDTH / 200) * (WINDOW_HEIGHT / 200);
 	int nParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
-	const int totalCountAsteroids = 20;//GetFronConfig?
+	const int totalCountAsteroids = 20;//GetFromConfig?
 	const int totalCountParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
 	Pool<Asteroid> poolAsteroid(totalCountAsteroids);
 	Pool<ParticleSpace> poolParticle(totalCountParticleSpace);
@@ -30,7 +33,8 @@ int main()
 	sf::Sprite sprite;
 	sprite.setTexture(asteroidTexture);
 
-	int _nParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
+	//int _nParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
+	int _nParticleSpace = 1;
 	int _nAsteroids = (WINDOW_WIDTH / 200) * (WINDOW_HEIGHT / 200);
 	for (int i = 0; i < _nParticleSpace; ++i)
 	{
@@ -39,12 +43,12 @@ int main()
 
 		objects.push_back(particle);
 	}
-	for (int i = 1; i <= _nAsteroids; ++i)
+	/*for (int i = 1; i <= _nAsteroids; ++i)
 	{
 		Asteroid* asteroid = poolAsteroid.Get();
 		asteroid->Init(sprite, window);
 		objects.push_back(asteroid);
-	}
+	}*/
 
 	while (window.isOpen())
 	{
@@ -77,18 +81,19 @@ int main()
 			}
 		}
 
-		float time = clock.getElapsedTime().asSeconds();
-		clock.restart();
-
 		window.clear();
+
+		deltaTime = clock.getElapsedTime() - timer;
 
 		for (auto *object : objects)
 		{
-			object->Update(time);
+			object->Update(deltaTime);
 			object->Draw();
 		}
 
 		window.display();
+
+		timer = clock.getElapsedTime();
 	}
 
 	return 0;

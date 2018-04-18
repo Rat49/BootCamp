@@ -38,10 +38,11 @@ void Asteroid::Init(sf::Sprite & sprite, sf::RenderWindow & window)
 	_rotationSpeed = GetRandomValue(1,80);
 }
 
-void Asteroid::Update(float time) 
+void Asteroid::Update(sf::Time time)
 {
-	_angularVelocity = _angularVelocity + time * _rotationSpeed;
-	sf::Vector2f nextPosition = _sprite.getPosition() + _linearVelocity * time;
+	float updateTime = time.asMilliseconds() / 60.0f;
+	_angularVelocity = _angularVelocity + updateTime * _rotationSpeed;
+	sf::Vector2f nextPosition = _sprite.getPosition() + _linearVelocity * updateTime;
 
 	float halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
 
