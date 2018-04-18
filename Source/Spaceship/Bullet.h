@@ -2,7 +2,7 @@
 #include "ImageSequenceResource.h"
 #include "AnimationPlayer.h"
 
-class Bullet : public sf::Drawable
+class Bullet : public sf::Drawable//, public PoolElement
 {
 public:
 	float _speed; // = _spaceshipDirection

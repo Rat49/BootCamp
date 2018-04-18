@@ -13,15 +13,16 @@ Spaceship::Spaceship(sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputM
 	, _spaceshipSprite(spaceshipAnimation.GetSprite())
 	, _isRecharged(true)
 	, _rotationAngle(10.0f)
-	, _rebound(0.001f)
-	, _powerfulRebound(0.1f)
+	, _rebound(35.001f)
+	, _powerfulRebound(25.1f)
 	, _currentAngle(0.0f)
-	, _inputFrequency(sf::milliseconds(100))
-	, _inputTime(sf::milliseconds(0))
+	, _inputTime(sf::milliseconds(100))
+	, _inputAccumulatedTime(sf::milliseconds(0))
 	, _bulletDeltaAngle(5.0f)
 	, _deltaSpeed(sf::Vector2f(1.0f, 1.0f))
-	, _maxSquareSpeed(500.0f)
+	, _maxSquareSpeed(800.0f)
 {
+	//_bulletStorage = Pool<OrdinaryBullet>(100);
 	_spaceshipSprite->setPosition(200.0f, 200.0f);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation.GetWidth() / 2, _spaceshipAnimation.GetHeight() / 2);
 }
@@ -51,7 +52,9 @@ void Spaceship::PowerfulShoot()
 
 	//Rocket rocketLeft = Rocket(speedValue * _spaceshipDirection, sprite, animationPlayer);
 	
-	_speed = sf::Vector2f(_speed.x - _spaceshipDirection.x * _powerfulRebound, _speed.y - _spaceshipDirection.y * _powerfulRebound);
+	//ChangeSpeed(_rebound);
+
+	//_speed = sf::Vector2f(_speed.x - _spaceshipDirection.x * _powerfulRebound, _speed.y - _spaceshipDirection.y * _powerfulRebound);
 	//==========================only for test=======================================
 	std::cout << "PowerfulShoot" << std::endl;
 	std::cout << _speed.x << " " << _speed.y << std::endl;
@@ -72,7 +75,9 @@ void Spaceship::OrdinaryShoot()
 	sf::Vector2f bulletRightDirection = rotation.transformPoint(_spaceshipDirection);
 	OrdinaryBullet bulletRight = OrdinaryBullet(bulletRightDirection, *_ordinaryShotAnimation);
 
-	_speed = sf::Vector2f(_speed.x - _spaceshipDirection.x * _rebound, _speed.y - _spaceshipDirection.y * _rebound);
+	ChangeSpeed(_rebound);
+
+	//_speed = sf::Vector2f(_speed.x - _spaceshipDirection.x * _rebound, _speed.y - _spaceshipDirection.y * _rebound);
 	//==========================only for test=======================================
 	std::cout << "OrdinaryShoot" << std::endl;
 	std::cout << _speed.x << " " << _speed.y << std::endl;
@@ -82,24 +87,25 @@ void Spaceship::OrdinaryShoot()
 
 void Spaceship::RotateSpaceship(float angle)
 {
-	//==========================only for test=======================================
+	//==========================only for test=========================================
 	//std::cout << "Rotation" << std::endl;
 	//std::cout << _spaceshipDirection.x << " " << _spaceshipDirection.y << std::endl;
-	//==============================================================================
+	//================================================================================
 	sf::Transform rotation;
 	rotation.rotate(angle, _spaceshipSprite->getOrigin());
 	_spaceshipDirection = rotation.transformPoint(_spaceshipDirection);
-	//==========================only for test=======================================
+	//==========================only for test=========================================
 	//std::cout << _spaceshipDirection.x << " " << _spaceshipDirection.y << std::endl;
-	//==============================================================================
+	//================================================================================
 
 	_currentAngle += angle;
 	_spaceshipSprite->setRotation(_currentAngle);	
 }
 
-void Spaceship::ChangeSpeed(sf::Vector2f deltaSpeed)
+void Spaceship::ChangeSpeed(float deltaSpeed)
 {
-	_speed += deltaSpeed;
+	sf::Vector2f direction = NormalizedDirection();
+	_speed -= deltaSpeed * direction;
 }
 
 float Spaceship::GetSquareSpeed(sf::Vector2f speed) const
@@ -107,6 +113,10 @@ float Spaceship::GetSquareSpeed(sf::Vector2f speed) const
 	return speed.x * speed.x + speed.y * speed.y;
 }
 
+sf::Vector2f Spaceship::NormalizedDirection()
+{
+	return _spaceshipDirection / GetSquareSpeed(_spaceshipDirection);
+}
 
 void Spaceship::Update(sf::Time deltaTime)
 {
@@ -133,38 +143,38 @@ void Spaceship::Update(sf::Time deltaTime)
 	_input.Update();
 	if (_input.GetState(static_cast<int>(GameActions::MoveLeft), stateMoveLeft) && (stateMoveLeft == ButtonsState::JustPressed || stateMoveLeft == ButtonsState::Pressed))
 	{
-		if (_inputTime < _inputFrequency)
+		if (_inputAccumulatedTime < _inputTime)
 		{
-			_inputTime += deltaTime;
+			_inputAccumulatedTime += deltaTime;
 		}
 		else 
 		{
 			RotateSpaceship(-_rotationAngle);
-			_inputTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::milliseconds(0);
 		}
 	}
 	if (_input.GetState(static_cast<int>(GameActions::MoveRight), stateMoveRight) && (stateMoveRight == ButtonsState::JustPressed || stateMoveRight == ButtonsState::Pressed))
 	{
-		if (_inputTime < _inputFrequency)
+		if (_inputAccumulatedTime < _inputTime)
 		{
-			_inputTime += deltaTime;
+			_inputAccumulatedTime += deltaTime;
 		}
 		else
 		{
 			RotateSpaceship(_rotationAngle);
-			_inputTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::milliseconds(0);
 		}
 	}
 	if (_input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && (stateMoveUp == ButtonsState::JustPressed || stateMoveUp == ButtonsState::Pressed))
 	{
-		if (_inputTime < _inputFrequency)
+		if (_inputAccumulatedTime < _inputTime)
 		{
-			_inputTime += deltaTime;
+			_inputAccumulatedTime += deltaTime;
 		}
 		else
 		{
 			Accelerate();
-			_inputTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::milliseconds(0);
 			//==========================only for test=======================================
 			std::cout << _speed.x << " " << _speed.y << std::endl;
 			//==============================================================================
@@ -172,14 +182,14 @@ void Spaceship::Update(sf::Time deltaTime)
 	}
 	if (_input.GetState(static_cast<int>(GameActions::MoveDown), stateMoveDown) && (stateMoveDown == ButtonsState::JustPressed || stateMoveDown == ButtonsState::Pressed))
 	{
-		if (_inputTime < _inputFrequency)
+		if (_inputAccumulatedTime < _inputTime)
 		{
-			_inputTime += deltaTime;
+			_inputAccumulatedTime += deltaTime;
 		}
 		else
 		{
 			Decelerate();
-			_inputTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::milliseconds(0);
 			//==========================only for test=======================================
 			std::cout << _speed.x << " " << _speed.y << std::endl;
 			//==============================================================================
@@ -200,6 +210,11 @@ void Spaceship::Update(sf::Time deltaTime)
 
 	_timeAfterPowerfulShot += deltaTime;
 	// RigidBody::Update();
+
+	//=======================================================================================
+	//std::cout << _speed.x << " " << _speed.y << std::endl;
+	//=======================================================================================
+	_spaceshipSprite->setPosition(_spaceshipSprite->getPosition() + deltaTime.asSeconds() * _speed);
 	_spaceshipAnimation.Update(deltaTime);
 }
 

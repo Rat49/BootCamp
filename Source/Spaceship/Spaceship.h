@@ -2,8 +2,9 @@
 #include "ImageSequenceResource.h"
 #include "AnimationPlayer.h"
 #include "OrdinaryBullet.h"
+//#include "Pool.h"
 
-class Spaceship : public sf::Drawable//, public Physics 
+class Spaceship : public sf::Drawable//, public PoolElement //, public Physics 
 {
 public:
 	Spaceship(sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
@@ -21,7 +22,7 @@ public:
 	~Spaceship();
 
 private:
-
+	//Pool<OrdinaryBullet> _bulletStorage;
 	sf::Vector2f _speed;  //remove when include physics
 	sf::Vector2f _spaceshipDirection;
 
@@ -33,8 +34,8 @@ private:
 	sf::Time _timeAfterPowerfulShot;
 	const float _rebound;
 	const float _powerfulRebound;
-	const sf::Time _inputFrequency;
-	sf::Time _inputTime;
+	const sf::Time _inputTime;
+	sf::Time _inputAccumulatedTime;
 	const float _bulletDeltaAngle;
 	const float _maxSquareSpeed;
 
@@ -50,6 +51,7 @@ private:
 
 	InputManager& _input;
 
-	void ChangeSpeed(sf::Vector2f deltaSpeed);
+	void ChangeSpeed(float deltaSpeed);
 	float GetSquareSpeed(sf::Vector2f speed) const;
+	sf::Vector2f NormalizedDirection();
 };

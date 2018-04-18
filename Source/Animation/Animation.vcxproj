@@ -83,11 +83,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AnimationPlayer.cpp" />
-    <ClCompile Include="SceneContainer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AnimationPlayer.h" />
-    <ClInclude Include="SceneContainer.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
