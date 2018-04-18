@@ -85,6 +85,13 @@ CmdTarget* Logger::AddCmdTarget() {
 	_outputTargets.insert(_outputTargets.begin(), cmdTarget);
 	return cmdTarget;
 }
+
+DebugConsoleTarget* Logger::AddDebugTarget() {
+	DebugConsoleTarget *debugTarget = new DebugConsoleTarget();
+	_outputTargets.insert(_outputTargets.begin(), debugTarget);
+	return debugTarget;
+}
+
 Logger& Logger::operator () (std::string channel)
 {
 	_currentChannel = channel;
