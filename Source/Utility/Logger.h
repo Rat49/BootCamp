@@ -1,4 +1,6 @@
 #pragma once
+#include "EventSystem.h"
+#include "LoggerMessageEvent.h"
 #include <algorithm>
 #include <cstdint>
 #include <ctime>
@@ -73,6 +75,15 @@ public:
 	}
 };
 
+class DebugConsoleTarget : public OutputTarget {
+public:
+	void Write(char *buffer) {
+		Dispatcher& dispatcher = Dispatcher::getInstance();
+		LoggerMessageEvent _loggerMessage (buffer);
+		dispatcher.Send(_loggerMessage, EventTypes::loggerMessageEventID);
+	}
+};
+
 class Logger;
 
 class LoggerDestroyer
@@ -110,6 +121,7 @@ public:
 	static Logger& GetInstance();
 	FileTarget* AddFileTarget(std::string path);
 	CmdTarget* AddCmdTarget();
+	DebugConsoleTarget* AddDebugTarget();
 	void Fatal(const char* msg, ...);
 	void Error(const char* msg, ...);
 	void Warning(const char* msg, ...);

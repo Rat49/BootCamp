@@ -6,5 +6,6 @@ enum EventTypes : EventID_t
 	firstEventID = 1,
 	secondEventID,
 	debugCommandManagerEventID,
-	debugConsoleKeyEventID
+	debugConsoleKeyEventID,
+	loggerMessageEventID
 };
