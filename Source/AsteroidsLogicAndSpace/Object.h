@@ -5,18 +5,17 @@ class Object :
 	public PoolElement
 {
 public:
+	Object() :_window(nullptr) {}
 
-	sf::RenderWindow *window = nullptr;
+	virtual void Draw() {}
 
-	virtual void Draw() {
+	virtual void Update(float time) {}
 
-	}
-
-	virtual void Update(float time) {
-
-	}
-
-	virtual ~Object() {
-
-	}
+	virtual ~Object() 	{}
+protected:
+	void DrawInWindow(const sf::Drawable & obj);
+	sf::Vector2u GetSizeWindow() const;
+	void SetWindowOneTime(sf::RenderWindow & window);
+private:
+	sf::RenderWindow *_window;
 };
