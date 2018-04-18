@@ -4,7 +4,7 @@ OrdinaryBullet::OrdinaryBullet(sf::Vector2f bulletDirection, AnimationPlayer& bu
 	:_ordinaryBulletAnimation(bulletAnimation)
 {
 	_zOrder = 1;
-	//body *= _speed
+	SetSpeed(bulletDirection * _speedValue);
 }
 
 OrdinaryBullet::~OrdinaryBullet()
@@ -14,9 +14,10 @@ OrdinaryBullet::~OrdinaryBullet()
 
 void OrdinaryBullet::Update(sf::Time deltaTime)
 {
-	//body update
-
-	//behind the screen
+	
+	RigidBody::Update(deltaTime.asSeconds());
+	
+	//behind the screen???
 	
 	_ordinaryBulletAnimation.Update(deltaTime);
 }

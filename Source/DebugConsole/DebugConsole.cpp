@@ -20,13 +20,22 @@ DebugConsole::DebugConsole(sf::RenderWindow& window)
 	_activeConsole = false;
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
-	_token = dispatcher.Connect(EventTypes::debugConsoleKeyEventID,
+	_tokenForDebugConsoleKeyEvent = dispatcher.Connect(EventTypes::debugConsoleKeyEventID,
 		[&](const Event& event)
 	{
 		const DebugConsoleKeyEvent& currentEventKey = static_cast<const DebugConsoleKeyEvent&>(event);
 		sf::Event eventKey = currentEventKey._event;
 		DebugConsole::Update(eventKey);
 	});
+	_tokenForLoggerMessageEvent = dispatcher.Connect(EventTypes::loggerMessageEventID,
+		[&](const Event& event)
+	{
+		const LoggerMessageEvent& currentLoggerMessage = static_cast<const LoggerMessageEvent&>(event);
+		std::string loggerMessage = currentLoggerMessage._loggerMessage;
+		DebugConsole::logMessageOutput(loggerMessage);
+	});
+	_tokens[EventTypes::debugConsoleKeyEventID] = _tokenForDebugConsoleKeyEvent;
+	_tokens[EventTypes::loggerMessageEventID] = _tokenForLoggerMessageEvent;
 }
 
 bool DebugConsole::getActiveConsoleStatus() const
@@ -42,7 +51,8 @@ void DebugConsole::setActiveConsoleStatus(bool activeConsoleStatus)
 DebugConsole::~DebugConsole()
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
-	dispatcher.Disconnect(EventTypes::debugConsoleKeyEventID, _token);
+	dispatcher.Disconnect(EventTypes::debugConsoleKeyEventID, _tokenForDebugConsoleKeyEvent);
+	dispatcher.Disconnect(EventTypes::loggerMessageEventID, _tokenForLoggerMessageEvent);
 }
 
 void DebugConsole::Update(const sf::Event& event)

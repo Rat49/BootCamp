@@ -2,6 +2,7 @@
 #include "EventSystem.h"
 #include "Input.h"
 #include "DebugCommandManagerEvent.h"
+#include "LoggerMessageEvent.h"
 #include <SFML/Graphics.hpp>
 #include <vector>
 #include <algorithm>
@@ -20,7 +21,9 @@ private:
 	int _characterSize;
 	int _currentFirstHistoryLine;
 	bool _activeConsole;
-	Token_t _token;
+	Token_t _tokenForDebugConsoleKeyEvent;
+	Token_t _tokenForLoggerMessageEvent;
+	std::map<EventID_t, Token_t> _tokens;
 public:
 	DebugConsole(sf::RenderWindow& window);
 	~DebugConsole();
