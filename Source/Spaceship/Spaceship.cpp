@@ -1,15 +1,16 @@
 #include "Input.h"
+#include "Physics.h"
 #include "Spaceship.h"
 #include <iostream>
 
-Spaceship::Spaceship(sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
-	AnimationPlayer& spaceshipAnimation)//, AnimationPlayer& ordinaryShotAnimation, AnimationPlayer& powerfulShotAnimation)
-	: _spaceshipDirection(spaceshipDirection)
-	, _speed(speed)
+Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
+	AnimationPlayer& spaceshipAnimation, AnimationPlayer& ordinaryShotAnimation, AnimationPlayer& powerfulShotAnimation)
+	: RigidBody(position, speed, spaceshipAnimation.GetWidth() / 2.0f, 1.0f)
+	, _spaceshipDirection(spaceshipDirection)
 	, _input(input)
 	, _spaceshipAnimation(spaceshipAnimation)
-	//, _ordinaryShotAnimation(ordinaryShotAnimation)
-	//, _powerfulShotAnimation(powerfulShotAnimation)
+	, _ordinaryShotAnimation(ordinaryShotAnimation)
+	, _powerfulShotAnimation(powerfulShotAnimation)
 	, _spaceshipSprite(spaceshipAnimation.GetSprite())
 	, _isRecharged(true)
 	, _rotationAngle(10.0f)
@@ -23,25 +24,25 @@ Spaceship::Spaceship(sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputM
 	, _maxSquareSpeed(800.0f)
 {
 	//_bulletStorage = Pool<OrdinaryBullet>(100);
-	_spaceshipSprite->setPosition(200.0f, 200.0f);
+	_spaceshipSprite->setPosition(position);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation.GetWidth() / 2, _spaceshipAnimation.GetHeight() / 2);
 }
 
 void Spaceship::Accelerate()
 {
-	sf::Vector2f newSpeed = _speed + _deltaSpeed;
+	sf::Vector2f newSpeed = GetSpeed() + _deltaSpeed;
 	if (GetSquareSpeed(newSpeed) < _maxSquareSpeed)
 	{
-		_speed = newSpeed;
+		SetSpeed(newSpeed);
 	}
 }
 
 void Spaceship::Decelerate()
 {
-	sf::Vector2f newSpeed = _speed - _deltaSpeed;
+	sf::Vector2f newSpeed = GetSpeed() - _deltaSpeed;
 	if (GetSquareSpeed(newSpeed) < _maxSquareSpeed)
 	{
-		_speed = newSpeed;
+		SetSpeed(newSpeed);
 	}
 }
 
@@ -57,7 +58,7 @@ void Spaceship::PowerfulShoot()
 	//_speed = sf::Vector2f(_speed.x - _spaceshipDirection.x * _powerfulRebound, _speed.y - _spaceshipDirection.y * _powerfulRebound);
 	//==========================only for test=======================================
 	std::cout << "PowerfulShoot" << std::endl;
-	std::cout << _speed.x << " " << _speed.y << std::endl;
+	std::cout << GetSpeed().x << " " << GetSpeed().y << std::endl;
 	//==============================================================================
 	// SetSpeed()
 
@@ -69,18 +70,20 @@ void Spaceship::OrdinaryShoot()
 	sf::Transform rotation;
 	rotation.rotate(_bulletDeltaAngle, _spaceshipSprite->getOrigin());
 	sf::Vector2f bulletLeftDirection = rotation.transformPoint(_spaceshipDirection);
-	OrdinaryBullet bulletLeft = OrdinaryBullet(bulletLeftDirection, *_ordinaryShotAnimation);
+	OrdinaryBullet bulletLeft = OrdinaryBullet(bulletLeftDirection, _ordinaryShotAnimation);
 
 	rotation.rotate(-_bulletDeltaAngle, _spaceshipSprite->getOrigin());
 	sf::Vector2f bulletRightDirection = rotation.transformPoint(_spaceshipDirection);
-	OrdinaryBullet bulletRight = OrdinaryBullet(bulletRightDirection, *_ordinaryShotAnimation);
+	OrdinaryBullet bulletRight = OrdinaryBullet(bulletRightDirection, _ordinaryShotAnimation);
 
 	ChangeSpeed(_rebound);
-
 	//_speed = sf::Vector2f(_speed.x - _spaceshipDirection.x * _rebound, _speed.y - _spaceshipDirection.y * _rebound);
+
+
+
 	//==========================only for test=======================================
 	std::cout << "OrdinaryShoot" << std::endl;
-	std::cout << _speed.x << " " << _speed.y << std::endl;
+	std::cout << GetSpeed().x << " " << GetSpeed().y << std::endl;
 	//==============================================================================
 	// SetSpeed()
 }
@@ -105,7 +108,8 @@ void Spaceship::RotateSpaceship(float angle)
 void Spaceship::ChangeSpeed(float deltaSpeed)
 {
 	sf::Vector2f direction = NormalizedDirection();
-	_speed -= deltaSpeed * direction;
+	SetSpeed(GetSpeed() - deltaSpeed * direction);
+	//_speed -= deltaSpeed * direction;
 }
 
 float Spaceship::GetSquareSpeed(sf::Vector2f speed) const
@@ -176,7 +180,7 @@ void Spaceship::Update(sf::Time deltaTime)
 			Accelerate();
 			_inputAccumulatedTime = sf::milliseconds(0);
 			//==========================only for test=======================================
-			std::cout << _speed.x << " " << _speed.y << std::endl;
+			std::cout << GetSpeed().x << " " << GetSpeed().y << std::endl;
 			//==============================================================================
 		}
 	}
@@ -191,7 +195,7 @@ void Spaceship::Update(sf::Time deltaTime)
 			Decelerate();
 			_inputAccumulatedTime = sf::milliseconds(0);
 			//==========================only for test=======================================
-			std::cout << _speed.x << " " << _speed.y << std::endl;
+			std::cout << GetSpeed().x << " " << GetSpeed().y << std::endl;
 			//==============================================================================
 		}
 	}
@@ -214,21 +218,9 @@ void Spaceship::Update(sf::Time deltaTime)
 	//=======================================================================================
 	//std::cout << _speed.x << " " << _speed.y << std::endl;
 	//=======================================================================================
-	_spaceshipSprite->setPosition(_spaceshipSprite->getPosition() + deltaTime.asSeconds() * _speed);
+	_spaceshipSprite->setPosition(_spaceshipSprite->getPosition() + deltaTime.asSeconds() * GetSpeed());
 	_spaceshipAnimation.Update(deltaTime);
 }
-
-void Spaceship::draw(sf::RenderTarget & target, sf::RenderStates states) const
-{
-	target.draw(*_spaceshipSprite);
-}
-
-void Spaceship::TestDraw(sf::RenderWindow window)
-{
-	
-}
-
-
 
 Spaceship::~Spaceship()
 {

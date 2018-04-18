@@ -2,13 +2,15 @@
 #include "ImageSequenceResource.h"
 #include "AnimationPlayer.h"
 #include "OrdinaryBullet.h"
+#include "Physics.h"
+
 //#include "Pool.h"
 
-class Spaceship : public sf::Drawable//, public PoolElement //, public Physics 
+class Spaceship : public RigidBody //, public PoolElement //
 {
 public:
-	Spaceship(sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
-		AnimationPlayer& spaceshipAnimation);//, AnimationPlayer& ordinaryShotAnimation, AnimationPlayer& powerfulShotAnimation);
+	Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
+		AnimationPlayer& spaceshipAnimation, AnimationPlayer& ordinaryShotAnimation, AnimationPlayer& powerfulShotAnimation);
 
 	void Accelerate();
 	void Decelerate();
@@ -16,14 +18,12 @@ public:
 	void OrdinaryShoot();
 	void RotateSpaceship(float angle);	
 	void Update(sf::Time deltaTime);
-	void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
-	void TestDraw(sf::RenderWindow window);
 
 	~Spaceship();
 
 private:
 	//Pool<OrdinaryBullet> _bulletStorage;
-	sf::Vector2f _speed;  //remove when include physics
+	//sf::Vector2f _speed;  //remove when include physics
 	sf::Vector2f _spaceshipDirection;
 
 	const float _rotationAngle;
@@ -43,11 +43,11 @@ private:
 	sf::Sprite* _ordinaryShootSprite;
 	sf::Sprite* _powerfulShootSprite;
 	AnimationPlayer& _spaceshipAnimation;
-	//AnimationPlayer& _ordinaryShotAnimation;
-	//AnimationPlayer& _powerfulShotAnimation;
+	AnimationPlayer& _ordinaryShotAnimation;
+	AnimationPlayer& _powerfulShotAnimation;
 	// tmp!
-	AnimationPlayer* _ordinaryShotAnimation;
-	AnimationPlayer* _powerfulShotAnimation;
+	//AnimationPlayer* _ordinaryShotAnimation;
+	//AnimationPlayer* _powerfulShotAnimation;
 
 	InputManager& _input;
 

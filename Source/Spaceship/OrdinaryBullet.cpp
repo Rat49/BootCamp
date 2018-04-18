@@ -2,8 +2,10 @@
 
 OrdinaryBullet::OrdinaryBullet(sf::Vector2f bulletDirection, AnimationPlayer& bulletAnimation)
 	:_ordinaryBulletAnimation(bulletAnimation)
+	, _speedValue(25.6f)
 {
 	_zOrder = 1;
+	
 	SetSpeed(bulletDirection * _speedValue);
 }
 
@@ -20,11 +22,6 @@ void OrdinaryBullet::Update(sf::Time deltaTime)
 	//behind the screen???
 	
 	_ordinaryBulletAnimation.Update(deltaTime);
-}
-
-void OrdinaryBullet::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{
-	target.draw((*_ordinaryBulletAnimation.GetSprite()),states);
 }
 
 void OrdinaryBullet::setZOrder(int zOrder)
