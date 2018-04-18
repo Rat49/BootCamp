@@ -68,15 +68,21 @@ int main()
 			case sf::Event::MouseButtonPressed:
 				if (event.mouseButton.button == sf::Mouse::Button::Left)
 				{
-					Asteroid* asteroid = poolAsteroid.Get();					
-					asteroid->Init(sprite,window);
-					objects.push_back(asteroid);
+					if (!poolAsteroid.Empty())
+					{
+						Asteroid* asteroid = poolAsteroid.Get();
+						asteroid->Init(sprite, window);
+						objects.push_back(asteroid);
+					}
 				}
 				else if (event.mouseButton.button == sf::Mouse::Button::Right)
 				{
-					Asteroid* asteroid = dynamic_cast<Asteroid *>(objects.back());
-					objects.pop_back();
-					poolAsteroid.Put(asteroid);
+					if (!(poolAsteroid.Count() == totalCountAsteroids))
+					{
+						Asteroid* asteroid = dynamic_cast<Asteroid *>(objects.back());
+						objects.pop_back();
+						poolAsteroid.Put(asteroid);
+					}
 				}
 			}
 		}
