@@ -7,48 +7,40 @@ const int WINDOW_HEIGHT = 800;
 
 std::vector<Object *> objects;
 
-/*void Init(sf::RenderWindow *window)
+void Init(sf::RenderWindow *window, const sf::Texture &asteroidTexture)
 {
-std::srand(std::time(nullptr));
+	std::srand(std::time(nullptr));
 
-/*Pool<Asteroid*> _poolAsteroid;
-Pool<ParticleSpace*> _poolParticle;
+	/*Pool<Asteroid*> _poolAsteroid;
+	Pool<ParticleSpace*> _poolParticle;*/
 
-ResourceManager *rm = new ResourceManager();
-int counterImageSequence = 0;
+	sf::Sprite sprite;
+	sprite.setTexture(asteroidTexture);
 
-PictureResource* asteroid = rm->GetResource<PictureResource>("asteroid");
-sf::Image image(*asteroid->Get());
-image.createMaskFromColor(sf::Color(0, 35, 57, 255), 0);
+	int _nParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
+	int _nAsteroids = (WINDOW_WIDTH / 200) * (WINDOW_HEIGHT / 200);
+	for (int i = 0; i < _nParticleSpace; ++i)
+	{
+		ParticleSpace* particle = new ParticleSpace();
+		particle->_window = window;
+		particle->Init();
 
-sf::Sprite sprite;
-sf::Texture asteroidTexture;
-asteroidTexture.loadFromImage(image, sf::IntRect(300, 90, 85, 85));
-sprite.setTexture(asteroidTexture);
+		objects.push_back(particle);
+	}
+	for (int i = 1; i <= _nAsteroids; ++i)
+	{
+		Asteroid* asteroid = new Asteroid();
+		asteroid->_window = window;
+		asteroid->Init(sprite);
 
-int _nParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
-int _nAsteroids = (WINDOW_WIDTH / 200) * (WINDOW_HEIGHT / 200);
-for (int i = 0; i < _nParticleSpace; ++i)
-{
-ParticleSpace* particle = new ParticleSpace();
-particle->window = window;
-particle->Init();
+		objects.push_back(asteroid);
+	}
 
-objects.push_back(particle);
 }
-for (int i = 1; i <= _nAsteroids; ++i)
-{
-Asteroid* asteroid = new Asteroid();
-asteroid->window = window;
-asteroid->Init(sprite);
-
-objects.push_back(asteroid);
-}
-
-}*/
 
 int main()
 {
+
 	sf::Clock clock;
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Asteroid!");
 
@@ -62,30 +54,11 @@ int main()
 
 
 	ResourceManager *rm = new ResourceManager();
-	int counterImageSequence = 0;
 
-	PictureResource* asteroid = rm->GetResource<PictureResource>("asteroid");
-	sf::Image image(*asteroid->Get());
-	image.createMaskFromColor(sf::Color(0, 35, 57, 255), 0);
+	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroid");
+	sf::Texture asteroidTexture = asteroid->Get();
 
-	sf::Sprite sprite;
-	sf::Texture asteroidTexture;
-	asteroidTexture.loadFromImage(image, sf::IntRect(300, 90, 85, 85));
-	sprite.setTexture(asteroidTexture);
-
-	for (int i = 0; i < nParticleSpace; ++i)
-	{
-		ParticleSpace* particle = poolParticle.Get();
-		particle->Init(window);
-
-		objects.push_back(particle);
-	}
-	for (int i = 1; i <= nAsteroids; ++i)
-	{
-		Asteroid* asteroid = poolAsteroid.Get();
-		asteroid->Init(sprite,window);
-		objects.push_back(asteroid);
-	}
+	Init(&window, asteroidTexture);
 
 	while (window.isOpen())
 	{
@@ -117,7 +90,6 @@ int main()
 				}
 			}
 		}
-
 
 		float time = clock.getElapsedTime().asSeconds();
 		clock.restart();
