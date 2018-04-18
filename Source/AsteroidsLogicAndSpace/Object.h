@@ -6,13 +6,17 @@ class Object :
 {
 public:
 
-	sf::RenderWindow *window = nullptr;
+	sf::RenderWindow *_window = nullptr;
 
 	virtual void Draw() {
 
 	}
 
 	virtual void Update(float time) {
+
+	}
+
+	virtual void Reset() {
 
 	}
 

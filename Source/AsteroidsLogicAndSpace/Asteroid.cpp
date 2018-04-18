@@ -32,7 +32,7 @@ void Asteroid::Init(sf::Sprite & sprite)
 	_sprite.setScale(sf::Vector2f(startScale, startScale));
 	_radius = _sprite.getLocalBounds().width / 2;
 	_sprite.setOrigin(_radius, _radius);
-	_sprite.setPosition(GetRandomValue(0, window->getSize().x), GetRandomValue(0, window->getSize().y));
+	_sprite.setPosition(GetRandomValue(0, _window->getSize().x), GetRandomValue(0, _window->getSize().y));
 	_sprite.setRotation(_angularVelocity);
 	_rotationSpeed = GetRandomValue(1,80);
 }
@@ -44,24 +44,24 @@ void Asteroid::Update(float time)
 
 	float halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
 
-	if (nextPosition.y + halfLenght > window->getSize().y)
+	if (nextPosition.y + halfLenght > _window->getSize().y)
 	{
-		nextPosition.y -= window->getSize().y + halfLenght * 2;
+		nextPosition.y -= _window->getSize().y + halfLenght * 2;
 	}
 
-	if (nextPosition.x + halfLenght > window->getSize().x) 
+	if (nextPosition.x + halfLenght > _window->getSize().x)
 	{
-		nextPosition.x -= window->getSize().x + halfLenght * 2;
+		nextPosition.x -= _window->getSize().x + halfLenght * 2;
 	}
 
 	if (nextPosition.y + halfLenght < 0) 
 	{
-		nextPosition.y += window->getSize().y + halfLenght * 2;
+		nextPosition.y += _window->getSize().y + halfLenght * 2;
 	}
 
 	if (nextPosition.x + halfLenght < 0) 
 	{
-		nextPosition.x += window->getSize().x + halfLenght * 2;
+		nextPosition.x += _window->getSize().x + halfLenght * 2;
 	}
 	
 	_sprite.setPosition(nextPosition);
@@ -70,7 +70,7 @@ void Asteroid::Update(float time)
 
 void Asteroid::Draw()
 {
-	window->draw(_sprite);
+	_window->draw(_sprite);
 }
 
 

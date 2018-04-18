@@ -12,4 +12,5 @@ public:
 private:
 	sf::CircleShape _particle;
 	float _depth;
+	sf::Vector2f GetRandomPosition();
 };
