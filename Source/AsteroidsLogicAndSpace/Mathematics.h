@@ -16,3 +16,9 @@ inline float GetFloatRandomValue(float start, float end)
 {
 	return (static_cast<float>(std::rand()) / static_cast<float>(RAND_MAX)) * (start - end) + start;
 }
+
+inline sf::Vector2f GetNormalizedVelocity(const sf::Vector2f &vector)
+{
+	float length = std::sqrt(vector.x * vector.x + vector.y * vector.y);
+	return sf::Vector2f(vector.x / length, vector.y / length);
+}

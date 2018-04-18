@@ -1,15 +1,6 @@
 #include "ParticleSpace.h"
 #include "Mathematics.h"
 
-sf::Vector2f ParticleSpace::GetNormalizedVelocity(sf::Vector2f vector)
-{
-
-	sf::Vector2f razn = sf::Vector2f(vector.x - window->getSize().x / 2, vector.y - window->getSize().y / 2);
-	float length = std::sqrt(razn.x * razn.x + razn.y * razn.y);
-	sf::Vector2f normalizedVelocity = _depth * sf::Vector2f(razn.x / length, razn.y / length);
-	return normalizedVelocity;
-}
-
 ParticleSpace::ParticleSpace()
 {
 	_particle = sf::CircleShape(0);
@@ -28,7 +19,7 @@ void ParticleSpace::Reset()
 
 void ParticleSpace::Init()
 {
-	_particle = sf::CircleShape(GetFloatRandomValue(1, 9));
+	_particle = sf::CircleShape(GetFloatRandomValue(0.1, 2));
 	_particle.setFillColor(sf::Color(255, 255, 255, GetRandomValue(10, 255)));
 	_particle.setPosition(GetRandomValue(0, window->getSize().x), GetRandomValue(0,window->getSize().y));
 	_depth = GetFloatRandomValue(5, 9);
@@ -37,8 +28,9 @@ void ParticleSpace::Init()
 void ParticleSpace::Update(float time)
 {	
 	sf::Vector2f coordinates = sf::Vector2f(_particle.getPosition().x, _particle.getPosition().y);
-	sf::Vector2f velocity = 10.0f * GetNormalizedVelocity(coordinates);
-	sf::Vector2f nextPosition = coordinates + velocity * time;
+	sf::Vector2f directionFromCenter = sf::Vector2f(coordinates.x - window->getSize().x / 2, coordinates.y - window->getSize().y / 2);
+	sf::Vector2f linearVelocity = _depth * 10.0f * GetNormalizedVelocity(directionFromCenter);
+	sf::Vector2f nextPosition = coordinates + linearVelocity * time;
 	if ((nextPosition.x > window->getSize().x) || (nextPosition.x < 0) || (nextPosition.y > window->getSize().y) || (nextPosition.y < 0))
 	{
 		nextPosition = sf::Vector2f(GetRandomValue(0, window->getSize().x), GetRandomValue(0, window->getSize().y));

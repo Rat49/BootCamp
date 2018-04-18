@@ -11,12 +11,9 @@ public:
 	void Reset() override;
 private:
 	sf::Sprite _sprite;
-	sf::Vector2f _velocity;
-	sf::Rect<int> _borders;
+	sf::Vector2f _linearVelocity;
 	int _radius;
-	float _rotation;
+	float _angularVelocity;
 	float _rotationSpeed;
-	sf::Vector2f _scale;
-	float _speed;
 
 };
