@@ -5,13 +5,15 @@ class Object :
 	public PoolElement
 {
 public:
-	Object() :_window(nullptr) {}
+	Object() :_window(nullptr), _live(200.0){}
 
 	virtual void Draw() {}
 
 	virtual void Update(sf::Time time) {}
 
 	virtual ~Object() 	{}
+
+	float _live;
 protected:
 	void DrawInWindow(const sf::Drawable & obj);
 	sf::Vector2u GetSizeWindow() const;

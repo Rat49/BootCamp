@@ -1,5 +1,5 @@
 #include "Asteroid.h"
-#include "ParticleSpace.h"
+#include "Star.h"
 #include "ResourceManager.h"
 
 const int WINDOW_WIDTH = 800;
@@ -23,32 +23,31 @@ int main()
 
 	std::srand(std::time(nullptr));
 
-	int nAsteroids = (WINDOW_WIDTH / 200) * (WINDOW_HEIGHT / 200);
-	int nParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
 	const int totalCountAsteroids = 20;//GetFromConfig?
-	const int totalCountParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
+	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
+
 	Pool<Asteroid> poolAsteroid(totalCountAsteroids);
-	Pool<ParticleSpace> poolParticle(totalCountParticleSpace);
+	Pool<Star> poolstar(totalCountStar);
 
 	sf::Sprite sprite;
 	sprite.setTexture(asteroidTexture);
 
-	//int _nParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
-	int _nParticleSpace = 1;
+	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
 	int _nAsteroids = (WINDOW_WIDTH / 200) * (WINDOW_HEIGHT / 200);
-	for (int i = 0; i < _nParticleSpace; ++i)
+	//int _nAsteroids = 2;
+	for (int i = 0; i < _nStars; ++i)
 	{
-		ParticleSpace* particle = poolParticle.Get();
-		particle->Init(window);
+		Star* star = poolstar.Get();
+		star->Init(window);
 
-		objects.push_back(particle);
+		objects.push_back(star);
 	}
-	/*for (int i = 1; i <= _nAsteroids; ++i)
+	for (int i = 1; i <= _nAsteroids; ++i)
 	{
 		Asteroid* asteroid = poolAsteroid.Get();
 		asteroid->Init(sprite, window);
 		objects.push_back(asteroid);
-	}*/
+	}
 
 	while (window.isOpen())
 	{
@@ -94,7 +93,10 @@ int main()
 		for (auto *object : objects)
 		{
 			object->Update(deltaTime);
-			object->Draw();
+			
+			if (object->_live > 0)
+				object->Draw();
+			
 		}
 
 		window.display();

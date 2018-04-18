@@ -1,18 +1,19 @@
 #pragma once
 #include "Object.h"
 
-class ParticleSpace : public Object
+class Star : public Object
 {
 public:
-	ParticleSpace();
+	Star();
 	void Init(sf::RenderWindow & window);
 	void Update(sf::Time time) override;
 	void Draw() override;
 	void Reset() override;
 private:
-	sf::CircleShape _particle;
+	sf::CircleShape _star;
 	int _alfaColor;
-	float _depth;
 	float _radius;
 	sf::Vector2f GetRandomPosition();
+	void DefaultInit();
+	void RandomInit();
 };
