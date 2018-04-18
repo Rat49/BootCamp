@@ -1,12 +1,13 @@
 #pragma once
 #include "SFML\Graphics.hpp"
+#include <vector>
 
-class Drawable
+class Drawable 
 {
 protected:
 	int _zOrder;
 public:
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const = 0;
-	virtual void setZOrder(int zOrder) = 0;
-	virtual int getZOrder() const = 0;
+	virtual void Add(Drawable& object) = 0; 
+	virtual int GetZOrder() const = 0;
+	virtual void Draw(sf::RenderWindow& window) = 0;
 };
