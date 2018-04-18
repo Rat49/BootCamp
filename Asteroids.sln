@@ -96,6 +96,9 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UI", "Source\UI\UI.vcxproj", "{36EAA57C-A1F0-411F-9A5D-7A8889C4ABB3}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UITest", "Source\UITest\UITest.vcxproj", "{A0D0CEF0-8630-4416-957D-45C89CD39F14}"
+	ProjectSection(ProjectDependencies) = postProject
+		{36EAA57C-A1F0-411F-9A5D-7A8889C4ABB3} = {36EAA57C-A1F0-411F-9A5D-7A8889C4ABB3}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
