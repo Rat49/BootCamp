@@ -15,7 +15,7 @@ int main()
 	AnimationPlayer* spaceshipAnimationPlayer = new AnimationPlayer(*sprite, *spaceshipImgseq, true);
 	InputManager* input = new InputManager();
 	
-	Spaceship* spaceship = new Spaceship(sf::Vector2f(1.0f, 1.0f), sf::Vector2f(2.0f, 2.0f), *input, *spaceshipAnimationPlayer, );
+	Spaceship* spaceship = new Spaceship(sf::Vector2f(1.0f, 1.0f), sf::Vector2f(2.0f, 2.0f), *input, *spaceshipAnimationPlayer );
 
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();

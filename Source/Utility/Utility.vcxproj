@@ -78,7 +78,7 @@
     <ClInclude Include="Pool.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Drawable.cpp" />
+    <ClCompile Include="Drawable.h" />
     <ClCompile Include="Logger.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

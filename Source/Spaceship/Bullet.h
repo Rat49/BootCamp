@@ -1,8 +1,9 @@
 #pragma once
 #include "ImageSequenceResource.h"
 #include "AnimationPlayer.h"
+#include "Drawable.h"
 
-class Bullet : public sf::Drawable
+class Bullet : public Drawable
 {
 public:
 	float _speed; // = _spaceshipDirection
