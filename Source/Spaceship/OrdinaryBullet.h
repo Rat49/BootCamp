@@ -10,4 +10,6 @@ public:
 	~OrdinaryBullet();
 	virtual void Update(sf::Time deltaTime) final;
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+	virtual void setZOrder(int zOrder);
+	virtual int getZOrder() const;
 };
