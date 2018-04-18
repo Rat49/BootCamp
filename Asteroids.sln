@@ -93,6 +93,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DebugCommandManagerTest", "
 		{774A8ED8-82D0-442C-A565-D1FA3C1255E6} = {774A8ED8-82D0-442C-A565-D1FA3C1255E6}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PlayFabSDKTest", "Source\PlayFabSDKTest\PlayFabSDKTest.vcxproj", "{1262DE12-81A4-48D9-94AC-90E97E7194CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -167,6 +169,10 @@ Global
 		{D7A30D5C-B71D-4EC0-BDCF-64D4D5110679}.Debug|x64.Build.0 = Debug|x64
 		{D7A30D5C-B71D-4EC0-BDCF-64D4D5110679}.Release|x64.ActiveCfg = Release|x64
 		{D7A30D5C-B71D-4EC0-BDCF-64D4D5110679}.Release|x64.Build.0 = Release|x64
+		{1262DE12-81A4-48D9-94AC-90E97E7194CC}.Debug|x64.ActiveCfg = Debug|x64
+		{1262DE12-81A4-48D9-94AC-90E97E7194CC}.Debug|x64.Build.0 = Debug|x64
+		{1262DE12-81A4-48D9-94AC-90E97E7194CC}.Release|x64.ActiveCfg = Release|x64
+		{1262DE12-81A4-48D9-94AC-90E97E7194CC}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
