@@ -1,7 +1,7 @@
 #include "ResourceManager.h"
 
 
-ResourceManager::ResourceManager(std::map<std::string, std::vector<std::pair<std::string, std::string>>>& resourceConfig)
+ResourceManager::ResourceManager(std::map<std::string, std::multimap<std::string, std::string>>& resourceConfig)
 {
 	std::multimap<std::string, std::string> _settingsForGirl;
 	_settingsForGirl.insert(std::make_pair("Width", "110"));
@@ -24,9 +24,9 @@ ResourceManager::ResourceManager(std::map<std::string, std::vector<std::pair<std
 	_settingsForFire.insert(std::make_pair("FrameCount", "12"));
 	_settingsForFire.insert(std::make_pair("AnimationTime", "600"));
 
-	std::vector<std::pair<std::string, std::string>> audioResource = resourceConfig.find("AudioResource")->second;
-	std::vector<std::pair<std::string, std::string>> pictureResource = resourceConfig.find("PictureResource")->second;
-	std::vector<std::pair<std::string, std::string>> imageSequenceResource = resourceConfig.find("ImageSequenceResource")->second;
+	std::vector<std::pair<std::string, std::string>> audioResource; //= resourceConfig.find("AudioResource")->second;
+		std::vector<std::pair<std::string, std::string>> pictureResource; //= resourceConfig.find("PictureResource")->second;
+		std::vector<std::pair<std::string, std::string>> imageSequenceResource; //= resourceConfig.find("ImageSequenceResource")->second;
 
 	for (auto audio : audioResource)
 	{
@@ -47,7 +47,7 @@ ResourceManager::ResourceManager(std::map<std::string, std::vector<std::pair<std
 				resourceConfig.find("ImageSequenceResource"+ imageSequenceResource[i].first)->second)));
 	}
 	//_resources.insert(std::pair<std::string, Resource*>
-	//	("piupiu", new AudioResource("piupiu", "Resources\\audio\\piupiu.wav")));
+	//	("piupiu", new AudioResource("piupiu", "Resources\\audio\\piupiu.wav")));tatus
 	//_resources.insert(std::pair<std::string, Resource*>
 	//	("booom", new AudioResource("booom", "Resources\\audio\\booom.wav")));
 	//_resources.insert(std::pair<std::string, Resource*>

@@ -10,25 +10,25 @@ bool LogCategory::IfElementExists(const std::string& keyValue) const {
 	return false;
 }
 
-std::string LogCategory::GetValue(const std::string& keyValue) {
+std::multimap<const std::string, const std::string>::const_iterator LogCategory::GetValue(const std::string& keyValue) {
 
 
 	if (IfElementExists(keyValue)) {
 
-		return params[keyValue];
+		return params.find(keyValue);
 	}
 
 	std::cerr << "Key value not found" << std::endl;
 
-	return "invalid";
+	return params.cend();
 }
 
-void LogCategory::AddNewParam(std::pair <std::string, std::string>& param) {
+void LogCategory::AddNewParam(const std::pair<std::string, std::string>& param) {
 
 	params.insert(param);
 }
 
-std::map<const std::string, const std::string> LogCategory::getParams()
+std::multimap<const std::string, const std::string> LogCategory::getParams()
 {
 	return params;
 }
@@ -91,24 +91,20 @@ void ConfigManager::CreateCategories() {
 
 void ConfigManager::CreateParameter(const std::string& categoryName, const std::string& line) {
 
-	std::string key;
-	std::string value;
-	std::string equalSign;
+	std::vector<std::string> keyAndArgs = parser.Split(line, "=");
 
-	std::istringstream iss(line);
+	std::string key = keyAndArgs[0];
+	parser.Trim(key);
 
-	iss >> key;
-	iss >> equalSign;
-	iss >> value;
+	std::vector<std::string> args = parser.Split(keyAndArgs[1], ",");
 
-	if (!key.empty() && !value.empty()) {
+	if (!key.empty() && !args.empty()) {
 
-		std::pair<std::string, std::string> p;
-
-		p.first = key;
-		p.second = value;
-
-		logCategories[categoryName].AddNewParam(p);
+		for (auto arg : args)
+		{
+			parser.Trim(arg);
+			logCategories[categoryName].AddNewParam(std::pair<std::string, std::string>(key, arg));
+		}
 	}
 }
 
