@@ -4,3 +4,4 @@ Temp
 **/*.user
 *.db
 *.opendb
+*.log
