@@ -7,12 +7,25 @@ const int WINDOW_HEIGHT = 800;
 
 std::vector<Object *> objects;
 
-void Init(sf::RenderWindow *window, const sf::Texture &asteroidTexture)
+
+int main()
 {
+	sf::Clock clock;
+	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Asteroid!");
+
+	ResourceManager *rm = new ResourceManager();
+
+	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroid");
+	sf::Texture asteroidTexture = asteroid->Get();
+
 	std::srand(std::time(nullptr));
 
-	/*Pool<Asteroid*> _poolAsteroid;
-	Pool<ParticleSpace*> _poolParticle;*/
+	int nAsteroids = (WINDOW_WIDTH / 200) * (WINDOW_HEIGHT / 200);
+	int nParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
+	const int totalCountAsteroids = 20;//GetFronConfig?
+	const int totalCountParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
+	Pool<Asteroid> poolAsteroid(totalCountAsteroids);
+	Pool<ParticleSpace> poolParticle(totalCountParticleSpace);
 
 	sf::Sprite sprite;
 	sprite.setTexture(asteroidTexture);
@@ -21,44 +34,17 @@ void Init(sf::RenderWindow *window, const sf::Texture &asteroidTexture)
 	int _nAsteroids = (WINDOW_WIDTH / 200) * (WINDOW_HEIGHT / 200);
 	for (int i = 0; i < _nParticleSpace; ++i)
 	{
-		ParticleSpace* particle = new ParticleSpace();
-		particle->_window = window;
-		particle->Init();
+		ParticleSpace* particle = poolParticle.Get();
+		particle->Init(window);
 
 		objects.push_back(particle);
 	}
 	for (int i = 1; i <= _nAsteroids; ++i)
 	{
-		Asteroid* asteroid = new Asteroid();
-		asteroid->_window = window;
-		asteroid->Init(sprite);
-
+		Asteroid* asteroid = poolAsteroid.Get();
+		asteroid->Init(sprite, window);
 		objects.push_back(asteroid);
 	}
-
-}
-
-int main()
-{
-
-	sf::Clock clock;
-	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Asteroid!");
-
-	std::srand(std::time(nullptr));
-	int nAsteroids = (WINDOW_WIDTH / 200) * (WINDOW_HEIGHT / 200);
-	int nParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
-	const int totalCountAsteroids = 20;//GetFronConfig?
-	const int totalCountParticleSpace = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
-	Pool<Asteroid> poolAsteroid(totalCountAsteroids);
-	Pool<ParticleSpace> poolParticle(totalCountParticleSpace);
-
-
-	ResourceManager *rm = new ResourceManager();
-
-	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroid");
-	sf::Texture asteroidTexture = asteroid->Get();
-
-	Init(&window, asteroidTexture);
 
 	while (window.isOpen())
 	{

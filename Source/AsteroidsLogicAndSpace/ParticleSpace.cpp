@@ -3,7 +3,7 @@
 
 sf::Vector2f ParticleSpace::GetRandomPosition()
 {
-	return sf::Vector2f(GetRandomValue(0, _window->getSize().x), GetRandomValue(0, _window->getSize().y));
+	return sf::Vector2f(GetRandomValue(0, GetSizeWindow().x), GetRandomValue(0, GetSizeWindow().y));
 }
 
 ParticleSpace::ParticleSpace()
@@ -24,7 +24,7 @@ void ParticleSpace::Reset()
 
 void ParticleSpace::Init(sf::RenderWindow & window)
 {
-
+	SetWindowOneTime(window);
 	_depth = GetFloatRandomValue(3.0, 3.9);
 	_particle.setPosition(GetRandomPosition());
 	
