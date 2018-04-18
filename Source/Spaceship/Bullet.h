@@ -2,11 +2,12 @@
 #include "ImageSequenceResource.h"
 #include "AnimationPlayer.h"
 #include "Drawable.h"
+#include "Physics.h"
 
-class Bullet : public Drawable
+class Bullet : public Drawable, public RigidBody
 {
 public:
-	float _speed; // = _spaceshipDirection
+	float _speedValue; 
 	bool _life; //???
 
 	virtual ~Bullet() = 0 {};

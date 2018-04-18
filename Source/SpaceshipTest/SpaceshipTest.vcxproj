@@ -57,11 +57,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Utility</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Utility_d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;Animation_d.lib;Input_d.lib;Resources_d.lib;Events_d.lib;Spaceship_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Physics_d.lib;Utility_d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;Animation_d.lib;Input_d.lib;Resources_d.lib;Events_d.lib;Spaceship_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -72,13 +72,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Utility</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin;</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Utility.lib;sfml-system.lib;sfml-window.lib;sfml-network.lib;sfml-audio.lib;sfml-graphics.lib;Animation.lib;Input.lib;Resources.lib;Events.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Physics.lib;Utility.lib;sfml-system.lib;sfml-window.lib;sfml-network.lib;sfml-audio.lib;sfml-graphics.lib;Animation.lib;Input.lib;Resources.lib;Events.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
