@@ -1,7 +1,10 @@
 #include <SFML/Graphics.hpp>
+
+#include "ConfigManager.h"
 #include "Events.h"
 #include "EventSystem.h"
 #include "Input.h"
+#include "ResourceManager.h"
 
 enum class GameActions {
 	MoveUp,
@@ -13,24 +16,6 @@ enum class GameActions {
 	Shoot
 };
 
-std::multimap<int, ButtonKey_t> init() {
-
-	std::multimap<int, ButtonKey_t> customActions = {
-		{ static_cast<int>(GameActions::MoveUp), sf::Keyboard::Up },
-	{ static_cast<int>(GameActions::MoveUp), sf::Keyboard::W },
-	{ static_cast<int>(GameActions::MoveDown), sf::Keyboard::Down },
-	{ static_cast<int>(GameActions::MoveDown), sf::Keyboard::S },
-	{ static_cast<int>(GameActions::MoveLeft), sf::Keyboard::Left },
-	{ static_cast<int>(GameActions::MoveLeft), sf::Keyboard::A },
-	{ static_cast<int>(GameActions::MoveRight), sf::Keyboard::Right },
-	{ static_cast<int>(GameActions::MoveRight), sf::Keyboard::D },
-	{ static_cast<int>(GameActions::Exit), sf::Keyboard::Escape },
-	{ static_cast<int>(GameActions::Choose), sf::Keyboard::Return },
-	{ static_cast<int>(GameActions::Shoot), sf::Keyboard::Space }
-	};
-
-	return customActions;
-}
 
 std::string GetNameForState(ButtonsState bState) {
 
@@ -53,7 +38,29 @@ std::string GetNameForState(ButtonsState bState) {
 
 int main()
 {
-	//ResourceManager *rm = new ResourceManager();
+	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
+	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
+	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").getParams()));
+	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").getParams()));
+	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").getParams();
+	resourceConfig.insert(std::make_pair("ImageSequenceResource", imageSequenceCategory));
+	std::vector<std::multimap<const std::string, const std::string>> imageSequenceSettings(imageSequenceCategory.size());
+	for (auto i : imageSequenceCategory)
+	{
+		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first, cm1->GetCategory("ImageSequenceResource." + i.first).getParams()));
+	}
+	ResourceManager *rm = new ResourceManager(resourceConfig);
+
+	std::multimap<int, ButtonKey_t> actions;
+	LogCategory category = cm1->GetCategory("Input");
+	std::multimap<const std::string, const std::string> inputCategory = category.getParams();
+	for (auto i : inputCategory)
+	{
+		int a = atoi(i.first.c_str());
+		int b = atoi(i.second.c_str());
+		actions.insert(std::pair<int, int>(a, b));
+	}
+	InputManager input(actions);
 
 	sf::RenderWindow rw(sf::VideoMode::getDesktopMode(), "Asteroids");
 	sf::Event sysEvent;
@@ -74,7 +81,6 @@ int main()
 		}
 
 		//Input update
-		std::multimap<int, ButtonKey_t> actions = init();
 		ButtonsState previousStateMoveUp = ButtonsState::Released;
 		ButtonsState stateMoveUp;
 
