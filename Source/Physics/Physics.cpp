@@ -45,15 +45,19 @@ void RigidBody::SetY(float arg) { _coords.y = arg; }
 
 void RigidBody::SetSpeed(sf::Vector2f s) { _speed = s; }
 
-float RigidBody::GetRadius() { return _radius; }
+float RigidBody::GetRadius() const { return _radius; }
 
-float RigidBody::GetX() { return _coords.x; }
+float RigidBody::GetX() const { return _coords.x; }
 
-float RigidBody::GetY() { return _coords.y; }
+float RigidBody::GetY() const { return _coords.y; }
 
-float RigidBody::GetMass() { return _mass; }
-float RigidBody::GetSpeedX() { return _speed.x; }
-float RigidBody::GetSpeedY() { return _speed.y; }
+sf::Vector2f RigidBody::GetCoordinates() const { return _coords; }
+
+float RigidBody::GetMass() const { return _mass; }
+float RigidBody::GetSpeedX() const { return _speed.x; }
+float RigidBody::GetSpeedY() const { return _speed.y; }
+sf::Vector2f RigidBody::GetSpeed() const { return _speed; }
+
 
 void RigidBody::SetSpeedX(float arg) { _speed.x = arg; }
 void RigidBody::SetSpeedY(float arg) { _speed.y = arg; }

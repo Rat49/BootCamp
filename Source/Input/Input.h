@@ -47,4 +47,5 @@ public:
 	void ConsoleMode();
 	void HandleRawEvent(const sf::Event& event);
 	InputManager(const std::multimap<Action_t, ButtonKey_t>& arr);
+	InputManager();
 };

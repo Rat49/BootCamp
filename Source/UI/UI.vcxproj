@@ -99,6 +99,7 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-2.dll" "$(OutDir)\*.*" /F /R /Y /I</Co
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AchievementShower.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="ScrollBar.cpp" />
     <ClCompile Include="SfmlButton.cpp" />
@@ -106,6 +107,7 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-2.dll" "$(OutDir)\*.*" /F /R /Y /I</Co
     <ClCompile Include="Widget.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AchievementShower.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="ScrollBar.h" />
     <ClInclude Include="SfmlButton.h" />
