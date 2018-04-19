@@ -1,4 +1,5 @@
 #include "DrawableManager.h"
+#include <iostream>
 
 
 DrawableManager::DrawableManager()
@@ -17,19 +18,20 @@ DrawableManager& DrawableManager::getInstance()
 
 void DrawableManager::SortDrawableVector()
 {
-	std::partial_sort(_drawableObjects.begin(), _drawableObjects.begin()+2, _drawableObjects.end(), [](const Drawable* lhs, const Drawable* rhs)
+	/*std::partial_sort(_drawableObjects.begin(), _drawableObjects.begin()+2, _drawableObjects.end(), [](const Drawable* lhs, const Drawable* rhs)
 	{
 		return lhs->GetZOrder() < rhs->GetZOrder();
 	}
-	);
+	);*/
 }
 
 void DrawableManager::DrawScene(sf::RenderWindow & window) 
 {
-	SortDrawableVector();
+	//SortDrawableVector();
 
-	for (auto drawableObject = _drawableObjects.cbegin(); drawableObject != _drawableObjects.cend(); ++drawableObject)
+	for (auto drawableObject = _drawableObjects.begin(); drawableObject != _drawableObjects.end(); ++drawableObject)
 	{
-		(*drawableObject)->Draw(window);
+		std::cout << drawableObject->GetZOrder() << std::endl;
+		drawableObject->Draw(window);
 	}
 }

@@ -71,6 +71,7 @@ void Spaceship::OrdinaryShoot()
 	rotation.rotate(_bulletDeltaAngle, _spaceshipSprite->getOrigin());
 	sf::Vector2f bulletLeftDirection = rotation.transformPoint(_spaceshipDirection);
 	OrdinaryBullet bulletLeft = OrdinaryBullet(GetCoordinates(), bulletLeftDirection, _ordinaryShotAnimation);
+	bulletLeft.Add();
 
 	rotation.rotate(-_bulletDeltaAngle, _spaceshipSprite->getOrigin());
 	sf::Vector2f bulletRightDirection = rotation.transformPoint(_spaceshipDirection);

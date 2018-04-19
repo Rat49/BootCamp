@@ -30,6 +30,8 @@ int main()
 
 	float currentAngle = 0.0f;
 
+	DrawableManager& drawableManager = DrawableManager::getInstance();
+
 	while (window.isOpen())
 	{
 		auto now = clock.getElapsedTime();
@@ -38,10 +40,12 @@ int main()
 
 		spaceship->Update(deltaTime);
 
-		for (auto drawableObject : DrawableManager::_drawableObjects)
+		drawableManager.DrawScene(window);
+
+		/*for (auto drawableObject : DrawableManager::_drawableObjects)
 		{
 			drawableObject->Draw(window);
-		}
+		}*/
 
 		window.clear();
 		window.draw(*spaceshipSprite);

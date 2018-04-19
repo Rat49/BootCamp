@@ -1,5 +1,6 @@
 #include "OrdinaryBullet.h"
 #include "DrawableManager.h"
+#include <iostream>
 
 OrdinaryBullet::OrdinaryBullet(sf::Vector2f position, sf::Vector2f bulletDirection, AnimationPlayer& bulletAnimation)
 	: Bullet(position, bulletDirection, 10.0f, 1.0f)
@@ -34,7 +35,8 @@ void OrdinaryBullet::Update(sf::Time deltaTime)
 
 void OrdinaryBullet::Add()
 {
-	DrawableManager::_drawableObjects.push_back(this);
+	DrawableManager::getInstance()._drawableObjects.push_back(*this);
+	//std::cout << "Vector size = " << DrawableManager::getInstance()._drawableObjects.size() << std::endl;
 }
 
 int OrdinaryBullet::GetZOrder() const
