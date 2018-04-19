@@ -1,7 +1,8 @@
 #include <SFML/Graphics.hpp>
-
+#include "iostream"
 int main()
 {
+	std::cout << "hello";
 	sf::RenderWindow rw(sf::VideoMode::getDesktopMode(), "Asteroids");
 	sf::Event sysEvent;
 	while (rw.isOpen())
