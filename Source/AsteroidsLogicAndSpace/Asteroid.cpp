@@ -27,22 +27,22 @@ void Asteroid::RandomInit()
 	
 }
 
-void Asteroid::InitFromCrash(sf::Sprite & sprite, sf::RenderWindow & window, sf::Vector2f position, float preHealth)
+void Asteroid::InitFromCrash(sf::Sprite & sprite, sf::RenderWindow & window, sf::Vector2f position, float preLifeTime)
 {
 	SetWindowOneTime(window);
 	_sprite = sprite;
 	_linearVelocity = sf::Vector2f(GetRandomValue(-500, 500), GetRandomValue(-500, 500));
 
 	float startScale = 1.0;
-	_cHealth = 30.0;
+	_liveTime = 30.0;
 
-	if (preHealth == 30.0)
+	if (preLifeTime == 30.0)
 	{
 		startScale = 0.5;
-		_cHealth = 20.0;
+		_liveTime = 20.0;
 	}
 	
-	_startHealth = _cHealth;
+	_allLiveTime = _liveTime;
 	_sprite.setScale(sf::Vector2f(startScale, startScale));
 
 	RandomInit();
@@ -75,13 +75,13 @@ void Asteroid::Init(sf::Sprite & sprite, sf::RenderWindow & window)
 	_sprite.setScale(sf::Vector2f(startScale, startScale));
 
 	if (startScale <= 0.5)
-		_cHealth = 20.0;
+		_liveTime = 20.0;
 	else if (startScale > 0.5 && startScale <= 1)
-		_cHealth = 30.0;
+		_liveTime = 30.0;
 	else
-		_cHealth = 40.0;
+		_liveTime = 40.0;
 
-	_startHealth = _cHealth;
+	_allLiveTime = _liveTime;
 
 	_sprite.setScale(sf::Vector2f(startScale, startScale));
 	RandomInit();
@@ -92,8 +92,8 @@ void Asteroid::Update(sf::Time time)
 {
 	float updateTime = time.asSeconds() * 40.0f;
 
-	if (_cHealth >= 0)
-		_cHealth -= updateTime;
+	if (_liveTime >= 0)
+		_liveTime -= updateTime;
 
 	_angularVelocity = _angularVelocity + updateTime * _rotationSpeed;
 	sf::Vector2f nextPosition = _position + _linearVelocity * updateTime;

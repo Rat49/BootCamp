@@ -95,12 +95,12 @@ int main()
 		{
 			object->Update(deltaTime);
 			
-			if (object->_cHealth > 0)
+			if (object->_liveTime > 0)
 			{
 				object->Draw();
 				objectsNew.push_back(object);
 			}
-			else if (object->_startHealth == 20.0)
+			else if (object->_allLiveTime == 20.0)
 			{
 				if (!(poolAsteroid.Count() == totalCountAsteroids))
 				{
@@ -116,7 +116,7 @@ int main()
 					if (!poolAsteroid.Empty())
 					{
 						Asteroid* asteroidNew = poolAsteroid.Get();
-						asteroidNew->InitFromCrash(sprite, window, object->_position, object->_startHealth);
+						asteroidNew->InitFromCrash(sprite, window, object->_position, object->_allLiveTime);
 						objectsNew.push_back(asteroidNew);
 					}
 					if (i == 3)
