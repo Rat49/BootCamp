@@ -1,13 +1,21 @@
 #pragma once
-#pragma once
 #include "Drawable.h"
+#include <algorithm>
 
 class DrawableManager
 {
-public:
-	static std::vector<Drawable*> _drawableObjects;
+private:
+	DrawableManager(DrawableManager const&) = delete;
 
+	DrawableManager& operator= (DrawableManager const&) = delete;
+
+	DrawableManager();
+
+	~DrawableManager();
+public:
+	std::vector<Drawable*> _drawableObjects;
+
+	static DrawableManager& getInstance();
 	void SortDrawableVector();
 	void DrawScene(sf::RenderWindow& window);
 };
-

@@ -3,14 +3,16 @@
 #include "AnimationPlayer.h"
 #include "OrdinaryBullet.h"
 #include "Physics.h"
+#include "Pool.h"
 
-//#include "Pool.h"
-
-class Spaceship : public RigidBody //, public PoolElement //
+class Spaceship : public RigidBody, public Drawable //, public PoolElement //
 {
 public:
 	Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
-		AnimationPlayer& spaceshipAnimation, AnimationPlayer& ordinaryShotAnimation, AnimationPlayer& powerfulShotAnimation);
+		AnimationPlayer* spaceshipAnimation, AnimationPlayer* ordinaryShotAnimation, AnimationPlayer* powerfulShotAnimation);
+
+	Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
+		ImageSequenceResource* spaceshipAnimationImseq, ImageSequenceResource* ordinaryShotAnimationImseq, ImageSequenceResource* powerfulShotAnimationImseq);
 
 	void Accelerate();
 	void Decelerate();
@@ -22,7 +24,9 @@ public:
 	~Spaceship();
 
 private:
-	//Pool<OrdinaryBullet> _bulletStorage;
+	//Pool<OrdinaryBullet> _ordinaryBulletStorage;
+	//Pool<RocketBullet> _rocketStorage;
+
 	//sf::Vector2f _speed;  //remove when include physics
 	sf::Vector2f _spaceshipDirection;
 
@@ -38,17 +42,30 @@ private:
 	sf::Time _inputAccumulatedTime;
 	const float _bulletDeltaAngle;
 	const float _maxSquareSpeed;
+	// tmp
+	std::vector<OrdinaryBullet*> _bullets;
+
+
 
 	sf::Sprite* _spaceshipSprite;
 	sf::Sprite* _ordinaryShootSprite;
 	sf::Sprite* _powerfulShootSprite;
-	AnimationPlayer& _spaceshipAnimation;
-	AnimationPlayer& _ordinaryShotAnimation;
-	AnimationPlayer& _powerfulShotAnimation;
+	AnimationPlayer* _spaceshipAnimation;
+	AnimationPlayer* _ordinaryShotAnimation;
+	AnimationPlayer* _powerfulShotAnimation;
+
+	ImageSequenceResource* _spaceshipAnimationImseq;
+	ImageSequenceResource* _ordinaryShotAnimationImseq;
+	ImageSequenceResource* _powerfulShotAnimationImseq;
 
 	InputManager& _input;
 
 	void ChangeSpeed(float deltaSpeed);
 	float GetSquareSpeed(sf::Vector2f speed) const;
 	sf::Vector2f NormalizedDirection();
+	sf::Vector2f NormalizedDirection(sf::Vector2f v);
+
+	void Add() override;
+	int GetZOrder() const override;
+	void Draw(sf::RenderWindow& window) override;
 };

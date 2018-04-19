@@ -2,8 +2,7 @@
 #include "Rocket.h"
 
 Rocket::Rocket(sf::Vector2f rocketPosition, sf::Vector2f rocketDirection, AnimationPlayer& rocketAnimation)
-	:Bullet(rocketPosition, rocketDirection, 10.0f, 1.0f)
-	, _rocketAnimation(rocketAnimation)
+	: _rocketAnimation(rocketAnimation)
 	, _speedValue(14.90f)
 {
 	_zOrder = 1;

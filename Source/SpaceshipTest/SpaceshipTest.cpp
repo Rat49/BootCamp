@@ -14,19 +14,20 @@ int main()
 	window.clear();
 	sf::Sprite* spaceshipSprite = new sf::Sprite();
 	sf::Sprite* bulletLeft = new sf::Sprite();
-	sf::Sprite* bulletReght = new sf::Sprite();
+	sf::Sprite* bulletRight = new sf::Sprite();
 
-	AnimationPlayer* spaceshipAnimationPlayer = new AnimationPlayer(*spaceshipSprite, *spaceshipImgseq, true);
-	AnimationPlayer* bulletLeftAnimationPlayer = new AnimationPlayer(*bulletLeft, *bulletImgseq, true);
-	AnimationPlayer* bulletRightAnimationPlayer = new AnimationPlayer(*bulletReght, *bulletImgseq, true);
+	//AnimationPlayer* spaceshipAnimationPlayer = new AnimationPlayer(*spaceshipSprite, *spaceshipImgseq, true);
+	//AnimationPlayer* bulletLeftAnimationPlayer = new AnimationPlayer(*bulletLeft, *bulletImgseq, true);
+	//AnimationPlayer* bulletRightAnimationPlayer = new AnimationPlayer(*bulletRight, *bulletImgseq, true);
 	InputManager* input = new InputManager();
 	
-	Spaceship* spaceship = new Spaceship(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(1.0f, 1.0f), sf::Vector2f(2.0f, 2.0f), *input, *spaceshipAnimationPlayer, *bulletLeftAnimationPlayer, *bulletRightAnimationPlayer);
+	Spaceship* spaceship = new Spaceship(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(1.0f, 1.0f), sf::Vector2f(2.0f, 2.0f), *input, spaceshipImgseq, bulletImgseq, bulletImgseq);
 
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();
 	sf::Time deltaTime;
-	spaceshipAnimationPlayer->Start();
+	//spaceshipAnimationPlayer->Start();
+	//bulletRightAnimationPlayer->Start();
 
 	float currentAngle = 0.0f;
 
@@ -38,17 +39,16 @@ int main()
 		deltaTime = now - timer;
 		timer = now;
 
+		//bulletRightAnimationPlayer->Update(deltaTime);
+
 		spaceship->Update(deltaTime);
 
+		window.clear();
 		drawableManager.DrawScene(window);
 
-		/*for (auto drawableObject : DrawableManager::_drawableObjects)
-		{
-			drawableObject->Draw(window);
-		}*/
-
-		window.clear();
-		window.draw(*spaceshipSprite);
+		
+		//window.draw(*spaceshipSprite);
+		//window.draw(*bulletRight);
 		window.display();
 	}
 
