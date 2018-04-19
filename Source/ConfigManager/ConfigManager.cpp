@@ -32,7 +32,10 @@ std::multimap<const std::string, const std::string> LogCategory::getParams()
 {
 	return params;
 }
-
+int LogCategory::size()
+{
+	return params.size();
+}
 /*
 ----------------------------------------------------------------------------
 */
@@ -91,8 +94,12 @@ void ConfigManager::CreateCategories() {
 
 void ConfigManager::CreateParameter(const std::string& categoryName, const std::string& line) {
 
-	std::vector<std::string> keyAndArgs = parser.Split(line, "=");
+	if (line.empty())
+	{
+		return;
+	}
 
+	std::vector<std::string> keyAndArgs = parser.Split(line, "=");
 	std::string key = keyAndArgs[0];
 	parser.Trim(key);
 

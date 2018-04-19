@@ -1,7 +1,7 @@
 #include "ResourceManager.h"
 
 
-ResourceManager::ResourceManager(std::map<std::string, std::multimap<std::string, std::string>>& resourceConfig)
+ResourceManager::ResourceManager(std::map<std::string, std::multimap<const std::string, const std::string>>& resourceConfig)
 {
 	std::multimap<std::string, std::string> _settingsForGirl;
 	_settingsForGirl.insert(std::make_pair("Width", "110"));

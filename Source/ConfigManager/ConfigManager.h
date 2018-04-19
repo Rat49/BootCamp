@@ -20,6 +20,7 @@ public:
 	void AddNewParam(const std::pair<std::string, std::string>& param);
 	std::multimap<const std::string, const std::string>::const_iterator GetValue(const std::string& configValue);
 	std::multimap<const std::string, const std::string> getParams();
+	int size();
 };
 
 
