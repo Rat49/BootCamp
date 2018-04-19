@@ -1,12 +1,12 @@
 #include "drawableManager.h"
 
 
-void drawableManager::SortDrawableVector()
+void DrawableManager::SortDrawableVector()
 {
 	//_drawableObjects std::partial_sort
 }
 
-void drawableManager::DrawScene(sf::RenderWindow & window) 
+void DrawableManager::DrawScene(sf::RenderWindow & window) 
 {
 	SortDrawableVector();
 

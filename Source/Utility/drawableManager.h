@@ -1,11 +1,13 @@
 #pragma once
+#pragma once
 #include "Drawable.h"
 
-class drawableManager 
+class DrawableManager
 {
 public:
-	std::vector<Drawable*> _drawableObjects;
+	static std::vector<Drawable*> _drawableObjects;
 
 	void SortDrawableVector();
 	void DrawScene(sf::RenderWindow& window);
 };
+

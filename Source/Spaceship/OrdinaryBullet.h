@@ -7,9 +7,12 @@ private:
 	AnimationPlayer& _ordinaryBulletAnimation;
 	const float _speedValue;
 public:
-	OrdinaryBullet(sf::Vector2f bulletDirection, AnimationPlayer& bulletAnimation);
+	OrdinaryBullet(sf::Vector2f position, sf::Vector2f bulletDirection, AnimationPlayer& bulletAnimation);
 	~OrdinaryBullet();
-	virtual void Update(sf::Time deltaTime) final;
-	virtual void setZOrder(int zOrder);
-	virtual int getZOrder() const;
+	
+	void Add() override;
+	int GetZOrder() const override;
+	void Draw(sf::RenderWindow& window) override;
+
+	void Update(sf::Time deltaTime) final override;
 };

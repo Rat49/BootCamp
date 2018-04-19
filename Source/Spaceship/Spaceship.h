@@ -45,9 +45,6 @@ private:
 	AnimationPlayer& _spaceshipAnimation;
 	AnimationPlayer& _ordinaryShotAnimation;
 	AnimationPlayer& _powerfulShotAnimation;
-	// tmp!
-	//AnimationPlayer* _ordinaryShotAnimation;
-	//AnimationPlayer* _powerfulShotAnimation;
 
 	InputManager& _input;
 

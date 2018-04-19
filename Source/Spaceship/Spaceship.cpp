@@ -20,8 +20,8 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf:
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
 	, _bulletDeltaAngle(5.0f)
-	, _deltaSpeed(sf::Vector2f(1.0f, 1.0f))
-	, _maxSquareSpeed(800.0f)
+	, _deltaSpeed(sf::Vector2f(5.0f, 5.0f))
+	, _maxSquareSpeed(5000.0f)
 {
 	//_bulletStorage = Pool<OrdinaryBullet>(100);
 	_spaceshipSprite->setPosition(position);
@@ -70,13 +70,14 @@ void Spaceship::OrdinaryShoot()
 	sf::Transform rotation;
 	rotation.rotate(_bulletDeltaAngle, _spaceshipSprite->getOrigin());
 	sf::Vector2f bulletLeftDirection = rotation.transformPoint(_spaceshipDirection);
-	OrdinaryBullet bulletLeft = OrdinaryBullet(bulletLeftDirection, _ordinaryShotAnimation);
+	OrdinaryBullet bulletLeft = OrdinaryBullet(GetCoordinates(), bulletLeftDirection, _ordinaryShotAnimation);
 
 	rotation.rotate(-_bulletDeltaAngle, _spaceshipSprite->getOrigin());
 	sf::Vector2f bulletRightDirection = rotation.transformPoint(_spaceshipDirection);
-	OrdinaryBullet bulletRight = OrdinaryBullet(bulletRightDirection, _ordinaryShotAnimation);
+	OrdinaryBullet bulletRight = OrdinaryBullet(GetCoordinates(), bulletRightDirection, _ordinaryShotAnimation);
+	bulletRight.Add();
 
-	ChangeSpeed(_rebound);
+	//ChangeSpeed(_rebound);
 	//_speed = sf::Vector2f(_speed.x - _spaceshipDirection.x * _rebound, _speed.y - _spaceshipDirection.y * _rebound);
 
 
@@ -213,7 +214,9 @@ void Spaceship::Update(sf::Time deltaTime)
 	//=======================================================================================
 
 	_timeAfterPowerfulShot += deltaTime;
-	// RigidBody::Update();
+	RigidBody::Update(deltaTime.asSeconds());
+
+
 
 	//=======================================================================================
 	//std::cout << _speed.x << " " << _speed.y << std::endl;
