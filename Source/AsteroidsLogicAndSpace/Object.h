@@ -1,8 +1,9 @@
 #pragma once
 #include "SFML/Graphics.hpp"
 #include "Pool.h"
+#include "Drawable.h"
 class Object :
-	public PoolElement
+	public PoolElement, public Drawable
 {
 public:
 	Object() :_window(nullptr), _live(200.0){}
