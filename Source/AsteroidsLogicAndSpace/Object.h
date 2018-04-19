@@ -5,7 +5,7 @@ class Object :
 	public PoolElement
 {
 public:
-	Object() :_window(nullptr), _live(200.0){}
+	Object() :_window(nullptr), _cHealth(200.0), _startHealth(200.0) {}
 
 	virtual void Draw() {}
 
@@ -13,7 +13,10 @@ public:
 
 	virtual ~Object() 	{}
 
-	float _live;
+	float _cHealth;
+	float _startHealth;
+
+	sf::Vector2f _position;
 protected:
 	void DrawInWindow(const sf::Drawable & obj);
 	sf::Vector2u GetSizeWindow() const;

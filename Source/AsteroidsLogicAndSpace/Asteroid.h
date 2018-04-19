@@ -6,7 +6,7 @@ class Asteroid : public Object
 public:
 	Asteroid();
 	void Init(sf::Sprite &sprite,sf::RenderWindow & window);
-	void InitFromCrash();
+	void InitFromCrash(sf::Sprite & sprite, sf::RenderWindow & window, sf::Vector2f position, float preHealth);
 	void Update(sf::Time time) override;
 	void Draw() override;
 	void Reset() override;

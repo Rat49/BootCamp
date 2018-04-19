@@ -16,7 +16,7 @@ void Star::RandomInit()
 {
 	_radius = GetFloatRandomValue(0.1, 1.0);
 	_star.setRadius(_radius);
-	if (_radius < 1.5)
+	if (_radius < 0.5)
 		_alfaColor = 100;
 	else
 		_alfaColor = 255;
@@ -63,8 +63,8 @@ void Star::Update(sf::Time time)
 	} 
 	else
 	{
-		_radius = 0.1;
-		_alfaColor = 0;
+		RandomInit();
+		_star.setPosition(GetRandomPosition());
 	}
 
 	_star.setRadius(_radius);
