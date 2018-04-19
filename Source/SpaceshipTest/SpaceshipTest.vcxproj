@@ -12,19 +12,19 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{E3962BCA-52AF-4987-8971-C0EB4BB22601}</ProjectGuid>
-    <RootNamespace>Utility</RootNamespace>
+    <ProjectGuid>{17E77B0B-6C38-4F58-B26B-63EE2EC1F184}</ProjectGuid>
+    <RootNamespace>SpaceshipTest</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.16299.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
-    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -56,8 +56,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Events;$(SolutionDir)SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Physics_d.lib;Utility_d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;Animation_d.lib;Input_d.lib;Resources_d.lib;Events_d.lib;Spaceship_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -66,24 +71,18 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Events;$(SolutionDir)SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin;</AdditionalLibraryDirectories>
+      <AdditionalDependencies>Physics.lib;Utility.lib;sfml-system.lib;sfml-window.lib;sfml-network.lib;sfml-audio.lib;sfml-graphics.lib;Animation.lib;Input.lib;Resources.lib;Events.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="drawableManager.h" />
-    <ClInclude Include="Logger.h" />
-    <ClInclude Include="LoggerMessageEvent.h" />
-    <ClInclude Include="Pool.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Drawable.h" />
-    <ClCompile Include="DrawableManager.cpp" />
-    <ClCompile Include="Logger.cpp" />
-    <ClCompile Include="LoggerMessageEvent.cpp" />
+    <ClCompile Include="SpaceshipTest.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
