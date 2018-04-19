@@ -5,34 +5,34 @@
 #include "Pool.h"
 #include <iostream>
 
-Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
-	AnimationPlayer* spaceshipAnimation, AnimationPlayer* ordinaryShotAnimation, AnimationPlayer* powerfulShotAnimation)
-	: RigidBody(position, speed, spaceshipAnimation->GetWidth() / 2.0f, 1.0f)
-	, _spaceshipDirection(spaceshipDirection)
-	, _input(input)
-	, _spaceshipAnimation(spaceshipAnimation)
-	, _ordinaryShotAnimation(ordinaryShotAnimation)
-	, _powerfulShotAnimation(powerfulShotAnimation)
-	, _spaceshipSprite(spaceshipAnimation->GetSprite())
-	, _isRecharged(true)
-	, _rotationAngle(10.0f)
-	, _rebound(35.001f)
-	, _powerfulRebound(25.1f)
-	, _currentAngle(0.0f)
-	, _inputTime(sf::milliseconds(100))
-	, _inputAccumulatedTime(sf::milliseconds(0))
-	, _bulletDeltaAngle(5.0f)
-	, _deltaSpeed(sf::Vector2f(5.0f, 5.0f))
-	, _maxSquareSpeed(5000.0f)
-{
-	//_ordinaryBulletStorage = Pool<OrdinaryBullet>(100);
-	//_rocketStorage = Pool<RocketBullet>(10);
-	Add();
-	_spaceshipSprite->setPosition(position);
-	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
-	_spaceshipAnimation->Start();
-
-}
+//Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
+//	AnimationPlayer* spaceshipAnimation, AnimationPlayer* ordinaryShotAnimation, AnimationPlayer* powerfulShotAnimation)
+//	: RigidBody(position, speed, spaceshipAnimation->GetWidth() / 2.0f, 1.0f)
+//	, _spaceshipDirection(spaceshipDirection)
+//	, _input(input)
+//	, _spaceshipAnimation(spaceshipAnimation)
+//	, _ordinaryShotAnimation(ordinaryShotAnimation)
+//	, _powerfulShotAnimation(powerfulShotAnimation)
+//	, _spaceshipSprite(spaceshipAnimation->GetSprite())
+//	, _isRecharged(true)
+//	, _rotationAngle(10.0f)
+//	, _rebound(35.001f)
+//	, _powerfulRebound(25.1f)
+//	, _currentAngle(0.0f)
+//	, _inputTime(sf::milliseconds(100))
+//	, _inputAccumulatedTime(sf::milliseconds(0))
+//	, _bulletDeltaAngle(5.0f)
+//	, _deltaSpeed(sf::Vector2f(5.0f, 5.0f))
+//	, _maxSquareSpeed(5000.0f)
+//{
+//	//_ordinaryBulletStorage = Pool<OrdinaryBullet>(100);
+//	//_rocketStorage = Pool<RocketBullet>(10);
+//	Add();
+//	_spaceshipSprite->setPosition(position);
+//	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
+//	_spaceshipAnimation->Start();
+//
+//}
 
 Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager & input, 
 	ImageSequenceResource * spaceshipAnimationImseq, ImageSequenceResource * ordinaryShotAnimationImseq, ImageSequenceResource * powerfulShotAnimationImseq)
@@ -67,7 +67,7 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf:
 void Spaceship::Accelerate()
 {
 	sf::Vector2f newSpeed = GetSpeed() + _deltaSpeed;
-	if (GetSquareSpeed(newSpeed) < _maxSquareSpeed)
+	if (GetSquareLength(newSpeed) < _maxSquareSpeed)
 	{
 		SetSpeed(newSpeed);
 	}
@@ -76,7 +76,7 @@ void Spaceship::Accelerate()
 void Spaceship::Decelerate()
 {
 	sf::Vector2f newSpeed = GetSpeed() - _deltaSpeed;
-	if (GetSquareSpeed(newSpeed) < _maxSquareSpeed)
+	if (GetSquareLength(newSpeed) < _maxSquareSpeed)
 	{
 		SetSpeed(newSpeed);
 	}
@@ -113,10 +113,8 @@ void Spaceship::OrdinaryShoot()
 
 
 	sf::Transform rotation;
-	//rotation.rotate(_bulletDeltaAngle, _spaceshipSprite->getPosition());
-	//sf::Vector2f bulletLeftDirection = rotation.transformPoint(_spaceshipDirection);
-	//spriteLeft->setPosition(GetCoordinates());
-	OrdinaryBullet * bulletLeft = new OrdinaryBullet(GetCoordinates(), NormalizedDirection(), _ordinaryShotAnimationLeft);
+	rotation.rotate(_bulletDeltaAngle, _spaceshipSprite->getOrigin());
+	OrdinaryBullet * bulletLeft = new OrdinaryBullet(_spaceshipSprite->getPosition(), NormalizedDirection(), _ordinaryShotAnimationLeft);
 	_bullets.push_back(bulletLeft);
 
 	//rotation.rotate(-_bulletDeltaAngle, _spaceshipSprite->getPosition());
@@ -141,8 +139,9 @@ void Spaceship::RotateSpaceship(float angle)
 	//std::cout << _spaceshipDirection.x << " " << _spaceshipDirection.y << std::endl;
 	//================================================================================
 	sf::Transform rotation;
-	rotation.rotate(angle, _spaceshipSprite->getPosition());
+	rotation.rotate(angle, _spaceshipSprite->getOrigin());
 	_spaceshipDirection = rotation.transformPoint(_spaceshipDirection);
+	//_spaceshipDirection = NormalizedDirection();
 	//==========================only for test=========================================
 	std::cout << _spaceshipDirection.x << " " << _spaceshipDirection.y << std::endl;
 	//================================================================================
@@ -158,19 +157,20 @@ void Spaceship::ChangeSpeed(float deltaSpeed)
 	//_speed -= deltaSpeed * direction;
 }
 
-float Spaceship::GetSquareSpeed(sf::Vector2f speed) const
+float Spaceship::GetSquareLength(sf::Vector2f speed) const
 {
 	return speed.x * speed.x + speed.y * speed.y;
 }
 
 sf::Vector2f Spaceship::NormalizedDirection()
 {
-	return _spaceshipDirection / GetSquareSpeed(_spaceshipDirection);
+	return _spaceshipDirection / std::sqrt(GetSquareLength(_spaceshipDirection));
 }
 
 sf::Vector2f Spaceship::NormalizedDirection(sf::Vector2f v)
 {
-	return v / GetSquareSpeed(v);
+	float length = std::sqrt(GetSquareLength(v));
+	return sf::Vector2f(v.x / length, v.y / length);
 }
 
 void Spaceship::Update(sf::Time deltaTime)

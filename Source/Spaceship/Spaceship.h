@@ -8,8 +8,8 @@
 class Spaceship : public RigidBody, public Drawable //, public PoolElement //
 {
 public:
-	Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
-		AnimationPlayer* spaceshipAnimation, AnimationPlayer* ordinaryShotAnimation, AnimationPlayer* powerfulShotAnimation);
+	//Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
+	//	AnimationPlayer* spaceshipAnimation, AnimationPlayer* ordinaryShotAnimation, AnimationPlayer* powerfulShotAnimation);
 
 	Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
 		ImageSequenceResource* spaceshipAnimationImseq, ImageSequenceResource* ordinaryShotAnimationImseq, ImageSequenceResource* powerfulShotAnimationImseq);
@@ -61,7 +61,7 @@ private:
 	InputManager& _input;
 
 	void ChangeSpeed(float deltaSpeed);
-	float GetSquareSpeed(sf::Vector2f speed) const;
+	float GetSquareLength(sf::Vector2f speed) const;
 	sf::Vector2f NormalizedDirection();
 	sf::Vector2f NormalizedDirection(sf::Vector2f v);
 

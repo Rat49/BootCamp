@@ -7,6 +7,8 @@ OrdinaryBullet::OrdinaryBullet(sf::Vector2f position, sf::Vector2f bulletDirecti
 	, _speedValue(50.6f)
 {
 	_zOrder = 1;
+
+	_ordinaryBulletAnimation->GetSprite()->setOrigin(sf::Vector2f(_ordinaryBulletAnimation->GetWidth() / 2.0f, _ordinaryBulletAnimation->GetHeight() / 2.0f));
 	_ordinaryBulletAnimation->GetSprite()->setPosition(position);
 
 	SetSpeed(bulletDirection * _speedValue);
