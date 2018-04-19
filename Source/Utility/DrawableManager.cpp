@@ -1,6 +1,4 @@
 #include "DrawableManager.h"
-#include <iostream>
-
 
 DrawableManager::DrawableManager()
 {
@@ -32,11 +30,10 @@ void DrawableManager::SortDrawableVector()
 
 void DrawableManager::DrawScene(sf::RenderWindow & window) 
 {
-	//SortDrawableVector();
+	SortDrawableVector();
 
 	for (auto drawableObject = _drawableObjects.begin(); drawableObject != _drawableObjects.end(); ++drawableObject)
 	{
-		std::cout << drawableObject->GetZOrder() << std::endl;
-		drawableObject->Draw(window);
+		(*drawableObject)->Draw(window);
 	}
 }

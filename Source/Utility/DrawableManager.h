@@ -13,10 +13,9 @@ private:
 
 	~DrawableManager();
 public:
-	std::vector<Drawable> _drawableObjects;
+	std::vector<Drawable*> _drawableObjects;
 
 	static DrawableManager& getInstance();
 	void SortDrawableVector();
 	void DrawScene(sf::RenderWindow& window);
 };
-
