@@ -17,12 +17,16 @@ int main()
 	AnimationPlayer* girlAnimationPlayer = new AnimationPlayer(*sprite, *girl, true);
 	AnimationPlayer* catAnimationPlayer = new AnimationPlayer(*sprite, *cat, true);
 
-	girlAnimationPlayer->Start(sf::milliseconds(10.0f));
+	girlAnimationPlayer->Start(sf::milliseconds(500.0f));
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();
 	sf::Time deltaTime;
 	while (window.isOpen())
 	{
+		auto now = clock.getElapsedTime();
+		deltaTime = now - timer;
+		timer = now;
+
 		sf::Event event;
    		while (window.pollEvent(event))
 		{
@@ -64,9 +68,7 @@ int main()
 				catAnimationPlayer->Stop();
 				girlAnimationPlayer->Start();
 			}
-		}
-
-		deltaTime = clock.getElapsedTime() - timer;		
+		}	
 
 		girlAnimationPlayer->Update(deltaTime);
 		catAnimationPlayer->Update(deltaTime);
@@ -74,8 +76,6 @@ int main()
 		window.clear();
 		window.draw(*sprite);
 		window.display();
-
-		timer = clock.getElapsedTime();
 	}
 
 	return 0;

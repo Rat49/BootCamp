@@ -26,7 +26,8 @@ InputManager::InputManager(const std::multimap<Action_t, ButtonKey_t>& buttonsKe
 	}
 }
 
-bool InputManager::GetState(const Action_t searchAction, ButtonsState & result) const {
+bool InputManager::GetState(const Action_t searchAction, ButtonsState & result) const 
+{
 	bool success = false;
 	for (auto actionIt = std::cbegin(buttonsState); actionIt != std::cend(buttonsState); ++actionIt)
 	{
@@ -38,7 +39,8 @@ bool InputManager::GetState(const Action_t searchAction, ButtonsState & result) 
 	return success;
 }
 
-ButtonsState InputManager::ChangeStateWhenPressed(ButtonsState currentState) {
+ButtonsState InputManager::ChangeStateWhenPressed(ButtonsState currentState) 
+{
 	switch (static_cast<ButtonsState>(currentState))
 	{
 	case ButtonsState::JustPressed:
@@ -52,10 +54,10 @@ ButtonsState InputManager::ChangeStateWhenPressed(ButtonsState currentState) {
 	default:
 		return ButtonsState::Pressed;
 	}
-
 };
 
-ButtonsState InputManager::ChangeStateWhenReleased(ButtonsState currentState) {
+ButtonsState InputManager::ChangeStateWhenReleased(ButtonsState currentState) 
+{
 	switch (static_cast<ButtonsState>(currentState))
 	{
 	case ButtonsState::JustPressed:
@@ -69,21 +71,51 @@ ButtonsState InputManager::ChangeStateWhenReleased(ButtonsState currentState) {
 	default:
 		return ButtonsState::Released;
 	}
-
 };
 
-void InputManager::Update() {
+InputMode InputManager::GetMode() const
+{
+	return InputManager::_mode;
+}
+
+void InputManager::Update() 
+{
 	for (auto &action : buttonsState)
 	{
 		if (sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(action.primary)) ||
 			sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(action.alternatively)))
 		{
 			action.state = ChangeStateWhenPressed(action.state);
+			if (action.primary == sf::Keyboard::Tilde && action.state == ButtonsState::JustPressed)
+			{
+				ConsoleMode();
+				_mode = (GetMode() == InputMode::Raw) ? InputMode::Normal : InputMode::Raw;
+			}
 		}
 		else
 		{
 			action.state = ChangeStateWhenReleased(action.state);
 		}
 	}
+}
 
+void  InputManager::ConsoleMode() 
+{
+	for (auto &action : buttonsState)
+	{
+		if (action.primary != sf::Keyboard::Tilde)
+		{
+			action.state = (action.state == ButtonsState::Block) ? ButtonsState::Released : ButtonsState::Block;
+		}
+	}
+}
+
+void InputManager::HandleRawEvent(const sf::Event& event)
+{
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	
+	_keyEvent = event;
+	
+	DebugConsoleKeyEvent keyEvent(_keyEvent);
+	dispatcher.Send(keyEvent, EventTypes::debugConsoleKeyEventID);
 }

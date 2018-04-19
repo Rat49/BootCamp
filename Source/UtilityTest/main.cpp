@@ -1,4 +1,5 @@
 #include "Pool.h"
+#include "Logger.h"
 #include <iostream>
 
 namespace PoolTest
@@ -32,10 +33,37 @@ namespace PoolTest
 	}
 }
 
+namespace LoggerTest
+{
+	
+	void Test()
+	{
+		Logger& log = Logger::GetInstance();
+		log.SetFrame(400);
+		auto cmdTarget = log.AddCmdTarget();
+		auto fileTarget = log.AddFileTarget("../Events/Events.log");
+		auto debug = log.AddDebugTarget();
+		debug->IncludeChannel("All");
+		debug->SetSeverity(LogLevel::Debug);
+		fileTarget->IncludeChannel("Event");
+		cmdTarget->SetSeverity(LogLevel::Warning);
+		fileTarget->SetSeverity(LogLevel::Info);
+		cmdTarget->IncludeChannel("All");
+		log("Audio").Debug("%s %s!", "Hello", "world");
+		log("Event").Info("%s %s!", "Hello", "world");
+		cmdTarget->ExcludeChannel("All");
+		cmdTarget->IncludeChannel("Audio");
+		log("Audio").Error("%s %s!", "Hello", "world");
+		log("Event").Warning("%s %s!", "Hello", "world");
+	}
+}
+
+
 int main()
 {
 	PoolTest::Test();
 
-	system("pause");
+	LoggerTest::Test();
+
 	return 0;
 }
