@@ -29,11 +29,6 @@ void UI::Render()
 	_window.display();
 }
 
-void UI::OnAchive(const std::string & text, sf::Image * picture)
-{
-	Get<AchievementShower>("achivementShower")->ImplementAchivement(text,picture,100);
-}
-
 void UI::SetPostion(const std::string & key, const PercentXY relCoord)
 {	
 	_widgets[key]->SetPosition(RelativeCordToAbs(relCoord));	
@@ -65,11 +60,6 @@ Widget * UI::CreateLabel(const std::string & content, const sf::Font & font, con
 Widget * UI::CreateScrollBar(const float length, const PercentXY relPos, const std::string & name)
 {
 	return _widgets[name] = new ScrollBar(length, RelativeCordToAbs(relPos), name, _window);
-}
-
-Widget * UI::CreateAchivementShower(const sf::Font & font, const PercentXY relPos)
-{
-	return _widgets["achivementShower"] = new AchievementShower(font, RelativeCordToAbs(relPos), "achivementShower",_window);
 }
 
 void UI::RemoveWidget(const std::string & key)

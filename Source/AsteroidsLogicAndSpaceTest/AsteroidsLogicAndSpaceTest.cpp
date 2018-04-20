@@ -1,12 +1,13 @@
 #include "Asteroid.h"
 #include "Star.h"
 #include "ResourceManager.h"
+#include <iostream>
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
 
 std::vector<Object *> objects;
-
+std::vector<Object *> objectsNew;
 
 int main()
 {
@@ -23,7 +24,7 @@ int main()
 
 	std::srand(std::time(nullptr));
 
-	const int totalCountAsteroids = 20;//GetFromConfig?
+	const int totalCountAsteroids = 100;//GetFromConfig?
 	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
 
 	Pool<Asteroid> poolAsteroid(totalCountAsteroids);
@@ -33,8 +34,8 @@ int main()
 	sprite.setTexture(asteroidTexture);
 
 	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
-	int _nAsteroids = (WINDOW_WIDTH / 200) * (WINDOW_HEIGHT / 200);
-	//int _nAsteroids = 2;
+	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200);
+	//int _nAsteroids = 1;
 	for (int i = 0; i < _nStars; ++i)
 	{
 		Star* star = poolstar.Get();
@@ -94,10 +95,46 @@ int main()
 		{
 			object->Update(deltaTime);
 			
-			if (object->_live > 0)
+			if (object->_liveTime > 0)
+			{
 				object->Draw();
-			
+				objectsNew.push_back(object);
+			}
+			else if (object->_allLiveTime == 20.0)
+			{
+				if (!(poolAsteroid.Count() == totalCountAsteroids))
+				{
+					Asteroid* asteroid = dynamic_cast<Asteroid *>(objects.back());
+					objects.pop_back();
+					poolAsteroid.Put(asteroid);
+				}
+			}
+			else
+			{
+				for (int i = 0; i < 4; ++i)
+				{
+					if (!poolAsteroid.Empty())
+					{
+						Asteroid* asteroidNew = poolAsteroid.Get();
+						asteroidNew->InitFromCrash(sprite, window, object->_position, object->_allLiveTime);
+						objectsNew.push_back(asteroidNew);
+					}
+					if (i == 3)
+					{
+						if (!(poolAsteroid.Count() == totalCountAsteroids))
+						{
+							Asteroid* asteroid = dynamic_cast<Asteroid *>(objects.back());
+							objects.pop_back();
+							poolAsteroid.Put(asteroid);
+						}
+					}
+				}
+			}
 		}
+
+		objects.clear();
+		objects = objectsNew;
+		objectsNew.clear();
 
 		window.display();
 

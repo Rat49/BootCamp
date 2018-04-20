@@ -22,7 +22,6 @@ public:
 	void OnResize() override;
 	void Draw() override;
 	~Label();
-
 private:
 	void operator=(const Label&) = delete;
 	Label(const Label&) = delete;
