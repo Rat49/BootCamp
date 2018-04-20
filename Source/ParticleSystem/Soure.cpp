@@ -9,6 +9,7 @@ public:
 
 	Rocket(unsigned int quantity, sf::Vector2u window):
 		particles(1000, window) {
+		particles.setNormalDistrParams(0, 3);
 	}
 
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -28,12 +29,97 @@ public:
 	void stop() {
 		particles.setRate(0);
 	}
+
 	void update(sf::Time deltaTime) {
-		particles.update(deltaTime);
+		particles.Update(deltaTime);
 	}
 
+	bool end() {
+		return particles.end;
+	}
 };
 
+class Explosion : public sf::Drawable {
+public:
+	ParticleSystem particles;
+	sf::Time reccomendedLifeTime = sf::seconds(0.3);
+
+	Explosion(unsigned int quantity, sf::Vector2u window) :
+		particles(7000, window) {
+		particles.setRate(150);
+		particles.setNormalDistrParams(0, 160);
+		particles._lifetime = 500;
+	}
+
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
+	{
+		target.draw(particles);
+	}
+
+	void setPosition(sf::Vector2f position) {
+		particles.setEmitterPosition(position);
+	}
+
+	void stop() {
+		particles.setRate(0);
+	}
+
+	void update(sf::Time deltaTime) {
+		reccomendedLifeTime -= deltaTime;
+		if (reccomendedLifeTime <= sf::Time::Zero)
+		{
+			particles.setRate(0);
+			particles.fading = true;
+		}
+		particles.Update(deltaTime);
+	}
+
+	bool end() {
+		return particles.end;
+	}
+};
+
+class Spaceship : public sf::Drawable {
+public:
+	ParticleSystem particles;
+
+	Spaceship(unsigned int quantity, sf::Vector2u window) :
+		particles(1000, window) {
+		particles._lifetime = 500;
+	}
+
+	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
+	{
+		target.draw(particles);
+	}
+
+	void setPosition(sf::Vector2f position) {
+		particles.setEmitterPosition(position);
+	}
+
+	void setVelocity(sf::Vector2f velocity) {
+		particles.setEmitterVelocity(velocity);
+		particles.AddCircleForceForRocket();
+	}
+
+	void stop() {
+		particles.fading = true;
+		particles.setRate(0);
+	}
+	void play() {
+		particles.fading = false;
+		particles.InitializeParticles();
+		particles.setRate(10);
+	}
+
+	void update(sf::Time deltaTime) {
+		particles.Update(deltaTime);
+	}
+
+	bool end() {
+		return particles.end;
+	}
+};
 
 int main()
 {
@@ -44,39 +130,10 @@ int main()
 	window.setVerticalSyncEnabled(true);
 
 	ParticleSystem particles(1000, window.getSize());
-	particles.setEmitter(sf::Vector2f(500, 500));
+	particles.SetEmitter(sf::Vector2f(500, 500));
 	particles.setEmitterVelocity(sf::Vector2f(2, 2));
 	particles.distribution = Distribution::Normal;
 	particles.setRate(130);
-
-
-	ParticleSystem particles1(1000, window.getSize());
-	//particles1.setEmitter(sf::Vector2f(350, 350));
-	particles1.distribution = Distribution::Uniform;
-	//particles1.setRate(10);
-	//particles1.setEmitterVelocity(sf::Vector2f(-20,5));
-	//particles1.AddCircleForce(particles1.m_emitter - sf::Vector2f(2 * particles1.emitterVelocity.x + 15, 2 * particles1.emitterVelocity.y + 15), 20, -0.4);
-	//particles1.AddCircleForce(particles1.m_emitter - sf::Vector2f(4 * particles1.emitterVelocity.x + 15, 4 *  particles1.emitterVelocity.y + 20), 20, -0.4);
-	//particles1.AddCircleForce(particles1.m_emitter - sf::Vector2f(6 * particles1.emitterVelocity.x+10, 6 *      particles1.emitterVelocity.y + 10), 20, 0.8);
-
-	//ParticleSystem particles2(1000, window.getSize());
-	//particles2.setEmitter(sf::Vector2f(450, 450));
-	//particles2.setRate(10);
-	//particles2.setEmitterVelocity(sf::Vector2f(-10,0));
-	//particles2.distribution = Distribution::Uniform;
-	//particles2.setUniformDistrRange(90);
-
-	//ParticleSystem particles3(100, window.getSize());
-	//particles3.setEmitter(sf::Vector2f(350, 350));
-	//particles3.setRate(10);
-	//particles3.setEmitterVelocity(sf::Vector2f(-20, 5));
-	//particles3.distribution = Distribution::Uniform;
-
-	//ParticleSystem particles4(100, window.getSize());
-	//particles4.setEmitter(sf::Vector2f(350, 350));
-	//particles4.setRate(10);
-	//particles4.setEmitterVelocity(sf::Vector2f(-14, -7));
-
 
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();
@@ -87,6 +144,12 @@ int main()
 	Rocket rocket(1000, window.getSize());
 	rocket.setPosition(sf::Vector2f(200, 233));
 	rocket.setVelocity(sf::Vector2f(-20, 5));
+
+	Explosion explosion(1000, window.getSize());
+	explosion.setPosition(sf::Vector2f(500, 500));
+
+	Spaceship spaceship(1000, window.getSize());
+	spaceship.setPosition(sf::Vector2f(300, 500));
 	
 	while (window.isOpen())
 	{
@@ -106,23 +169,28 @@ int main()
 		auto now = clock.getElapsedTime();
 		deltaTime = now - timer;
 		timer = now;
-		rocket.update(deltaTime * 1.f);
-		if (count == 100)
-			rocket.stop();
 
-		//particles.update(deltaTime * 1.f);
-		particles1.update(deltaTime * 1.f);
-		/*particles2.update(deltaTime * 1.f);
-		particles3.update(deltaTime * 1.f);
-		particles4.update(deltaTime * 1.f);
-		*/
+		rocket.update(deltaTime * 1.f);
+		explosion.update(deltaTime * 1.f);
+		spaceship.update(deltaTime * 1.f);
+		particles.Update(deltaTime * 1.f);
+		
 		window.clear(sf::Color::Black);
-		//window.draw(particles);
+		window.draw(particles);
 		window.draw(rocket);
-		//window.draw(particles1);
-		/*window.draw(particles2);*/
-		//window.draw(particles3);
-		//window.draw(particles4);
+		window.draw(explosion);
+		window.draw(spaceship);
+
+		if (count%47==0) {
+			spaceship.stop();
+			spaceship.setVelocity(sf::Vector2f(std::rand() % 40 - 20, std::rand() % 40 - 20));
+			std::cout << "stop" << std::endl;
+		}
+		if (count% 97==0) {
+			spaceship.play();
+			std::cout << "play" << std::endl;
+		}
+		
 		window.display();
 		LastMousePos = mousePos;
 		count++;
