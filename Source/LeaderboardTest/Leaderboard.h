@@ -24,9 +24,9 @@ public:
 
 	void Login(const std::string& customID);
 	void Register(const std::string& customID);
-	void UpdatePlayerStatistics(const int statisticValue);
+	void UpdatePlayerStatistic(const int statisticValue);
 	void UpdateUserTitleDisplayName(const std::string& name);
-	void GetLeaderboard();
+	void UpdateLocalLeaderboard();
 
 };
 

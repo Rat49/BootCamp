@@ -1,21 +1,43 @@
 #include"Leaderboard.h"
 
 
-int main() {
-
-	Leaderboard *l = Leaderboard::Create();
-
-	l->Login("okkkk");
-	l->Register("ookkk");
-	l->Login("ookkk");
-
-	l->GetLeaderboard();
-	l->leaderboard;
+namespace LeaderboardTest {
 
 
-	if (l != NULL) {
-		delete l;
+	void Test() {
+
+		Leaderboard *l = Leaderboard::Create();
+
+		std::cout << "Login and register test:" << std::endl;
+		std::cout << "Register:" << std::endl;
+		l->Register("ok");
+		std::cout << "Wrong login:" << std::endl;
+		l->Login("okkkk");
+		std::cout << "Correct login:" << std::endl;
+		l->Login("ok");
+
+		std::cout << "Update user name test:" << std::endl;
+		l->UpdateUserTitleDisplayName("ok1");
+		std::cout << "Update player statistic test:" << std::endl;
+		l->UpdatePlayerStatistic(1000);
+
+		std::cout << "Get updated leaderboard test:" << std::endl;
+		l->UpdateLocalLeaderboard();
+		l->leaderboard;
+
+
+		if (l != NULL) {
+			delete l;
+		}
+
 	}
 
-	return 0;
+
+	int main() {
+
+		Test();
+
+		return 0;
+	}
+
 }

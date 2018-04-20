@@ -38,7 +38,7 @@ void Leaderboard::Register(const std::string& customID) {
 		Sleep(1);
 }
 
-void Leaderboard::UpdatePlayerStatistics(const int statisticValue) {
+void Leaderboard::UpdatePlayerStatistic(const int statisticValue) {
 
 	UpdatePlayerStatisticsRequest request;
 
@@ -66,7 +66,7 @@ void Leaderboard::UpdateUserTitleDisplayName(const std::string& name) {
 		Sleep(1);
 }
 
-void Leaderboard::GetLeaderboard() {
+void Leaderboard::UpdateLocalLeaderboard() {
 
 	GetLeaderboardRequest request;
 	request.StatisticName = "Top Scores";
