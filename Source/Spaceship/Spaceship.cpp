@@ -2,7 +2,6 @@
 #include "Physics.h"
 #include "Spaceship.h"
 #include "DrawableManager.h"
-#include "Pool.h"
 #include <iostream>
 
 const float  PI_F = 3.14159265358979f;
@@ -23,6 +22,7 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	, _ordinaryShotAnimationImseq(ordinaryShotAnimationImseq)
 	, _powerfulShotAnimationImseq(powerfulShotAnimationImseq)
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
+	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(100))
 {
 	_spaceshipSprite = new sf::Sprite();
 	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, spaceshipAnimationImseq, true);
@@ -59,8 +59,11 @@ void Spaceship::OrdinaryShoot()
 	std::cout << "Spaceship position" << GetX() << " " << GetY() << std::endl;
 
 	sf::Transform rotation;
-	rotation.rotate(_bulletDeltaAngle, _spaceshipSprite->getPosition());
-	OrdinaryBullet * bulletLeft = new OrdinaryBullet(_spaceshipSprite->getPosition(), _spaceshipDirection, _ordinaryShotAnimationImseq);
+	rotation.rotate(_bulletDeltaAngle, _spaceshipSprite->getOrigin());
+	OrdinaryBullet * bulletLeft = _ordinaryBulletStorage.Get();//new OrdinaryBullet(_spaceshipSprite->getPosition(), NormalizedDirection(), _ordinaryShotAnimationImseq);
+	bulletLeft->Init(_spaceshipSprite->getPosition(), NormalizedDirection(), _ordinaryShotAnimationImseq);
+	//OrdinaryBullet* bullet = _ordinaryBulletStorage.Get();
+	//bullet->Init(_spaceshipSprite->getPosition(), NormalizedDirection());
 
 	_bullets.push_back(bulletLeft);
 }

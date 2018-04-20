@@ -24,7 +24,7 @@
     <ClInclude Include="LoggerMessageEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DrawableManager.h">
+    <ClInclude Include="drawableManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
