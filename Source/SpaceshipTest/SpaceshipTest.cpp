@@ -16,9 +16,6 @@ int main()
 	sf::Sprite* bulletLeft = new sf::Sprite();
 	sf::Sprite* bulletRight = new sf::Sprite();
 
-	//AnimationPlayer* spaceshipAnimationPlayer = new AnimationPlayer(*spaceshipSprite, *spaceshipImgseq, true);
-	//AnimationPlayer* bulletLeftAnimationPlayer = new AnimationPlayer(*bulletLeft, *bulletImgseq, true);
-	//AnimationPlayer* bulletRightAnimationPlayer = new AnimationPlayer(*bulletRight, *bulletImgseq, true);
 	InputManager* input = new InputManager();
 	
 	Spaceship* spaceship = new Spaceship(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(0.0f, 1.0f), *input, *spaceshipImgseq, *bulletImgseq, *bulletImgseq);
@@ -26,8 +23,6 @@ int main()
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();
 	sf::Time deltaTime;
-	//spaceshipAnimationPlayer->Start();
-	//bulletRightAnimationPlayer->Start();
 
 	float currentAngle = 0.0f;
 

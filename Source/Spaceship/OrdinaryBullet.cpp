@@ -16,7 +16,7 @@ OrdinaryBullet::~OrdinaryBullet()
 
 void OrdinaryBullet::Init(const sf::Vector2f position,const  sf::Vector2f bulletDirection, ImageSequenceResource& bulletAnimationImseq)
 {
-	*_bulletAnimationImseq = bulletAnimationImseq;
+	_bulletAnimationImseq = &bulletAnimationImseq;
 
 	
 	_ordinaryBulletAnimation->Init(_ordinaryBulletSprite, bulletAnimationImseq, true);
@@ -53,7 +53,7 @@ void OrdinaryBullet::Update(sf::Time deltaTime)
 
 void OrdinaryBullet::Reset()
 {
-	_ordinaryBulletAnimation->Reset();
+	//_ordinaryBulletAnimation->Reset();
 }
 
 void OrdinaryBullet::Add()

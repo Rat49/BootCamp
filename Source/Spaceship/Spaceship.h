@@ -7,7 +7,7 @@
 #include "Rocket.h"
 #include "Pool.h"
 
-class Spaceship : public RigidBody, public Drawable, public PoolElement
+class Spaceship : public RigidBody, public Drawable
 {
 public:
 	//Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,

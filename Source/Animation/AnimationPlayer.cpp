@@ -3,8 +3,8 @@
 
 AnimationPlayer::AnimationPlayer(sf::Sprite& animatedSprite, ImageSequenceResource& animation, bool isLooped)
 {
-	*_animation = animation;
-	*_animatedSprite = animatedSprite;
+	_animation = &animation;
+	_animatedSprite = &animatedSprite;
 	_spriteSheet = _animation->Get();
 	_isLooped = isLooped;
 	_currentFrame = 0;
@@ -22,8 +22,8 @@ AnimationPlayer::AnimationPlayer()
 
 void AnimationPlayer::Init(sf::Sprite& animatedSprite, ImageSequenceResource& animation, bool isLooped)
 {
-	*_animation = animation;
-	*_animatedSprite = animatedSprite;
+	_animation = &animation;
+	_animatedSprite = &animatedSprite;
 	_spriteSheet = _animation->Get();
 	_isLooped = isLooped;
 	_currentFrame = 0;

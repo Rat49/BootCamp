@@ -61,7 +61,7 @@ void Spaceship::OrdinaryShoot()
 	sf::Transform rotation;
 	rotation.rotate(_bulletDeltaAngle, _spaceshipSprite->getOrigin());
 	OrdinaryBullet * bulletLeft = _ordinaryBulletStorage.Get();//new OrdinaryBullet(_spaceshipSprite->getPosition(), NormalizedDirection(), _ordinaryShotAnimationImseq);
-	bulletLeft->Init(_spaceshipSprite->getPosition(), NormalizedDirection(), _ordinaryShotAnimationImseq);
+	bulletLeft->Init(_spaceshipSprite->getPosition(), _spaceshipDirection, _ordinaryShotAnimationImseq);
 	//OrdinaryBullet* bullet = _ordinaryBulletStorage.Get();
 	//bullet->Init(_spaceshipSprite->getPosition(), NormalizedDirection());
 
