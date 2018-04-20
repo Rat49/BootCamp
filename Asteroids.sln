@@ -117,6 +117,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AsteroidsLogicAndSpace", "S
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AsteroidsLogicAndSpaceTest", "Source\AsteroidsLogicAndSpaceTest\AsteroidsLogicAndSpaceTest.vcxproj", "{A6F84BF9-8449-4761-9279-125B3C4A32E9}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Spaceship", "Source\Spaceship\Spaceship.vcxproj", "{176C4C58-FAB5-457B-BE6D-81EDE35612B2}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpaceshipTest", "Source\SpaceshipTest\SpaceshipTest.vcxproj", "{17E77B0B-6C38-4F58-B26B-63EE2EC1F184}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -215,6 +219,14 @@ Global
 		{A6F84BF9-8449-4761-9279-125B3C4A32E9}.Debug|x64.Build.0 = Debug|x64
 		{A6F84BF9-8449-4761-9279-125B3C4A32E9}.Release|x64.ActiveCfg = Release|x64
 		{A6F84BF9-8449-4761-9279-125B3C4A32E9}.Release|x64.Build.0 = Release|x64
+		{176C4C58-FAB5-457B-BE6D-81EDE35612B2}.Debug|x64.ActiveCfg = Debug|x64
+		{176C4C58-FAB5-457B-BE6D-81EDE35612B2}.Debug|x64.Build.0 = Debug|x64
+		{176C4C58-FAB5-457B-BE6D-81EDE35612B2}.Release|x64.ActiveCfg = Release|x64
+		{176C4C58-FAB5-457B-BE6D-81EDE35612B2}.Release|x64.Build.0 = Release|x64
+		{17E77B0B-6C38-4F58-B26B-63EE2EC1F184}.Debug|x64.ActiveCfg = Debug|x64
+		{17E77B0B-6C38-4F58-B26B-63EE2EC1F184}.Debug|x64.Build.0 = Debug|x64
+		{17E77B0B-6C38-4F58-B26B-63EE2EC1F184}.Release|x64.ActiveCfg = Release|x64
+		{17E77B0B-6C38-4F58-B26B-63EE2EC1F184}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
