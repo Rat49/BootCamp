@@ -2,7 +2,7 @@
 #include "Star.h"
 #include "ResourceManager.h"
 #include <iostream>
-
+#include "drawableManager.h"
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
 
@@ -15,6 +15,7 @@ int main()
 	sf::Time timer = clock.getElapsedTime();
 	sf::Time deltaTime;
 
+	DrawableManager& dm = DrawableManager::getInstance();
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Asteroid!");
 
 	ResourceManager *rm = new ResourceManager();
@@ -28,7 +29,7 @@ int main()
 	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
 
 	Pool<Asteroid> poolAsteroid(totalCountAsteroids);
-	Pool<Star> poolstar(totalCountStar);
+	Pool<Star> poolStar(totalCountStar);
 
 	sf::Sprite sprite;
 	sprite.setTexture(asteroidTexture);
@@ -38,16 +39,16 @@ int main()
 	//int _nAsteroids = 1;
 	for (int i = 0; i < _nStars; ++i)
 	{
-		Star* star = poolstar.Get();
+		Star* star = poolStar.Get();
 		star->Init(window);
 
-		objects.push_back(star);
+		dm._drawableObjects.push_back(star);
 	}
 	for (int i = 1; i <= _nAsteroids; ++i)
 	{
 		Asteroid* asteroid = poolAsteroid.Get();
-		asteroid->Init(sprite, window);
-		objects.push_back(asteroid);
+		asteroid->Init(sprite);
+		dm._drawableObjects.push_back(asteroid);
 	}
 
 	while (window.isOpen())
@@ -71,8 +72,8 @@ int main()
 					if (!poolAsteroid.Empty())
 					{
 						Asteroid* asteroid = poolAsteroid.Get();
-						asteroid->Init(sprite, window);
-						objects.push_back(asteroid);
+						asteroid->Init(sprite);
+						dm._drawableObjects.push_back(asteroid);
 					}
 				}
 				else if (event.mouseButton.button == sf::Mouse::Button::Right)
@@ -97,7 +98,7 @@ int main()
 			
 			if (object->_liveTime > 0)
 			{
-				object->Draw();
+				//object->Draw();
 				objectsNew.push_back(object);
 			}
 			else if (object->_allLiveTime == 20.0)
@@ -116,7 +117,7 @@ int main()
 					if (!poolAsteroid.Empty())
 					{
 						Asteroid* asteroidNew = poolAsteroid.Get();
-						asteroidNew->InitFromCrash(sprite, window, object->_position, object->_allLiveTime);
+						asteroidNew->InitFromCrash(sprite, object->_position, object->_allLiveTime);
 						objectsNew.push_back(asteroidNew);
 					}
 					if (i == 3)
