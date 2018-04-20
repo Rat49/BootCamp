@@ -13,7 +13,7 @@ public:
 	//Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
 	//	AnimationPlayer* spaceshipAnimation, AnimationPlayer* ordinaryShotAnimation, AnimationPlayer* powerfulShotAnimation);
 
-	Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
+	Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager& input,
 		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& ordinaryShotAnimationImseq, ImageSequenceResource& powerfulShotAnimationImseq);
 
 	void Accelerate();
@@ -33,27 +33,19 @@ private:
 
 	const float _rotationAngle;
 	float _currentAngle;
-	const sf::Vector2f _deltaSpeed;
+	const float _deltaSpeed;
 	const sf::Time _rechargeTime;
 	bool _isRecharged;	
 	sf::Time _timeAfterPowerfulShot;
-	const float _rebound;
-	const float _powerfulRebound;
 	const sf::Time _inputTime;
 	sf::Time _inputAccumulatedTime;
 	const float _bulletDeltaAngle;
 	const float _maxSquareSpeed;
-	// tmp
+
 	std::vector<OrdinaryBullet*> _bullets;
 
-
-
 	sf::Sprite* _spaceshipSprite;
-	sf::Sprite* _ordinaryShootSprite;
-	sf::Sprite* _powerfulShootSprite;
 	AnimationPlayer* _spaceshipAnimation;
-	//AnimationPlayer* _ordinaryShotAnimation;
-	//AnimationPlayer* _powerfulShotAnimation;
 
 	ImageSequenceResource& _spaceshipAnimationImseq;
 	ImageSequenceResource& _ordinaryShotAnimationImseq;
@@ -63,8 +55,6 @@ private:
 
 	void ChangeSpeed(float deltaSpeed);
 	float GetSquareLength(sf::Vector2f speed) const;
-	sf::Vector2f NormalizedDirection();
-	sf::Vector2f NormalizedDirection(sf::Vector2f v);
 
 	void Add() override;
 	int GetZOrder() const override;

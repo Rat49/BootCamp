@@ -21,7 +21,7 @@ int main()
 	//AnimationPlayer* bulletRightAnimationPlayer = new AnimationPlayer(*bulletRight, *bulletImgseq, true);
 	InputManager* input = new InputManager();
 	
-	Spaceship* spaceship = new Spaceship(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(1.0f, 0.0f), sf::Vector2f(2.0f, 2.0f), *input, *spaceshipImgseq, *bulletImgseq, *bulletImgseq);
+	Spaceship* spaceship = new Spaceship(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(0.0f, 1.0f), *input, *spaceshipImgseq, *bulletImgseq, *bulletImgseq);
 
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();

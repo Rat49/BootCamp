@@ -4,7 +4,7 @@
 
 OrdinaryBullet::OrdinaryBullet(sf::Vector2f position, sf::Vector2f bulletDirection, ImageSequenceResource& bulletAnimationImseq)
 	: _bulletAnimationImseq(bulletAnimationImseq)
-	, _speedValue(50.6f)
+	, _speedValue(150.6f)
 {
 	_zOrder = 1;
 
@@ -28,11 +28,12 @@ OrdinaryBullet::~OrdinaryBullet()
 
 void OrdinaryBullet::Init(sf::Vector2f position, sf::Vector2f bulletDirection)
 {
+	float spriteHeight = _ordinaryBulletAnimation->GetHeight();
+	float spriteWidth = _ordinaryBulletAnimation->GetWidth();
 	_ordinaryBulletAnimation->GetSprite()->setOrigin(sf::Vector2f(_ordinaryBulletAnimation->GetWidth() / 2.0f, _ordinaryBulletAnimation->GetHeight() / 2.0f));
-	_ordinaryBulletAnimation->GetSprite()->setPosition(position);
 
 	SetSpeed(bulletDirection * _speedValue);
-	SetCoordinates(position);
+	SetCoordinates(sf::Vector2f(position.x + bulletDirection.x * spriteHeight / 2.0f, position.y + bulletDirection.y * spriteHeight / 2.0f));
 }
 
 sf::Sprite* OrdinaryBullet::GetSprite()
