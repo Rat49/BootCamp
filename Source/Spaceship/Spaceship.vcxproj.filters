@@ -32,10 +32,10 @@
     <ClCompile Include="Spaceship.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="OrdinaryBullet.cpp">
+    <ClCompile Include="Rocket.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Rocket.cpp">
+    <ClCompile Include="OrdinaryBullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
