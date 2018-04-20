@@ -3,10 +3,18 @@
 
 int main() {
 
-	Leaderboard *leaderboard = Leaderboard::Create();
+	Leaderboard *l = Leaderboard::Create();
 
-	if (leaderboard != NULL) {
-		delete leaderboard;
+	l->Login("okkkk");
+	l->Register("ookkk");
+	l->Login("ookkk");
+
+	l->GetLeaderboard();
+	l->leaderboard;
+
+
+	if (l != NULL) {
+		delete l;
 	}
 
 	return 0;

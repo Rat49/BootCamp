@@ -8,7 +8,7 @@ using namespace ClientModels;
 Leaderboard* Leaderboard::Create() {
 	
 	PlayFabSettings::titleId = WidenString("EFAC");
-
+	
 	return new Leaderboard();
 }
 
@@ -20,6 +20,9 @@ void Leaderboard::Login(const std::string& customID) {
 	request.CustomId = customID;
 
 	PlayFabClientAPI::LoginWithCustomID(request, OnLoginSuccess, OnFail);
+
+	while (PlayFabClientAPI::Update() != 0)
+		Sleep(1);
 }
 
 
@@ -31,6 +34,8 @@ void Leaderboard::Register(const std::string& customID) {
 
 	PlayFabClientAPI::LoginWithCustomID(request, OnLoginSuccess, OnFail);
 
+	while (PlayFabClientAPI::Update() != 0)
+		Sleep(1);
 }
 
 void Leaderboard::UpdatePlayerStatistics(const int statisticValue) {
@@ -61,18 +66,20 @@ void Leaderboard::UpdateUserTitleDisplayName(const std::string& name) {
 		Sleep(1);
 }
 
-std::list<PlayFab::ClientModels::PlayerLeaderboardEntry>& Leaderboard::GetLeaderboard() {
+void Leaderboard::GetLeaderboard() {
 
 	GetLeaderboardRequest request;
 	request.StatisticName = "Top Scores";
 
-	PlayFabClientAPI::GetLeaderboard(request, OnGetLeaderboardSuccess, OnFail);
+	PlayFabClientAPI::GetLeaderboard(request, [this](const GetLeaderboardResult& result, void* customData) { 
+
+		leaderboard = result.Leaderboard;
+		std::cout << "Operation success" << std::endl;
+
+	}, OnFail);
 
 	while (PlayFabClientAPI::Update() != 0)
 		Sleep(1);
-
-
-	return leaderboard;
 }
 
 
@@ -82,12 +89,6 @@ void OnLoginSuccess(const LoginResult& result, void* customData) {
 
 void OnPlayerStatisticsUpdateSuccess(const UpdatePlayerStatisticsResult& result, void* customData) {
 	std::cout << "Player statistic was updated" << std::endl;
-}
-
-void OnGetLeaderboardSuccess(const GetLeaderboardResult& result, void* customData) {
-
-	leaderboard = result.Leaderboard;
-	std::cout << "Operation success" << std::endl;
 }
 
 void OnNameUpdateSuccess(const UpdateUserTitleDisplayNameResult& result, void* customData) {
