@@ -5,9 +5,9 @@
 #include "Physics.h"
 #include "Pool.h"
 #include "Rocket.h"
+#include "Pool.h"
 
-
-class Spaceship : public RigidBody, public Drawable
+class Spaceship : public RigidBody, public Drawable, public PoolElement
 {
 public:
 	//Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
@@ -26,7 +26,7 @@ public:
 	~Spaceship();
 
 private:
-	//Pool<OrdinaryBullet> _ordinaryBulletStorage;
+	Pool<OrdinaryBullet> _ordinaryBulletStorage;
 	//Pool<Rocket> _rocketStorage;
 
 	sf::Vector2f _spaceshipDirection;

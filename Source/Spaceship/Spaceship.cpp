@@ -2,7 +2,6 @@
 #include "Physics.h"
 #include "Spaceship.h"
 #include "DrawableManager.h"
-#include "Pool.h"
 #include <iostream>
 
 //Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
@@ -56,6 +55,7 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf:
 	, _ordinaryShotAnimationImseq(ordinaryShotAnimationImseq)
 	, _powerfulShotAnimationImseq(powerfulShotAnimationImseq)
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
+	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(100))
 {
 	_spaceshipSprite = new sf::Sprite();
 	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, spaceshipAnimationImseq, true);
@@ -116,8 +116,8 @@ void Spaceship::OrdinaryShoot()
 
 	sf::Transform rotation;
 	rotation.rotate(_bulletDeltaAngle, _spaceshipSprite->getOrigin());
-	OrdinaryBullet * bulletLeft = new OrdinaryBullet(_spaceshipSprite->getPosition(), NormalizedDirection(), _ordinaryShotAnimationImseq);
-	
+	OrdinaryBullet * bulletLeft = _ordinaryBulletStorage.Get();//new OrdinaryBullet(_spaceshipSprite->getPosition(), NormalizedDirection(), _ordinaryShotAnimationImseq);
+	bulletLeft->Init(_spaceshipSprite->getPosition(), NormalizedDirection(), _ordinaryShotAnimationImseq);
 	//OrdinaryBullet* bullet = _ordinaryBulletStorage.Get();
 	//bullet->Init(_spaceshipSprite->getPosition(), NormalizedDirection());
 
