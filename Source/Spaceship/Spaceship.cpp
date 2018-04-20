@@ -35,8 +35,8 @@
 //}
 
 Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager & input, 
-	ImageSequenceResource * spaceshipAnimationImseq, ImageSequenceResource * ordinaryShotAnimationImseq, ImageSequenceResource * powerfulShotAnimationImseq)
-	: RigidBody(position, speed, spaceshipAnimationImseq->GetWidth() / 2.0f, 1.0f)
+	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource &ordinaryShotAnimationImseq, ImageSequenceResource &powerfulShotAnimationImseq)
+	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
 	, _spaceshipDirection(spaceshipDirection)
 	, _input(input)
 	//, _spaceshipAnimation(spaceshipAnimation)
@@ -54,9 +54,11 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf:
 	, _deltaSpeed(sf::Vector2f(5.0f, 5.0f))
 	, _maxSquareSpeed(5000.0f)
 	, _ordinaryShotAnimationImseq(ordinaryShotAnimationImseq)
+	, _powerfulShotAnimationImseq(powerfulShotAnimationImseq)
+	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 {
 	_spaceshipSprite = new sf::Sprite();
-	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, *spaceshipAnimationImseq, true);
+	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, spaceshipAnimationImseq, true);
 	Add();
 	_spaceshipSprite->setPosition(position);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
@@ -106,15 +108,19 @@ void Spaceship::OrdinaryShoot()
 {
 	std::cout << "Spaceship position" << GetX() << " " << GetY() << std::endl;
 
-	sf::Sprite* spriteLeft = new sf::Sprite();
-	sf::Sprite* spriteRight = new sf::Sprite();
-	AnimationPlayer* _ordinaryShotAnimationLeft = new AnimationPlayer(*spriteLeft, *_ordinaryShotAnimationImseq, true);
-	AnimationPlayer* _ordinaryShotAnimationRight = new AnimationPlayer(*spriteRight, *_ordinaryShotAnimationImseq, true);
+	//sf::Sprite* spriteLeft = new sf::Sprite();
+	//sf::Sprite* spriteRight = new sf::Sprite();
+	//AnimationPlayer* _ordinaryShotAnimationLeft = new AnimationPlayer(*spriteLeft, _ordinaryShotAnimationImseq, true);
+	//AnimationPlayer* _ordinaryShotAnimationRight = new AnimationPlayer(*spriteRight, _ordinaryShotAnimationImseq, true);
 
 
 	sf::Transform rotation;
 	rotation.rotate(_bulletDeltaAngle, _spaceshipSprite->getOrigin());
-	OrdinaryBullet * bulletLeft = new OrdinaryBullet(_spaceshipSprite->getPosition(), NormalizedDirection(), _ordinaryShotAnimationLeft);
+	OrdinaryBullet * bulletLeft = new OrdinaryBullet(_spaceshipSprite->getPosition(), NormalizedDirection(), _ordinaryShotAnimationImseq);
+	
+	//OrdinaryBullet* bullet = _ordinaryBulletStorage.Get();
+	//bullet->Init(_spaceshipSprite->getPosition(), NormalizedDirection());
+
 	_bullets.push_back(bulletLeft);
 
 	//rotation.rotate(-_bulletDeltaAngle, _spaceshipSprite->getPosition());
@@ -134,10 +140,6 @@ void Spaceship::OrdinaryShoot()
 
 void Spaceship::RotateSpaceship(float angle)
 {
-	//==========================only for test=========================================
-	//std::cout << "Rotation" << std::endl;
-	//std::cout << _spaceshipDirection.x << " " << _spaceshipDirection.y << std::endl;
-	//================================================================================
 	sf::Transform rotation;
 	rotation.rotate(angle, _spaceshipSprite->getOrigin());
 	_spaceshipDirection = rotation.transformPoint(_spaceshipDirection);
@@ -154,7 +156,6 @@ void Spaceship::ChangeSpeed(float deltaSpeed)
 {
 	sf::Vector2f direction = NormalizedDirection();
 	SetSpeed(GetSpeed() - deltaSpeed * direction);
-	//_speed -= deltaSpeed * direction;
 }
 
 float Spaceship::GetSquareLength(sf::Vector2f speed) const
@@ -300,7 +301,6 @@ void Spaceship::Draw(sf::RenderWindow & window)
 {
 	window.draw(*(_spaceshipAnimation->GetSprite()));
 }
-
 
 Spaceship::~Spaceship()
 {
