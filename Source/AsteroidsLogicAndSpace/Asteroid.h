@@ -4,10 +4,10 @@ class Asteroid : public Object
 {
 public:
 	Asteroid();
-	void Init(sf::Sprite &sprite);
+	void Init(sf::Sprite &sprite,sf::Vector2u size);
 	void InitFromCrash(sf::Sprite & sprite,sf::Vector2f position, float preHealth);
 	void Update(sf::Time time) override;
-	void Draw() override;
+	void Draw(sf::RenderWindow &window) override;
 	void Reset() override;
 	
 private:

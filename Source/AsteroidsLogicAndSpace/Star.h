@@ -7,7 +7,7 @@ public:
 	Star();
 	void Init(sf::RenderWindow & window);
 	void Update(sf::Time time) override;
-	void Draw() override;
+	void Draw(sf::RenderWindow &window) override;
 	void Reset() override;
 private:
 	sf::CircleShape _star;

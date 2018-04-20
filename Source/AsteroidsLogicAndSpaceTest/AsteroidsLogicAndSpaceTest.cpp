@@ -6,8 +6,8 @@
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
 
-std::vector<Object *> objects;
-std::vector<Object *> objectsNew;
+std::vector<Asteroid *> asteroids;
+std::vector<Asteroid *> asteroidsNew;
 
 int main()
 {
@@ -47,8 +47,8 @@ int main()
 	for (int i = 1; i <= _nAsteroids; ++i)
 	{
 		Asteroid* asteroid = poolAsteroid.Get();
-		asteroid->Init(sprite);
-		dm._drawableObjects.push_back(asteroid);
+		asteroid->Init(sprite,window.getSize());
+		asteroids.push_back(asteroid);
 	}
 
 	while (window.isOpen())
@@ -72,16 +72,16 @@ int main()
 					if (!poolAsteroid.Empty())
 					{
 						Asteroid* asteroid = poolAsteroid.Get();
-						asteroid->Init(sprite);
-						dm._drawableObjects.push_back(asteroid);
+						asteroid->Init(sprite,window.getSize());
+						asteroids.push_back(asteroid);
 					}
 				}
 				else if (event.mouseButton.button == sf::Mouse::Button::Right)
 				{
 					if (!(poolAsteroid.Count() == totalCountAsteroids))
 					{
-						Asteroid* asteroid = dynamic_cast<Asteroid *>(objects.back());
-						objects.pop_back();
+						Asteroid* asteroid = dynamic_cast<Asteroid *>(dm._drawableObjects.back());
+						asteroids.pop_back();
 						poolAsteroid.Put(asteroid);
 					}
 				}
@@ -91,22 +91,21 @@ int main()
 		window.clear();
 
 		deltaTime = clock.getElapsedTime() - timer;
-
-		for (auto *object : objects)
+		for (auto *cAsteroid : asteroids)
 		{
-			object->Update(deltaTime);
+			cAsteroid->Update(deltaTime);
 			
-			if (object->_liveTime > 0)
+			if (cAsteroid->_liveTime > 0)
 			{
-				//object->Draw();
-				objectsNew.push_back(object);
+				//cAsteroid->Draw();
+				asteroidsNew.push_back(cAsteroid);
 			}
-			else if (object->_allLiveTime == 20.0)
+			else if (cAsteroid->_allLiveTime == 20.0)
 			{
 				if (!(poolAsteroid.Count() == totalCountAsteroids))
 				{
-					Asteroid* asteroid = dynamic_cast<Asteroid *>(objects.back());
-					objects.pop_back();
+					Asteroid* asteroid = asteroids.back();
+					asteroids.pop_back();
 					poolAsteroid.Put(asteroid);
 				}
 			}
@@ -117,26 +116,28 @@ int main()
 					if (!poolAsteroid.Empty())
 					{
 						Asteroid* asteroidNew = poolAsteroid.Get();
-						asteroidNew->InitFromCrash(sprite, object->_position, object->_allLiveTime);
-						objectsNew.push_back(asteroidNew);
+						asteroidNew->InitFromCrash(sprite, cAsteroid->_position, cAsteroid->_allLiveTime);
+						asteroidsNew.push_back(asteroidNew);
 					}
 					if (i == 3)
 					{
 						if (!(poolAsteroid.Count() == totalCountAsteroids))
 						{
-							Asteroid* asteroid = dynamic_cast<Asteroid *>(objects.back());
-							objects.pop_back();
+							Asteroid* asteroid = asteroids.back();
+							asteroids.pop_back();
 							poolAsteroid.Put(asteroid);
 						}
 					}
 				}
 			}
+			dm._drawableObjects.emplace_back(cAsteroid);
 		}
 
-		objects.clear();
-		objects = objectsNew;
-		objectsNew.clear();
+		asteroids.clear();
+		asteroids = asteroidsNew;
+		asteroidsNew.clear();
 
+		dm.DrawScene(window);
 		window.display();
 
 		timer = clock.getElapsedTime();

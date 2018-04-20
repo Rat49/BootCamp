@@ -1,18 +1,18 @@
 #include "Object.h"
 
-void Object::DrawInWindow(const sf::Drawable & obj)
-{
-	_window->draw(obj);
-}
-
 sf::Vector2u Object::GetSizeWindow() const
 {
-	return _window->getSize();
+	return _sizeSpace;
 }
-void Object::SetWindowOneTime(sf::RenderWindow & window)
+
+
+void Object::Add()
 {
-	if (_window == nullptr)
-	{
-		_window = &window;
-	}
+	DrawableManager::getInstance()._drawableObjects.push_back(this);
+	DrawableManager::getInstance().SortDrawableVector();
+}
+
+int Object::GetZOrder() const
+{
+	return _zOrder;
 }

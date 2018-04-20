@@ -1,10 +1,16 @@
 #pragma once
 #include "SFML/System/Vector2.hpp"
-#include <math.h>
 
 inline int GetRandomValue(int start, int end)
 {
-	return start + rand() % (end - start);
+	if (start != end)
+	{
+		return start + rand() % (end - start);
+	}
+	else
+	{
+		return start;
+	}
 }
 
 inline float GetLenght(const sf::Vector2f &vector)

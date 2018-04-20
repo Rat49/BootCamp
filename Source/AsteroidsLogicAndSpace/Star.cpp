@@ -39,7 +39,6 @@ void Star::Reset()
 
 void Star::Init(sf::RenderWindow & window)
 {
-	SetWindowOneTime(window);
 	RandomInit();
 	_star.setPosition(GetRandomPosition());
 }
@@ -84,8 +83,7 @@ void Star::Update(sf::Time time)
 	_star.setPosition(nextPosition);
 }
 
-void Star::Draw()
+void Star::Draw(sf::RenderWindow & window)
 {
-	DrawInWindow(_star);
+	window.draw(_star);
 }
-

@@ -27,9 +27,9 @@ void Asteroid::RandomInit()
 	
 }
 
-void Asteroid::InitFromCrash(sf::Sprite & sprite, sf::RenderWindow & window, sf::Vector2f position, float preLifeTime)
+void Asteroid::InitFromCrash(sf::Sprite & sprite,sf::Vector2f position, float preLifeTime)
 {
-	SetWindowOneTime(window);
+	
 	_sprite = sprite;
 	_linearVelocity = sf::Vector2f(GetRandomValue(-500, 500), GetRandomValue(-500, 500));
 
@@ -65,9 +65,9 @@ void Asteroid::Reset()
 	DefaultInit();
 }
 
-void Asteroid::Init(sf::Sprite & sprite, sf::RenderWindow & window)
+void Asteroid::Init(sf::Sprite & sprite, sf::Vector2u size)
 {	
-	SetWindowOneTime(window);
+	_sizeSpace = size;
 	_sprite = sprite;
 	_linearVelocity = sf::Vector2f(GetRandomValue(-300, 300), GetRandomValue(-300, 300));
 	//float startScale = GetRandomValue(0.3, 1.5);
@@ -122,14 +122,8 @@ void Asteroid::Update(sf::Time time)
 	_sprite.setRotation(_angularVelocity);
 }
 
-void Asteroid::Draw()
+void Asteroid::Draw(sf::RenderWindow & window)
 {
-	DrawInWindow(_sprite);
+	window.draw(_sprite);
 }
-
-
-
-
-
-
 
