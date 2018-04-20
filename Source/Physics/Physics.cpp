@@ -105,13 +105,7 @@ void ResolveCollision(RigidBody & go1, RigidBody & go2)
   go1.SetSpeedY(ty * dpTan1 + ny * m1);
   go2.SetSpeedX(tx * dpTan2 + nx * m2);
   go2.SetSpeedY(ty * dpTan2 + ny * m2);
-  /*go1.SetSpeedX(((go1.GetMass() - go2.GetMass()) * go1.GetSpeedX() + (2 * go2.GetMass() * go2.GetSpeedX())) / (go1.GetMass() + go2.GetMass()));
 
-  go2.SetSpeedX(((go2.GetMass() - go1.GetMass()) * go2.GetSpeedX() + (2 * go1.GetMass() * go1.GetSpeedX())) / (go1.GetMass() + go2.GetMass()));
-
-  go1.SetSpeedY(((go1.GetMass() - go2.GetMass()) * go1.GetSpeedY() + (2 * go2.GetMass() * go2.GetSpeedY())) / (go1.GetMass() + go2.GetMass()));
-
-  go2.SetSpeedY(((go2.GetMass() - go1.GetMass()) * go2.GetSpeedY() + (2 * go1.GetMass() * go1.GetSpeedY())) / (go1.GetMass() + go2.GetMass()));*/
 }
 
 bool Collided(RigidBody go1, RigidBody go2)

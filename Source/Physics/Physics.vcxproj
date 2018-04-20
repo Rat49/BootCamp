@@ -82,9 +82,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionEvent.h" />
     <ClInclude Include="Physics.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionEvent.cpp" />
     <ClCompile Include="Physics.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

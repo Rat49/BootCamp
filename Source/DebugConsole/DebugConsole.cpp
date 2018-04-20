@@ -7,7 +7,7 @@ DebugConsole::DebugConsole(sf::RenderWindow& window)
 	_characterSize = _consoleHeight / 12;
 
 	_consoleRectangle = sf::RectangleShape(sf::Vector2f(_windowWidth, _consoleHeight));
-	_consoleRectangle.setFillColor(sf::Color::Black);
+	_consoleRectangle.setFillColor(sf::Color::Blue);
 
 	_consoleFont.loadFromFile("DroidSansMono.ttf");
 	

@@ -2,14 +2,6 @@
 #include "EventSystem.h"
 #include "CollisionEvent.h"
 
-CollisionEvent::CollisionEvent() {}
-
-CollisionEvent::~CollisionEvent() {}
-void CollisionEvent::setObjs(RigidBody & o1, RigidBody & o2)
-{
-  obj1 = o1;
-  obj2 = o2;
-}
 
 constexpr size_t numOfObjects = 10;
 void             MainLoop(RigidBody * RigidBodysFunc)
@@ -53,12 +45,10 @@ void             MainLoop(RigidBody * RigidBodysFunc)
     while(accumulatedFrameTime >= physicsStepTargetFrameTime)
     {
       accumulatedFrameTime -= physicsStepTargetFrameTime;
-      for(int i = 0; i < numOfObjects; ++i)
+      for(int i = 0; i < numOfObjects - 1; ++i)
       {
-        for(int j = 0; j < numOfObjects; ++j)
+        for(int j = i + 1; j < numOfObjects; ++j)
         {
-          if(i != j)
-          {
             if(Collided(RigidBodysFunc[i], RigidBodysFunc[j]))
             {
               circles[i].setFillColor(sf::Color::Red);
@@ -66,7 +56,6 @@ void             MainLoop(RigidBody * RigidBodysFunc)
               collisionEvent.setObjs(RigidBodysFunc[i], RigidBodysFunc[j]);
               dispatcher.Send(collisionEvent, collisionEventID);
               ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
-            }
           }
         }
       }
