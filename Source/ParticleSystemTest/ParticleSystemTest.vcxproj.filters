@@ -15,12 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Particles.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Particles.cpp">
+    <ClCompile Include="ParticleTest.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

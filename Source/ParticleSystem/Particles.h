@@ -83,10 +83,10 @@ private:
 	std::mt19937 gen{ rd() };
 	std::vector<std::pair<float, sf::Color>> colors = {
 		{ 1.f,sf::Color::Color(static_cast<sf::Uint8>(255),static_cast<sf::Uint8>(255),static_cast<sf::Uint8>(255),static_cast<sf::Uint8>(255)) },
-	{ .9f, sf::Color::Color(static_cast<sf::Uint8>(255),static_cast<sf::Uint8>(128),static_cast<sf::Uint8>(0),static_cast<sf::Uint8>(255)) },
-	{ .7f, sf::Color::Red },
-	{ .5f, sf::Color::Color(static_cast<sf::Uint8>(90), static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(57),static_cast<sf::Uint8>(255)) },
-	{ .1f,  sf::Color::Black }
+		{ .9f, sf::Color::Color(static_cast<sf::Uint8>(255),static_cast<sf::Uint8>(128),static_cast<sf::Uint8>(0),static_cast<sf::Uint8>(255)) },
+		{ .7f, sf::Color::Red },
+		{ .5f, sf::Color::Color(static_cast<sf::Uint8>(90), static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(57),static_cast<sf::Uint8>(255)) },
+		{ .1f,  sf::Color::Black }
 	};
 
 	void ResetParticle(std::size_t index);
