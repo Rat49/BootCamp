@@ -11,6 +11,7 @@ ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize) :
 	_emitterVelocity(0, 0)
 {
 	InitializeParticles();
+	Add();
 }
 
 void ParticleSystem::InitializeParticles()
@@ -166,10 +167,19 @@ void ParticleSystem::ResetParticle(std::size_t index)
 	_vertices[index].position = _emitterPosition;
 }
 
-void ParticleSystem::draw(sf::RenderTarget& target, sf::RenderStates states) const
+void ParticleSystem::Draw(sf::RenderWindow & window) 
 {
-	states.transform *= getTransform();
+	window.draw(_vertices);
 
-	target.draw(_vertices, states);
+}
 
+void ParticleSystem::Add()
+{
+	DrawableManager::getInstance()._drawableObjects.push_back(this);
+	DrawableManager::getInstance().SortDrawableVector();
+}
+
+int ParticleSystem::GetZOrder() const
+{
+	return _zOrder;
 }

@@ -24,6 +24,12 @@
     <ClInclude Include="LoggerMessageEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Drawable.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="drawableManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Logger.cpp">
@@ -31,6 +37,9 @@
     </ClCompile>
     <ClCompile Include="LoggerMessageEvent.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawableManager.cpp">
+      <Filter>Header Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

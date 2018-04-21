@@ -3,19 +3,15 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
 #include "Particles.h"
+#include "Drawable.h"
 
-class Rocket : public sf::Drawable {
+class Rocket {
 public:
 	ParticleSystem particles;
 
 	Rocket(unsigned int quantity, sf::Vector2u window) :
 		particles(1000, window) {
 		particles.SetNormalDistrParams(0, 3);
-	}
-
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
-	{
-		target.draw(particles);
 	}
 
 	void SetPosition(sf::Vector2f position) {
@@ -40,7 +36,7 @@ public:
 	}
 };
 
-class Explosion : public sf::Drawable {
+class Explosion {
 public:
 	ParticleSystem particles;
 	sf::Time reccomendedLifeTime = sf::seconds(0.2);
@@ -50,11 +46,6 @@ public:
 		particles.SetRate(150);
 		particles.SetNormalDistrParams(0, 160);
 		particles.SetParticlesLifetime(500);
-	}
-
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
-	{
-		target.draw(particles);
 	}
 
 	void SetPosition(sf::Vector2f position) {
@@ -80,18 +71,13 @@ public:
 	}
 };
 
-class Spaceship : public sf::Drawable {
+class Spaceship{
 public:
 	ParticleSystem particles;
 
 	Spaceship(unsigned int quantity, sf::Vector2u window) :
 		particles(1000, window) {
 		particles.SetParticlesLifetime(500);
-	}
-
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const
-	{
-		target.draw(particles);
 	}
 
 	void SetPosition(sf::Vector2f position) {
@@ -129,6 +115,8 @@ int main()
 		sf::VideoMode(videoMode),
 		"Particle");
 	window.setVerticalSyncEnabled(true);
+
+	DrawableManager& dm = DrawableManager::getInstance();
 
 	ParticleSystem particles(1000, window.getSize());
 	particles.SetEmitterPosition(sf::Vector2f(500, 500));
@@ -177,10 +165,9 @@ int main()
 		particles.Update(deltaTime * 1.f);
 
 		window.clear(sf::Color::Black);
-		window.draw(particles);
-		window.draw(rocket);
-		window.draw(*explosion);
-		window.draw(spaceship);
+		
+		dm.DrawScene(window);
+		//~~~~~~~~~~~~~~just for testing~~~~~~~~~~~~~~~~~
 		if (count % 47 == 0) {
 			spaceship.Stop();
 			spaceship.SetVelocity(sf::Vector2f(std::rand() % 40 - 20, std::rand() % 40 - 20));
@@ -195,6 +182,7 @@ int main()
 		window.display();
 		LastMousePos = mousePos;
 		count++;
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	}
 	system("pause");
 	return 0;

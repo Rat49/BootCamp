@@ -5,6 +5,8 @@
 #include <cassert>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
+#include "Drawable.h"
+#include "DrawableManager.h"
 
 struct Particle
 {
@@ -31,7 +33,7 @@ constexpr const T& clamp(const T& v, const T& lo, const T& hi)
 	return clamp(v, lo, hi, std::less<>());
 }
 
-class ParticleSystem : public sf::Drawable, public sf::Transformable
+class ParticleSystem : public Drawable, public sf::Transformable
 {
 public:
 
@@ -55,6 +57,9 @@ public:
 	Distribution distribution = Distribution::Normal;
 	bool fading = false;
 	bool end = false;
+	int GetZOrder() const override;
+	void Draw(sf::RenderWindow &window) override;
+
 
 private:
 	struct circleForce {
@@ -80,8 +85,9 @@ private:
 	std::random_device rd{};
 	std::mt19937 gen{ rd() };
 	std::vector<std::pair<float, sf::Color>> colors;
-
+	
+	
+	void Add() override;
 	void ResetParticle(std::size_t index);
-	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	void ChangeColor(const float lifeTime, sf::Vertex& vertex);
 };
