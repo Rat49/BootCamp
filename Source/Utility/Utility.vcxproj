@@ -74,6 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="DrawableManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="LoggerMessageEvent.h" />
     <ClInclude Include="Pool.h" />

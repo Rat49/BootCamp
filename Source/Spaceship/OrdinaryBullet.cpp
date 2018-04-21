@@ -1,11 +1,10 @@
-#include "DrawableManager.h"
 #include "OrdinaryBullet.h"
 
 OrdinaryBullet::OrdinaryBullet()
 	: _speedValue(200.0f)
 	, _ordinaryBulletSprite()
 	, _bulletTexture()
-	//, _ordinaryBulletAnimation()
+	//,_ordinaryBulletAnimation()
 {
 	_zOrder = 2;
 }
@@ -53,12 +52,12 @@ sf::Sprite* OrdinaryBullet::GetSprite()
 	return &_ordinaryBulletSprite;
 }
 
-void OrdinaryBullet::Draw(sf::RenderWindow & window)
+void OrdinaryBullet::Draw(sf::RenderWindow& window)
 {
 	window.draw(_ordinaryBulletSprite);
 }
 
-void OrdinaryBullet::Update(sf::Time deltaTime)
+void OrdinaryBullet::Update(sf::Time& deltaTime)
 {
 	RigidBody::Update(deltaTime.asSeconds());
 
@@ -73,7 +72,6 @@ void OrdinaryBullet::Reset()
 	_ordinaryBulletSprite.setTexture(sf::Texture::Texture());
 	_ordinaryBulletSprite.setOrigin(sf::Vector2f(0.0f, 0.0f));
 	_ordinaryBulletSprite.setPosition(sf::Vector2f(0.0f, 0.0f));
-
 }
 
 void OrdinaryBullet::Add()

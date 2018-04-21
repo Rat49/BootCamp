@@ -1,10 +1,6 @@
-#include "Input.h"
-#include "Physics.h"
 #include "Spaceship.h"
-#include "DrawableManager.h"
-#include <iostream>
 
-const float  PI_F = 3.14159265358979f;
+const float PI_F = 3.14159265358979f;
 
 Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & input,
 	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource &ordinaryShotAnimationImseq, ImageSequenceResource &powerfulShotAnimationImseq)
@@ -57,7 +53,6 @@ void Spaceship::PowerfulShoot()
 
 void Spaceship::OrdinaryShoot()
 {
-
 	sf::Sprite* bulletSprite = new sf::Sprite();
 	OrdinaryBullet * bulletLeft = _ordinaryBulletStorage.Get();
 	bulletLeft->Init(*bulletSprite, _spaceshipSprite->getPosition(), _spaceshipDirection, _ordinaryShotAnimationImseq.Get()[0]);
@@ -197,12 +192,11 @@ int Spaceship::GetZOrder() const
 	return _zOrder;
 }
 
-void Spaceship::Draw(sf::RenderWindow & window)
+void Spaceship::Draw(sf::RenderWindow& window)
 {
 	window.draw(*(_spaceshipAnimation->GetSprite()));
 }
 
 Spaceship::~Spaceship()
 {
-
 }

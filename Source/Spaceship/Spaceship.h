@@ -6,6 +6,7 @@
 #include "Pool.h"
 #include "Rocket.h"
 #include "Pool.h"
+#include "Input.h"
 
 class Spaceship : public RigidBody, public Drawable
 {

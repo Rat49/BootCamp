@@ -12,5 +12,5 @@ public:
 	bool _life; 
 
 	virtual ~Bullet() = 0 {};
-	virtual void Update(sf::Time deltaTime) = 0;
+	virtual void Update(sf::Time& deltaTime) = 0;
 };

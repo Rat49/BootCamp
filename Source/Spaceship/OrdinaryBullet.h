@@ -1,5 +1,6 @@
 #pragma once
 #include "Bullet.h"
+#include "DrawableManager.h"
 
 class OrdinaryBullet final : public Bullet
 {
@@ -18,6 +19,6 @@ public:
 	void Add() override;
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;
-	void Update(sf::Time deltaTime) override;
+	void Update(sf::Time& deltaTime) override;
 	void Reset() override;
 };
