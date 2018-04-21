@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Parser.h"
 #include<fstream>
 #include<iostream>
 #include<map>
@@ -11,14 +12,15 @@ class LogCategory {
 
 private:
 
-	std::map<const std::string, const std::string> params;
+	std::multimap<const std::string, const std::string> params;
 
 	bool IfElementExists(const std::string& keyValue) const;
 
 public:
-	void AddNewParam(std::pair <std::string, std::string>&);
-	std::string GetValue(const std::string& configValue);
-	std::map<const std::string, const std::string> getParams();
+	void AddNewParam(const std::pair<std::string, std::string>& param);
+	const std::vector<std::pair<const std::string, const std::string>>  GetValues(const std::string& configValue) const;
+	std::multimap<const std::string, const std::string> getParams();
+	int size();
 };
 
 
@@ -30,6 +32,7 @@ class ConfigManager final {
 
 private:
 
+	Parser parser;
 	std::ifstream inFile;
 	std::map<std::string, LogCategory> logCategories;
 

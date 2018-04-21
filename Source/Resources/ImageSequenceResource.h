@@ -7,7 +7,7 @@ class ImageSequenceResource : public PictureResource
 {
 public:
 
-	ImageSequenceResource(const std::string& id, const std::string& name, const std::multimap<std::string, std::string>& settings);
+	ImageSequenceResource(const std::string& id, const std::string& name, const std::multimap<const std::string, const std::string>& settings);
 
 	void Load() override;
 	void Unload() override;

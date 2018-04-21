@@ -42,6 +42,9 @@ namespace LoggerTest
 		log.SetFrame(400);
 		auto cmdTarget = log.AddCmdTarget();
 		auto fileTarget = log.AddFileTarget("../Events/Events.log");
+		auto debug = log.AddDebugTarget();
+		debug->IncludeChannel("All");
+		debug->SetSeverity(LogLevel::Debug);
 		fileTarget->IncludeChannel("Event");
 		cmdTarget->SetSeverity(LogLevel::Warning);
 		fileTarget->SetSeverity(LogLevel::Info);

@@ -58,12 +58,12 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Resources;$(SolutionDir)Source\DebugConsole;$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)Source\ResourceManager;$(SolutionDir)Source\Physics;$(SolutionDir)Source\Utility;%(AdditionalIncludeDirectories)$(SolutionDir)Source\DebugConsole;$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)Source\ResourceManager;$(SolutionDir)Source\Physics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>Input.lib;Events.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-window.lib;sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;Events.lib;ConfigManager.lib;DebugCommandManager.lib;DebugConsole.lib;Resources.lib;Input.lib;Physics.lib;Utility.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
@@ -81,11 +81,12 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-2.dll" "$(OutDir)\*.*" /F /R /Y /I
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Resources;$(SolutionDir)Source\DebugConsole;$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)Source\ResourceManager;$(SolutionDir)Source\Physics;$(SolutionDir)Source\Utility;%(AdditionalIncludeDirectories)$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>Input_d.lib;Events_d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;ConfigManager_d.lib;DebugCommandManager_d.lib;DebugConsole_d.lib;Events_d.lib;Input_d.lib;Resources_d.lib;Physics_d.lib;Utility_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin</AdditionalLibraryDirectories>
+      <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)SFML\bin\openal32.dll" "$(OutDir)\*.*" /F /R /Y /I
@@ -99,6 +100,9 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Asteroids.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
