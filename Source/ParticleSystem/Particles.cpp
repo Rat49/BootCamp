@@ -1,4 +1,5 @@
 #include "Particles.h"
+#include <SFML/System.hpp>
 
 
 ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize) :
@@ -14,6 +15,13 @@ ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize) :
 
 void ParticleSystem::InitializeParticles()
 {
+	colors = {
+		{ 1.f, sf::Color::Color(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255)) },
+		{ .9f, sf::Color::Color(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(128), static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(255)) },
+		{ .7f, sf::Color::Red },
+		{ .5f, sf::Color::Color(static_cast<sf::Uint8>(90), static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(57), static_cast<sf::Uint8>(255)) },
+		{ .1f, sf::Color::Black }
+	};
 	for (std::size_t i = 0; i < _particles.size(); ++i)
 	{
 		Particle& p = _particles[i];
@@ -65,7 +73,7 @@ void ParticleSystem::Update(sf::Time elapsed)
 			p.velocity += _simpleForce * elapsed.asSeconds();
 		_vertices[i].position += p.velocity * elapsed.asSeconds();
 
-		float ratio = clamp(p.lifetime.asSeconds() / p.AllLifetime.asSeconds(), 0.f, 1.f);
+		float ratio =  clamp(p.lifetime.asSeconds() / p.AllLifetime.asSeconds(), 0.f, 1.f);
 
 		_vertices[i].color.a = static_cast<sf::Uint8>(ratio * 255);
 
