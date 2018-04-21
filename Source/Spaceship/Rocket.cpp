@@ -17,7 +17,7 @@ Rocket::~Rocket()
 void Rocket::Init(const sf::Vector2f position, const  sf::Vector2f rocketDirection, ImageSequenceResource& rocketAnimationImseq)
 {
 	*_rocketAnimationImseq = rocketAnimationImseq;
-	_rocketAnimation->Init(_rocketSprite, rocketAnimationImseq, true);
+	_rocketAnimation->Init(&_rocketSprite, &rocketAnimationImseq, true);
 
 	Add();
 

@@ -7,7 +7,7 @@ class AnimationPlayer final
 public:
 	AnimationPlayer(sf::Sprite& animatedSprite, ImageSequenceResource& animation, bool isLooped);
 	AnimationPlayer();
-	void Init(sf::Sprite& animatedSprite, ImageSequenceResource& animation, bool isLooped);
+	void Init(sf::Sprite* animatedSprite, ImageSequenceResource* animation, bool isLooped);
 	void Start();
 	void Start(sf::Time AnimationTime);
 	void Pause();
