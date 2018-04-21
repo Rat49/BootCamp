@@ -2,12 +2,12 @@
 #include "OrdinaryBullet.h"
 
 OrdinaryBullet::OrdinaryBullet()
-	: _speedValue(100.6f)
+	: _speedValue(200.0f)
 	, _ordinaryBulletSprite()
 	, _bulletTexture()
 	//, _ordinaryBulletAnimation()
 {
-	_zOrder = 1;
+	_zOrder = 2;
 }
 
 OrdinaryBullet::~OrdinaryBullet()

@@ -24,7 +24,7 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(100))
 {
-	_zOrder = 5;
+	_zOrder = 1;
 	_spaceshipSprite = new sf::Sprite();
 	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, spaceshipAnimationImseq, true);
 	Add();
