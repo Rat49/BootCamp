@@ -3,11 +3,11 @@
 const float PI_F = 3.14159265358979f;
 
 Rocket::Rocket()
-	: _speedValue(150.0f)
+	: _speedValue(200.0f)
 	, _rocketSprite()
 	, _rocketTexture()
 	, _speedDelayTime(sf::seconds(1.0f))
-	, _deltaSpeedValue(50.0f)
+	, _deltaSpeedValue(600.0f)
 	//,_rocketAnimation()
 {
 	_zOrder = 2;	
@@ -70,7 +70,7 @@ void Rocket::Update(sf::Time& deltaTime)
 	_timeAfterShot += deltaTime;
 	if (_timeAfterShot.asSeconds() > _speedDelayTime.asSeconds())
 	{
-		SetSpeed(GetSpeed() + _direction * _deltaSpeedValue);
+		SetSpeed(_direction * (_speedValue + _deltaSpeedValue));
 	}
 
 	_rocketSprite.setPosition(GetCoordinates());
