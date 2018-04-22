@@ -227,6 +227,11 @@ void Spaceship::Update(sf::Time deltaTime)
 	for (auto bullet : _bullets)
 	{
 		bullet->Update(deltaTime);
+		if (bullet->GetLifeStatus() == false)
+		{
+			_ordinaryBulletStorage.Put(bullet);
+			bullet->Reset();
+		}
 	}
 	for (auto rocket : _rockets)
 	{

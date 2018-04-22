@@ -10,6 +10,7 @@ private:
 	sf::Texture* _bulletTexture;
 	sf::Sprite _ordinaryBulletSprite;
 	const float _speedValue;
+	bool _life;
 public:
 	OrdinaryBullet();
 	~OrdinaryBullet();
@@ -21,4 +22,5 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 	void Update(sf::Time& deltaTime) override;
 	void Reset() override;
+	bool GetLifeStatus() const;
 };

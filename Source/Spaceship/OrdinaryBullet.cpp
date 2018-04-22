@@ -8,7 +8,9 @@ OrdinaryBullet::OrdinaryBullet()
 	, _bulletTexture()
 	//,_ordinaryBulletAnimation()
 {
+	Add();
 	_zOrder = 2;
+	_life = true;
 }
 
 OrdinaryBullet::~OrdinaryBullet()
@@ -40,7 +42,6 @@ OrdinaryBullet::~OrdinaryBullet()
 void OrdinaryBullet::Init(sf::Sprite& ordinaryBulletSprite, sf::Vector2f position, const  sf::Vector2f bulletDirection, sf::Texture& bulletTexture)
 {
 	_ordinaryBulletSprite = ordinaryBulletSprite;
-	Add();
 	_bulletTexture = &bulletTexture;
 	_ordinaryBulletSprite.setTexture(*_bulletTexture);
 	_ordinaryBulletSprite.setOrigin(sf::Vector2f(_bulletTexture->getSize().x / 2.0f, _bulletTexture->getSize().y / 2.0f));
@@ -49,7 +50,6 @@ void OrdinaryBullet::Init(sf::Sprite& ordinaryBulletSprite, sf::Vector2f positio
 		angle += 180.0f;
 
 	_ordinaryBulletSprite.setRotation(angle);
-
 	SetSpeed(bulletDirection * _speedValue);
 	SetCoordinates(sf::Vector2f(position.x + bulletDirection.x * _bulletTexture->getSize().y / 2.0f, position.y + bulletDirection.y * _bulletTexture->getSize().y / 2.0f));
 }
@@ -70,15 +70,22 @@ void OrdinaryBullet::Update(sf::Time& deltaTime)
 
 	_ordinaryBulletSprite.setPosition(GetCoordinates());
 	//_ordinaryBulletAnimation->Update(deltaTime);
+
+	if (_ordinaryBulletSprite.getPosition().x >= WindowResolution::_W || _ordinaryBulletSprite.getPosition().x < 0 || _ordinaryBulletSprite.getPosition().y > WindowResolution::_H || _ordinaryBulletSprite.getPosition().y < 0)
+	{
+		_life = false;
+	}
 }
 
 void OrdinaryBullet::Reset()
 {
 	//_ordinaryBulletAnimation->Reset();
+	_life = true;
+}
 
-	_ordinaryBulletSprite.setTexture(sf::Texture::Texture());
-	_ordinaryBulletSprite.setOrigin(sf::Vector2f(0.0f, 0.0f));
-	_ordinaryBulletSprite.setPosition(sf::Vector2f(0.0f, 0.0f));
+bool OrdinaryBullet::GetLifeStatus() const
+{
+	return _life;
 }
 
 void OrdinaryBullet::Add()

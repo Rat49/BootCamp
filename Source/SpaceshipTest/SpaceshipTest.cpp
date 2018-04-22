@@ -13,6 +13,7 @@ int main()
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
 
 	sf::RenderWindow window(sf::VideoMode(900, 900), "SFML works!");
+	WindowResolution::SetResolution(window);
 	window.clear();
 
 	InputManager* input = new InputManager();
