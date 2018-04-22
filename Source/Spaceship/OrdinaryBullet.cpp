@@ -1,5 +1,7 @@
 #include "OrdinaryBullet.h"
 
+const float PI_F = 3.14159265358979f;
+
 OrdinaryBullet::OrdinaryBullet()
 	: _speedValue(200.0f)
 	, _ordinaryBulletSprite()
@@ -42,6 +44,8 @@ void OrdinaryBullet::Init(sf::Sprite& ordinaryBulletSprite, sf::Vector2f positio
 	_bulletTexture = &bulletTexture;
 	_ordinaryBulletSprite.setTexture(*_bulletTexture);
 	_ordinaryBulletSprite.setOrigin(sf::Vector2f(_bulletTexture->getSize().x / 2.0f, _bulletTexture->getSize().y / 2.0f));
+	float angle = std::atan(bulletDirection.x / -bulletDirection.y) * 180.0f / PI_F;
+	_ordinaryBulletSprite.setRotation(angle);
 
 	SetSpeed(bulletDirection * _speedValue);
 	SetCoordinates(sf::Vector2f(position.x + bulletDirection.x * _bulletTexture->getSize().y / 2.0f, position.y + bulletDirection.y * _bulletTexture->getSize().y / 2.0f));

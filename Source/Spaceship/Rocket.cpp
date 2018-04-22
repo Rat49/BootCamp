@@ -1,12 +1,16 @@
 #include "Rocket.h"
 
+const float PI_F = 3.14159265358979f;
+
 Rocket::Rocket()
 	: _speedValue(150.0f)
-	,_rocketSprite()
-	,_rocketTexture()
+	, _rocketSprite()
+	, _rocketTexture()
+	, _speedDelayTime(sf::seconds(1.0f))
+	, _deltaSpeedValue(50.0f)
 	//,_rocketAnimation()
 {
-	_zOrder = 2;
+	_zOrder = 2;	
 }
 
 Rocket::~Rocket()
@@ -33,13 +37,16 @@ Rocket::~Rocket()
 void Rocket::Init(sf::Sprite& rocketSprite, sf::Vector2f position, const sf::Vector2f rocketDirection, sf::Texture& rocketTexture)
 {
 	_rocketSprite = rocketSprite;
+	_direction = rocketDirection;
 	Add();
 	_rocketTexture = &rocketTexture;
 	_rocketSprite.setTexture(*_rocketTexture);
 	_rocketSprite.setOrigin(sf::Vector2f(_rocketTexture->getSize().x / 2.0f, _rocketTexture->getSize().y / 2.0f));
+	float angle = std::atan(_direction.x / -_direction.y) * 180.0f / PI_F;
+	_rocketSprite.setRotation(angle);
 
 	SetSpeed(rocketDirection * _speedValue);
-	_speedDelayTime = sf::seconds(0.0f);
+	_timeAfterShot = sf::seconds(0.0f);
 	SetCoordinates(sf::Vector2f(position.x + rocketDirection.x * _rocketTexture->getSize().y / 2.0f, position.y + rocketDirection.y * _rocketTexture->getSize().y / 2.0f));
 }
 
@@ -57,10 +64,10 @@ void Rocket::Update(sf::Time& deltaTime)
 {
 	RigidBody::Update(deltaTime.asSeconds());
 	
-	_speedDelayTime += deltaTime;
-	if (_speedDelayTime.asSeconds() > 2.0f)
+	_timeAfterShot += deltaTime;
+	if (_timeAfterShot.asSeconds() > _speedDelayTime.asSeconds())
 	{
-		SetSpeed(GetSpeed() + sf::Vector2f(50, 50));
+		SetSpeed(GetSpeed() + _direction * _deltaSpeedValue);
 	}
 
 	_rocketSprite.setPosition(GetCoordinates());

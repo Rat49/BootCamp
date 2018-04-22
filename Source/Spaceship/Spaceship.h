@@ -15,7 +15,7 @@ public:
 	//	AnimationPlayer* spaceshipAnimation, AnimationPlayer* ordinaryShotAnimation, AnimationPlayer* powerfulShotAnimation);
 
 	Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager& input,
-		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& ordinaryShotAnimationImseq, ImageSequenceResource& powerfulShotAnimationImseq);
+		ImageSequenceResource& spaceshipAnimationImseq, TextureResource &ordinaryShotTexture, TextureResource &powerfulShotTexture);
 
 	void Accelerate();
 	void Decelerate();
@@ -27,6 +27,8 @@ public:
 	~Spaceship();
 
 private:
+	const sf::Vector2f _initialDirection = sf::Vector2f(0.0f, -1.0f);
+
 	Pool<OrdinaryBullet> _ordinaryBulletStorage;
 	Pool<Rocket> _rocketStorage;
 
@@ -50,13 +52,14 @@ private:
 	AnimationPlayer* _spaceshipAnimation;
 
 	ImageSequenceResource& _spaceshipAnimationImseq;
-	ImageSequenceResource& _ordinaryShotAnimationImseq;
-	ImageSequenceResource& _powerfulShotAnimationImseq;
+	TextureResource& _ordinaryShotTexture;
+	TextureResource& _powerfulShotTexture;
 
 	InputManager& _input;
 
 	void ChangeSpeed(float deltaSpeed);
 	float GetSquareLength(sf::Vector2f speed) const;
+	sf::Vector2f RotateDirection(float angle) const;
 
 	void Add() override;
 	int GetZOrder() const override;

@@ -10,7 +10,10 @@ private:
 	sf::Texture* _rocketTexture;
 	sf::Sprite _rocketSprite;
 	const float _speedValue;
-	sf::Time _speedDelayTime;
+	const sf::Time _speedDelayTime;
+	sf::Vector2f _direction;
+	const float _deltaSpeedValue;
+	sf::Time _timeAfterShot;
 public:
 	Rocket();
 	~Rocket();

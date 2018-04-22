@@ -10,7 +10,8 @@ enum class GameActions {
 	MoveRight,
 	Exit,
 	Choose,
-	Shoot
+	Shoot,
+	SuperShoot
 };
 
 InputManager::InputManager()
@@ -27,7 +28,8 @@ InputManager::InputManager()
 	{ static_cast<int>(GameActions::MoveRight), sf::Keyboard::D },
 	{ static_cast<int>(GameActions::Exit), sf::Keyboard::Escape },
 	{ static_cast<int>(GameActions::Choose), sf::Keyboard::Return },
-	{ static_cast<int>(GameActions::Shoot), sf::Keyboard::Space }
+	{ static_cast<int>(GameActions::Shoot), sf::Keyboard::Space },
+	{ static_cast<int>(GameActions::SuperShoot), sf::Keyboard::LAlt }
 	};
 
 

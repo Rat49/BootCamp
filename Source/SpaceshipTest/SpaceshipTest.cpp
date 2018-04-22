@@ -8,17 +8,16 @@ int main()
 	int counterImageSequence = 0;
 
 	ImageSequenceResource* spaceshipImgseq = rm->GetResource<ImageSequenceResource>("spaceshipNormal");
-	ImageSequenceResource* bulletImgseq = rm->GetResource<ImageSequenceResource>("fire");
+	//ImageSequenceResource* bulletImgseq = rm->GetResource<ImageSequenceResource>("fire");
+	TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
+	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
 
-	sf::RenderWindow window(sf::VideoMode(512, 512), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(900, 900), "SFML works!");
 	window.clear();
-	sf::Sprite* spaceshipSprite = new sf::Sprite();
-	sf::Sprite* bulletLeft = new sf::Sprite();
-	sf::Sprite* bulletRight = new sf::Sprite();
 
 	InputManager* input = new InputManager();
 	
-	Spaceship* spaceship = new Spaceship(sf::Vector2f(200.0f, 200.0f), sf::Vector2f(0.0f, 1.0f), *input, *spaceshipImgseq, *bulletImgseq, *bulletImgseq);
+	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), *input, *spaceshipImgseq, *bulletTexture, *rocketTexture);
 
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();
@@ -34,16 +33,11 @@ int main()
 		deltaTime = now - timer;
 		timer = now;
 
-		//bulletRightAnimationPlayer->Update(deltaTime);
-
 		spaceship->Update(deltaTime);
 
 		window.clear();
 		drawableManager.DrawScene(window);
 
-		
-		//window.draw(*spaceshipSprite);
-		//window.draw(*bulletRight);
 		window.display();
 	}
 
