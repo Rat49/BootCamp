@@ -1,13 +1,10 @@
 #pragma once
-
 #include <vector>
 #include <iostream>
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <SFML/Graphics.hpp>
-
-const int W = 1200;
-const int H = 800;
+#include "WindowResolution.h"
 
 class RigidBody {
 private:

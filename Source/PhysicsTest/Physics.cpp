@@ -2,14 +2,6 @@
 #include "EventSystem.h"
 #include "CollisionEvent.h"
 
-CollisionEvent::CollisionEvent() {}
-
-CollisionEvent::~CollisionEvent() {}
-void CollisionEvent::setObjs(RigidBody & o1, RigidBody & o2)
-{
-  obj1 = o1;
-  obj2 = o2;
-}
 
 constexpr size_t numOfObjects = 10;
 void             MainLoop(RigidBody * RigidBodysFunc)
@@ -17,7 +9,8 @@ void             MainLoop(RigidBody * RigidBodysFunc)
   sf::Clock clock;
   sf::Time  deltaTime;
 
-  sf::RenderWindow app(sf::VideoMode(W, H), "Asteroids!");
+  sf::RenderWindow app(sf::VideoMode(400,400), "Asteroids!");
+  WindowResolution::SetResolution(app);
 
   sf::CircleShape circles[numOfObjects];
   sf::CircleShape circlesCenters[numOfObjects];
@@ -87,6 +80,15 @@ void             MainLoop(RigidBody * RigidBodysFunc)
     }
     app.display();
   }
+}
+
+CollisionEvent::CollisionEvent() {}
+
+CollisionEvent::~CollisionEvent() {}
+void CollisionEvent::setObjs(RigidBody & o1, RigidBody & o2)
+{
+	obj1 = o1;
+	obj2 = o2;
 }
 
 void Test()
