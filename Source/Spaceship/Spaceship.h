@@ -28,7 +28,7 @@ public:
 
 private:
 	Pool<OrdinaryBullet> _ordinaryBulletStorage;
-	//Pool<Rocket> _rocketStorage;
+	Pool<Rocket> _rocketStorage;
 
 	sf::Vector2f _spaceshipDirection;
 
@@ -44,6 +44,7 @@ private:
 	const float _maxSquareSpeed;
 
 	std::vector<OrdinaryBullet*> _bullets;
+	std::vector<Rocket*> _rockets;
 
 	sf::Sprite* _spaceshipSprite;
 	AnimationPlayer* _spaceshipAnimation;

@@ -19,6 +19,7 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	, _powerfulShotAnimationImseq(powerfulShotAnimationImseq)
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(100))
+	, _rocketStorage(Pool<Rocket>(10))
 {
 	_zOrder = 1;
 	_spaceshipSprite = new sf::Sprite();
@@ -42,10 +43,14 @@ void Spaceship::Decelerate()
 
 void Spaceship::PowerfulShoot()
 {
+	sf::Sprite* rocketSprite = new sf::Sprite();
+	Rocket* rocketLeft = _rocketStorage.Get();
+	rocketLeft->Init(*rocketSprite, _spaceshipSprite->getPosition(), _spaceshipDirection, _powerfulShotAnimationImseq.Get()[0]);
+	
+	_rockets.push_back(rocketLeft);
+	
 	if (_timeAfterPowerfulShot < _rechargeTime)
 		return;
-
-	//Rocket rocketLeft = Rocket(speedValue * _spaceshipDirection, sprite, animationPlayer);
 
 	_timeAfterPowerfulShot = sf::seconds(0.0f); 
 }
@@ -54,7 +59,7 @@ void Spaceship::PowerfulShoot()
 void Spaceship::OrdinaryShoot()
 {
 	sf::Sprite* bulletSprite = new sf::Sprite();
-	OrdinaryBullet * bulletLeft = _ordinaryBulletStorage.Get();
+	OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
 	bulletLeft->Init(*bulletSprite, _spaceshipSprite->getPosition(), _spaceshipDirection, _ordinaryShotAnimationImseq.Get()[0]);
 
 	_bullets.push_back(bulletLeft);
