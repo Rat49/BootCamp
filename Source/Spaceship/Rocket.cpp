@@ -10,7 +10,9 @@ Rocket::Rocket()
 	, _deltaSpeedValue(600.0f)
 	//,_rocketAnimation()
 {
+	Add();
 	_zOrder = 2;	
+	_life = false;
 }
 
 Rocket::~Rocket()
@@ -34,11 +36,10 @@ Rocket::~Rocket()
 //	SetCoordinates(position);
 //}
 
-void Rocket::Init(sf::Sprite& rocketSprite, sf::Vector2f position, const sf::Vector2f rocketDirection, sf::Texture& rocketTexture)
+void Rocket::Init(sf::Vector2f position, const sf::Vector2f rocketDirection, sf::Texture& rocketTexture)
 {
-	_rocketSprite = rocketSprite;
+	_life = true;
 	_direction = rocketDirection;
-	Add();
 	_rocketTexture = &rocketTexture;
 	_rocketSprite.setTexture(*_rocketTexture);
 	_rocketSprite.setOrigin(sf::Vector2f(_rocketTexture->getSize().x / 2.0f, _rocketTexture->getSize().y / 2.0f));
@@ -47,7 +48,7 @@ void Rocket::Init(sf::Sprite& rocketSprite, sf::Vector2f position, const sf::Vec
 		angle += 180.0f;
 
 	_rocketSprite.setRotation(angle);
-
+	
 	SetSpeed(rocketDirection * _speedValue);
 	_timeAfterShot = sf::seconds(0.0f);
 	SetCoordinates(sf::Vector2f(position.x + rocketDirection.x * _rocketTexture->getSize().y / 2.0f, position.y + rocketDirection.y * _rocketTexture->getSize().y / 2.0f));
@@ -60,7 +61,10 @@ sf::Sprite* Rocket::GetSprite()
 
 void Rocket::Draw(sf::RenderWindow& window)
 {
-	window.draw(_rocketSprite);
+	if (GetLifeStatus())
+	{
+		window.draw(_rocketSprite);
+	}
 }
 
 void Rocket::Update(sf::Time& deltaTime)
@@ -73,6 +77,12 @@ void Rocket::Update(sf::Time& deltaTime)
 		SetSpeed(_direction * (_speedValue + _deltaSpeedValue));
 	}
 
+	if (_rocketSprite.getPosition().x >= WindowResolution::_W || _rocketSprite.getPosition().x < 0
+		|| _rocketSprite.getPosition().y > WindowResolution::_H || _rocketSprite.getPosition().y < 0)
+	{
+		_life = false;
+	}
+
 	_rocketSprite.setPosition(GetCoordinates());
 	//_rocketAnimation->Update(deltaTime);
 }
@@ -81,9 +91,19 @@ void Rocket::Reset()
 {
 	//_rocketAnimation->Reset();
 
-	_rocketSprite.setTexture(sf::Texture::Texture());
-	_rocketSprite.setOrigin(sf::Vector2f(0.0f, 0.0f));
-	_rocketSprite.setPosition(sf::Vector2f(0.0f, 0.0f));
+	_life = false;
+
+	_rocketSprite.setOrigin(0, 0);
+	_rocketSprite.setPosition(0, 0);
+	_rocketSprite.setRotation(0);
+	_direction = sf::Vector2f(0, 0);
+	_timeAfterShot = sf::seconds(0);
+	SetSpeed(sf::Vector2f(0, 0));
+}
+
+bool Rocket::GetLifeStatus() const
+{
+	return _life;
 }
 
 void Rocket::Add()

@@ -53,11 +53,14 @@ void Spaceship::PowerfulShoot()
 		return;
 	}
 
-	sf::Sprite* rocketSprite = new sf::Sprite();
 	Rocket* rocket = _rocketStorage.Get();
-	rocket->Init(*rocketSprite, _spaceshipSprite->getPosition(), _spaceshipDirection, _powerfulShotTexture.Get());
+	rocket->Init(_spaceshipSprite->getPosition(), _spaceshipDirection, _powerfulShotTexture.Get());
 	
-	_rockets.push_back(rocket);
+	if (std::find(_rockets.cbegin(), _rockets.cend(), rocket) == _rockets.cend())
+	{
+		_rockets.push_back(rocket);
+	}
+
 	//GetRebound(_powerfulRebound);
 	
 	_timeAfterPowerfulShot = sf::seconds(0.0f); 
@@ -66,16 +69,21 @@ void Spaceship::PowerfulShoot()
 
 void Spaceship::OrdinaryShoot()
 {
-	sf::Sprite* bulletSpriteLeft = new sf::Sprite();
 	OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
-	bulletLeft->Init(*bulletSpriteLeft, _spaceshipSprite->getPosition(), RotateDirection(10.0f), _ordinaryShotTexture.Get());
+	bulletLeft->Init(_spaceshipSprite->getPosition(), RotateDirection(10.0f), _ordinaryShotTexture.Get());
 
-	sf::Sprite* bulletSpriteRight = new sf::Sprite();
 	OrdinaryBullet* bulletRight = _ordinaryBulletStorage.Get();
-	bulletRight->Init(*bulletSpriteRight, _spaceshipSprite->getPosition(), RotateDirection(-10.0f), _ordinaryShotTexture.Get());
+	bulletRight->Init(_spaceshipSprite->getPosition(), RotateDirection(-10.0f), _ordinaryShotTexture.Get());
 
-	_bullets.push_back(bulletLeft);
-	_bullets.push_back(bulletRight);
+	if (std::find(_bullets.cbegin(), _bullets.cend(), bulletLeft) == _bullets.cend())
+	{
+		_bullets.push_back(bulletLeft);
+	}
+	if (std::find(_bullets.cbegin(), _bullets.cend(), bulletRight) == _bullets.cend())
+	{
+		_bullets.push_back(bulletRight);
+	}
+
 	//GetRebound(_rebound);
 }
 
@@ -223,11 +231,13 @@ void Spaceship::Update(sf::Time deltaTime)
 	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
 	_spaceshipAnimation->Update(deltaTime);
 
-
 	for (auto bullet : _bullets)
 	{
-		bullet->Update(deltaTime);
-		if (bullet->GetLifeStatus() == false)
+		if (bullet->GetLifeStatus())
+		{
+			bullet->Update(deltaTime);
+		}
+		else
 		{
 			_ordinaryBulletStorage.Put(bullet);
 			bullet->Reset();
@@ -235,7 +245,15 @@ void Spaceship::Update(sf::Time deltaTime)
 	}
 	for (auto rocket : _rockets)
 	{
-		rocket->Update(deltaTime);
+		if (rocket->GetLifeStatus())
+		{
+			rocket->Update(deltaTime);
+		}
+		else
+		{
+			_rocketStorage.Put(rocket);
+			rocket->Reset();
+		}
 	}
 }
 
