@@ -44,6 +44,8 @@ private:
 	sf::Time _inputAccumulatedTime;
 	const float _bulletDeltaAngle;
 	const float _maxSquareSpeed;
+	const float _rebound;
+	const float _powerfulRebound;
 
 	std::vector<OrdinaryBullet*> _bullets;
 	std::vector<Rocket*> _rockets;
@@ -60,6 +62,7 @@ private:
 	void ChangeSpeed(float deltaSpeed);
 	float GetSquareLength(sf::Vector2f speed) const;
 	sf::Vector2f RotateDirection(float angle) const;
+	void GetRebound(float reboundValue);
 
 	void Add() override;
 	int GetZOrder() const override;
