@@ -23,6 +23,7 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	, _powerfulRebound(15.0f)
 	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(100))
 	, _rocketStorage(Pool<Rocket>(10))
+	, _rechargeTime(sf::seconds(3.0f))
 {
 	_speedDirection = NormalizeSpeed();
 	_zOrder = 1;
@@ -47,8 +48,10 @@ void Spaceship::Decelerate()
 
 void Spaceship::PowerfulShoot()
 {
-	if (_timeAfterPowerfulShot < _rechargeTime)
+	if (_timeAfterPowerfulShot.asSeconds() < _rechargeTime.asSeconds())
+	{
 		return;
+	}
 
 	sf::Sprite* rocketSprite = new sf::Sprite();
 	Rocket* rocket = _rocketStorage.Get();
