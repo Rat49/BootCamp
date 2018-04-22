@@ -33,6 +33,7 @@ private:
 	Pool<Rocket> _rocketStorage;
 
 	sf::Vector2f _spaceshipDirection;
+	sf::Vector2f _speedDirection;
 
 	const float _rotationAngle;
 	float _currentAngle;
@@ -62,6 +63,8 @@ private:
 	void ChangeSpeed(float deltaSpeed);
 	float GetSquareLength(sf::Vector2f speed) const;
 	sf::Vector2f RotateDirection(float angle) const;
+	sf::Vector2f RotateDirection(sf::Vector2f vector, float angle) const;
+	sf::Vector2f NormalizeSpeed() const;
 	void GetRebound(float reboundValue);
 
 	void Add() override;

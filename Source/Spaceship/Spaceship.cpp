@@ -1,4 +1,5 @@
 #include "Spaceship.h"
+#include <iostream>
 
 const float PI_F = 3.14159265358979f;
 
@@ -23,6 +24,7 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(100))
 	, _rocketStorage(Pool<Rocket>(10))
 {
+	_speedDirection = NormalizeSpeed();
 	_zOrder = 1;
 	_spaceshipSprite = new sf::Sprite();
 	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, spaceshipAnimationImseq, true);
@@ -84,12 +86,13 @@ void Spaceship::RotateSpaceship(float angle)
 
 void Spaceship::ChangeSpeed(float deltaSpeed)
 {
-	sf::Vector2f newSpeed = std::sqrt(GetSquareLength(GetSpeed())) * _spaceshipDirection;
+	sf::Vector2f speed = GetSpeed();
+	float angle = std::acos(_speedDirection.x * _spaceshipDirection.x + _speedDirection.y * _spaceshipDirection.y) * 180.0f / PI_F;
 
-	if (newSpeed == GetSpeed())
-	{
-		newSpeed += deltaSpeed * _spaceshipDirection;
-	}
+	SetSpeed(RotateDirection(GetSpeed(), angle));
+	_speedDirection = _spaceshipDirection;
+
+	sf::Vector2f newSpeed = GetSpeed() + deltaSpeed * _spaceshipDirection;
 
 	if (GetSquareLength(newSpeed) < _maxSquareSpeed)
 	{
@@ -107,6 +110,19 @@ sf::Vector2f Spaceship::RotateDirection(float angle) const
 	float radianAngle = angle * PI_F / 180.0f;
 	return sf::Vector2f(_spaceshipDirection.x * std::cos(radianAngle) - _spaceshipDirection.y * std::sin(radianAngle),
 		_spaceshipDirection.x * std::sin(radianAngle) + _spaceshipDirection.y * std::cos(radianAngle));
+}
+
+sf::Vector2f Spaceship::RotateDirection(sf::Vector2f vector, float angle) const
+{
+	float radianAngle = angle * PI_F / 180.0f;
+	return sf::Vector2f(vector.x * std::cos(radianAngle) - vector.y * std::sin(radianAngle),
+		vector.x * std::sin(radianAngle) + vector.y * std::cos(radianAngle));
+}
+
+sf::Vector2f Spaceship::NormalizeSpeed() const
+{
+	float speedLength = std::sqrt(GetSquareLength(GetSpeed()));
+	return GetSpeed() / speedLength;
 }
 
 void Spaceship::GetRebound(float reboundValue)
