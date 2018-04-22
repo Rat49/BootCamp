@@ -95,11 +95,9 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Object.h" />
     <ClInclude Include="Particles.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Object.cpp" />
     <ClCompile Include="Particles.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

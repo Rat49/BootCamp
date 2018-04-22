@@ -42,7 +42,7 @@ public:
 	sf::Time reccomendedLifeTime = sf::seconds(0.2);
 
 	Explosion(unsigned int quantity, sf::Vector2u window) :
-		particles(7000, window) {
+		particles(1000, window) {
 		particles.SetRate(150);
 		particles.SetNormalDistrParams(0, 160);
 		particles.SetParticlesLifetime(500);
@@ -184,6 +184,5 @@ int main()
 		count++;
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	}
-	system("pause");
 	return 0;
 }
