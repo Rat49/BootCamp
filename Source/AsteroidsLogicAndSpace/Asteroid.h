@@ -1,6 +1,7 @@
 #pragma once
 #include "Object.h"
 #include "Physics.h"
+#include "Event.h"
 
 enum class AsteroidType : uint8_t
 {
@@ -21,7 +22,7 @@ public:
 	void Update(float time) override;
 	void Draw(sf::RenderWindow &window) override;
 	void Reset() override;
-
+	static void  OnCollisionHandler(const & cEvent);
 	AsteroidType _type;
 	float _health;
 	

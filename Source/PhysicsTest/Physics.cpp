@@ -1,6 +1,6 @@
 #include "Physics.h"
 #include "EventSystem.h"
-#include "CollisionEvent.h"
+#include "CollisionEventPhysicstest.h"
 
 
 constexpr size_t numOfObjects = 10;
@@ -15,7 +15,7 @@ void             MainLoop(RigidBody * RigidBodysFunc)
   sf::CircleShape circles[numOfObjects];
   sf::CircleShape circlesCenters[numOfObjects];
 
-  CollisionEvent collisionEvent;
+  CollisionEventPhysicstest collisionEvent;
   Dispatcher &   dispatcher = Dispatcher::getInstance();
 
   for(int i = 0; i < numOfObjects; ++i)
@@ -82,10 +82,10 @@ void             MainLoop(RigidBody * RigidBodysFunc)
   }
 }
 
-CollisionEvent::CollisionEvent() {}
+CollisionEventPhysicstest::CollisionEventPhysicstest() {}
 
-CollisionEvent::~CollisionEvent() {}
-void CollisionEvent::setObjs(RigidBody & o1, RigidBody & o2)
+CollisionEventPhysicstest::~CollisionEventPhysicstest() {}
+void CollisionEventPhysicstest::setObjs(RigidBody & o1, RigidBody & o2)
 {
 	obj1 = o1;
 	obj2 = o2;

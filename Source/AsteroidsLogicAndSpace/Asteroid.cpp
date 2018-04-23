@@ -107,8 +107,16 @@ void Asteroid::Reset()
 	DefaultInit();
 }
 
+void  Asteroid::OnCollisionHandler(const Event& cEvent)
+{
+	cEvent.
+	std::cout << "Collision!";
+}
+
 void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 {		
+	/*Dispatcher& dp = Dispatcher::getInstance();
+	dp.Connect();*/
 	_sprite = sprite;
 	_sizeSpace = size;
 
@@ -131,7 +139,7 @@ void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 
 void Asteroid::Update(float time)
 {
-	RigidBody::Update(time, false);
+	RigidBody::Update(time);
 
 	_angularVelocity = _angularVelocity + time * _rotationSpeed;
 	sf::Vector2f nextPosition = GetCoordinates() + GetSpeed() * time;

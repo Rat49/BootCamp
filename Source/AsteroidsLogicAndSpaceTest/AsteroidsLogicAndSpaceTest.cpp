@@ -4,16 +4,6 @@
 #include "EventSystem.h"
 #include "ResourceManager.h"
 #include "Star.h"
-
-/*CollisionEvent::CollisionEvent() {}
-
-CollisionEvent::~CollisionEvent() {}
-void CollisionEvent::setObjs(RigidBody & o1, RigidBody & o2)
-{
-	obj1 = o1;
-	obj2 = o2;
-}*/
-
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
 
@@ -27,7 +17,7 @@ int main()
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
 
-	//CollisionEvent collisionEvent;
+	CollisionEvent collisionEvent;
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 
 	DrawableManager& dm = DrawableManager::getInstance();
@@ -63,6 +53,7 @@ int main()
 	{
 		Asteroid* asteroid = poolAsteroid.Get();
 		asteroid->Init(sprite,window.getSize());
+		dispatcher.Connect(EventTypes::collisionEventID, Asteroid::OnCollisionHandler);
 		asteroids.push_back(asteroid);
 	}
 
@@ -99,8 +90,8 @@ int main()
 					{
 						if (Collided(*asteroids[i], *asteroids[j]))
 						{
-							//collisionEvent.setObjs(*asteroids[i], *asteroids[j]);
-							//dispatcher.Send(collisionEvent, collisionEventID);
+							collisionEvent.setObjs(*asteroids[i], *asteroids[j]);
+							dispatcher.Send(collisionEvent, collisionEventID);
 							ResolveCollision(*asteroids[i], *asteroids[j]);
 							asteroids[i]->_health -= 50;
 							asteroids[j]->_health -= 50;

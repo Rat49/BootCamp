@@ -72,6 +72,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="..\PhysicsTest\CollisionEvent.h" />
     <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="DispatcherErrorMessagesStore.h" />
     <ClInclude Include="Event.h" />
