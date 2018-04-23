@@ -32,9 +32,11 @@ private:
 	const float _rotationAngle;
 	float _currentAngle;
 	const float _deltaSpeed;
-	const sf::Time _rechargeTime;
+	const sf::Time _rechargeRocketTime;
+	const sf::Time _rechargeBulletTime;
 	bool _isRecharged;	
 	sf::Time _timeAfterPowerfulShot;
+	sf::Time _timeAfterBulletShot;
 	const sf::Time _inputTime;
 	sf::Time _inputAccumulatedTime;
 	const float _bulletDeltaAngle;

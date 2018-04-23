@@ -25,7 +25,8 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	, _totalRocketCount(10)
 	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(200))
 	, _rocketStorage(Pool<Rocket>(10))
-	, _rechargeTime(sf::seconds(3.0f))
+	, _rechargeRocketTime(sf::seconds(3.0f))
+	, _rechargeBulletTime(sf::seconds(0.5f))
 {
 	_speedDirection = NormalizeSpeed();
 	_zOrder = 1;
@@ -49,7 +50,7 @@ void Spaceship::Decelerate()
 
 void Spaceship::PowerfulShoot()
 {
-	if (_timeAfterPowerfulShot.asSeconds() < _rechargeTime.asSeconds())
+	if (_timeAfterPowerfulShot.asSeconds() < _rechargeRocketTime.asSeconds())
 	{
 		return;
 	}
@@ -65,6 +66,11 @@ void Spaceship::PowerfulShoot()
 
 void Spaceship::OrdinaryShoot()
 {
+	if (_timeAfterBulletShot.asSeconds() < _rechargeBulletTime.asSeconds())
+	{
+		return;
+	}
+	
 	OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
 	bulletLeft->Init(_spaceshipSprite->getPosition(), RotateDirection(15.0f), _ordinaryShotTexture.Get());
 
@@ -77,6 +83,8 @@ void Spaceship::OrdinaryShoot()
 	_bullets.push_back(bulletLeft);
 	_bullets.push_back(bulletRight);
 	_bullets.push_back(bulletCentr);
+
+	_timeAfterBulletShot = sf::seconds(0.0f);
 }
 
 void Spaceship::RotateSpaceship(float angle)
@@ -217,6 +225,7 @@ void Spaceship::Update(sf::Time deltaTime)
 	}
 
 	_timeAfterPowerfulShot += deltaTime;
+	_timeAfterBulletShot += deltaTime;
 	RigidBody::Update(deltaTime.asSeconds());
 	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
 	_spaceshipAnimation->Update(deltaTime);
