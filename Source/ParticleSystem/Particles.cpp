@@ -10,19 +10,10 @@ ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize) :
 	_canvasSize(canvasSize),
 	_emitterVelocity(0, 0)
 {
-	_zOrder = 2;
+	_zOrder = 5;
 	InitializeParticles();
 	Add();
-	
-	Dispatcher& dispatcher = Dispatcher::getInstance();
-	
-	_tokenForResizeWindowEvent = dispatcher.Connect(EventTypes::resizeWindowEventId,
-		[&](const Event& event)
-	{
-		const ResizeWindowEvent& currentWindowSize = static_cast<const ResizeWindowEvent&>(event);
-		_canvasSize = currentWindowSize._windowsize;
-	});
-	_tokens[EventTypes::resizeWindowEventId] = _tokenForResizeWindowEvent;
+
 }
 
 void ParticleSystem::InitializeParticles()
@@ -67,10 +58,10 @@ void ParticleSystem::SetStandartColors()
 }
 
 void ParticleSystem::AddCircleForce(sf::Vector2f centre, float radius, float strength) {
-	_forces.insert(_forces.begin(), circleForce{ strength, centre, radius });
+	_forces.insert(_forces.begin(), circleForce{ strength, centre, centre, radius });
 }
 
-void ParticleSystem::AddCircleForceBehind(unsigned int coeff, float radius, float strength) {
+void ParticleSystem::AddCircleForceBehind(float coeff, float radius, float strength) {
 	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
 	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
 	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
@@ -97,6 +88,12 @@ void ParticleSystem::Update(sf::Time elapsed)
 {
 	int count = 0;
 	int invisible = 0;
+
+	for (auto& force : _forces) {
+			force.centre.x = force.centreInitial.x + std::rand() % 16 - 8;
+			force.centre.y = force.centreInitial.y + std::rand() % 16 - 8;
+	}
+
 	for (std::size_t i = 0; i < _particles.size(); ++i)
 	{
 		Particle& p = _particles[i];
@@ -122,6 +119,7 @@ void ParticleSystem::Update(sf::Time elapsed)
 		ChangeColor(ratio, _vertices[i]);
 
 		for (auto& force : _forces) {
+			
 			sf::Vector2f vec = _vertices[i].position - sf::Vector2f(force.centre.x + force.radius, force.centre.y + force.radius);
 			float lenght = sqrt(vec.x*vec.x + vec.y*vec.y);
 			if (lenght <= force.radius) {
@@ -148,7 +146,7 @@ void ParticleSystem::Update(sf::Time elapsed)
 
 	for (auto& force : _forces) {
 
-		force.centre += _emitterVelocity * elapsed.asSeconds();
+		force.centreInitial += _emitterVelocity * elapsed.asSeconds();
 	}
 	
 	_emitterPosition += _emitterVelocity * elapsed.asSeconds();

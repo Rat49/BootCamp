@@ -7,7 +7,6 @@
 #include <SFML/System.hpp>
 #include "Drawable.h"
 #include "DrawableManager.h"
-#include "ResizeWindowEvent.h"
 
 struct Particle
 {
@@ -44,7 +43,7 @@ public:
 
 	void SetEmitterPosition(sf::Vector2f position)		{ _emitterPosition = position;}
 	void SetSimpleForce(sf::Vector2f force)				{ _simpleForce = force;}
-	void SetEmitterVelocity(sf::Vector2f velocity)		{ _emitterVelocity = velocity; }
+	void SetEmitterVelocity(sf::Vector2f velocity) { _forces.clear(); _emitterVelocity = velocity; }
 	void SetParticlesLifetime(int lifetime)				{ _lifetime = lifetime; }
 	void SetRate(int rate)								{ _rate = rate;}
 	void SetNormalDistrParams(float mean, float sigma)	{ _mean = mean;_sigma = sigma;}
@@ -54,7 +53,7 @@ public:
 	void AddColor(float begin, sf::Color color);
 	void SetStandartColors();
 	void AddCircleForce(sf::Vector2f centre, float radius, float strength);
-	void AddCircleForceBehind(unsigned int coeff, float radius, float strength);
+	void AddCircleForceBehind(float coeff, float radius, float strength);
 	void Update(sf::Time elapsed);
 
 
@@ -69,6 +68,7 @@ private:
 	struct circleForce {
 		float strength;
 		sf::Vector2f centre;
+		sf::Vector2f centreInitial;
 		float radius;
 	};
 	sf::Vector2f _emitterVelocity;
@@ -79,8 +79,6 @@ private:
 	std::vector<Particle> _particles;
 	sf::VertexArray _vertices;
 	sf::Time m_lifetime;
-	Token_t _tokenForResizeWindowEvent;
-	std::map<EventID_t, Token_t> _tokens;
 	int _lifetime = 3500;
 	float _emitterAngle = 180;
 	int _rate = 100;

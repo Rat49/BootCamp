@@ -15,7 +15,8 @@ public:
 		particles.SetNormalDistrParams(0, 3);
 		particles.AddColor(0.3, sf::Color::Cyan);
 		particles.AddColor(0.7, sf::Color::Green);
-		particles.SetParticlesLifetime(2000);
+		particles.SetParticlesLifetime(300);
+		particles.SetRate(15);
 	}
 
 	void SetPosition(sf::Vector2f position) {
@@ -24,11 +25,10 @@ public:
 
 	void SetVelocity(sf::Vector2f velocity) {
 		particles.SetEmitterVelocity(velocity);
-		particles.AddCircleForceBehind(3, 20, 0.5);
-		particles.AddCircleForceBehind(6, 40, -0.3);
-		particles.AddCircleForceBehind(9, 40, 0.5);
-		particles.AddCircleForceBehind(12, 40, 0.2);
-
+		particles.AddCircleForceBehind(0.5, 20, -2);
+		particles.AddCircleForceBehind(1.5, 20, 0.3);
+		particles.AddCircleForceBehind(2.5, 20, -2);
+		particles.AddCircleForceBehind(3.5, 20, 0.5);
 	}
 
 	void Stop() {
@@ -87,7 +87,7 @@ public:
 
 	Spaceship(unsigned int quantity, sf::Vector2u window) :
 		particles(1000, window) {
-		particles.SetParticlesLifetime(500);
+		particles.SetParticlesLifetime(50);
 	}
 
 	void SetPosition(sf::Vector2f position) {
@@ -96,10 +96,8 @@ public:
 
 	void SetVelocity(sf::Vector2f velocity) {
 		particles.SetEmitterVelocity(velocity);
-		particles.AddCircleForceBehind(3, 40, -0.5);
-		particles.AddCircleForceBehind(6, 40, 0.5);
-		particles.AddCircleForceBehind(9, 40, -0.5);
-		particles.AddCircleForceBehind(12, 40, 0.5);
+		particles.AddCircleForceBehind(0.5, 20, -1);
+		particles.AddCircleForceBehind(1.5, 20, 0.7);
 	}
 
 	void Stop() {
@@ -139,7 +137,7 @@ int main()
 	sf::Vector2f LastMousePos(0, 0);
 	Rocket rocket(1000, window.getSize());
 	rocket.SetPosition(sf::Vector2f(600, 233));
-	rocket.SetVelocity(sf::Vector2f(-20, 5));
+	rocket.SetVelocity(sf::Vector2f(-40, 15));
 
 	Explosion* explosion = new Explosion(1000, window.getSize());
 	explosion->SetPosition(sf::Vector2f(500, 500));
@@ -157,12 +155,6 @@ int main()
 			if (event.type == sf::Event::Closed) {
 				window.close();
 			}
-			if (event.type == sf::Event::Resized) {
-				Dispatcher & dispatcher = Dispatcher::getInstance();
-				sf::Vector2u windowsize = window.getSize();
-				ResizeWindowEvent resizeEvent(windowsize);
-				dispatcher.Send(resizeEvent, EventTypes::resizeWindowEventId);
-			}
 		}
 
 		auto now = clock.getElapsedTime();
@@ -177,11 +169,11 @@ int main()
 		
 		dm.DrawScene(window);
 		//~~~~~~~~~~~~~~just for testing~~~~~~~~~~~~~~~~~
-		if (count % 47 == 0) {
+		if (count % 269 == 0) {
 			spaceship.Stop();
-			spaceship.SetVelocity(sf::Vector2f(std::rand() % 40 - 20, std::rand() % 40 - 20));
+			spaceship.SetVelocity(sf::Vector2f(std::rand() % 70 - 20, std::rand() % 70 - 20));
 		}
-		if (count % 97 == 0) {
+		if (count % 41 == 0) {
 			spaceship.Play();
 		}
 		if (explosion->IsEnd()) {
