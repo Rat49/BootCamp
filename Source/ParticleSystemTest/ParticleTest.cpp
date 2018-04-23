@@ -1,6 +1,7 @@
 #include <sstream>
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include "Particles.h"
 #include "Drawable.h"
