@@ -12,7 +12,7 @@ public:
 
 	Rocket(unsigned int quantity, sf::Vector2u window) :
 		particles(1000, window) {
-		particles.SetNormalDistrParams(0, 3);
+		particles.SetNormalDistrParams(0, 5);
 		particles.AddColor(0.3, sf::Color::Cyan);
 		particles.AddColor(0.7, sf::Color::Green);
 		particles.SetParticlesLifetime(300);
