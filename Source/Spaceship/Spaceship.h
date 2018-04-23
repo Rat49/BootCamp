@@ -33,7 +33,7 @@ private:
 	sf::Vector2f _speedDirection;
 	const float _rotationAngle;
 	float _currentAngle;
-	const float _deltaSpeed;
+	const float _acceleration;
 	const sf::Time _rechargeRocketTime;
 	const sf::Time _rechargeBulletTime;
 	bool _isRecharged;	
@@ -41,7 +41,7 @@ private:
 	sf::Time _timeAfterBulletShot;
 	const sf::Time _inputTime;
 	sf::Time _inputAccumulatedTime;
-	const float _bulletDeltaAngle;
+	const float _bulletDeflection;
 	const float _maxSquareSpeed;
 	const float _rebound;
 	const float _powerfulRebound;
@@ -56,12 +56,11 @@ private:
 
 	InputManager& _input;
 
-	void ChangeSpeed(float deltaSpeed);
+	void ControlSpeed(float deltaSpeed);
 	float GetSquareLength(sf::Vector2f speed) const;
 	sf::Vector2f RotateDirection(float angle) const;
-	sf::Vector2f RotateDirection(sf::Vector2f vector, float angle) const;
 	sf::Vector2f NormalizeSpeed() const;
-	void GetRebound(float reboundValue);
+	void GainRebound(float reboundValue);
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;
 };

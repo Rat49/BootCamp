@@ -9,12 +9,12 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	, _spaceshipDirection(_initialDirection)
 	, _input(input)
 	, _isRecharged(true)
-	, _rotationAngle(10.0f)
+	, _rotationAngle(17.0f)
 	, _currentAngle(0.0f)
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
-	, _bulletDeltaAngle(5.0f)
-	, _deltaSpeed(15.0f)
+	, _bulletDeflection(5.0f)
+	, _acceleration(15.0f)
 	, _maxSquareSpeed(15000.0f)
 	, _ordinaryShotTexture(ordinaryShotTexture)
 	, _powerfulShotTexture(powerfulShotTexture)
@@ -39,12 +39,12 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 
 void Spaceship::Accelerate()
 {
-	ChangeSpeed(_deltaSpeed);
+	ControlSpeed(_acceleration);
 }
 
 void Spaceship::Decelerate()
 {
-	ChangeSpeed(-_deltaSpeed);
+	ControlSpeed(-_acceleration);
 }
 
 void Spaceship::PowerfulShoot()
@@ -60,6 +60,7 @@ void Spaceship::PowerfulShoot()
 	_rockets.push_back(rocket);
 	
 	_timeAfterPowerfulShot = sf::seconds(0.0f); 
+	GainRebound(_powerfulRebound);
 }
 
 
@@ -71,10 +72,10 @@ void Spaceship::OrdinaryShoot()
 	}
 	
 	OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
-	bulletLeft->Init(_spaceshipSprite->getPosition(), RotateDirection(15.0f), _ordinaryShotTexture.Get());
+	bulletLeft->Init(_spaceshipSprite->getPosition(), RotateDirection(_bulletDeflection), _ordinaryShotTexture.Get());
 
 	OrdinaryBullet* bulletRight = _ordinaryBulletStorage.Get();
-	bulletRight->Init(_spaceshipSprite->getPosition(), RotateDirection(-15.0f), _ordinaryShotTexture.Get());
+	bulletRight->Init(_spaceshipSprite->getPosition(), RotateDirection(-_bulletDeflection), _ordinaryShotTexture.Get());
 
 	OrdinaryBullet* bulletCentr = _ordinaryBulletStorage.Get();
 	bulletCentr->Init(_spaceshipSprite->getPosition(), RotateDirection(0.0f), _ordinaryShotTexture.Get());
@@ -84,6 +85,7 @@ void Spaceship::OrdinaryShoot()
 	_bullets.push_back(bulletCentr);
 
 	_timeAfterBulletShot = sf::seconds(0.0f);
+	GainRebound(_rebound);
 }
 
 void Spaceship::RotateSpaceship(float angle)
@@ -94,7 +96,7 @@ void Spaceship::RotateSpaceship(float angle)
 	_spaceshipSprite->setRotation(_currentAngle);	
 }
 
-void Spaceship::ChangeSpeed(float deltaSpeed)
+void Spaceship::ControlSpeed(float deltaSpeed)
 {
 	float speedValue = std::sqrt(GetSquareLength(GetSpeed()));
 
@@ -111,7 +113,6 @@ void Spaceship::ChangeSpeed(float deltaSpeed)
 	{
 		SetSpeed(newSpeed);
 	}
-
 }
 
 float Spaceship::GetSquareLength(sf::Vector2f speed) const
@@ -126,23 +127,15 @@ sf::Vector2f Spaceship::RotateDirection(float angle) const
 		_spaceshipDirection.x * std::sin(radianAngle) + _spaceshipDirection.y * std::cos(radianAngle));
 }
 
-sf::Vector2f Spaceship::RotateDirection(sf::Vector2f vector, float angle) const
-{
-	float radianAngle = angle * PI_F / 180.0f;
-	return sf::Vector2f(vector.x * std::cos(radianAngle) - vector.y * std::sin(radianAngle),
-		vector.x * std::sin(radianAngle) + vector.y * std::cos(radianAngle));
-}
-
 sf::Vector2f Spaceship::NormalizeSpeed() const
 {
 	float speedLength = std::sqrt(GetSquareLength(GetSpeed()));
 	return GetSpeed() / speedLength;
 }
 
-void Spaceship::GetRebound(float reboundValue)
+void Spaceship::GainRebound(float reboundValue)
 {
-	sf::Vector2f rebound = -_spaceshipDirection * reboundValue;
-	SetSpeed(GetSpeed() - rebound);
+	SetSpeed(GetSpeed() + -_spaceshipDirection * reboundValue);
 }
 
 void Spaceship::Update(sf::Time deltaTime)

@@ -8,7 +8,6 @@ int main()
 	int counterImageSequence = 0;
 
 	ImageSequenceResource* spaceshipImgseq = rm->GetResource<ImageSequenceResource>("spaceshipNormal");
-	//ImageSequenceResource* bulletImgseq = rm->GetResource<ImageSequenceResource>("fire");
 	TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
 
