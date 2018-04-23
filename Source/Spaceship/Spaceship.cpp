@@ -15,7 +15,7 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	, _inputAccumulatedTime(sf::milliseconds(0))
 	, _bulletDeltaAngle(5.0f)
 	, _deltaSpeed(15.0f)
-	, _maxSquareSpeed(10000.0f)
+	, _maxSquareSpeed(15000.0f)
 	, _ordinaryShotTexture(ordinaryShotTexture)
 	, _powerfulShotTexture(powerfulShotTexture)
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
@@ -98,15 +98,20 @@ void Spaceship::ChangeSpeed(float deltaSpeed)
 {
 	float speedValue = std::sqrt(GetSquareLength(GetSpeed()));
 
-	_speedDirection = deltaSpeed > 0 ? _spaceshipDirection : -_spaceshipDirection;
-	SetSpeed(_speedDirection * speedValue);
+	if (!((_speedDirection == _spaceshipDirection) || (_speedDirection == -_spaceshipDirection)))
+	{
+		_speedDirection = deltaSpeed > 0 ? _spaceshipDirection : -_spaceshipDirection;
 
-	sf::Vector2f newSpeed = GetSpeed() + std::abs(deltaSpeed) * _speedDirection;
+		SetSpeed(_speedDirection * speedValue);
+	}
+
+	sf::Vector2f newSpeed = GetSpeed() + deltaSpeed * _spaceshipDirection;
 
 	if (GetSquareLength(newSpeed) < _maxSquareSpeed)
 	{
 		SetSpeed(newSpeed);
 	}
+
 }
 
 float Spaceship::GetSquareLength(sf::Vector2f speed) const
