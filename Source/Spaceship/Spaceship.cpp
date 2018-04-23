@@ -89,13 +89,12 @@ void Spaceship::RotateSpaceship(float angle)
 
 void Spaceship::ChangeSpeed(float deltaSpeed)
 {
-	sf::Vector2f speed = GetSpeed();
-	float angle = std::acos(_speedDirection.x * _spaceshipDirection.x + _speedDirection.y * _spaceshipDirection.y) * 180.0f / PI_F;
+	float speedValue = std::sqrt(GetSquareLength(GetSpeed()));
 
-	SetSpeed(RotateDirection(GetSpeed(), angle));
-	_speedDirection = _spaceshipDirection;
+	_speedDirection = deltaSpeed > 0 ? _spaceshipDirection : -_spaceshipDirection;
+	SetSpeed(_speedDirection * speedValue);
 
-	sf::Vector2f newSpeed = GetSpeed() + deltaSpeed * _spaceshipDirection;
+	sf::Vector2f newSpeed = GetSpeed() + std::abs(deltaSpeed) * _speedDirection;
 
 	if (GetSquareLength(newSpeed) < _maxSquareSpeed)
 	{
