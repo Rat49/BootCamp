@@ -7,7 +7,6 @@ OrdinaryBullet::OrdinaryBullet()
 	, _ordinaryBulletSprite()
 	, _bulletTexture()
 {
-	Add();
 	_zOrder = 4;
 	_life = false;
 }
@@ -19,6 +18,8 @@ OrdinaryBullet::~OrdinaryBullet()
 
 void OrdinaryBullet::Init(sf::Vector2f position, const  sf::Vector2f bulletDirection, sf::Texture& bulletTexture)
 {
+	Add();
+	
 	_life = true;
 	_bulletTexture = &bulletTexture;
 	_ordinaryBulletSprite.setTexture(*_bulletTexture);

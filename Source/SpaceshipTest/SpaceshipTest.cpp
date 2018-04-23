@@ -19,7 +19,8 @@ int main()
 	InputManager* input = new InputManager();
 	
 	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), *input, *spaceshipImgseq, *bulletTexture, *rocketTexture);
-
+	spaceship->Add();
+	
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();
 	sf::Time deltaTime;

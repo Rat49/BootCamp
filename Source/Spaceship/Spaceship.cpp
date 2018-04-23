@@ -32,7 +32,6 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	_zOrder = 1;
 	_spaceshipSprite = new sf::Sprite();
 	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, spaceshipAnimationImseq, true);
-	Add();
 	_spaceshipSprite->setPosition(position);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
 	_spaceshipAnimation->Start();
@@ -244,6 +243,9 @@ void Spaceship::Update(sf::Time deltaTime)
 				_bullets.erase(_bullets.cbegin() + i);
 				--i;
 				_ordinaryBulletStorage.Put(ptrBullet);
+				DrawableManager::getInstance()._drawableObjects.erase
+				(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), dynamic_cast<Drawable*>(ptrBullet)), 
+					DrawableManager::getInstance()._drawableObjects.end());
 			}
 		}
 	}	
@@ -262,6 +264,9 @@ void Spaceship::Update(sf::Time deltaTime)
 				_rockets.erase(_rockets.cbegin() + i);
 				--i;
 				_rocketStorage.Put(ptrRocket);
+				DrawableManager::getInstance()._drawableObjects.erase
+				(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), dynamic_cast<Drawable*>(ptrRocket)), 
+					DrawableManager::getInstance()._drawableObjects.end());
 			}
 		}
 	}

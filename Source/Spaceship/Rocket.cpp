@@ -9,7 +9,6 @@ Rocket::Rocket()
 	, _speedDelayTime(sf::seconds(1.0f))
 	, _deltaSpeedValue(600.0f)
 {
-	Add();
 	_zOrder = 3;	
 	_life = false;
 }
@@ -21,6 +20,8 @@ Rocket::~Rocket()
 
 void Rocket::Init(sf::Vector2f position, const sf::Vector2f rocketDirection, sf::Texture& rocketTexture)
 {
+	Add();
+	
 	_life = true;
 	_direction = rocketDirection;
 	_rocketTexture = &rocketTexture;

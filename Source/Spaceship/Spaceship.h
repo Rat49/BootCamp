@@ -6,6 +6,7 @@
 #include "Input.h"
 #include "OrdinaryBullet.h"
 #include "Rocket.h"
+#include <algorithm>
 
 class Spaceship : public RigidBody, public Drawable
 {
@@ -20,6 +21,7 @@ public:
 	void OrdinaryShoot();
 	void RotateSpaceship(float angle);	
 	void Update(sf::Time deltaTime);
+	void Add() override;
 private:
 	Pool<OrdinaryBullet> _ordinaryBulletStorage;
 	Pool<Rocket> _rocketStorage;
@@ -60,7 +62,6 @@ private:
 	sf::Vector2f RotateDirection(sf::Vector2f vector, float angle) const;
 	sf::Vector2f NormalizeSpeed() const;
 	void GetRebound(float reboundValue);
-	void Add() override;
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;
 };
