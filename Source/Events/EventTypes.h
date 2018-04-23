@@ -8,5 +8,6 @@ enum EventTypes : EventID_t
 	debugCommandManagerEventID,
 	debugConsoleKeyEventID,
 	loggerMessageEventID,
-	collisionEventID
+	collisionEventID,
+	resizeWindowEventId
 };

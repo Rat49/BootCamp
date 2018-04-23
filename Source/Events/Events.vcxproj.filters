@@ -30,6 +30,9 @@
     <ClInclude Include="DispatcherErrorMessagesStore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ResizeWindowEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dispatcher.cpp">

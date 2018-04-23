@@ -1,11 +1,11 @@
 #include "Particles.h"
+#include "EventSystem.h"
 #include <SFML/System.hpp>
 
 
 ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize) :
 	_particles(count),
 	_vertices(sf::Points, count),
-	m_lifetime(sf::seconds(3)),
 	_emitterPosition(0, 0),
 	_canvasSize(canvasSize),
 	_emitterVelocity(0, 0)
@@ -13,9 +13,49 @@ ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize) :
 	_zOrder = 2;
 	InitializeParticles();
 	Add();
+	
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	
+	_tokenForResizeWindowEvent = dispatcher.Connect(EventTypes::resizeWindowEventId,
+		[&](const Event& event)
+	{
+		const ResizeWindowEvent& currentWindowSize = static_cast<const ResizeWindowEvent&>(event);
+		_canvasSize = currentWindowSize._windowsize;
+	});
+	_tokens[EventTypes::resizeWindowEventId] = _tokenForResizeWindowEvent;
 }
 
 void ParticleSystem::InitializeParticles()
+{
+	for (std::size_t i = 0; i < _particles.size(); ++i)
+	{
+		Particle& p = _particles[i];
+		float angle = (std::rand() % 360) * 3.14f / 180.f;
+		float speed = 0;
+		p._velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
+		_vertices[i].position = _emitterPosition;
+		_particles[i]._currentLifetime = sf::milliseconds((std::rand() % _lifetime));
+	}
+}
+
+bool SortPair(const std::pair <float, sf::Color> &p1, const std::pair <float, sf::Color> &p2)
+{
+	return p1.first > p2.first;
+}
+
+void ParticleSystem::SortColors()
+{
+	sort(colors.begin(), colors.end(), SortPair);
+	auto t = colors;
+}
+
+void ParticleSystem::AddColor(float begin, sf::Color color)
+{
+	colors.insert(colors.begin(), std::make_pair(begin, color));
+	SortColors();
+}
+
+void ParticleSystem::SetStandartColors()
 {
 	colors = {
 		{ 1.f, sf::Color::Color(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255)) },
@@ -24,27 +64,17 @@ void ParticleSystem::InitializeParticles()
 		{ .5f, sf::Color::Color(static_cast<sf::Uint8>(90), static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(57), static_cast<sf::Uint8>(255)) },
 		{ .1f, sf::Color::Black }
 	};
-	for (std::size_t i = 0; i < _particles.size(); ++i)
-	{
-		Particle& p = _particles[i];
-		float angle = (std::rand() % 360) * 3.14f / 180.f;
-		float speed = 0;
-		p.velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
-		_vertices[i].position = _emitterPosition;
-		_particles[i].lifetime = sf::milliseconds((std::rand() % _lifetime));
-	}
 }
 
-void ParticleSystem::AddCircleForce(sf::Vector2f centre, float radius, float strenght) {
-	_forces.insert(_forces.begin(), circleForce{ strenght, centre, radius });
+void ParticleSystem::AddCircleForce(sf::Vector2f centre, float radius, float strength) {
+	_forces.insert(_forces.begin(), circleForce{ strength, centre, radius });
 }
 
-void ParticleSystem::AddCircleForceForRocket() {
-	float radius = 40;
-	AddCircleForce(_emitterPosition - sf::Vector2f(3 * _emitterVelocity.x + radius, 3 * _emitterVelocity.y + radius), 40, -0.3);
-	AddCircleForce(_emitterPosition - sf::Vector2f(6 * _emitterVelocity.x + radius, 6 * _emitterVelocity.y + radius), 40, 0.3);
-	AddCircleForce(_emitterPosition - sf::Vector2f(9 * _emitterVelocity.x + radius, 9 * _emitterVelocity.y + radius), 40, -0.3);
-	AddCircleForce(_emitterPosition - sf::Vector2f(12 * _emitterVelocity.x + radius, 12 * _emitterVelocity.y + radius), 40, 0.3);
+void ParticleSystem::AddCircleForceBehind(unsigned int coeff, float radius, float strength) {
+	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
+	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
+	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
+	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
 }
 
 void ParticleSystem::ChangeColor(const float lifeTime, sf::Vertex& vertex) {
@@ -70,12 +100,12 @@ void ParticleSystem::Update(sf::Time elapsed)
 	for (std::size_t i = 0; i < _particles.size(); ++i)
 	{
 		Particle& p = _particles[i];
-		p.lifetime -= elapsed;
-		if (p.velocity != sf::Vector2f(0, 0))
-			p.velocity += _simpleForce * elapsed.asSeconds();
-		_vertices[i].position += p.velocity * elapsed.asSeconds();
+		p._currentLifetime -= elapsed;
+		if (p._velocity != sf::Vector2f(0, 0))
+			p._velocity += _simpleForce * elapsed.asSeconds();
+		_vertices[i].position += p._velocity * elapsed.asSeconds();
 
-		float ratio =  clamp(p.lifetime.asSeconds() / p.AllLifetime.asSeconds(), 0.f, 1.f);
+		float ratio =  clamp(p._currentLifetime.asSeconds() / p._fullLifetime.asSeconds(), 0.f, 1.f);
 
 		_vertices[i].color.a = static_cast<sf::Uint8>(ratio * 255);
 
@@ -83,7 +113,7 @@ void ParticleSystem::Update(sf::Time elapsed)
 			_vertices[i].color.a = _vertices[i].color.a - 80;
 		}
 
-		if (p.lifetime <= sf::Time::Zero && count < _rate)
+		if (p._currentLifetime <= sf::Time::Zero && count < _rate)
 		{
 			ResetParticle(i);
 			count++;
@@ -96,8 +126,8 @@ void ParticleSystem::Update(sf::Time elapsed)
 			float lenght = sqrt(vec.x*vec.x + vec.y*vec.y);
 			if (lenght <= force.radius) {
 				sf::Vector2f normal = sf::Vector2f(vec.x / sqrt(lenght), vec.y / sqrt(lenght));
-				float strenght = ((force.radius - sqrt(lenght)) / force.radius) * force.strenght;
-				p.velocity += normal * strenght;
+				float strength = ((force.radius - sqrt(lenght)) / force.radius) * force.strength;
+				p._velocity += normal * strength;
 
 			}
 		}
@@ -162,9 +192,9 @@ void ParticleSystem::ResetParticle(std::size_t index)
 	}
 	float speed = (std::rand() % 5) + _speed;
 
-	_particles[index].velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
-	_particles[index].lifetime = sf::milliseconds((std::rand() % 500) + _lifetime);
-	_particles[index].AllLifetime = _particles[index].lifetime;
+	_particles[index]._velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
+	_particles[index]._currentLifetime = sf::milliseconds((std::rand() % 500) + _lifetime);
+	_particles[index]._fullLifetime = _particles[index]._currentLifetime;
 	_vertices[index].position = _emitterPosition;
 }
 

@@ -7,12 +7,13 @@
 #include <SFML/System.hpp>
 #include "Drawable.h"
 #include "DrawableManager.h"
+#include "ResizeWindowEvent.h"
 
 struct Particle
 {
-	sf::Vector2f velocity;
-	sf::Time AllLifetime;
-	sf::Time lifetime;
+	sf::Vector2f _velocity;
+	sf::Time _fullLifetime;
+	sf::Time _currentLifetime;
 };
 
 enum Distribution {
@@ -21,16 +22,16 @@ enum Distribution {
 };
 
 template<class T, class Compare>
-constexpr const T& clamp(const T& v, const T& lo, const T& hi, Compare comp)
+constexpr const T& clamp(const T& value, const T& lowerBound, const T& upperBound, Compare comp)
 {
-	return assert(!comp(hi, lo)),
-		comp(v, lo) ? lo : comp(hi, v) ? hi : v;
+	return assert(!comp(upperBound, lowerBound)),
+		comp(value, lowerBound) ? lowerBound : comp(upperBound, value) ? upperBound : value;
 }
 
 template<class T>
-constexpr const T& clamp(const T& v, const T& lo, const T& hi)
+constexpr const T& clamp(const T& value, const T& lowerBound, const T& upperBound)
 {
-	return clamp(v, lo, hi, std::less<>());
+	return clamp(value, lowerBound, upperBound, std::less<>());
 }
 
 class ParticleSystem : public Drawable, public sf::Transformable
@@ -49,8 +50,11 @@ public:
 	void SetNormalDistrParams(float mean, float sigma)	{ _mean = mean;_sigma = sigma;}
 	void SetUniformDistrRange(int range)				{ _range = range;}
 	
-	void AddCircleForce(sf::Vector2f centre, float radius, float strenght);
-	void AddCircleForceForRocket();
+	void SortColors();
+	void AddColor(float begin, sf::Color color);
+	void SetStandartColors();
+	void AddCircleForce(sf::Vector2f centre, float radius, float strength);
+	void AddCircleForceBehind(unsigned int coeff, float radius, float strength);
 	void Update(sf::Time elapsed);
 
 
@@ -63,7 +67,7 @@ public:
 
 private:
 	struct circleForce {
-		float strenght;
+		float strength;
 		sf::Vector2f centre;
 		float radius;
 	};
@@ -75,6 +79,8 @@ private:
 	std::vector<Particle> _particles;
 	sf::VertexArray _vertices;
 	sf::Time m_lifetime;
+	Token_t _tokenForResizeWindowEvent;
+	std::map<EventID_t, Token_t> _tokens;
 	int _lifetime = 3500;
 	float _emitterAngle = 180;
 	int _rate = 100;
