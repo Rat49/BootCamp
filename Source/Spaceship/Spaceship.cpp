@@ -1,11 +1,11 @@
 #include "Spaceship.h"
-#include <iostream>
 
 const float PI_F = 3.14159265358979f;
 
 Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & input,
 	ImageSequenceResource &spaceshipAnimationImseq, TextureResource &ordinaryShotTexture, TextureResource &powerfulShotTexture)
 	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
 	, _input(input)
 	, _isRecharged(true)
@@ -21,7 +21,9 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 	, _rebound(5.0f)
 	, _powerfulRebound(15.0f)
-	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(100))
+	, _totalBulletCount(200)
+	, _totalRocketCount(10)
+	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(200))
 	, _rocketStorage(Pool<Rocket>(10))
 	, _rechargeTime(sf::seconds(3.0f))
 {
@@ -33,7 +35,6 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	_spaceshipSprite->setPosition(position);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
 	_spaceshipAnimation->Start();
-	
 }
 
 void Spaceship::Accelerate()
@@ -56,12 +57,7 @@ void Spaceship::PowerfulShoot()
 	Rocket* rocket = _rocketStorage.Get();
 	rocket->Init(_spaceshipSprite->getPosition(), _spaceshipDirection, _powerfulShotTexture.Get());
 	
-	if (std::find(_rockets.cbegin(), _rockets.cend(), rocket) == _rockets.cend())
-	{
-		_rockets.push_back(rocket);
-	}
-
-	//GetRebound(_powerfulRebound);
+	_rockets.push_back(rocket);
 	
 	_timeAfterPowerfulShot = sf::seconds(0.0f); 
 }
@@ -70,21 +66,17 @@ void Spaceship::PowerfulShoot()
 void Spaceship::OrdinaryShoot()
 {
 	OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
-	bulletLeft->Init(_spaceshipSprite->getPosition(), RotateDirection(10.0f), _ordinaryShotTexture.Get());
+	bulletLeft->Init(_spaceshipSprite->getPosition(), RotateDirection(15.0f), _ordinaryShotTexture.Get());
 
 	OrdinaryBullet* bulletRight = _ordinaryBulletStorage.Get();
-	bulletRight->Init(_spaceshipSprite->getPosition(), RotateDirection(-10.0f), _ordinaryShotTexture.Get());
+	bulletRight->Init(_spaceshipSprite->getPosition(), RotateDirection(-15.0f), _ordinaryShotTexture.Get());
 
-	if (std::find(_bullets.cbegin(), _bullets.cend(), bulletLeft) == _bullets.cend())
-	{
-		_bullets.push_back(bulletLeft);
-	}
-	if (std::find(_bullets.cbegin(), _bullets.cend(), bulletRight) == _bullets.cend())
-	{
-		_bullets.push_back(bulletRight);
-	}
-
-	//GetRebound(_rebound);
+	OrdinaryBullet* bulletCentr = _ordinaryBulletStorage.Get();
+	bulletCentr->Init(_spaceshipSprite->getPosition(), RotateDirection(0.0f), _ordinaryShotTexture.Get());
+	
+	_bullets.push_back(bulletLeft);
+	_bullets.push_back(bulletRight);
+	_bullets.push_back(bulletCentr);
 }
 
 void Spaceship::RotateSpaceship(float angle)
@@ -141,8 +133,6 @@ void Spaceship::GetRebound(float reboundValue)
 	sf::Vector2f rebound = -_spaceshipDirection * reboundValue;
 	SetSpeed(GetSpeed() - rebound);
 }
-
-
 
 void Spaceship::Update(sf::Time deltaTime)
 {
@@ -231,32 +221,43 @@ void Spaceship::Update(sf::Time deltaTime)
 	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
 	_spaceshipAnimation->Update(deltaTime);
 
-	for (auto bullet : _bullets)
+	for (size_t i = 0; i < _bullets.size(); ++i)
 	{
-		if (bullet->GetLifeStatus())
+		OrdinaryBullet* ptrBullet = _bullets[i];
+		
+		if (ptrBullet->GetLifeStatus())
 		{
-			bullet->Update(deltaTime);
+			ptrBullet->Update(deltaTime);
 		}
 		else
 		{
-			_ordinaryBulletStorage.Put(bullet);
-			bullet->Reset();
+			if (!(_ordinaryBulletStorage.Count() == _totalBulletCount)) 
+			{
+				_bullets.erase(_bullets.cbegin() + i);
+				--i;
+				_ordinaryBulletStorage.Put(ptrBullet);
+			}
 		}
-	}
-	for (auto rocket : _rockets)
+	}	
+	for (size_t i = 0; i < _rockets.size(); ++i)
 	{
-		if (rocket->GetLifeStatus())
+		Rocket* ptrRocket = _rockets[i];
+
+		if (ptrRocket->GetLifeStatus())
 		{
-			rocket->Update(deltaTime);
+			ptrRocket->Update(deltaTime);
 		}
 		else
 		{
-			_rocketStorage.Put(rocket);
-			rocket->Reset();
+			if (!(_rocketStorage.Count() == _totalRocketCount))
+			{
+				_rockets.erase(_rockets.cbegin() + i);
+				--i;
+				_rocketStorage.Put(ptrRocket);
+			}
 		}
 	}
 }
-
 
 void Spaceship::Add()
 {
@@ -276,4 +277,5 @@ void Spaceship::Draw(sf::RenderWindow& window)
 
 Spaceship::~Spaceship()
 {
+	//unsub event
 }

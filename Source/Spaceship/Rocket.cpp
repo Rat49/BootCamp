@@ -8,10 +8,9 @@ Rocket::Rocket()
 	, _rocketTexture()
 	, _speedDelayTime(sf::seconds(1.0f))
 	, _deltaSpeedValue(600.0f)
-	//,_rocketAnimation()
 {
 	Add();
-	_zOrder = 2;	
+	_zOrder = 3;	
 	_life = false;
 }
 
@@ -19,22 +18,6 @@ Rocket::~Rocket()
 {
 	//unsub event 
 }
-
-//void Rocket::Init(const sf::Vector2f position, const  sf::Vector2f rocketDirection, ImageSequenceResource& rocketAnimationImseq)
-//{
-//	*_rocketAnimationImseq = rocketAnimationImseq;
-//	_rocketAnimation->Init(&_rocketSprite, &rocketAnimationImseq, true);
-//
-//	Add();
-//
-//	_rocketAnimation->Start();
-//	_rocketAnimation->GetSprite()->setOrigin(sf::Vector2f(_rocketAnimation->GetWidth() / 2.0f, _rocketAnimation->GetHeight() / 2.0f));
-//	_rocketAnimation->GetSprite()->setPosition(position);
-//
-//	SetSpeed(rocketDirection * _speedValue);
-//	_speedDelayTime = sf::seconds(0.0f);
-//	SetCoordinates(position);
-//}
 
 void Rocket::Init(sf::Vector2f position, const sf::Vector2f rocketDirection, sf::Texture& rocketTexture)
 {
@@ -84,15 +67,11 @@ void Rocket::Update(sf::Time& deltaTime)
 	}
 
 	_rocketSprite.setPosition(GetCoordinates());
-	//_rocketAnimation->Update(deltaTime);
 }
 
 void Rocket::Reset()
 {
-	//_rocketAnimation->Reset();
-
 	_life = false;
-
 	_rocketSprite.setOrigin(0, 0);
 	_rocketSprite.setPosition(0, 0);
 	_rocketSprite.setRotation(0);

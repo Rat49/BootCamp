@@ -1,7 +1,5 @@
 #pragma once
-#include "AnimationPlayer.h"
 #include "Drawable.h"
-#include "ImageSequenceResource.h"
 #include "Physics.h"
 #include "Pool.h"
 
