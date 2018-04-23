@@ -1,6 +1,6 @@
-#include "Input.h"
-#include "Spaceship.h"
 #include "DrawableManager.h"
+#include "Spaceship.h"
+
 
 int main()
 {
