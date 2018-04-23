@@ -40,10 +40,12 @@ sf::Sprite* OrdinaryBullet::GetSprite()
 
 void OrdinaryBullet::Draw(sf::RenderWindow& window)
 {
-	if (GetLifeStatus())
+	if (!GetLifeStatus())
 	{
-		window.draw(_ordinaryBulletSprite);
+		return;
 	}
+	
+	window.draw(_ordinaryBulletSprite);
 }
 
 void OrdinaryBullet::Update(sf::Time& deltaTime)

@@ -45,10 +45,12 @@ sf::Sprite* Rocket::GetSprite()
 
 void Rocket::Draw(sf::RenderWindow& window)
 {
-	if (GetLifeStatus())
+	if (!GetLifeStatus())
 	{
-		window.draw(_rocketSprite);
+		return;
 	}
+	
+	window.draw(_rocketSprite);
 }
 
 void Rocket::Update(sf::Time& deltaTime)
