@@ -12,26 +12,29 @@ RigidBody::RigidBody(sf::Vector2f c, sf::Vector2f s, float r, float m)
 }
 
 
-void RigidBody::Update(float t)
+void RigidBody::Update(float t, bool clampByPhysicSpace)
 {
   _coords.x += _speed.x * t;
   _coords.y += _speed.y * t;
 
-  if(_coords.x > W)
+  if (clampByPhysicSpace)
   {
-    _coords.x = 0;
-  }
-  if(_coords.x < 0)
-  {
-    _coords.x = W;
-  }
-  if(_coords.y > H)
-  {
-    _coords.y = 0;
-  }
-  if(_coords.y < 0)
-  {
-    _coords.y = H;
+	  if (_coords.x > W)
+	  {
+		  _coords.x = 0;
+	  }
+	  if (_coords.x < 0)
+	  {
+		  _coords.x = W;
+	  }
+	  if (_coords.y > H)
+	  {
+		  _coords.y = 0;
+	  }
+	  if (_coords.y < 0)
+	  {
+		  _coords.y = H;
+	  }
   }
 }
 

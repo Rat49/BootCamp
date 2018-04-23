@@ -6,7 +6,7 @@
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
-const int W = 1200;
+const int W = 800;
 const int H = 800;
 
 class RigidBody {
@@ -20,7 +20,7 @@ public:
 
 	RigidBody();
 	RigidBody(sf::Vector2f, sf::Vector2f, float, float);
-	void Update(float);
+	void Update(float t, bool clampByPhysicSpace = true);
 	void SetRadius(float);
 	void SetCoordinates(sf::Vector2f);
 	void SetX(float);

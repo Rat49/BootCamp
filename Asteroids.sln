@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2024
+VisualStudioVersion = 15.0.27004.2010
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Asteroids", "Source\Asteroids\Asteroids.vcxproj", "{EC36BC08-A0CE-44C3-A47D-99DF70476154}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -132,6 +132,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AsteroidsLogicAndSpaceTest"
 		{176C4C58-FAB5-457B-BE6D-81EDE35612B2} = {176C4C58-FAB5-457B-BE6D-81EDE35612B2}
 		{C3536574-33D7-4412-9F11-583178751BAA} = {C3536574-33D7-4412-9F11-583178751BAA}
 		{E3962BCA-52AF-4987-8971-C0EB4BB22601} = {E3962BCA-52AF-4987-8971-C0EB4BB22601}
+		{1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82} = {1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82}
 	EndProjectSection
 EndProject
 Global

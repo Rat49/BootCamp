@@ -4,32 +4,23 @@
 #include "Drawable.h"
 #include "DrawableManager.h"
 class Object :
-	public PoolElement, public Drawable
+	public Drawable, public PoolElement
 {
 public:
-	Object() :_sizeSpace(), _liveTime(200.0), _allLiveTime(200.0) 
-	{
-		Add();
-	}
 
-	void Draw(sf::RenderWindow & window) override {};
+	Object() :_sizeSpace() {}
 
-	virtual void Update(sf::Time time) {};
+	void Draw(sf::RenderWindow & window) override {}
+	virtual void Update(float time) {}
 
 	virtual ~Object() 	{}
 
-	float _liveTime;
-	float _allLiveTime;
-
-	sf::Vector2f _position;
 protected:
+
 	void Add() override;
+	void Remove();
 	int GetZOrder() const  override;
 	sf::Vector2u _sizeSpace;
-//protected:
-//	void DrawInWindow(const sf::Drawable & obj);
     sf::Vector2u GetSizeWindow() const;
-//	void SetWindowOneTime(sf::RenderWindow & window);
-//private:
-//	sf::RenderWindow *_window;
+
 };
