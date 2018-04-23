@@ -109,8 +109,12 @@ void Asteroid::Reset()
 
 void  Asteroid::OnCollisionHandler(const Event& cEvent)
 {
-	cEvent.
+	const CollisionEvent &collisionEvent = dynamic_cast<const CollisionEvent&>(cEvent);
 	std::cout << "Collision!";
+}
+
+void Asteroid::Handler(const CollisionEvent & cEvent)
+{
 }
 
 void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)

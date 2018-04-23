@@ -2,7 +2,7 @@
 #include "Object.h"
 #include "Physics.h"
 #include "Event.h"
-
+#include "CollisionEvent.h"
 enum class AsteroidType : uint8_t
 {
 	Small,
@@ -22,7 +22,9 @@ public:
 	void Update(float time) override;
 	void Draw(sf::RenderWindow &window) override;
 	void Reset() override;
-	static void  OnCollisionHandler(const & cEvent);
+	static void  OnCollisionHandler(const Event& cEvent);
+	static void Handler(const CollisionEvent& cEvent);
+	
 	AsteroidType _type;
 	float _health;
 	

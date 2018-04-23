@@ -54,6 +54,7 @@ int main()
 		Asteroid* asteroid = poolAsteroid.Get();
 		asteroid->Init(sprite,window.getSize());
 		dispatcher.Connect(EventTypes::collisionEventID, Asteroid::OnCollisionHandler);
+		
 		asteroids.push_back(asteroid);
 	}
 
@@ -90,7 +91,7 @@ int main()
 					{
 						if (Collided(*asteroids[i], *asteroids[j]))
 						{
-							collisionEvent.setObjs(*asteroids[i], *asteroids[j]);
+							//collisionEvent.setObjs(*asteroids[i], *asteroids[j]);
 							dispatcher.Send(collisionEvent, collisionEventID);
 							ResolveCollision(*asteroids[i], *asteroids[j]);
 							asteroids[i]->_health -= 50;

@@ -56,6 +56,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -65,6 +66,7 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -72,7 +74,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\PhysicsTest\CollisionEvent.h" />
+    <ClInclude Include="CollisionEvent.h" />
     <ClInclude Include="Dispatcher.h" />
     <ClInclude Include="DispatcherErrorMessagesStore.h" />
     <ClInclude Include="Event.h" />
@@ -80,6 +82,7 @@
     <ClInclude Include="EventTypes.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionEvent.cpp" />
     <ClCompile Include="Dispatcher.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

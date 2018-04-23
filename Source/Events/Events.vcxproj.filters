@@ -30,12 +30,15 @@
     <ClInclude Include="DispatcherErrorMessagesStore.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\PhysicsTest\CollisionEvent.h">
+    <ClInclude Include="CollisionEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Dispatcher.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

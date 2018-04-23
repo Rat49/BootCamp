@@ -1,12 +1,15 @@
 #pragma once
-#include "EventSystem.h"
+#include "Event.h"
+#include "Physics.h"
+#include <vector>
+#include "Pool.h"
 
 class CollisionEvent : public Event
 {
 public:
-	CollisionEvent();
-	virtual ~CollisionEvent();
-	void setObjs(RigidBody&, RigidBody&);
-//private:
-	RigidBody obj1, obj2;
+	CollisionEvent() {};
+	~CollisionEvent(){};
+	RigidBody *_obj1, *_obj2;
+	std::vector<RigidBody*> *_owner;
+	Pool<RigidBody*> *_poolOwner;
 };
