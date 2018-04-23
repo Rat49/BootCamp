@@ -1,5 +1,5 @@
 #include "Physics.h"
-#include "EventSystem.h"
+#include "CollisionEvent.h"
 
 RigidBody::RigidBody() {}
 
@@ -35,53 +35,32 @@ void RigidBody::Update(float t)
   }
 }
 
-void RigidBody::SetRadius(float r) { _radius = r; }
-
-void RigidBody::SetCoordinates(sf::Vector2f c) { _coords = c; }
-
-void RigidBody::SetX(float arg) { _coords.x = arg; }
-
-void RigidBody::SetY(float arg) { _coords.y = arg; }
-
-void RigidBody::SetSpeed(sf::Vector2f s) { _speed = s; }
-
-float RigidBody::GetRadius() { return _radius; }
-
-float RigidBody::GetX() { return _coords.x; }
-
-float RigidBody::GetY() { return _coords.y; }
-
-float RigidBody::GetMass() { return _mass; }
-float RigidBody::GetSpeedX() { return _speed.x; }
-float RigidBody::GetSpeedY() { return _speed.y; }
-
-void RigidBody::SetSpeedX(float arg) { _speed.x = arg; }
-void RigidBody::SetSpeedY(float arg) { _speed.y = arg; }
-void RigidBody::SetMass(float arg) { _mass = arg; }
 
 constexpr float tolerance = 1.04f;
 
-void ResolveCollision(RigidBody & go1, RigidBody & go2)
+void ResolveCollision(const Event& event)
 {
+	const CollisionEvent collision = static_cast<const CollisionEvent&>(event);
+	RigidBody* go1 = collision.obj1;
+	RigidBody* go2 = collision.obj2;
+  float dx = (go1->_coords.x + go1->_radius - go2->_coords.x - go2->_radius);
+  float dy = (go1->_coords.y + go1->_radius - go2->_coords.y - go2->_radius);
 
-  float dx = (go1.GetX() + go1.GetRadius() - go2.GetX() - go2.GetRadius());
-  float dy = (go1.GetY() + go1.GetRadius() - go2.GetY() - go2.GetRadius());
+  float d1x = go1->_coords.x + go1->_radius;
+  float d1y = go1->_coords.y + go1->_radius;
 
-  float d1x = go1.GetX() + go1.GetRadius();
-  float d1y = go1.GetY() + go1.GetRadius();
-
-  float d2x = go2.GetX() + go2.GetRadius();
-  float d2y = go2.GetY() + go2.GetRadius();
+  float d2x = go2->_coords.x + go2->_radius;
+  float d2y = go2->_coords.y + go2->_radius;
 
   float dist = sqrt(dx * dx + dy * dy);
 
-  float overlap = tolerance * (dist - go1.GetRadius() - go2.GetRadius());
+  float overlap = tolerance * (dist - go1->_radius - go2->_radius);
 
-  go1.SetX(go1.GetX() - (overlap * (go1.GetX() - go2.GetX()) / dist));
-  go1.SetY(go1.GetY() - (overlap * (go1.GetY() - go2.GetY()) / dist));
+  go1->_coords.x = go1->_coords.x - (overlap * (go1->_coords.x - go2->_coords.x) / dist);
+  go1->_coords.y = go1->_coords.y - (overlap * (go1->_coords.y - go2->_coords.y) / dist);
 
-  go2.SetX(go2.GetX() + (overlap * (go1.GetX() - go2.GetX()) / dist));
-  go2.SetY(go2.GetY() + (overlap * (go1.GetY() - go2.GetY()) / dist));
+  go2->_coords.x = go2->_coords.x + (overlap * (go1->_coords.x - go2->_coords.x) / dist);
+  go2->_coords.y = go2->_coords.y + (overlap * (go1->_coords.y - go2->_coords.y) / dist);
 
   //normal
   float nx = (d1x - d2x) / dist;
@@ -89,31 +68,31 @@ void ResolveCollision(RigidBody & go1, RigidBody & go2)
   //Tanget
   float tx     = -ny;
   float ty     = nx;
-  float dpTan1 = go1.GetSpeedX() * tx + go1.GetSpeedY() * ty;
-  float dpTan2 = go2.GetSpeedX() * tx + go2.GetSpeedX() * ty;
+  float dpTan1 = go1->_speed.x * tx + go1->_speed.y * ty;
+  float dpTan2 = go2->_speed.x * tx + go2->_speed.x * ty;
 
-  float dpNorm1 = go1.GetSpeedX() * nx + go1.GetSpeedY() * ny;
-  float dpNorm2 = go2.GetSpeedX() * nx + go2.GetSpeedX() * ny;
+  float dpNorm1 = go1->_speed.x * nx + go1->_speed.y * ny;
+  float dpNorm2 = go2->_speed.x * nx + go2->_speed.x * ny;
 
   float m1 =
-    (dpNorm1 * (go1.GetMass() - go2.GetMass()) + 2.0f * go2.GetMass() * dpNorm2) / (go1.GetMass() + go2.GetMass());
+    (dpNorm1 * (go1->_mass - go2->_mass) + 2.0f * go2->_mass * dpNorm2) / (go1->_mass + go2->_mass);
   float m2 =
-    (dpNorm2 * (go2.GetMass() - go1.GetMass()) + 2.0f * go1.GetMass() * dpNorm1) / (go1.GetMass() + go2.GetMass());
+    (dpNorm2 * (go2->_mass - go1->_mass) + 2.0f * go1->_mass * dpNorm1) / (go1->_mass + go2->_mass);
 
   // Update ball velocities
-  go1.SetSpeedX(tx * dpTan1 + nx * m1);
-  go1.SetSpeedY(ty * dpTan1 + ny * m1);
-  go2.SetSpeedX(tx * dpTan2 + nx * m2);
-  go2.SetSpeedY(ty * dpTan2 + ny * m2);
+  go1->_speed.x = tx * dpTan1 + nx * m1;
+  go1->_speed.y = ty * dpTan1 + ny * m1;
+  go2->_speed.x = tx * dpTan2 + nx * m2;
+  go2->_speed.y = ty * dpTan2 + ny * m2;
 
 }
 
 bool Collided(RigidBody go1, RigidBody go2)
 {
-  float dx       = (go1.GetX() + go1.GetRadius() - go2.GetX() - go2.GetRadius());
-  float dy       = (go1.GetY() + go1.GetRadius() - go2.GetY() - go2.GetRadius());
+  float dx       = (go1._coords.x + go1._radius - go2._coords.x - go2._radius);
+  float dy       = (go1._coords.y + go1._radius - go2._coords.y - go2._radius);
   float distance = dx * dx + dy * dy;
-  return (distance < (go1.GetRadius() + go2.GetRadius()) * (go1.GetRadius() + go2.GetRadius()));
+  return (distance < (go1._radius + go2._radius) * (go1._radius + go2._radius));
 }
 
 void RandomFill(RigidBody * RigidBodysFunc, int length)
@@ -122,11 +101,11 @@ void RandomFill(RigidBody * RigidBodysFunc, int length)
 
   for(int i = 0; i < length; ++i)
   {
-    RigidBodysFunc[i].SetRadius(10 + std::rand() / ((RAND_MAX + 1u) / 100));
-    RigidBodysFunc[i].SetCoordinates({static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / W)),
-                                      static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / H))});
-    RigidBodysFunc[i].SetSpeed({static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)),
-                                static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 15))});
-    RigidBodysFunc[i].SetMass(10 + std::rand() / ((RAND_MAX + 1u) / 20));
+    RigidBodysFunc[i]._radius = 10 + std::rand() / ((RAND_MAX + 1u) / 100);
+    RigidBodysFunc[i]._coords = {static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / W)),
+                                      static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / H))};
+    RigidBodysFunc[i]._speed = {static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)),
+                                static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 15))};
+    RigidBodysFunc[i]._mass = 10 + std::rand() / ((RAND_MAX + 1u) / 20);
   }
 }

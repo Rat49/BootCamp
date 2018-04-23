@@ -89,6 +89,7 @@ int main()
 	For Physics
 	*/
 	CollisionEvent collisionEvent;
+	dispatcher.Connect(collisionEventID, ResolveCollision);
 	constexpr size_t numOfObjects = 10;
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
@@ -98,21 +99,21 @@ int main()
 	for (int i = 0; i < numOfObjects / 2; i++)
 	{
 		const int idx = i * 2;
-		RigidBodies[idx].SetRadius(10);
-		RigidBodies[idx].SetCoordinates({ 500, 200.f + 60 * i });
-		RigidBodies[idx].SetSpeed({ 60, 15 });
-		RigidBodies[idx].SetMass(0.005f);
+		RigidBodies[idx]._radius =10;
+		RigidBodies[idx]._coords = { 500, 200.f + 60 * i };
+		RigidBodies[idx]._speed = { 60, 15 };
+		RigidBodies[idx]._mass = 0.005f;
 
-		RigidBodies[idx + 1].SetRadius(25);
-		RigidBodies[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
-		RigidBodies[idx + 1].SetSpeed({ -100, 40});
-		RigidBodies[idx + 1].SetMass(0.01f);
+		RigidBodies[idx + 1]._radius = 25;
+		RigidBodies[idx + 1]._coords = { 750, 250.f + 60 * i };
+		RigidBodies[idx + 1]._speed = { -100, 40};
+		RigidBodies[idx + 1]._mass = 0.01f;
 	}
 
 	for (int i = 0; i < numOfObjects; ++i)
 	{
-		circles[i].setRadius(RigidBodies[i].GetRadius());
-		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
+		circles[i].setRadius(RigidBodies[i]._radius);
+		circles[i].setPosition(RigidBodies[i]._coords.x, RigidBodies[i]._coords.y);
 	}
 	
 
@@ -212,9 +213,9 @@ int main()
 						{
 							circles[i].setFillColor(sf::Color::Red);
 							circles[j].setFillColor(sf::Color::Red);
-							collisionEvent.setObjs(RigidBodies[i], RigidBodies[j]);
+							collisionEvent.setObjs(&RigidBodies[i], &RigidBodies[j]);
 							dispatcher.Send(collisionEvent, collisionEventID);
-							ResolveCollision(RigidBodies[i], RigidBodies[j]);
+							//ResolveCollision(RigidBodies[i], RigidBodies[j]);
 						}
 					}
 				}
@@ -222,7 +223,7 @@ int main()
 				for (int i = 0; i < numOfObjects; ++i)
 				{
 					RigidBodies[i].Update(physicsStepTargetFrameTime / 1e3);
-					circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
+					circles[i].setPosition(RigidBodies[i]._coords.x, RigidBodies[i]._coords.y);
 				}
 			}
 		}

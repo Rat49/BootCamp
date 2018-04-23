@@ -16,13 +16,14 @@ void             MainLoop(RigidBody * RigidBodysFunc)
 
   CollisionEvent collisionEvent;
   Dispatcher &   dispatcher = Dispatcher::getInstance();
+  dispatcher.Connect(collisionEventID, ResolveCollision);
 
   for(int i = 0; i < numOfObjects; ++i)
   {
-    circles[i].setRadius(RigidBodysFunc[i].GetRadius());
-    circles[i].setPosition(RigidBodysFunc[i].GetX(), RigidBodysFunc[i].GetY());
-    circlesCenters[i].setPosition(RigidBodysFunc[i].GetX() + RigidBodysFunc[i].GetRadius(),
-                                  RigidBodysFunc[i].GetY() + RigidBodysFunc[i].GetRadius());
+    circles[i].setRadius(RigidBodysFunc[i]._radius);
+    circles[i].setPosition(RigidBodysFunc[i]._coords.x, RigidBodysFunc[i]._coords.y);
+    circlesCenters[i].setPosition(RigidBodysFunc[i]._coords.x + RigidBodysFunc[i]._radius,
+                                  RigidBodysFunc[i]._coords.y + RigidBodysFunc[i]._radius);
     circlesCenters[i].setRadius(1.f);
     circlesCenters[i].setFillColor(sf::Color::Green);
   }
@@ -53,9 +54,9 @@ void             MainLoop(RigidBody * RigidBodysFunc)
             {
               circles[i].setFillColor(sf::Color::Red);
               circles[j].setFillColor(sf::Color::Red);
-              collisionEvent.setObjs(RigidBodysFunc[i], RigidBodysFunc[j]);
+              collisionEvent.setObjs(&RigidBodysFunc[i], &RigidBodysFunc[j]);
               dispatcher.Send(collisionEvent, collisionEventID);
-              ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
+              //ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
           }
         }
       }
@@ -63,9 +64,9 @@ void             MainLoop(RigidBody * RigidBodysFunc)
       for(int i = 0; i < numOfObjects; ++i)
       {
         RigidBodysFunc[i].Update(physicsStepTargetFrameTime / 1e3);
-        circles[i].setPosition(RigidBodysFunc[i].GetX(), RigidBodysFunc[i].GetY());
-        circlesCenters[i].setPosition(RigidBodysFunc[i].GetX() + RigidBodysFunc[i].GetRadius(),
-                                      RigidBodysFunc[i].GetY() + RigidBodysFunc[i].GetRadius());
+        circles[i].setPosition(RigidBodysFunc[i]._coords.x, RigidBodysFunc[i]._coords.y);
+        circlesCenters[i].setPosition(RigidBodysFunc[i]._coords.x + RigidBodysFunc[i]._radius,
+                                      RigidBodysFunc[i]._coords.y + RigidBodysFunc[i]._radius);
       }
     }
     app.clear();
@@ -86,15 +87,15 @@ void Test()
   for(int i = 0; i < numOfObjects / 2; i++)
   {
     const int idx = i * 2;
-    RigidBodys[idx].SetRadius(10);
-    RigidBodys[idx].SetCoordinates({500, 200.f + 60 * i});
-    RigidBodys[idx].SetSpeed({60, 15});
-    RigidBodys[idx].SetMass(0.005f);
+    RigidBodys[idx]._radius =10;
+    RigidBodys[idx]._coords = {500, 200.f + 60 * i};
+    RigidBodys[idx]._speed = {60, 15};
+    RigidBodys[idx]._mass = 0.005f;
 
-    RigidBodys[idx + 1].SetRadius(25);
-    RigidBodys[idx + 1].SetCoordinates({750, 250.f + 60 * i});
-    RigidBodys[idx + 1].SetSpeed({-100, 40});
-    RigidBodys[idx + 1].SetMass(0.01f);
+    RigidBodys[idx + 1]._radius = 25;
+    RigidBodys[idx + 1]._coords = {750, 250.f + 60 * i};
+    RigidBodys[idx + 1]._speed = {-100, 40};
+    RigidBodys[idx + 1]._mass = 0.01f;
   }
 
 
