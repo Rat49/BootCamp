@@ -93,26 +93,26 @@ int main()
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
 	sf::CircleShape circles[numOfObjects];
-	RigidBody * RigidBodys = new RigidBody[numOfObjects];
+	RigidBody * RigidBodies = new RigidBody[numOfObjects];
 	/*Init rigid bodies and implementation for them*/
 	for (int i = 0; i < numOfObjects / 2; i++)
 	{
 		const int idx = i * 2;
-		RigidBodys[idx].SetRadius(10);
-		RigidBodys[idx].SetCoordinates({ 500, 200.f + 60 * i });
-		RigidBodys[idx].SetSpeed({ 60, 15 });
-		RigidBodys[idx].SetMass(0.005f);
+		RigidBodies[idx].SetRadius(10);
+		RigidBodies[idx].SetCoordinates({ 500, 200.f + 60 * i });
+		RigidBodies[idx].SetSpeed({ 60, 15 });
+		RigidBodies[idx].SetMass(0.005f);
 
-		RigidBodys[idx + 1].SetRadius(25);
-		RigidBodys[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
-		RigidBodys[idx + 1].SetSpeed({ -100, 40});
-		RigidBodys[idx + 1].SetMass(0.01f);
+		RigidBodies[idx + 1].SetRadius(25);
+		RigidBodies[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
+		RigidBodies[idx + 1].SetSpeed({ -100, 40});
+		RigidBodies[idx + 1].SetMass(0.01f);
 	}
 
 	for (int i = 0; i < numOfObjects; ++i)
 	{
-		circles[i].setRadius(RigidBodys[i].GetRadius());
-		circles[i].setPosition(RigidBodys[i].GetX(), RigidBodys[i].GetY());
+		circles[i].setRadius(RigidBodies[i].GetRadius());
+		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
 	}
 	
 
@@ -208,22 +208,22 @@ int main()
 				{
 					for (int j = i + 1; j < numOfObjects; ++j)
 					{
-						if (Collided(RigidBodys[i], RigidBodys[j]))
+						if (Collided(RigidBodies[i], RigidBodies[j]))
 						{
 							circles[i].setFillColor(sf::Color::Red);
 							circles[j].setFillColor(sf::Color::Red);
-							collisionEvent.setObjs(RigidBodys[i], RigidBodys[j]);
+							collisionEvent.setObjs(RigidBodies[i], RigidBodies[j]);
 							dispatcher.Send(collisionEvent, collisionEventID);
-							ResolveCollision(RigidBodys[i], RigidBodys[j]);
+							ResolveCollision(RigidBodies[i], RigidBodies[j]);
 						}
 					}
 				}
-			}
 
-			for (int i = 0; i < numOfObjects; ++i)
-			{
-				RigidBodys[i].Update(physicsStepTargetFrameTime / 1e3);
-				circles[i].setPosition(RigidBodys[i].GetX(), RigidBodys[i].GetY());
+				for (int i = 0; i < numOfObjects; ++i)
+				{
+					RigidBodies[i].Update(physicsStepTargetFrameTime / 1e3);
+					circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
+				}
 			}
 		}
 		//...
@@ -244,7 +244,7 @@ int main()
 		//Display
 		rw.display();
 	}
-	delete[] RigidBodys;
+	delete[] RigidBodies;
 	delete cm1;
 	return 0;
 }
