@@ -1,6 +1,5 @@
 #pragma once
 #include "Bullet.h"
-#include "DrawableManager.h"
 
 class OrdinaryBullet final : public Bullet
 {

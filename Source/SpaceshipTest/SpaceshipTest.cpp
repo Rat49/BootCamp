@@ -37,6 +37,8 @@ int main()
 
 		spaceship->Update(deltaTime);
 
+		std::cout << "_drawableObjects.size(): " << DrawableManager::getInstance()._drawableObjects.size() << std::endl;
+		
 		window.clear();
 		drawableManager.DrawScene(window);
 

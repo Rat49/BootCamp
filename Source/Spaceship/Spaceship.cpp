@@ -244,7 +244,7 @@ void Spaceship::Update(sf::Time deltaTime)
 				--i;
 				_ordinaryBulletStorage.Put(ptrBullet);
 				DrawableManager::getInstance()._drawableObjects.erase
-				(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), dynamic_cast<Drawable*>(ptrBullet)), 
+				(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrBullet)),
 					DrawableManager::getInstance()._drawableObjects.end());
 			}
 		}
@@ -265,7 +265,7 @@ void Spaceship::Update(sf::Time deltaTime)
 				--i;
 				_rocketStorage.Put(ptrRocket);
 				DrawableManager::getInstance()._drawableObjects.erase
-				(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), dynamic_cast<Drawable*>(ptrRocket)), 
+				(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrRocket)), 
 					DrawableManager::getInstance()._drawableObjects.end());
 			}
 		}
