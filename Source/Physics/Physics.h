@@ -15,8 +15,11 @@ private:
 
 public:
 
+	size_t _token;
+
 	RigidBody();
 	RigidBody(sf::Vector2f, sf::Vector2f, float, float);
+	virtual ~RigidBody() {}
 	void Update(float);
 	void SetRadius(float);
 	void SetCoordinates(sf::Vector2f);

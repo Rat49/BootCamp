@@ -9,6 +9,9 @@ class Object :
 {
 public:
 
+	//TODO: move to ObjectManager
+	static std::vector<Object*> _allObjects;
+
 	Object() :_sizeSpace() {}
 
 	void Draw(sf::RenderWindow & window) override {}
@@ -19,7 +22,7 @@ public:
 protected:
 
 	void Add() override;
-	void Remove();
+	virtual void Remove();
 	int GetZOrder() const  override;
 	sf::Vector2u _sizeSpace;
     sf::Vector2u GetSizeWindow() const;

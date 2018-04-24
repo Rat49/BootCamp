@@ -40,6 +40,11 @@ public:
 		return m_pool.size();
 	}
 
+	size_t MaxCount()
+	{
+		return m_all.size();
+	}
+
     T* Get()
     {
         if ( m_pool.empty() )

@@ -7,9 +7,6 @@
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
 
-std::vector<Asteroid *> asteroids;
-std::vector<Star *> stars;
-
 int main()
 {
 	sf::Clock clock;
@@ -32,9 +29,10 @@ int main()
 	std::srand(std::time(nullptr));
 
 	const int totalCountAsteroids = 100;
-	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
-
 	Pool<Asteroid> poolAsteroid(totalCountAsteroids);
+	Asteroid::poolAsteroid = &poolAsteroid;
+
+	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
 	Pool<Star> poolStar(totalCountStar);
 
 	sf::Sprite sprite;
@@ -47,15 +45,12 @@ int main()
 	{
 		Star* star = poolStar.Get();
 		star->Init(window.getSize());
-		stars.push_back(star);
 	}
 	for (int i = 1; i <= _nAsteroids; ++i)
 	{
 		Asteroid* asteroid = poolAsteroid.Get();
 		asteroid->Init(sprite,window.getSize());
-		dispatcher.Connect(EventTypes::collisionEventID, Asteroid::OnCollisionHandler);
-		
-		asteroids.push_back(asteroid);
+		Asteroid::rigidBodies.push_back(asteroid);
 	}
 
 	while (window.isOpen())
@@ -83,32 +78,33 @@ int main()
 		while (accumulatedFrameTime >= physicsStepTargetFrameTime)
 		{
 			accumulatedFrameTime -= physicsStepTargetFrameTime;
-			for (int i = 0; i < asteroids.size(); ++i)
+			for (int i = 0; i < Asteroid::rigidBodies.size(); ++i)
 			{
-				for (int j = 0; j < asteroids.size(); ++j)
+				for (int j = 0; j < Asteroid::rigidBodies.size(); ++j)
 				{
 					if (i != j)
 					{
-						if (Collided(*asteroids[i], *asteroids[j]))
+						if (Collided(*Asteroid::rigidBodies[i], *Asteroid::rigidBodies[j]))
 						{
-							//collisionEvent.setObjs(*asteroids[i], *asteroids[j]);
-							dispatcher.Send(collisionEvent, collisionEventID);
-							ResolveCollision(*asteroids[i], *asteroids[j]);
-							asteroids[i]->_health -= 50;
-							asteroids[j]->_health -= 50;
+							collisionEvent._obj1 = Asteroid::rigidBodies[i];
+							collisionEvent._obj2 = Asteroid::rigidBodies[j];
+							dispatcher.Send(collisionEvent, collisionEventID, Asteroid::rigidBodies[i]->_token);
+							collisionEvent._obj1 = Asteroid::rigidBodies[j];
+							collisionEvent._obj2 = Asteroid::rigidBodies[i];
+							dispatcher.Send(collisionEvent, collisionEventID, Asteroid::rigidBodies[j]->_token);
+							ResolveCollision(*Asteroid::rigidBodies[i], *Asteroid::rigidBodies[j]);
 						}
 					}
 				}
 			}
 
-			for (auto *star : stars)
+			for (auto *object : Object::_allObjects)
 			{
-				star->Update(physicsStepTargetFrameTime / 1e3);
+				object->Update(physicsStepTargetFrameTime / 1e3);
 			}
-			for (size_t i = 0; i < asteroids.size(); ++i)
+			/*for (size_t i = 0; i < asteroids.size(); ++i)
 			{
 				Asteroid* cAsteroid = asteroids[i];
-				cAsteroid->Update(physicsStepTargetFrameTime / 1e3);
 
 				if (cAsteroid->_health <= 0)
 				{
@@ -129,6 +125,7 @@ int main()
 							{
 								Asteroid* asteroidNew = poolAsteroid.Get();
 								asteroidNew->InitFromCrash(sprite, cAsteroid->GetCoordinates(), cAsteroid->_type, window.getSize());
+								asteroidNew->_token = dispatcher.Connect(EventTypes::collisionEventID, Asteroid::OnCollisionHandler);
 								asteroids.push_back(asteroidNew);
 							}
 						}
@@ -140,7 +137,7 @@ int main()
 						}
 					}
 				}
-			}
+			}*/
 		}
 		
 		dm.DrawScene(window);

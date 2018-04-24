@@ -1,6 +1,9 @@
 #include "Asteroid.h"
 #include "Mathematics.h"
 
+Pool<Asteroid> *Asteroid::poolAsteroid = nullptr;
+std::vector<RigidBody *> Asteroid::rigidBodies;
+
 void Asteroid::DefaultInit()
 {
 	_angularVelocity = 0;
@@ -45,17 +48,23 @@ void Asteroid::SetParametersFromType(AsteroidType type)
 	case AsteroidType::Big:
 		_startScale = 1.5;
 		_health = 400.0;
+		_damage = 60;
+		_defense = 20;
 		SetMass(0.015f);
 		break;
 	case AsteroidType::Middle:
 		_startScale = 1.0;
 		_health = 300.0;
+		_damage = 40;
+		_defense = 10;
 		SetMass(0.01f);
 		break;
 	case AsteroidType::Small:
 	default:
 		_startScale = 0.5;
 		_health = 200.0;
+		_damage = 20;
+		_defense = 5;
 		SetMass(0.005f);
 		break;
 	}
@@ -107,20 +116,25 @@ void Asteroid::Reset()
 	DefaultInit();
 }
 
-void  Asteroid::OnCollisionHandler(const Event& cEvent)
+void Asteroid::OnCollisionHandler(const Event& cEvent)
 {
 	const CollisionEvent &collisionEvent = dynamic_cast<const CollisionEvent&>(cEvent);
+	Asteroid *obj = dynamic_cast<Asteroid *>(collisionEvent._obj2);
+	
+	this->_health -= obj->_damage - _defense;
+	if (this->IsDead())
+	{
+		if (poolAsteroid != nullptr && !(poolAsteroid->Count() == poolAsteroid->MaxCount()))
+		{
+			Remove();
+			poolAsteroid->Put(this);
+		}
+	}
 	std::cout << "Collision!";
-}
-
-void Asteroid::Handler(const CollisionEvent & cEvent)
-{
 }
 
 void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 {		
-	/*Dispatcher& dp = Dispatcher::getInstance();
-	dp.Connect();*/
 	_sprite = sprite;
 	_sizeSpace = size;
 
@@ -139,6 +153,20 @@ void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 	_halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
 
 	Add();
+}
+
+void Asteroid::Add()
+{
+	Object::Add();
+
+	_token = Dispatcher::getInstance().Connect(EventTypes::collisionEventID, std::bind(&Asteroid::OnCollisionHandler, this, std::placeholders::_1));
+}
+
+void Asteroid::Remove()
+{
+	Object::Remove();
+
+	Dispatcher::getInstance().Disconnect(EventTypes::collisionEventID, _token);
 }
 
 void Asteroid::Update(float time)
@@ -202,5 +230,29 @@ void Asteroid::Draw(sf::RenderWindow &window)
 	physicsShape.setOutlineThickness(1);
 
 	window.draw(physicsShape);
+}
+
+bool Asteroid::IsDead()
+{
+	if (_health <= 0)
+	{
+		if (_type == AsteroidType::Small)
+			return true;
+		else
+		{
+			for (int j = 0; j < 4; ++j)
+			{
+				if (poolAsteroid != nullptr && !poolAsteroid->Empty())
+				{
+					Asteroid* asteroidNew = poolAsteroid->Get();
+					asteroidNew->InitFromCrash(_sprite, GetCoordinates(), _type, _sizeSpace);
+					rigidBodies.push_back(asteroidNew);
+				}
+			}
+			return true;
+		}
+	}
+	else
+		return false;
 }
 

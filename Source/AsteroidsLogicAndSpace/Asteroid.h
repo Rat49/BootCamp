@@ -15,6 +15,11 @@ class Asteroid : public Object, public RigidBody
 {
 public:
 
+	//TODO: manager?
+	static Pool<Asteroid> *poolAsteroid;
+	//TODO: move to physics
+	static std::vector<RigidBody *> rigidBodies;
+
 	Asteroid();
 
 	void Init(const sf::Sprite &sprite, const sf::Vector2u &size);
@@ -22,11 +27,14 @@ public:
 	void Update(float time) override;
 	void Draw(sf::RenderWindow &window) override;
 	void Reset() override;
-	static void  OnCollisionHandler(const Event& cEvent);
-	static void Handler(const CollisionEvent& cEvent);
+	void Add() override;
+	void Remove() override;
+	void OnCollisionHandler(const Event& cEvent);
 	
 	AsteroidType _type;
 	float _health;
+	float _damage;
+	float _defense;
 	
 private:
 
@@ -40,5 +48,6 @@ private:
 	void DefaultInit();
 	void RandomInit();
 	void SetParametersFromType(AsteroidType type);
+	bool IsDead();
 
 };
