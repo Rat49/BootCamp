@@ -119,10 +119,10 @@ void Asteroid::Reset()
 void Asteroid::OnCollisionHandler(const Event& cEvent)
 {
 	std::cout << "|| Collision! Resolve is ";
-	const CollisionEvent<Asteroid> &collisionEvent = dynamic_cast<const CollisionEvent<Asteroid>&>(cEvent);
+	const CollisionEventBetweenAsteroids &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroids&>(cEvent);
 	
-	Asteroid *obj1 = collisionEvent._obj1;
-	Asteroid *obj2 = collisionEvent._obj2;
+	Asteroid *obj1 = collisionEvent._asteroid1;
+	Asteroid *obj2 = collisionEvent._asteroid2;
 	if (this == obj1)
 	{
 		this->_health -= obj2->_damage - _defense;

@@ -59,7 +59,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Events;$(SolutionDir)SFML\include;$(SolutionDir)Source\Spaceship</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Resources;$(SolutionDir)Source\Animation;$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Events;$(SolutionDir)SFML\include;$(SolutionDir)Source\Spaceship</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

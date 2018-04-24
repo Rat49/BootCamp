@@ -35,7 +35,7 @@ public:
 	float _health;
 	float _damage;
 	float _defense;
-	
+	bool _isLife;
 private:
 
 	sf::Sprite _sprite;
@@ -48,6 +48,6 @@ private:
 	void DefaultInit();
 	void RandomInit();
 	void SetParametersFromType(AsteroidType type);
-	bool IsDead(Pool<Asteroid> &poolOwner,std::vector<Asteroid *> &asteroids);
+	bool IsDead();
 
 };

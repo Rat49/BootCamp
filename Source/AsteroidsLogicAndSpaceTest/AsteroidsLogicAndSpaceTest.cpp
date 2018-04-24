@@ -14,7 +14,7 @@ int main()
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
 
-	Dispatcher &   dispatcher = Dispatcher::getInstance();
+	Dispatcher&   dispatcher = Dispatcher::getInstance();
 
 	DrawableManager& dm = DrawableManager::getInstance();
 
@@ -32,7 +32,7 @@ int main()
 	std::vector<Asteroid *> asteroids;
 	//Asteroid::poolAsteroid = &poolAsteroid;
 
-	CollisionEvent<Asteroid> collisionEvent(poolAsteroid, asteroids);
+	CollisionEventBetweenAsteroids collisionEvent;
 	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
 	Pool<Star> poolStar(totalCountStar);
 
@@ -87,8 +87,8 @@ int main()
 					{
 						if (Collided(*asteroids[i], *asteroids[j]))
 						{
-							collisionEvent._obj1 = asteroids[i];
-							collisionEvent._obj2 = asteroids[j];
+							collisionEvent._asteroid1 = asteroids[i];
+							collisionEvent._asteroid2 = asteroids[j];
 							dispatcher.Send(collisionEvent, collisionEventID, asteroids[i]->_token);
 							//collisionEvent._obj1 = Asteroid::rigidBodies[j];
 							//collisionEvent._obj2 = Asteroid::rigidBodies[i];
