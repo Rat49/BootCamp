@@ -6,6 +6,7 @@ OrdinaryBullet::OrdinaryBullet()
 	: _speedValue(200.0f)
 	, _ordinaryBulletSprite()
 	, _bulletTexture()
+	, _bulletScale(1.0f, 1.0f)
 {
 	_zOrder = 4;
 }
@@ -14,8 +15,10 @@ void OrdinaryBullet::Init(sf::Vector2f position, const  sf::Vector2f bulletDirec
 {
 	Add();
 	
+	_bulletScale = sf::Vector2f(0.5f, 0.5f);
 	_bulletTexture = &bulletTexture;
 	_ordinaryBulletSprite.setTexture(*_bulletTexture);
+	_ordinaryBulletSprite.setScale(_bulletScale);
 	_ordinaryBulletSprite.setOrigin(sf::Vector2f(_bulletTexture->getSize().x / 2.0f, _bulletTexture->getSize().y / 2.0f));
 	float angle = std::atan(bulletDirection.x / -bulletDirection.y) * 180.0f / PI_F;	
 	if (bulletDirection.y > 0)

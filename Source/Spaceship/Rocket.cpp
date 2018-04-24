@@ -8,6 +8,7 @@ Rocket::Rocket()
 	, _rocketTexture()
 	, _speedDelayTime(sf::seconds(1.0f))
 	, _deltaSpeedValue(600.0f)
+	, _rocketScale(1.0f, 1.0f)
 {
 	_zOrder = 3;	
 }
@@ -16,9 +17,11 @@ void Rocket::Init(sf::Vector2f position, const sf::Vector2f rocketDirection, sf:
 {
 	Add();
 	
+	_rocketScale = sf::Vector2f(0.8f, 0.8f);
 	_direction = rocketDirection;
 	_rocketTexture = &rocketTexture;
 	_rocketSprite.setTexture(*_rocketTexture);
+	_rocketSprite.setScale(_rocketScale);
 	_rocketSprite.setOrigin(sf::Vector2f(_rocketTexture->getSize().x / 2.0f, _rocketTexture->getSize().y / 2.0f));
 	float angle = std::atan(_direction.x / -_direction.y) * 180.0f / PI_F;
 	if (_direction.y > 0)

@@ -30,6 +30,12 @@ ResourceManager::ResourceManager()
 	_settingsForSpaceshipNormal.insert(std::make_pair("FrameCount", "4"));
 	_settingsForSpaceshipNormal.insert(std::make_pair("AnimationTime", "500"));
 
+	std::multimap<std::string, std::string> _settingsForSpaceshipFlickering;
+	_settingsForSpaceshipFlickering.insert(std::make_pair("Width", "99"));
+	_settingsForSpaceshipFlickering.insert(std::make_pair("Height", "154"));
+	_settingsForSpaceshipFlickering.insert(std::make_pair("FrameCount", "8"));
+	_settingsForSpaceshipFlickering.insert(std::make_pair("AnimationTime", "1000"));
+
 	_resources.insert(std::pair<std::string, Resource*>
 		("piupiu", new AudioResource("piupiu", "Resources\\audio\\piupiu.wav")));
 	_resources.insert(std::pair<std::string, Resource*>
@@ -46,6 +52,8 @@ ResourceManager::ResourceManager()
 		("fire", new ImageSequenceResource("fire", "Resources\\graphics\\fire.png", _settingsForFire)));
 	_resources.insert(std::pair<std::string, Resource*>
 		("spaceshipNormal", new ImageSequenceResource("spaceshipNormal", "Resources\\graphics\\spaceship.png", _settingsForSpaceshipNormal)));
+	_resources.insert(std::pair<std::string, Resource*>
+		("spaceshipFlickering", new ImageSequenceResource("spaceshipFlickering", "Resources\\graphics\\spaceshipFlickering.png", _settingsForSpaceshipFlickering)));
 	_resources.insert(std::pair<std::string, Resource*>
 		("bullet", new TextureResource("bullet", "Resources\\graphics\\bullet.png")));
 	_resources.insert(std::pair<std::string, Resource*>

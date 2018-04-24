@@ -7,6 +7,7 @@ private:
 	sf::Texture* _bulletTexture;
 	sf::Sprite _ordinaryBulletSprite;
 	const float _speedValue;
+	sf::Vector2f _bulletScale;
 public:
 	OrdinaryBullet();
 	void Init(const sf::Vector2f position, const sf::Vector2f bulletDirection, sf::Texture& bulletTexture);

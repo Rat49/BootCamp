@@ -14,7 +14,8 @@
 class Spaceship : public RigidBody, public Drawable
 {
 public:
-	Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq); 
+	Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager& input,
+		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);
 	~Spaceship();
 
 	void Accelerate();
@@ -22,22 +23,30 @@ public:
 	void PowerfulShoot();
 	void OrdinaryShoot();
 	void RotateSpaceship(float angle);	
-	void Update(const sf::Time& deltaTime);
+	void Update(sf::Time deltaTime);
 	void Add() override;
 private:
+	unsigned int _liveCount;
+	bool _isDamaged;
 	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;
 	sf::Vector2f _speedDirection;
 	sf::Sprite* _spaceshipSprite;
 	AnimationPlayer* _spaceshipAnimation;
 	ImageSequenceResource& _spaceshipAnimationImseq;
+	AnimationPlayer* _spaceshipFlickering;
+	ImageSequenceResource& _spaceshipFlickeringImseq;
 	const float _rotationAngle;
 	const float _acceleration;
 	const float _maxSquareSpeed;
+	sf::Time _flickeringTime;
+	sf::Time _timeAfterDamage;
+
 	Token_t _tokenForCollisionEventBetweenAsteroidAndSpaceship;
 	InputManager& _input;
 	const sf::Time _inputTime;
 	sf::Time _inputAccumulatedTime;
+
 	const sf::Time _rechargeRocketTime;
 	const sf::Time _rechargeBulletTime;
 	sf::Time _timeAfterPowerfulShot;
@@ -50,6 +59,8 @@ private:
 	sf::Vector2f RotateDirection(float angle) const;
 	sf::Vector2f NormalizeSpeed() const;
 	void GainRebound(float reboundValue);
+	void SetFlickeringMode();
+	void SetNormalMode();
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;
 };
