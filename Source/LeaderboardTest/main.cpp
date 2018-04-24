@@ -7,10 +7,12 @@ namespace LeaderboardTest {
 	void Test() {
 
 		Leaderboard *l = Leaderboard::Create();
+		bool createAccount = true;
 
 		std::cout << "Login and register test:" << std::endl;
 		std::cout << "Register:" << std::endl;
-		l->Register("ok");
+		l->Login("ok", createAccount);
+
 		std::cout << "Wrong login:" << std::endl;
 		l->Login("okkkk");
 		std::cout << "Correct login:" << std::endl;
@@ -35,7 +37,7 @@ namespace LeaderboardTest {
 
 	int main() {
 
-		Test();
+		LeaderboardTest::Test();
 
 		return 0;
 	}
