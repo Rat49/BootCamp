@@ -10,11 +10,6 @@ OrdinaryBullet::OrdinaryBullet()
 	_zOrder = 4;
 }
 
-OrdinaryBullet::~OrdinaryBullet()
-{
-	//unsub event
-}
-
 void OrdinaryBullet::Init(sf::Vector2f position, const  sf::Vector2f bulletDirection, sf::Texture& bulletTexture)
 {
 	Add();
@@ -41,7 +36,7 @@ void OrdinaryBullet::Draw(sf::RenderWindow& window)
 	window.draw(_ordinaryBulletSprite);
 }
 
-void OrdinaryBullet::Update(sf::Time& deltaTime)
+void OrdinaryBullet::Update(const sf::Time& deltaTime)
 {
 	RigidBody::Update(deltaTime.asSeconds());
 

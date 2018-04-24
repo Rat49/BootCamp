@@ -25,7 +25,7 @@ public:
 	sf::Vector2f _position;
 	sf::Vector2f _direction;
 
-	CreateRocketEvent(sf::Vector2f position, sf::Vector2f direction);
+	CreateRocketEvent(sf::Vector2f position,sf::Vector2f direction);
 };
 
 class DeleteRocketEvent : public Event

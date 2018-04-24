@@ -14,8 +14,7 @@
 class Spaceship : public RigidBody, public Drawable
 {
 public:
-	Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager& input,
-		ImageSequenceResource& spaceshipAnimationImseq); //, TextureResource &ordinaryShotTexture, TextureResource &powerfulShotTexture);
+	Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq); 
 	~Spaceship();
 
 	void Accelerate();
@@ -23,7 +22,7 @@ public:
 	void PowerfulShoot();
 	void OrdinaryShoot();
 	void RotateSpaceship(float angle);	
-	void Update(sf::Time deltaTime);
+	void Update(const sf::Time& deltaTime);
 	void Add() override;
 private:
 	const sf::Vector2f _initialDirection;
@@ -36,22 +35,13 @@ private:
 	const float _acceleration;
 	const float _maxSquareSpeed;
 	Token_t _tokenForCollisionEventBetweenAsteroidAndSpaceship;
-	//Token_t _tokenForCollisionEventBetweenAsteroidAndRocket;
-	//Token_t _tokenForCollisionEventBetweenAsteroidAndBullet;
 	InputManager& _input;
 	const sf::Time _inputTime;
 	sf::Time _inputAccumulatedTime;
-
-	/*const int _totalBulletCount;
-	const int _totalRocketCount;*/
-	
-	//TextureResource& _ordinaryShotTexture;
-	//TextureResource& _powerfulShotTexture;	
 	const sf::Time _rechargeRocketTime;
 	const sf::Time _rechargeBulletTime;
 	sf::Time _timeAfterPowerfulShot;
 	sf::Time _timeAfterBulletShot;	
-	//const float _bulletDeflection;
 	const float _bulletRebound;
 	const float _rocketRebound;
 

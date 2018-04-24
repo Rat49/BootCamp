@@ -12,11 +12,6 @@ Rocket::Rocket()
 	_zOrder = 3;	
 }
 
-Rocket::~Rocket()
-{
-	//unsub event 
-}
-
 void Rocket::Init(sf::Vector2f position, const sf::Vector2f rocketDirection, sf::Texture& rocketTexture)
 {
 	Add();
@@ -46,7 +41,7 @@ void Rocket::Draw(sf::RenderWindow& window)
 	window.draw(_rocketSprite);
 }
 
-void Rocket::Update(sf::Time& deltaTime)
+void Rocket::Update(const sf::Time& deltaTime)
 {
 	RigidBody::Update(deltaTime.asSeconds());
 	

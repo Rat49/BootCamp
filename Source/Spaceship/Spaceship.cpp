@@ -132,7 +132,7 @@ void Spaceship::GainRebound(float reboundValue)
 	_speedDirection = NormalizeSpeed();
 }
 
-void Spaceship::Update(sf::Time deltaTime)
+void Spaceship::Update(const sf::Time& deltaTime)
 {
 	//============temporary===============
 	enum class GameActions {

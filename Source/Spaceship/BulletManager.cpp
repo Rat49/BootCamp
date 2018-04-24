@@ -1,6 +1,6 @@
 #include "BulletManager.h"
 
-BulletManager::BulletManager(TextureResource &ordinaryBulletTexture, TextureResource &rocketTexture)
+BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureResource& rocketTexture)
 	: _totalBulletCount(200)
 	, _totalRocketCount(10)
 	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(_totalBulletCount))
@@ -9,7 +9,7 @@ BulletManager::BulletManager(TextureResource &ordinaryBulletTexture, TextureReso
 	, _rocketTexture(rocketTexture)
 	, _bulletDeflection(5.0f)
 {
-	Dispatcher & dispatcher = Dispatcher::getInstance();
+	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_bulletDeletion = dispatcher.Connect(createBulletEventID, [&](const Event& event)
 	{
 		CreateBullet(event);
@@ -55,7 +55,7 @@ void BulletManager::CreateBullet(const Event& event)
 	_bullets.push_back(bulletCentr);
 }
 
-void BulletManager::DeleteBullet(const Event & event)
+void BulletManager::DeleteBullet(const Event& event)
 {
 	const DeleteBulletEvent& currentEvent = static_cast<const DeleteBulletEvent&>(event);
 
@@ -91,17 +91,15 @@ void BulletManager::DeleteRocket(const Event & event)
 		DrawableManager::getInstance()._drawableObjects.end());
 }
 
-void BulletManager::Update(sf::Time deltaTime)
+void BulletManager::Update(const sf::Time& deltaTime)
 {
-	for (size_t i = 0; i < _bullets.size(); ++i)
+	for (auto& bullet : _bullets)
 	{
-		OrdinaryBullet* ptrBullet = _bullets[i];
-		ptrBullet->Update(deltaTime);
+		bullet->Update(deltaTime);
 	}
-	for (size_t i = 0; i < _rockets.size(); ++i)
+	for (auto& rocket : _rockets)
 	{
-		Rocket* ptrRocket = _rockets[i];
-		ptrRocket->Update(deltaTime);		
+		rocket->Update(deltaTime);
 	}
 }
 
