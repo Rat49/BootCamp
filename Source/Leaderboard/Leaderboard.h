@@ -22,8 +22,7 @@ public:
 
 	static Leaderboard* Create();
 
-	void Login(const std::string& customID);
-	void Register(const std::string& customID);
+	void Login(const std::string& customID, bool createAccount=false);
 	void UpdatePlayerStatistic(const int statisticValue);
 	void UpdateUserTitleDisplayName(const std::string& name);
 	void UpdateLocalLeaderboard();

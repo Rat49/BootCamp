@@ -12,24 +12,10 @@ Leaderboard* Leaderboard::Create() {
 	return new Leaderboard();
 }
 
-
-void Leaderboard::Login(const std::string& customID) {
-
-	LoginWithCustomIDRequest request;
-	request.CreateAccount = false;
-	request.CustomId = customID;
-
-	PlayFabClientAPI::LoginWithCustomID(request, OnLoginSuccess, OnFail);
-
-	while (PlayFabClientAPI::Update() != 0)
-		Sleep(1);
-}
-
-
-void Leaderboard::Register(const std::string& customID) {
+void Leaderboard::Login(const std::string& customID, bool createAccount=false) {
 
 	LoginWithCustomIDRequest request;
-	request.CreateAccount = true;
+	request.CreateAccount = createAccount;
 	request.CustomId = customID;
 
 	PlayFabClientAPI::LoginWithCustomID(request, OnLoginSuccess, OnFail);
