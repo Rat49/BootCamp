@@ -16,13 +16,13 @@ public:
 
 	void Draw(sf::RenderWindow & window) override {}
 	virtual void Update(float time) {}
+	void Add() override;
+	virtual void Remove();
 
 	virtual ~Object() 	{}
 
 protected:
 
-	void Add() override;
-	virtual void Remove();
 	int GetZOrder() const  override;
 	sf::Vector2u _sizeSpace;
     sf::Vector2u GetSizeWindow() const;

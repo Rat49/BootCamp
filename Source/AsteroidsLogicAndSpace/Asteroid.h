@@ -36,8 +36,6 @@ public:
 	float _damage;
 	float _defense;
 	bool _life;
-	
-private:
 
 	sf::Sprite _sprite;
 	sf::Vector2f _linearVelocity;
@@ -46,6 +44,8 @@ private:
 	int _radius;
 	float _halfLenght;
 	float _startScale;
+
+private:
 	void DefaultInit();
 	void RandomInit();
 	void SetParametersFromType(AsteroidType type);

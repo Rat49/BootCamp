@@ -48,14 +48,14 @@ void Asteroid::SetParametersFromType(AsteroidType type)
 	{
 	case AsteroidType::Big:
 		_startScale = 1.5;
-		_health = 400.0;
+		_health = 800.0;
 		_damage = 60;
 		_defense = 20;
 		SetMass(0.015f);
 		break;
 	case AsteroidType::Middle:
 		_startScale = 1.0;
-		_health = 300.0;
+		_health = 400.0;
 		_damage = 40;
 		_defense = 10;
 		SetMass(0.01f);
@@ -63,7 +63,7 @@ void Asteroid::SetParametersFromType(AsteroidType type)
 	case AsteroidType::Small:
 	default:
 		_startScale = 0.5;
-		_health = 200.0;
+		_health = 100.0;
 		_damage = 20;
 		_defense = 5;
 		SetMass(0.005f);
@@ -189,22 +189,23 @@ void Asteroid::Update(float time)
 	_angularVelocity = _angularVelocity + time * _rotationSpeed;
 	sf::Vector2f nextPosition = GetCoordinates() + GetSpeed() * time;
 
-	if (nextPosition.y + _halfLenght > GetSizeWindow().y)
+	if (nextPosition.y - _halfLenght > GetSizeWindow().y)
 	{
 		nextPosition.y -= GetSizeWindow().y + _halfLenght * 2;
 		SetCoordinates(nextPosition);
 	}
-	if (nextPosition.x + _halfLenght > GetSizeWindow().x)
-	{
-		nextPosition.x -= GetSizeWindow().x + _halfLenght * 2;
-		SetCoordinates(nextPosition);
-	}
-	if (nextPosition.y + _halfLenght < 0)
+	else if (nextPosition.y + _halfLenght < 0)
 	{
 		nextPosition.y += GetSizeWindow().y + _halfLenght * 2;
 		SetCoordinates(nextPosition);
 	}
-	if (nextPosition.x + _halfLenght < 0)
+
+	if (nextPosition.x - _halfLenght > GetSizeWindow().x)
+	{
+		nextPosition.x -= GetSizeWindow().x + _halfLenght * 2;
+		SetCoordinates(nextPosition);
+	}
+	else if (nextPosition.x + _halfLenght < 0)
 	{
 		nextPosition.x += GetSizeWindow().x + _halfLenght * 2;
 		SetCoordinates(nextPosition);
