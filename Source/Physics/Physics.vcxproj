@@ -59,7 +59,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Events;$(SolutionDir)SFML\include; $(SolutionDir)Source\Events</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Events;$(SolutionDir)SFML\include;$(SolutionDir)Source\Spaceship</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -82,10 +82,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionEvent.h" />
     <ClInclude Include="Physics.h" />
     <ClInclude Include="WindowResolution.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionEvent.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="WindowResolution.cpp" />
   </ItemGroup>

@@ -1,54 +1,53 @@
 #include "Spaceship.h"
-#include <iostream>
 
 const float PI_F = 3.14159265358979f;
 
 Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & input,
 	ImageSequenceResource &spaceshipAnimationImseq, TextureResource &ordinaryShotTexture, TextureResource &powerfulShotTexture)
 	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
-	, _input(input)
-	, _isRecharged(true)
-	, _rotationAngle(10.0f)
-	, _currentAngle(0.0f)
+	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
+	, _rotationAngle(17.0f)
+	, _acceleration(15.0f)
+	, _maxSquareSpeed(12000.0f)
+	, _input(input)	
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
-	, _bulletDeltaAngle(5.0f)
-	, _deltaSpeed(15.0f)
-	, _maxSquareSpeed(10000.0f)
+	, _totalBulletCount(200)
+	, _totalRocketCount(10)
+	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(_totalBulletCount))
+	, _rocketStorage(Pool<Rocket>(_totalRocketCount))
 	, _ordinaryShotTexture(ordinaryShotTexture)
 	, _powerfulShotTexture(powerfulShotTexture)
-	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
-	, _rebound(5.0f)
-	, _powerfulRebound(15.0f)
-	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(100))
-	, _rocketStorage(Pool<Rocket>(10))
-	, _rechargeTime(sf::seconds(3.0f))
+	, _rechargeRocketTime(sf::seconds(3.0f))
+	, _rechargeBulletTime(sf::seconds(0.5f))
+	, _bulletRebound(5.0f)
+	, _rocketRebound(15.0f)
+	, _bulletDeflection(5.0f)
 {
-	_speedDirection = NormalizeSpeed();
 	_zOrder = 1;
+	_speedDirection = NormalizeSpeed();
 	_spaceshipSprite = new sf::Sprite();
 	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, spaceshipAnimationImseq, true);
-	Add();
 	_spaceshipSprite->setPosition(position);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
 	_spaceshipAnimation->Start();
-	
 }
 
 void Spaceship::Accelerate()
 {
-	ChangeSpeed(_deltaSpeed);
+	ControlSpeed(_acceleration);
 }
 
 void Spaceship::Decelerate()
 {
-	ChangeSpeed(-_deltaSpeed);
+	ControlSpeed(-_acceleration);
 }
 
 void Spaceship::PowerfulShoot()
 {
-	if (_timeAfterPowerfulShot.asSeconds() < _rechargeTime.asSeconds())
+	if (_timeAfterPowerfulShot.asSeconds() < _rechargeRocketTime.asSeconds())
 	{
 		return;
 	}
@@ -56,52 +55,53 @@ void Spaceship::PowerfulShoot()
 	Rocket* rocket = _rocketStorage.Get();
 	rocket->Init(_spaceshipSprite->getPosition(), _spaceshipDirection, _powerfulShotTexture.Get());
 	
-	if (std::find(_rockets.cbegin(), _rockets.cend(), rocket) == _rockets.cend())
-	{
-		_rockets.push_back(rocket);
-	}
-
-	//GetRebound(_powerfulRebound);
+	_rockets.push_back(rocket);
 	
 	_timeAfterPowerfulShot = sf::seconds(0.0f); 
+	GainRebound(_rocketRebound);
 }
 
 
 void Spaceship::OrdinaryShoot()
 {
+	if (_timeAfterBulletShot.asSeconds() < _rechargeBulletTime.asSeconds())
+	{
+		return;
+	}
+	
 	OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
-	bulletLeft->Init(_spaceshipSprite->getPosition(), RotateDirection(10.0f), _ordinaryShotTexture.Get());
+	bulletLeft->Init(_spaceshipSprite->getPosition(), RotateDirection(_bulletDeflection), _ordinaryShotTexture.Get());
 
 	OrdinaryBullet* bulletRight = _ordinaryBulletStorage.Get();
-	bulletRight->Init(_spaceshipSprite->getPosition(), RotateDirection(-10.0f), _ordinaryShotTexture.Get());
+	bulletRight->Init(_spaceshipSprite->getPosition(), RotateDirection(-_bulletDeflection), _ordinaryShotTexture.Get());
 
-	if (std::find(_bullets.cbegin(), _bullets.cend(), bulletLeft) == _bullets.cend())
-	{
-		_bullets.push_back(bulletLeft);
-	}
-	if (std::find(_bullets.cbegin(), _bullets.cend(), bulletRight) == _bullets.cend())
-	{
-		_bullets.push_back(bulletRight);
-	}
+	OrdinaryBullet* bulletCentr = _ordinaryBulletStorage.Get();
+	bulletCentr->Init(_spaceshipSprite->getPosition(), RotateDirection(0.0f), _ordinaryShotTexture.Get());
+	
+	_bullets.push_back(bulletLeft);
+	_bullets.push_back(bulletRight);
+	_bullets.push_back(bulletCentr);
 
-	//GetRebound(_rebound);
+	_timeAfterBulletShot = sf::seconds(0.0f);
+	GainRebound(_bulletRebound);
 }
 
 void Spaceship::RotateSpaceship(float angle)
 {
-	_spaceshipDirection = RotateDirection(angle);
-
-	_currentAngle += angle;
-	_spaceshipSprite->setRotation(_currentAngle);	
+	_spaceshipDirection = RotateDirection(angle);	
+	_spaceshipSprite->setRotation(_spaceshipSprite->getRotation() + angle);
 }
 
-void Spaceship::ChangeSpeed(float deltaSpeed)
+void Spaceship::ControlSpeed(float deltaSpeed)
 {
-	sf::Vector2f speed = GetSpeed();
-	float angle = std::acos(_speedDirection.x * _spaceshipDirection.x + _speedDirection.y * _spaceshipDirection.y) * 180.0f / PI_F;
+	float speedValue = std::sqrt(GetSquareLength(GetSpeed()));
 
-	SetSpeed(RotateDirection(GetSpeed(), angle));
-	_speedDirection = _spaceshipDirection;
+	if (!((_speedDirection == _spaceshipDirection) || (_speedDirection == -_spaceshipDirection)))
+	{
+		_speedDirection = deltaSpeed > 0 ? _spaceshipDirection : -_spaceshipDirection;
+
+		SetSpeed(_speedDirection * speedValue);
+	}
 
 	sf::Vector2f newSpeed = GetSpeed() + deltaSpeed * _spaceshipDirection;
 
@@ -123,26 +123,17 @@ sf::Vector2f Spaceship::RotateDirection(float angle) const
 		_spaceshipDirection.x * std::sin(radianAngle) + _spaceshipDirection.y * std::cos(radianAngle));
 }
 
-sf::Vector2f Spaceship::RotateDirection(sf::Vector2f vector, float angle) const
-{
-	float radianAngle = angle * PI_F / 180.0f;
-	return sf::Vector2f(vector.x * std::cos(radianAngle) - vector.y * std::sin(radianAngle),
-		vector.x * std::sin(radianAngle) + vector.y * std::cos(radianAngle));
-}
-
 sf::Vector2f Spaceship::NormalizeSpeed() const
 {
 	float speedLength = std::sqrt(GetSquareLength(GetSpeed()));
 	return GetSpeed() / speedLength;
 }
 
-void Spaceship::GetRebound(float reboundValue)
+void Spaceship::GainRebound(float reboundValue)
 {
-	sf::Vector2f rebound = -_spaceshipDirection * reboundValue;
-	SetSpeed(GetSpeed() - rebound);
+	SetSpeed(GetSpeed() + -_spaceshipDirection * reboundValue);
+	_speedDirection = NormalizeSpeed();
 }
-
-
 
 void Spaceship::Update(sf::Time deltaTime)
 {
@@ -215,8 +206,6 @@ void Spaceship::Update(sf::Time deltaTime)
 			_inputAccumulatedTime = sf::milliseconds(0);
 		}
 	}
-
-	
 	if (_input.GetState(static_cast<int>(GameActions::SuperShoot), stateSuperShoot) && stateSuperShoot == ButtonsState::JustPressed)
 	{
 		PowerfulShoot();
@@ -227,36 +216,54 @@ void Spaceship::Update(sf::Time deltaTime)
 	}
 
 	_timeAfterPowerfulShot += deltaTime;
+	_timeAfterBulletShot += deltaTime;
 	RigidBody::Update(deltaTime.asSeconds());
 	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
 	_spaceshipAnimation->Update(deltaTime);
 
-	for (auto bullet : _bullets)
+	for (size_t i = 0; i < _bullets.size(); ++i)
 	{
-		if (bullet->GetLifeStatus())
+		OrdinaryBullet* ptrBullet = _bullets[i];
+		
+		if (ptrBullet->GetLifeStatus())
 		{
-			bullet->Update(deltaTime);
+			ptrBullet->Update(deltaTime);
 		}
 		else
 		{
-			_ordinaryBulletStorage.Put(bullet);
-			bullet->Reset();
+			if (!(_ordinaryBulletStorage.Count() == _totalBulletCount)) 
+			{
+				_bullets.erase(_bullets.cbegin() + i);
+				--i;
+				_ordinaryBulletStorage.Put(ptrBullet);
+				DrawableManager::getInstance()._drawableObjects.erase
+				(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrBullet)),
+					DrawableManager::getInstance()._drawableObjects.end());
+			}
 		}
-	}
-	for (auto rocket : _rockets)
+	}	
+	for (size_t i = 0; i < _rockets.size(); ++i)
 	{
-		if (rocket->GetLifeStatus())
+		Rocket* ptrRocket = _rockets[i];
+
+		if (ptrRocket->GetLifeStatus())
 		{
-			rocket->Update(deltaTime);
+			ptrRocket->Update(deltaTime);
 		}
 		else
 		{
-			_rocketStorage.Put(rocket);
-			rocket->Reset();
+			if (!(_rocketStorage.Count() == _totalRocketCount))
+			{
+				_rockets.erase(_rockets.cbegin() + i);
+				--i;
+				_rocketStorage.Put(ptrRocket);
+				DrawableManager::getInstance()._drawableObjects.erase
+				(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrRocket)), 
+					DrawableManager::getInstance()._drawableObjects.end());
+			}
 		}
 	}
 }
-
 
 void Spaceship::Add()
 {
@@ -276,4 +283,5 @@ void Spaceship::Draw(sf::RenderWindow& window)
 
 Spaceship::~Spaceship()
 {
+	//unsub event
 }

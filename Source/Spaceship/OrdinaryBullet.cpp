@@ -6,10 +6,8 @@ OrdinaryBullet::OrdinaryBullet()
 	: _speedValue(200.0f)
 	, _ordinaryBulletSprite()
 	, _bulletTexture()
-	//,_ordinaryBulletAnimation()
 {
-	Add();
-	_zOrder = 2;
+	_zOrder = 4;
 	_life = false;
 }
 
@@ -18,29 +16,10 @@ OrdinaryBullet::~OrdinaryBullet()
 	//unsub event
 }
 
-//void OrdinaryBullet::Init(const sf::Vector2f position,const  sf::Vector2f bulletDirection, ImageSequenceResource& bulletAnimationImseq)
-//{
-//	_bulletAnimationImseq = &bulletAnimationImseq;
-//
-//	
-//	_ordinaryBulletAnimation->Init(&_ordinaryBulletSprite, &bulletAnimationImseq, true);
-//	
-//	Add();
-//
-//	_ordinaryBulletAnimation->Start();
-//
-//	float spriteHeight = _ordinaryBulletAnimation->GetHeight();
-//	float spriteWidth = _ordinaryBulletAnimation->GetWidth();
-//	_ordinaryBulletAnimation->GetSprite()->setOrigin(sf::Vector2f(_ordinaryBulletAnimation->GetWidth() / 2.0f, _ordinaryBulletAnimation->GetHeight() / 2.0f));
-//
-//	SetSpeed(bulletDirection * _speedValue);
-//	SetCoordinates(sf::Vector2f(position.x + bulletDirection.x * spriteHeight / 2.0f, position.y + bulletDirection.y * spriteHeight / 2.0f));
-
-  //_ordinaryBulletSprite() = _ordinaryBulletAnimation->GetSprite();
-//}
-
 void OrdinaryBullet::Init(sf::Vector2f position, const  sf::Vector2f bulletDirection, sf::Texture& bulletTexture)
 {
+	Add();
+	
 	_life = true;
 	_bulletTexture = &bulletTexture;
 	_ordinaryBulletSprite.setTexture(*_bulletTexture);
@@ -61,10 +40,12 @@ sf::Sprite* OrdinaryBullet::GetSprite()
 
 void OrdinaryBullet::Draw(sf::RenderWindow& window)
 {
-	if (GetLifeStatus())
+	if (!GetLifeStatus())
 	{
-		window.draw(_ordinaryBulletSprite);
+		return;
 	}
+	
+	window.draw(_ordinaryBulletSprite);
 }
 
 void OrdinaryBullet::Update(sf::Time& deltaTime)
@@ -72,7 +53,6 @@ void OrdinaryBullet::Update(sf::Time& deltaTime)
 	RigidBody::Update(deltaTime.asSeconds());
 
 	_ordinaryBulletSprite.setPosition(GetCoordinates());
-	//_ordinaryBulletAnimation->Update(deltaTime);
 
 	if (_ordinaryBulletSprite.getPosition().x >= WindowResolution::_W || _ordinaryBulletSprite.getPosition().x < 0 
 	  || _ordinaryBulletSprite.getPosition().y > WindowResolution::_H || _ordinaryBulletSprite.getPosition().y < 0)
@@ -83,8 +63,6 @@ void OrdinaryBullet::Update(sf::Time& deltaTime)
 
 void OrdinaryBullet::Reset()
 {
-	//_ordinaryBulletAnimation->Reset();
-
 	_life = false;
 	_ordinaryBulletSprite.setOrigin(0, 0);
 	_ordinaryBulletSprite.setPosition(0, 0);
