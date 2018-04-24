@@ -1,5 +1,6 @@
 #include "Asteroid.h"
 #include "Mathematics.h"
+#include <iostream>
 
 //Pool<Asteroid> *Asteroid::poolAsteroid = nullptr;
 //std::vector<RigidBody *> Asteroid::rigidBodies;
@@ -68,6 +69,7 @@ void Asteroid::SetParametersFromType(AsteroidType type)
 		SetMass(0.005f);
 		break;
 	}
+	_life = true;
 }
 
 void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &position, const AsteroidType type, const sf::Vector2u &size)
@@ -118,18 +120,20 @@ void Asteroid::Reset()
 
 void Asteroid::OnCollisionHandler(const Event& cEvent)
 {
-	std::cout << "|| Collision! Resolve is ";
+	//std::cout << "|| Collision! Resolve is ";
 	const CollisionEvent<Asteroid> &collisionEvent = dynamic_cast<const CollisionEvent<Asteroid>&>(cEvent);
 	
 	Asteroid *obj1 = collisionEvent._obj1;
 	Asteroid *obj2 = collisionEvent._obj2;
 	if (this == obj1)
 	{
-		this->_health -= obj2->_damage - _defense;
+		if (_defense < obj2->_damage)
+			this->_health -= obj2->_damage - _defense;
 	}
 	else if (this == obj2)
 	{
-		this->_health -= obj1->_damage - _defense;		
+		if (_defense < obj1->_damage)
+			this->_health -= obj1->_damage - _defense;		
 	}
 	else
 	{
@@ -137,11 +141,7 @@ void Asteroid::OnCollisionHandler(const Event& cEvent)
 	}
 	if (IsDead(collisionEvent._poolOwner,collisionEvent._owner))
 	{
-		if (!(collisionEvent._poolOwner.Count() == collisionEvent._poolOwner.MaxCount()))
-		{
-			Remove();
-			collisionEvent._poolOwner.Put(this);
-		}
+		_life = false;
 	}	
 }
 
@@ -150,7 +150,8 @@ void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 	_sprite = sprite;
 	_sizeSpace = size;
 
-	_type = static_cast<AsteroidType>(std::rand() % static_cast<uint8_t>(AsteroidType::Count));
+	//_type = static_cast<AsteroidType>(std::rand() % static_cast<uint8_t>(AsteroidType::Count));
+	_type = AsteroidType::Big;
 
 	SetParametersFromType(_type);
 	
@@ -241,7 +242,7 @@ void Asteroid::Draw(sf::RenderWindow &window)
 	physicsShape.setFillColor(sf::Color::Transparent);
 	physicsShape.setOutlineThickness(1);
 
-	window.draw(physicsShape);
+	//window.draw(physicsShape);
 }
 
 bool Asteroid::IsDead(Pool<Asteroid> &poolOwner, std::vector<Asteroid*> &asteroids)
@@ -250,7 +251,7 @@ bool Asteroid::IsDead(Pool<Asteroid> &poolOwner, std::vector<Asteroid*> &asteroi
 	{
 		if (_type == AsteroidType::Small)
 		{
-			std::cout << "Death! ";
+			//std::cout << "Death! ";
 			return true;
 		}
 		else
@@ -264,13 +265,13 @@ bool Asteroid::IsDead(Pool<Asteroid> &poolOwner, std::vector<Asteroid*> &asteroi
 					asteroids.push_back(asteroidNew);
 				}
 			}
-			std::cout << "Broke! ";
+			//std::cout << "Broke! ";
 			return true;
 		}
 	}
 	else
 	{
-		std::cout << "Damaged! ";
+		//std::cout << "Damaged! ";
 		return false;
 	}
 }

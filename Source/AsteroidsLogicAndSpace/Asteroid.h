@@ -35,6 +35,7 @@ public:
 	float _health;
 	float _damage;
 	float _defense;
+	bool _life;
 	
 private:
 

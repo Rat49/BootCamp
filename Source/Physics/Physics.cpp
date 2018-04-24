@@ -17,23 +17,23 @@ void RigidBody::Update(float t)
   _coords.x += _speed.x * t;
   _coords.y += _speed.y * t;
 
-  //if(_coords.x > WindowResolution::_W)
-  //{
-  //  _coords.x = 0;
-  //}
-  //if(_coords.x < 0)
-  //{
-  //  _coords.x = WindowResolution::_W;
-  //}
-  //if(_coords.y > WindowResolution::_H)
-  //{
-  //  _coords.y = 0;
-  //}
-  //if(_coords.y < 0)
-  //{
-  //  _coords.y = WindowResolution::_H;
-  //}
-}
+  /*if(_coords.x > WindowResolution::_W)
+  {
+    _coords.x = 0;
+  }
+  if(_coords.x < 0)
+  {
+    _coords.x = WindowResolution::_W;
+  }
+  if(_coords.y > WindowResolution::_H)
+  {
+    _coords.y = 0;
+  }
+  if(_coords.y < 0)
+  {
+    _coords.y = WindowResolution::_H;
+  }
+*/}
 
 void RigidBody::SetRadius(float r) { _radius = r; }
 

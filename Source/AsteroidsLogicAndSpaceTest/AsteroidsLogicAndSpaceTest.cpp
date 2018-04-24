@@ -41,6 +41,7 @@ int main()
 
 	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
 	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200);
+	//int _nAsteroids = 4;
 
 	for (int i = 0; i < _nStars; ++i)
 	{
@@ -75,13 +76,14 @@ int main()
 			}
 		}
 		window.clear();
-
+		size_t n = asteroids.size();
 		while (accumulatedFrameTime >= physicsStepTargetFrameTime)
 		{
 			accumulatedFrameTime -= physicsStepTargetFrameTime;
-			for (int i = 0; i < asteroids.size(); ++i)
+			
+			for (size_t i = 0; i < n; ++i)
 			{
-				for (int j = 0; j <asteroids.size(); ++j)
+				for (size_t j = i; j < n; ++j)
 				{
 					if (i != j)
 					{
@@ -89,12 +91,23 @@ int main()
 						{
 							collisionEvent._obj1 = asteroids[i];
 							collisionEvent._obj2 = asteroids[j];
-							dispatcher.Send(collisionEvent, collisionEventID, asteroids[i]->_token);
-							//collisionEvent._obj1 = Asteroid::rigidBodies[j];
-							//collisionEvent._obj2 = Asteroid::rigidBodies[i];
-							dispatcher.Send(collisionEvent, collisionEventID, asteroids[j]->_token);
 							ResolveCollision(*asteroids[i], *asteroids[j]);
+							dispatcher.Send(collisionEvent, collisionEventID, asteroids[i]->_token);
+							dispatcher.Send(collisionEvent, collisionEventID, asteroids[j]->_token);
 						}
+					}
+				}
+			}
+
+			for (size_t i = 0; i < asteroids.size(); ++i)
+			{
+				if (asteroids[i]->_life == false)
+				{
+					if (!(poolAsteroid.Count() == poolAsteroid.MaxCount()))
+					{
+						asteroids[i]->Remove();
+						poolAsteroid.Put(asteroids[i]);
+						asteroids.erase(std::find(asteroids.begin(), asteroids.end(), asteroids[i]));
 					}
 				}
 			}
@@ -102,6 +115,7 @@ int main()
 			for (auto *object : Object::_allObjects)
 			{
 				object->Update(physicsStepTargetFrameTime / 1e3);
+
 			}
 			/*for (size_t i = 0; i < asteroids.size(); ++i)
 			{

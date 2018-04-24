@@ -3,13 +3,13 @@
 #include "CollisionEventPhysicstest.h"
 
 
-constexpr size_t numOfObjects = 10;
+constexpr size_t numOfObjects = 20;
 void             MainLoop(RigidBody * RigidBodysFunc)
 {
   sf::Clock clock;
   sf::Time  deltaTime;
 
-  sf::RenderWindow app(sf::VideoMode(400,400), "Asteroids!");
+  sf::RenderWindow app(sf::VideoMode(800,800), "Asteroids!");
   WindowResolution::SetResolution(app);
 
   sf::CircleShape circles[numOfObjects];
