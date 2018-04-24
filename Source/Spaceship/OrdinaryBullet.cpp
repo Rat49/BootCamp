@@ -11,7 +11,7 @@ OrdinaryBullet::OrdinaryBullet()
 
 void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bulletDirection, sf::Texture& bulletTexture)
 {
-	Add();
+	AddToDrawableManager();
 	
 	_bulletScale = sf::Vector2f(0.5f, 0.5f);
 	_bulletTexture = &bulletTexture;
@@ -52,7 +52,7 @@ void OrdinaryBullet::Reset()
 	SetSpeed(sf::Vector2f(0, 0));
 }
 
-void OrdinaryBullet::Add()
+void OrdinaryBullet::AddToDrawableManager()
 {
 	DrawableManager::getInstance()._drawableObjects.push_back(this);
 	DrawableManager::getInstance().SortDrawableVector();

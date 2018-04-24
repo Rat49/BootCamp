@@ -16,7 +16,7 @@ int main()
 
 	InputManager* input = new InputManager();
 	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), *input, *spaceshipImgseq, *flickeringImgseq);
-	spaceship->Add();
+	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture,*rocketTexture);
 	DrawableManager& drawableManager = DrawableManager::getInstance();
 

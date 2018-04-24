@@ -12,7 +12,7 @@ public:
 	OrdinaryBullet();
 	void Init(const sf::Vector2f& position, const sf::Vector2f& bulletDirection, sf::Texture& bulletTexture);
 	const sf::Sprite* GetSprite();
-	void Add() override;
+	void AddToDrawableManager() override;
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;
 	void Update(const sf::Time& deltaTime) override;

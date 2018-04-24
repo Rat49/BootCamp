@@ -256,7 +256,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 
 }
 
-void Spaceship::Add()
+void Spaceship::AddToDrawableManager()
 {
 	DrawableManager::getInstance()._drawableObjects.push_back(this);
 	DrawableManager::getInstance().SortDrawableVector();

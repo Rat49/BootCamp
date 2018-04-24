@@ -13,7 +13,7 @@ Rocket::Rocket()
 
 void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture)
 {
-	Add();
+	AddToDrawableManager();
 	
 	_rocketScale = sf::Vector2f(0.8f, 0.8f);
 	_direction = rocketDirection;
@@ -65,7 +65,7 @@ void Rocket::Reset()
 	SetSpeed(sf::Vector2f(0, 0));
 }
 
-void Rocket::Add()
+void Rocket::AddToDrawableManager()
 {
 	DrawableManager::getInstance()._drawableObjects.push_back(this);
 	DrawableManager::getInstance().SortDrawableVector();

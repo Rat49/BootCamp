@@ -16,7 +16,7 @@ public:
 	Rocket();
 	void Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture);
 	const sf::Sprite* GetSprite();
-	void Add() override;
+	void AddToDrawableManager() override;
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;
 	void Update(const sf::Time& deltaTime) override;
