@@ -23,4 +23,4 @@ class CollisionEventBetweenAsteroidAndSpaceship : public Event
 {
 	Spaceship* _spaceship;
 	Asteroid* _asteroid;
-}
+};
