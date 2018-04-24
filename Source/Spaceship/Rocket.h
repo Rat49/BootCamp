@@ -11,6 +11,7 @@ private:
 	sf::Vector2f _direction;
 	const float _deltaSpeedValue;
 	sf::Time _timeAfterShot;
+	sf::Vector2f _rocketScale;
 public:
 	Rocket();
 	~Rocket();

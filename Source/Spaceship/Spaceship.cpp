@@ -3,23 +3,22 @@
 const float PI_F = 3.14159265358979f;
 
 Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & input,
-	ImageSequenceResource &spaceshipAnimationImseq) //, TextureResource &ordinaryShotTexture, TextureResource &powerfulShotTexture)
+	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
 	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	, _liveCount(3)
+	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
+	, _spaceshipFlickeringImseq(spaceshipFlickeringImseq)
 	, _rotationAngle(17.0f)
 	, _acceleration(15.0f)
 	, _maxSquareSpeed(12000.0f)
+	, _flickeringTime(sf::seconds(1.0f))
+	, _timeAfterDamage(sf::seconds(0.0f))
 	, _input(input)	
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
-	/*, _totalBulletCount(200)
-	, _totalRocketCount(10)
-	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(_totalBulletCount))
-	, _rocketStorage(Pool<Rocket>(_totalRocketCount))
-	, _ordinaryShotTexture(ordinaryShotTexture)
-	, _powerfulShotTexture(powerfulShotTexture)*/
 	, _rechargeRocketTime(sf::seconds(3.0f))
 	, _rechargeBulletTime(sf::seconds(0.5f))
 	, _bulletRebound(5.0f)
@@ -29,6 +28,7 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	_speedDirection = NormalizeSpeed();
 	_spaceshipSprite = new sf::Sprite();
 	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, spaceshipAnimationImseq, true);
+	_spaceshipFlickering = new AnimationPlayer(*_spaceshipSprite, spaceshipFlickeringImseq, true);
 	_spaceshipSprite->setPosition(position);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
 	_spaceshipAnimation->Start();
@@ -132,6 +132,25 @@ void Spaceship::GainRebound(float reboundValue)
 	_speedDirection = NormalizeSpeed();
 }
 
+void Spaceship::SetFlickeringMode()
+{
+	_spaceshipAnimation->Stop();
+	_spaceshipFlickering->Start();
+
+	_timeAfterDamage = sf::seconds(0.0f);
+	_isDamaged = true;
+}
+
+void Spaceship::SetNormalMode()
+{
+	_spaceshipFlickering->Stop();
+	_spaceshipAnimation->Start();
+
+	_isDamaged = false;
+}
+
+
+
 void Spaceship::Update(sf::Time deltaTime)
 {
 	//============temporary===============
@@ -211,12 +230,31 @@ void Spaceship::Update(sf::Time deltaTime)
 	{
 		OrdinaryShoot();
 	}
+	//==========================only for test============================================
+	if (_input.GetState(static_cast<int>(GameActions::Choose), stateShoot) && stateShoot == ButtonsState::JustPressed)
+	{
+		SetFlickeringMode();
+	}
+	//===================================================================================
 
 	_timeAfterPowerfulShot += deltaTime;
 	_timeAfterBulletShot += deltaTime;
 	RigidBody::Update(deltaTime.asSeconds());
 	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
 	_spaceshipAnimation->Update(deltaTime);
+	_spaceshipFlickering->Update(deltaTime);
+
+	if (_isDamaged)
+	{
+		if (_timeAfterDamage < _flickeringTime)
+		{
+			_timeAfterDamage += deltaTime;
+		}
+		else
+		{
+			SetNormalMode();
+		}
+	}
 
 }
 
