@@ -14,7 +14,6 @@ int main()
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
 
-	CollisionEvent collisionEvent;
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 
 	DrawableManager& dm = DrawableManager::getInstance();
@@ -30,8 +29,10 @@ int main()
 
 	const int totalCountAsteroids = 100;
 	Pool<Asteroid> poolAsteroid(totalCountAsteroids);
-	Asteroid::poolAsteroid = &poolAsteroid;
+	std::vector<Asteroid *> asteroids;
+	//Asteroid::poolAsteroid = &poolAsteroid;
 
+	CollisionEvent<Asteroid> collisionEvent(poolAsteroid, asteroids);
 	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
 	Pool<Star> poolStar(totalCountStar);
 
@@ -50,7 +51,7 @@ int main()
 	{
 		Asteroid* asteroid = poolAsteroid.Get();
 		asteroid->Init(sprite,window.getSize());
-		Asteroid::rigidBodies.push_back(asteroid);
+		asteroids.push_back(asteroid);
 	}
 
 	while (window.isOpen())
@@ -78,21 +79,21 @@ int main()
 		while (accumulatedFrameTime >= physicsStepTargetFrameTime)
 		{
 			accumulatedFrameTime -= physicsStepTargetFrameTime;
-			for (int i = 0; i < Asteroid::rigidBodies.size(); ++i)
+			for (int i = 0; i < asteroids.size(); ++i)
 			{
-				for (int j = 0; j < Asteroid::rigidBodies.size(); ++j)
+				for (int j = 0; j <asteroids.size(); ++j)
 				{
 					if (i != j)
 					{
-						if (Collided(*Asteroid::rigidBodies[i], *Asteroid::rigidBodies[j]))
+						if (Collided(*asteroids[i], *asteroids[j]))
 						{
-							collisionEvent._obj1 = Asteroid::rigidBodies[i];
-							collisionEvent._obj2 = Asteroid::rigidBodies[j];
-							dispatcher.Send(collisionEvent, collisionEventID, Asteroid::rigidBodies[i]->_token);
-							collisionEvent._obj1 = Asteroid::rigidBodies[j];
-							collisionEvent._obj2 = Asteroid::rigidBodies[i];
-							dispatcher.Send(collisionEvent, collisionEventID, Asteroid::rigidBodies[j]->_token);
-							ResolveCollision(*Asteroid::rigidBodies[i], *Asteroid::rigidBodies[j]);
+							collisionEvent._obj1 = asteroids[i];
+							collisionEvent._obj2 = asteroids[j];
+							dispatcher.Send(collisionEvent, collisionEventID, asteroids[i]->_token);
+							//collisionEvent._obj1 = Asteroid::rigidBodies[j];
+							//collisionEvent._obj2 = Asteroid::rigidBodies[i];
+							dispatcher.Send(collisionEvent, collisionEventID, asteroids[j]->_token);
+							ResolveCollision(*asteroids[i], *asteroids[j]);
 						}
 					}
 				}

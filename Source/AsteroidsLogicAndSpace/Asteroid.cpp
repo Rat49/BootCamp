@@ -1,8 +1,8 @@
 #include "Asteroid.h"
 #include "Mathematics.h"
 
-Pool<Asteroid> *Asteroid::poolAsteroid = nullptr;
-std::vector<RigidBody *> Asteroid::rigidBodies;
+//Pool<Asteroid> *Asteroid::poolAsteroid = nullptr;
+//std::vector<RigidBody *> Asteroid::rigidBodies;
 
 void Asteroid::DefaultInit()
 {
@@ -118,19 +118,31 @@ void Asteroid::Reset()
 
 void Asteroid::OnCollisionHandler(const Event& cEvent)
 {
-	const CollisionEvent &collisionEvent = dynamic_cast<const CollisionEvent&>(cEvent);
-	Asteroid *obj = dynamic_cast<Asteroid *>(collisionEvent._obj2);
+	std::cout << "|| Collision! Resolve is ";
+	const CollisionEvent<Asteroid> &collisionEvent = dynamic_cast<const CollisionEvent<Asteroid>&>(cEvent);
 	
-	this->_health -= obj->_damage - _defense;
-	if (this->IsDead())
+	Asteroid *obj1 = collisionEvent._obj1;
+	Asteroid *obj2 = collisionEvent._obj2;
+	if (this == obj1)
 	{
-		if (poolAsteroid != nullptr && !(poolAsteroid->Count() == poolAsteroid->MaxCount()))
+		this->_health -= obj2->_damage - _defense;
+	}
+	else if (this == obj2)
+	{
+		this->_health -= obj1->_damage - _defense;		
+	}
+	else
+	{
+		//Log
+	}
+	if (IsDead(collisionEvent._poolOwner,collisionEvent._owner))
+	{
+		if (!(collisionEvent._poolOwner.Count() == collisionEvent._poolOwner.MaxCount()))
 		{
 			Remove();
-			poolAsteroid->Put(this);
+			collisionEvent._poolOwner.Put(this);
 		}
-	}
-	std::cout << "Collision!";
+	}	
 }
 
 void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
@@ -232,27 +244,34 @@ void Asteroid::Draw(sf::RenderWindow &window)
 	window.draw(physicsShape);
 }
 
-bool Asteroid::IsDead()
+bool Asteroid::IsDead(Pool<Asteroid> &poolOwner, std::vector<Asteroid*> &asteroids)
 {
 	if (_health <= 0)
 	{
 		if (_type == AsteroidType::Small)
+		{
+			std::cout << "Death! ";
 			return true;
+		}
 		else
 		{
 			for (int j = 0; j < 4; ++j)
 			{
-				if (poolAsteroid != nullptr && !poolAsteroid->Empty())
+				if (!poolOwner.Empty())
 				{
-					Asteroid* asteroidNew = poolAsteroid->Get();
+					Asteroid* asteroidNew = poolOwner.Get();
 					asteroidNew->InitFromCrash(_sprite, GetCoordinates(), _type, _sizeSpace);
-					rigidBodies.push_back(asteroidNew);
+					asteroids.push_back(asteroidNew);
 				}
 			}
+			std::cout << "Broke! ";
 			return true;
 		}
 	}
 	else
+	{
+		std::cout << "Damaged! ";
 		return false;
+	}
 }
 

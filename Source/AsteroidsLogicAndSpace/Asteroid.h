@@ -16,9 +16,9 @@ class Asteroid : public Object, public RigidBody
 public:
 
 	//TODO: manager?
-	static Pool<Asteroid> *poolAsteroid;
+	//static Pool<Asteroid> *poolAsteroid;
 	//TODO: move to physics
-	static std::vector<RigidBody *> rigidBodies;
+	//static std::vector<RigidBody *> rigidBodies;
 
 	Asteroid();
 
@@ -48,6 +48,6 @@ private:
 	void DefaultInit();
 	void RandomInit();
 	void SetParametersFromType(AsteroidType type);
-	bool IsDead();
+	bool IsDead(Pool<Asteroid> &poolOwner,std::vector<Asteroid *> &asteroids);
 
 };
