@@ -3,7 +3,7 @@
 const float PI_F = 3.14159265358979f;
 
 Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & input,
-	ImageSequenceResource &spaceshipAnimationImseq, TextureResource &ordinaryShotTexture, TextureResource &powerfulShotTexture)
+	ImageSequenceResource &spaceshipAnimationImseq) //, TextureResource &ordinaryShotTexture, TextureResource &powerfulShotTexture)
 	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
@@ -14,17 +14,16 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	, _input(input)	
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
-	, _totalBulletCount(200)
+	/*, _totalBulletCount(200)
 	, _totalRocketCount(10)
 	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(_totalBulletCount))
 	, _rocketStorage(Pool<Rocket>(_totalRocketCount))
 	, _ordinaryShotTexture(ordinaryShotTexture)
-	, _powerfulShotTexture(powerfulShotTexture)
+	, _powerfulShotTexture(powerfulShotTexture)*/
 	, _rechargeRocketTime(sf::seconds(3.0f))
 	, _rechargeBulletTime(sf::seconds(0.5f))
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
-	, _bulletDeflection(5.0f)
 {
 	_zOrder = 1;
 	_speedDirection = NormalizeSpeed();
@@ -33,6 +32,14 @@ Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & i
 	_spaceshipSprite->setPosition(position);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
 	_spaceshipAnimation->Start();
+
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	_tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
+		[&](const Event& event)
+	{
+		const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
+		//currentEvent._spaceship minus life
+	});
 }
 
 void Spaceship::Accelerate()
@@ -52,10 +59,9 @@ void Spaceship::PowerfulShoot()
 		return;
 	}
 
-	Rocket* rocket = _rocketStorage.Get();
-	rocket->Init(_spaceshipSprite->getPosition(), _spaceshipDirection, _powerfulShotTexture.Get());
-	
-	_rockets.push_back(rocket);
+	CreateRocketEvent createRocket(_spaceshipSprite->getPosition(), _spaceshipDirection);
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	dispatcher.Send(createRocket, EventTypes::createRocketEventID);
 	
 	_timeAfterPowerfulShot = sf::seconds(0.0f); 
 	GainRebound(_rocketRebound);
@@ -69,18 +75,9 @@ void Spaceship::OrdinaryShoot()
 		return;
 	}
 	
-	OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
-	bulletLeft->Init(_spaceshipSprite->getPosition(), RotateDirection(_bulletDeflection), _ordinaryShotTexture.Get());
-
-	OrdinaryBullet* bulletRight = _ordinaryBulletStorage.Get();
-	bulletRight->Init(_spaceshipSprite->getPosition(), RotateDirection(-_bulletDeflection), _ordinaryShotTexture.Get());
-
-	OrdinaryBullet* bulletCentr = _ordinaryBulletStorage.Get();
-	bulletCentr->Init(_spaceshipSprite->getPosition(), RotateDirection(0.0f), _ordinaryShotTexture.Get());
-	
-	_bullets.push_back(bulletLeft);
-	_bullets.push_back(bulletRight);
-	_bullets.push_back(bulletCentr);
+	CreateBulletEvent createBullet(_spaceshipSprite->getPosition(),_spaceshipDirection);
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	dispatcher.Send(createBullet, EventTypes::createBulletEventID);
 
 	_timeAfterBulletShot = sf::seconds(0.0f);
 	GainRebound(_bulletRebound);
@@ -221,48 +218,6 @@ void Spaceship::Update(sf::Time deltaTime)
 	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
 	_spaceshipAnimation->Update(deltaTime);
 
-	for (size_t i = 0; i < _bullets.size(); ++i)
-	{
-		OrdinaryBullet* ptrBullet = _bullets[i];
-		
-		if (ptrBullet->GetLifeStatus())
-		{
-			ptrBullet->Update(deltaTime);
-		}
-		else
-		{
-			if (!(_ordinaryBulletStorage.Count() == _totalBulletCount)) 
-			{
-				_bullets.erase(_bullets.cbegin() + i);
-				--i;
-				_ordinaryBulletStorage.Put(ptrBullet);
-				DrawableManager::getInstance()._drawableObjects.erase
-				(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrBullet)),
-					DrawableManager::getInstance()._drawableObjects.end());
-			}
-		}
-	}	
-	for (size_t i = 0; i < _rockets.size(); ++i)
-	{
-		Rocket* ptrRocket = _rockets[i];
-
-		if (ptrRocket->GetLifeStatus())
-		{
-			ptrRocket->Update(deltaTime);
-		}
-		else
-		{
-			if (!(_rocketStorage.Count() == _totalRocketCount))
-			{
-				_rockets.erase(_rockets.cbegin() + i);
-				--i;
-				_rocketStorage.Put(ptrRocket);
-				DrawableManager::getInstance()._drawableObjects.erase
-				(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrRocket)), 
-					DrawableManager::getInstance()._drawableObjects.end());
-			}
-		}
-	}
 }
 
 void Spaceship::Add()
@@ -283,5 +238,6 @@ void Spaceship::Draw(sf::RenderWindow& window)
 
 Spaceship::~Spaceship()
 {
-	//unsub event
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID , _tokenForCollisionEventBetweenAsteroidAndSpaceship);
 }

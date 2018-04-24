@@ -1,32 +1,35 @@
 #pragma once
 #include "EventSystem.h"
-#include "Physics.h"
-#include "Bullet.h"
-#include "Spaceship.h"
+
+class Spaceship;
+class RigidBody;
+class Rocket;
+class OrdinaryBullet;
 
 class CollisionEventBetweenAsteroids : public Event
 {
-private:
+public:
 	RigidBody* _asteroid1;
 	RigidBody* _asteroid2;
-public:
-	void setObjs(RigidBody * o1, RigidBody * o2);
 };
 
 class CollisionEventBetweenAsteroidAndBullet : public Event
 {
-private:
-	Bullet* _bullet;
-	RigidBody* _asteroid;
 public:
-	void setObjs(Bullet* o1, RigidBody* o2);
+	OrdinaryBullet* _bullet;
+	RigidBody* _asteroid;
+};
+
+class CollisionEventBetweenAsteroidAndRocket : public Event
+{
+public:
+	Rocket* _bullet;
+	RigidBody* _asteroid;
 };
 
 class CollisionEventBetweenAsteroidAndSpaceship : public Event
 {
-private:
+public:
 	Spaceship* _spaceship;
 	RigidBody* _asteroid;
-public:
-	void setObjs(Spaceship* o1, RigidBody* o2);
 };

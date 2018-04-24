@@ -58,11 +58,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Events; $(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Events; $(SolutionDir)Source\Physics;$(SolutionDir)Source\Spaceship</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Physics_d.lib;Events_d.lib;sfml-system-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Spaceship_d.lib;Physics_d.lib;Events_d.lib;sfml-system-d.lib;sfml-graphics-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

@@ -1,6 +1,6 @@
 #include "DrawableManager.h"
 #include "Spaceship.h"
-
+#include "BulletManager.h"
 
 int main()
 {
@@ -17,9 +17,9 @@ int main()
 
 	InputManager* input = new InputManager();
 	
-	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), *input, *spaceshipImgseq, *bulletTexture, *rocketTexture);
+	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), *input, *spaceshipImgseq);
 	spaceship->Add();
-	
+	BulletManager manager(*bulletTexture,*rocketTexture);
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();
 	sf::Time deltaTime;
@@ -35,6 +35,7 @@ int main()
 		timer = now;
 
 		spaceship->Update(deltaTime);
+		manager.Update(deltaTime);
 
 		//std::cout << "_drawableObjects.size(): " << DrawableManager::getInstance()._drawableObjects.size() << std::endl;
 		

@@ -1,4 +1,7 @@
 #pragma once
+#include "EventSystem.h"
+#include "CollisionEvent.h"
+#include "BulletManagerEvents.h"
 #include "AnimationPlayer.h"
 #include "ImageSequenceResource.h"
 #include "Input.h"
@@ -12,7 +15,7 @@ class Spaceship : public RigidBody, public Drawable
 {
 public:
 	Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager& input,
-		ImageSequenceResource& spaceshipAnimationImseq, TextureResource &ordinaryShotTexture, TextureResource &powerfulShotTexture);
+		ImageSequenceResource& spaceshipAnimationImseq); //, TextureResource &ordinaryShotTexture, TextureResource &powerfulShotTexture);
 	~Spaceship();
 
 	void Accelerate();
@@ -32,24 +35,23 @@ private:
 	const float _rotationAngle;
 	const float _acceleration;
 	const float _maxSquareSpeed;
-
+	Token_t _tokenForCollisionEventBetweenAsteroidAndSpaceship;
+	//Token_t _tokenForCollisionEventBetweenAsteroidAndRocket;
+	//Token_t _tokenForCollisionEventBetweenAsteroidAndBullet;
 	InputManager& _input;
 	const sf::Time _inputTime;
 	sf::Time _inputAccumulatedTime;
 
-	const int _totalBulletCount;
-	const int _totalRocketCount;
-	Pool<OrdinaryBullet> _ordinaryBulletStorage;
-	Pool<Rocket> _rocketStorage;	
-	std::vector<OrdinaryBullet*> _bullets;
-	std::vector<Rocket*> _rockets;
-	TextureResource& _ordinaryShotTexture;
-	TextureResource& _powerfulShotTexture;	
+	/*const int _totalBulletCount;
+	const int _totalRocketCount;*/
+	
+	//TextureResource& _ordinaryShotTexture;
+	//TextureResource& _powerfulShotTexture;	
 	const sf::Time _rechargeRocketTime;
 	const sf::Time _rechargeBulletTime;
 	sf::Time _timeAfterPowerfulShot;
 	sf::Time _timeAfterBulletShot;	
-	const float _bulletDeflection;
+	//const float _bulletDeflection;
 	const float _bulletRebound;
 	const float _rocketRebound;
 

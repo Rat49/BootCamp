@@ -11,7 +11,6 @@ private:
 	sf::Vector2f _direction;
 	const float _deltaSpeedValue;
 	sf::Time _timeAfterShot;
-	bool _life;
 public:
 	Rocket();
 	~Rocket();
@@ -22,5 +21,4 @@ public:
 	void Draw(sf::RenderWindow& window) override;
 	void Update(sf::Time& deltaTime) override;
 	void Reset() override;
-	bool GetLifeStatus() const;
 };

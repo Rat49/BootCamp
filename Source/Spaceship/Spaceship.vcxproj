@@ -83,11 +83,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Bullet.h" />
+    <ClInclude Include="BulletManager.h" />
+    <ClInclude Include="BulletManagerEvents.h" />
     <ClInclude Include="OrdinaryBullet.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Spaceship.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BulletManager.cpp" />
+    <ClCompile Include="BulletManagerEvents.cpp" />
     <ClCompile Include="OrdinaryBullet.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Spaceship.cpp" />
