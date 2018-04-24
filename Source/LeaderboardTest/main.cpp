@@ -1,11 +1,8 @@
-#include"Leaderboard.h"
+#include "Leaderboard.h"
 
 
 namespace LeaderboardTest {
-
-
 	void Test() {
-
 		Leaderboard *l = Leaderboard::Create();
 
 		std::cout << "Login and register test:" << std::endl;
@@ -29,15 +26,11 @@ namespace LeaderboardTest {
 		if (l != NULL) {
 			delete l;
 		}
-
 	}
+}
 
+int main() {
+    LeaderboardTest::Test();
 
-	int main() {
-
-		Test();
-
-		return 0;
-	}
-
+    return 0;
 }

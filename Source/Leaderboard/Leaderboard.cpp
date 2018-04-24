@@ -52,7 +52,7 @@ void Leaderboard::UpdatePlayerStatistic(const int statisticValue) {
 	PlayFabClientAPI::UpdatePlayerStatistics(request, OnPlayerStatisticsUpdateSuccess, OnFail);
 
 	while (PlayFabClientAPI::Update() != 0)
-		Sleep(1);
+		Sleep(50);
 }
 
 void Leaderboard::UpdateUserTitleDisplayName(const std::string& name) {
