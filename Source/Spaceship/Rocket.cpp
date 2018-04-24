@@ -1,7 +1,5 @@
 #include "Rocket.h"
 
-const float PI_F = 3.14159265358979f;
-
 Rocket::Rocket()
 	: _speedValue(200.0f)
 	, _rocketSprite()
@@ -13,7 +11,7 @@ Rocket::Rocket()
 	_zOrder = 3;	
 }
 
-void Rocket::Init(sf::Vector2f position, const sf::Vector2f rocketDirection, sf::Texture& rocketTexture)
+void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture)
 {
 	Add();
 	
@@ -23,7 +21,7 @@ void Rocket::Init(sf::Vector2f position, const sf::Vector2f rocketDirection, sf:
 	_rocketSprite.setTexture(*_rocketTexture);
 	_rocketSprite.setScale(_rocketScale);
 	_rocketSprite.setOrigin(sf::Vector2f(_rocketTexture->getSize().x / 2.0f, _rocketTexture->getSize().y / 2.0f));
-	float angle = std::atan(_direction.x / -_direction.y) * 180.0f / PI_F;
+	float angle = std::atan(_direction.x / -_direction.y) * 180.0f / M_PI;
 	if (_direction.y > 0)
 		angle += 180.0f;
 
@@ -34,7 +32,7 @@ void Rocket::Init(sf::Vector2f position, const sf::Vector2f rocketDirection, sf:
 	SetCoordinates(sf::Vector2f(position.x + rocketDirection.x * _rocketTexture->getSize().y / 2.0f, position.y + rocketDirection.y * _rocketTexture->getSize().y / 2.0f));
 }
 
-sf::Sprite* Rocket::GetSprite()
+const sf::Sprite* Rocket::GetSprite()
 {
 	return &_rocketSprite;
 }

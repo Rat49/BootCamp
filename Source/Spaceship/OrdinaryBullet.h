@@ -10,8 +10,8 @@ private:
 	sf::Vector2f _bulletScale;
 public:
 	OrdinaryBullet();
-	void Init(const sf::Vector2f position, const sf::Vector2f bulletDirection, sf::Texture& bulletTexture);
-	sf::Sprite* GetSprite();
+	void Init(const sf::Vector2f& position, const sf::Vector2f& bulletDirection, sf::Texture& bulletTexture);
+	const sf::Sprite* GetSprite();
 	void Add() override;
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;

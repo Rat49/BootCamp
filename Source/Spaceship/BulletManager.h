@@ -2,9 +2,9 @@
 #include "EventSystem.h"
 #include "BulletManagerEvents.h"
 #include "Pool.h"
+#include "ResourceManager.h"
 #include "OrdinaryBullet.h"
 #include "Rocket.h"
-#include "ResourceManager.h"
 #include "SFML\Graphics.hpp"
 
 class BulletManager final 
@@ -33,6 +33,6 @@ public:
 	void CreateRocket(const Event& event);
 	void DeleteRocket(const Event& event);
 	void Update(const sf::Time& deltaTime);
-	sf::Vector2f DeflectBullets(float angle, sf::Vector2f direction) const;
+	sf::Vector2f DeflectBullets(float angle, const sf::Vector2f& direction) const;
 };
 

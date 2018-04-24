@@ -114,12 +114,12 @@ sf::Sprite* AnimationPlayer::GetSprite()
 	return _animatedSprite;
 }
 
-const int AnimationPlayer::GetWidth() const
+int AnimationPlayer::GetWidth() const
 {
 	return _animation->GetWidth();
 }
 
-const int AnimationPlayer::GetHeight() const
+int AnimationPlayer::GetHeight() const
 {
 	return _animation->GetHeight();
 }

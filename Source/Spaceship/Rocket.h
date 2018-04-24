@@ -14,8 +14,8 @@ private:
 	sf::Vector2f _rocketScale;
 public:
 	Rocket();
-	void Init(const sf::Vector2f position, const sf::Vector2f rocketDirection, sf::Texture& rocketTexture);
-	sf::Sprite* GetSprite();
+	void Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture);
+	const sf::Sprite* GetSprite();
 	void Add() override;
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;

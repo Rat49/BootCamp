@@ -5,16 +5,16 @@
 #include "AnimationPlayer.h"
 #include "ImageSequenceResource.h"
 #include "Input.h"
-#include "OrdinaryBullet.h"
 #include "Physics.h"
 #include "Pool.h"
-#include "Rocket.h"
+#include "DrawableManager.h"
+#include <math.h>
 #include <algorithm>
 
 class Spaceship : public RigidBody, public Drawable
 {
 public:
-	Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager& input,
+	Spaceship(const sf::Vector2f& position, const sf::Vector2f& speed, InputManager& input, 
 		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);
 	~Spaceship();
 
@@ -22,8 +22,8 @@ public:
 	void Decelerate();
 	void PowerfulShoot();
 	void OrdinaryShoot();
-	void RotateSpaceship(float angle);	
-	void Update(sf::Time deltaTime);
+	void RotateSpaceship(float angle);
+	void Update(const sf::Time& deltaTime);
 	void Add() override;
 private:
 	unsigned int _liveCount;
@@ -50,12 +50,12 @@ private:
 	const sf::Time _rechargeRocketTime;
 	const sf::Time _rechargeBulletTime;
 	sf::Time _timeAfterPowerfulShot;
-	sf::Time _timeAfterBulletShot;	
+	sf::Time _timeAfterBulletShot;
 	const float _bulletRebound;
 	const float _rocketRebound;
 
 	void ControlSpeed(float deltaSpeed);
-	float GetSquareLength(sf::Vector2f speed) const;
+	float GetSquareLength(const sf::Vector2f& speed) const;
 	sf::Vector2f RotateDirection(float angle) const;
 	sf::Vector2f NormalizeSpeed() const;
 	void GainRebound(float reboundValue);

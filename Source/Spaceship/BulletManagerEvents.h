@@ -1,8 +1,9 @@
 #pragma once
-#include "SFML\Graphics.hpp"
 #include "Event.h"
-#include "OrdinaryBullet.h"
-#include "Rocket.h"
+#include "SFML\Graphics.hpp"
+
+class OrdinaryBullet;
+class Rocket;
 
 class CreateBulletEvent : public Event
 {
@@ -10,7 +11,7 @@ public:
 	sf::Vector2f _position;
 	sf::Vector2f _direction;
 
-	CreateBulletEvent(sf::Vector2f position, sf::Vector2f direction);
+	CreateBulletEvent(const sf::Vector2f& position, const sf::Vector2f& direction);
 };
 
 class DeleteBulletEvent : public Event
@@ -25,7 +26,7 @@ public:
 	sf::Vector2f _position;
 	sf::Vector2f _direction;
 
-	CreateRocketEvent(sf::Vector2f position,sf::Vector2f direction);
+	CreateRocketEvent(const sf::Vector2f& position, const sf::Vector2f& direction);
 };
 
 class DeleteRocketEvent : public Event

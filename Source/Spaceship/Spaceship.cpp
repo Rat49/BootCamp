@@ -1,8 +1,6 @@
 #include "Spaceship.h"
 
-const float PI_F = 3.14159265358979f;
-
-Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & input,
+Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, InputManager & input,
 	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
 	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
 	, _liveCount(3)
@@ -108,14 +106,14 @@ void Spaceship::ControlSpeed(float deltaSpeed)
 	}
 }
 
-float Spaceship::GetSquareLength(sf::Vector2f speed) const
+float Spaceship::GetSquareLength(const sf::Vector2f& speed) const
 {
 	return speed.x * speed.x + speed.y * speed.y;
 }
 
 sf::Vector2f Spaceship::RotateDirection(float angle) const
 {
-	float radianAngle = angle * PI_F / 180.0f;
+	float radianAngle = angle * M_PI / 180.0f;
 	return sf::Vector2f(_spaceshipDirection.x * std::cos(radianAngle) - _spaceshipDirection.y * std::sin(radianAngle),
 		_spaceshipDirection.x * std::sin(radianAngle) + _spaceshipDirection.y * std::cos(radianAngle));
 }
@@ -151,7 +149,7 @@ void Spaceship::SetNormalMode()
 
 
 
-void Spaceship::Update(sf::Time deltaTime)
+void Spaceship::Update(const sf::Time& deltaTime)
 {
 	//============temporary===============
 	enum class GameActions {

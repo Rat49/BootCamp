@@ -35,7 +35,7 @@ InputManager::InputManager()
 
 	for (auto actionIt = std::cbegin(customActions); actionIt != std::cend(customActions); ++actionIt)
 	{
-		std::vector<localButtonsConfig>::iterator it = std::find_if(
+		auto it = std::find_if(
 			buttonsState.begin(),
 			buttonsState.end(),
 			[actionIt](const localButtonsConfig & current) -> bool {
@@ -58,7 +58,7 @@ InputManager::InputManager(const std::multimap<Action_t, ButtonKey_t>& buttonsKe
 {
 	for (auto actionIt = std::cbegin(buttonsKeyFromConfig); actionIt != std::cend(buttonsKeyFromConfig); ++actionIt)
 	{
-		std::vector<localButtonsConfig>::iterator it = std::find_if(
+		auto it = std::find_if(
 			buttonsState.begin(),
 			buttonsState.end(),
 			[actionIt](const localButtonsConfig & current) -> bool {
