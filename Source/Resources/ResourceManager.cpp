@@ -24,10 +24,6 @@ ResourceManager::ResourceManager(const std::map<std::string, std::multimap<const
 	}
 }
 
-ResourceManager::ResourceManager()
-{
-}
-
 Resource* ResourceManager::GetGeneralResource(const std::string& key)
 {
 	auto iter = _resources.find(key);
