@@ -29,7 +29,7 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 	
 	SetSpeed(rocketDirection * _speedValuePixelsPerSecond);
 	_timeAfterShot = sf::seconds(0.0f);
-	SetCoordinates(sf::Vector2f(position.x + rocketDirection.x * _rocketTexture->getSize().y / 2.0f, position.y + rocketDirection.y * _rocketTexture->getSize().y / 2.0f));
+	SetCoordinates(sf::Vector2f(position.x, position.y));
 }
 
 const sf::Sprite* Rocket::GetSprite()
