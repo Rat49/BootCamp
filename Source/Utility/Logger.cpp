@@ -37,7 +37,7 @@ void Logger::GetStaringInfo(LogLevel level)
 	strftime(buff, 100, "%H:%M:%S", &newtime);
 	_os << "[" << buff << "]";
 	char fr[16];
-	sprintf_s(fr,"%u", _frame);
+	sprintf_s(fr,"%llu", _frame);
 	_os << "[" << fr << "] ";
 }
 

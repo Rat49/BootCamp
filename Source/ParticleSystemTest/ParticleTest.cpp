@@ -6,7 +6,8 @@
 #include "Particles.h"
 #include "Drawable.h"
 
-class Rocket {
+class Rocket
+{
 public:
 	ParticleSystem particles;
 

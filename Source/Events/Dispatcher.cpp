@@ -17,7 +17,7 @@ Dispatcher& Dispatcher::getInstance()
 	return instance;
 }
 
-int Dispatcher::Connect(const EventID_t eventID, const EventHandler_t& handler)
+Token_t Dispatcher::Connect(const EventID_t eventID, const EventHandler_t& handler)
 {
 	std::map<Token_t, EventHandler_t>& handlersForCurrentEvent = _listeners[eventID];
 	Token_t tokenForCurrentListener = 0;

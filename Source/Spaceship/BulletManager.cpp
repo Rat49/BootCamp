@@ -105,7 +105,7 @@ void BulletManager::Update(const sf::Time& deltaTime)
 
 sf::Vector2f BulletManager::DeflectBullets(float angle,const sf::Vector2f& direction) const
 {
-	float radianAngle = angle * M_PI / 180.0f;
+	float radianAngle = angle * static_cast<float>(M_PI) / 180.0f;
 	return sf::Vector2f(direction.x * std::cos(radianAngle) - direction.y * std::sin(radianAngle),
 		direction.x * std::sin(radianAngle) + direction.y * std::cos(radianAngle));
 }

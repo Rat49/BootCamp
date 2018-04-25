@@ -53,20 +53,20 @@ void AnimationPlayer::Start(sf::Time animationTime)
 void AnimationPlayer::Pause()
 {
 	_isStopped = true;
-	_playingTime = sf::milliseconds(0.0f);
+	_playingTime = sf::milliseconds(0);
 }
 
 void AnimationPlayer::Stop()
 {
 	_currentFrame = 0;
-	_playingTime = sf::milliseconds(0.0f);
+	_playingTime = sf::milliseconds(0);
 	_isStopped = true;
 }
 
 void AnimationPlayer::Reset()
 {
 	_currentFrame = 0;
-	_playingTime = sf::milliseconds(0.0f);
+	_playingTime = sf::milliseconds(0);
 	_isStopped = false;
 }
 
@@ -81,7 +81,7 @@ void AnimationPlayer::Update(sf::Time deltaTime)
 	_playingTime += deltaTime;
 	if (_playingTime > _frameTime)
 	{
-		_playingTime = sf::milliseconds(0.0f);
+		_playingTime = sf::milliseconds(0);
 		int64_t frameNumber = _currentFrame + 1;
 
 		if (_isLooped)

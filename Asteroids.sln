@@ -100,6 +100,11 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Physics", "Source\Physics\Physics.vcxproj", "{C3536574-33D7-4412-9F11-583178751BAA}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PhysicsTest", "Source\PhysicsTest\PhysicsTest.vcxproj", "{20434D42-5452-4A29-A745-3FEBE74CE4A3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{176C4C58-FAB5-457B-BE6D-81EDE35612B2} = {176C4C58-FAB5-457B-BE6D-81EDE35612B2}
+		{C3536574-33D7-4412-9F11-583178751BAA} = {C3536574-33D7-4412-9F11-583178751BAA}
+		{1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82} = {1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Spaceship", "Source\Spaceship\Spaceship.vcxproj", "{176C4C58-FAB5-457B-BE6D-81EDE35612B2}"
 	ProjectSection(ProjectDependencies) = postProject

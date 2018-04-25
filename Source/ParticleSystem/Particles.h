@@ -65,7 +65,8 @@ public:
 
 
 private:
-	struct circleForce {
+	struct circleForce
+    {
 		float strength;
 		sf::Vector2f centre;
 		sf::Vector2f centreInitial;
