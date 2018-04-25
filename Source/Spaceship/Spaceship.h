@@ -42,6 +42,7 @@ private:
 	const float _maxSquareSpeed;
 	sf::Time _flickeringTime;
 	sf::Time _timeAfterDamage;
+	const float _shotIndentValue;
 
 	Token_t _tokenForCollisionEventBetweenAsteroidAndSpaceship;
 	InputManager& _input;

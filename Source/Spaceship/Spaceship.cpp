@@ -21,6 +21,7 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	, _rechargeBulletTime(sf::seconds(0.15f))
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
+	, _shotIndentValue(50.0f)
 {
 	_zOrder = 1;
 	_speedDirection = GetNormalizedVelocity(GetSpeed());
@@ -57,7 +58,9 @@ void Spaceship::PowerfulShoot()
 		return;
 	}
 
-	CreateRocketEvent createRocket(_spaceshipSprite->getPosition(), _spaceshipDirection);
+	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
+
+	CreateRocketEvent createRocket(_spaceshipSprite->getPosition() + indent, _spaceshipDirection);
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createRocket, EventTypes::createRocketEventID);
 	
@@ -73,7 +76,9 @@ void Spaceship::OrdinaryShoot()
 		return;
 	}	
 
-	CreateBulletEvent createBullet(_spaceshipSprite->getPosition(),_spaceshipDirection);
+	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
+
+	CreateBulletEvent createBullet(_spaceshipSprite->getPosition() + indent, _spaceshipDirection);
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createBullet, EventTypes::createBulletEventID);
 
