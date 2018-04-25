@@ -1,8 +1,9 @@
 #pragma once
 #include "AudioResource.h"
+#include "ImageSequenceResource.h"
 #include "PictureResource.h"
 #include "Resource.h"
-#include "ImageSequenceResource.h"
+#include "TextureResource.h"
 #include <cassert>
 #include <map>
 #include <string>

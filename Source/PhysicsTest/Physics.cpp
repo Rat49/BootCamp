@@ -9,7 +9,8 @@ void             MainLoop(RigidBody * RigidBodysFunc)
   sf::Clock clock;
   sf::Time  deltaTime;
 
-  sf::RenderWindow app(sf::VideoMode(W, H), "Asteroids!");
+  sf::RenderWindow app(sf::VideoMode(800,800), "Asteroids!");
+  WindowResolution::SetResolution(app);
 
   sf::CircleShape circles[numOfObjects];
   sf::CircleShape circlesCenters[numOfObjects];
@@ -54,7 +55,7 @@ void             MainLoop(RigidBody * RigidBodysFunc)
               circles[i].setFillColor(sf::Color::Red);
               circles[j].setFillColor(sf::Color::Red);
               collisionEvent.setObjs(RigidBodysFunc[i], RigidBodysFunc[j]);
-              dispatcher.Send(collisionEvent, collisionEventID);
+              dispatcher.Send(collisionEvent, EventTypes::collisionEventBetweenAsteroidsID);
               ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
           }
         }
@@ -76,6 +77,15 @@ void             MainLoop(RigidBody * RigidBodysFunc)
     }
     app.display();
   }
+}
+
+CollisionEvent::CollisionEvent() {}
+
+CollisionEvent::~CollisionEvent() {}
+void CollisionEvent::setObjs(RigidBody & o1, RigidBody & o2)
+{
+	obj1 = o1;
+	obj2 = o2;
 }
 
 void Test()
