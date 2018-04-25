@@ -21,6 +21,9 @@
     <ClInclude Include="WindowResolution.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Physics.cpp">

@@ -1,107 +1,102 @@
 #include "Spaceship.h"
-#include <iostream>
 
-const float PI_F = 3.14159265358979f;
-
-Spaceship::Spaceship(sf::Vector2f position, sf::Vector2f speed, InputManager & input,
-	ImageSequenceResource &spaceshipAnimationImseq, TextureResource &ordinaryShotTexture, TextureResource &powerfulShotTexture)
+Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, InputManager & input,
+	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
 	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	, _liveCount(3)
+	, _isDamaged(false)
+	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
-	, _input(input)
-	, _isRecharged(true)
-	, _rotationAngle(10.0f)
-	, _currentAngle(0.0f)
+	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
+	, _spaceshipFlickeringImseq(spaceshipFlickeringImseq)
+	, _rotationAngle(17.0f)
+	, _acceleration(15.0f)
+	, _maxSquareSpeed(12000.0f)
+	, _flickeringTime(sf::seconds(1.0f))
+	, _timeAfterDamage(sf::seconds(0.0f))
+	, _input(input)	
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
-	, _bulletDeltaAngle(5.0f)
-	, _deltaSpeed(15.0f)
-	, _maxSquareSpeed(10000.0f)
-	, _ordinaryShotTexture(ordinaryShotTexture)
-	, _powerfulShotTexture(powerfulShotTexture)
-	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
-	, _rebound(5.0f)
-	, _powerfulRebound(15.0f)
-	, _ordinaryBulletStorage(Pool<OrdinaryBullet>(100))
-	, _rocketStorage(Pool<Rocket>(10))
-	, _rechargeTime(sf::seconds(3.0f))
+	, _rechargeRocketTime(sf::seconds(3.0f))
+	, _rechargeBulletTime(sf::seconds(0.5f))
+	, _bulletRebound(5.0f)
+	, _rocketRebound(15.0f)
 {
-	_speedDirection = NormalizeSpeed();
 	_zOrder = 1;
+	_speedDirection = NormalizeSpeed();
 	_spaceshipSprite = new sf::Sprite();
 	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, spaceshipAnimationImseq, true);
-	Add();
+	_spaceshipFlickering = new AnimationPlayer(*_spaceshipSprite, spaceshipFlickeringImseq, true);
 	_spaceshipSprite->setPosition(position);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
 	_spaceshipAnimation->Start();
-	
+
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	_tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
+		[&](const Event& event)
+	{
+		const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
+		//currentEvent._spaceship minus life
+	});
 }
 
 void Spaceship::Accelerate()
 {
-	ChangeSpeed(_deltaSpeed);
+	ControlSpeed(_acceleration);
 }
 
 void Spaceship::Decelerate()
 {
-	ChangeSpeed(-_deltaSpeed);
+	ControlSpeed(-_acceleration);
 }
 
 void Spaceship::PowerfulShoot()
 {
-	if (_timeAfterPowerfulShot.asSeconds() < _rechargeTime.asSeconds())
+	if (_timeAfterPowerfulShot.asSeconds() < _rechargeRocketTime.asSeconds())
 	{
 		return;
 	}
 
-	Rocket* rocket = _rocketStorage.Get();
-	rocket->Init(_spaceshipSprite->getPosition(), _spaceshipDirection, _powerfulShotTexture.Get());
-	
-	if (std::find(_rockets.cbegin(), _rockets.cend(), rocket) == _rockets.cend())
-	{
-		_rockets.push_back(rocket);
-	}
-
-	//GetRebound(_powerfulRebound);
+	CreateRocketEvent createRocket(_spaceshipSprite->getPosition(), _spaceshipDirection);
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	dispatcher.Send(createRocket, EventTypes::createRocketEventID);
 	
 	_timeAfterPowerfulShot = sf::seconds(0.0f); 
+	GainRebound(_rocketRebound);
 }
 
 
 void Spaceship::OrdinaryShoot()
 {
-	OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
-	bulletLeft->Init(_spaceshipSprite->getPosition(), RotateDirection(10.0f), _ordinaryShotTexture.Get());
-
-	OrdinaryBullet* bulletRight = _ordinaryBulletStorage.Get();
-	bulletRight->Init(_spaceshipSprite->getPosition(), RotateDirection(-10.0f), _ordinaryShotTexture.Get());
-
-	if (std::find(_bullets.cbegin(), _bullets.cend(), bulletLeft) == _bullets.cend())
+	if (_timeAfterBulletShot.asSeconds() < _rechargeBulletTime.asSeconds())
 	{
-		_bullets.push_back(bulletLeft);
+		return;
 	}
-	if (std::find(_bullets.cbegin(), _bullets.cend(), bulletRight) == _bullets.cend())
-	{
-		_bullets.push_back(bulletRight);
-	}
+	
+	CreateBulletEvent createBullet(_spaceshipSprite->getPosition(),_spaceshipDirection);
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	dispatcher.Send(createBullet, EventTypes::createBulletEventID);
 
-	//GetRebound(_rebound);
+	_timeAfterBulletShot = sf::seconds(0.0f);
+	GainRebound(_bulletRebound);
 }
 
 void Spaceship::RotateSpaceship(float angle)
 {
-	_spaceshipDirection = RotateDirection(angle);
-
-	_currentAngle += angle;
-	_spaceshipSprite->setRotation(_currentAngle);	
+	_spaceshipDirection = RotateDirection(angle);	
+	_spaceshipSprite->setRotation(_spaceshipSprite->getRotation() + angle);
 }
 
-void Spaceship::ChangeSpeed(float deltaSpeed)
+void Spaceship::ControlSpeed(float deltaSpeed)
 {
-	sf::Vector2f speed = GetSpeed();
-	float angle = std::acos(_speedDirection.x * _spaceshipDirection.x + _speedDirection.y * _spaceshipDirection.y) * 180.0f / PI_F;
+	float speedValue = std::sqrt(GetSquareLength(GetSpeed()));
 
-	SetSpeed(RotateDirection(GetSpeed(), angle));
-	_speedDirection = _spaceshipDirection;
+	if (!((_speedDirection == _spaceshipDirection) || (_speedDirection == -_spaceshipDirection)))
+	{
+		_speedDirection = deltaSpeed > 0 ? _spaceshipDirection : -_spaceshipDirection;
+
+		SetSpeed(_speedDirection * speedValue);
+	}
 
 	sf::Vector2f newSpeed = GetSpeed() + deltaSpeed * _spaceshipDirection;
 
@@ -111,23 +106,16 @@ void Spaceship::ChangeSpeed(float deltaSpeed)
 	}
 }
 
-float Spaceship::GetSquareLength(sf::Vector2f speed) const
+float Spaceship::GetSquareLength(const sf::Vector2f& speed) const
 {
 	return speed.x * speed.x + speed.y * speed.y;
 }
 
 sf::Vector2f Spaceship::RotateDirection(float angle) const
 {
-	float radianAngle = angle * PI_F / 180.0f;
+	float radianAngle = angle * M_PI / 180.0f;
 	return sf::Vector2f(_spaceshipDirection.x * std::cos(radianAngle) - _spaceshipDirection.y * std::sin(radianAngle),
 		_spaceshipDirection.x * std::sin(radianAngle) + _spaceshipDirection.y * std::cos(radianAngle));
-}
-
-sf::Vector2f Spaceship::RotateDirection(sf::Vector2f vector, float angle) const
-{
-	float radianAngle = angle * PI_F / 180.0f;
-	return sf::Vector2f(vector.x * std::cos(radianAngle) - vector.y * std::sin(radianAngle),
-		vector.x * std::sin(radianAngle) + vector.y * std::cos(radianAngle));
 }
 
 sf::Vector2f Spaceship::NormalizeSpeed() const
@@ -136,15 +124,32 @@ sf::Vector2f Spaceship::NormalizeSpeed() const
 	return GetSpeed() / speedLength;
 }
 
-void Spaceship::GetRebound(float reboundValue)
+void Spaceship::GainRebound(float reboundValue)
 {
-	sf::Vector2f rebound = -_spaceshipDirection * reboundValue;
-	SetSpeed(GetSpeed() - rebound);
+	SetSpeed(GetSpeed() + -_spaceshipDirection * reboundValue);
+	_speedDirection = NormalizeSpeed();
+}
+
+void Spaceship::SetFlickeringMode()
+{
+	_spaceshipAnimation->Stop();
+	_spaceshipFlickering->Start();
+
+	_timeAfterDamage = sf::seconds(0.0f);
+	_isDamaged = true;
+}
+
+void Spaceship::SetNormalMode()
+{
+	_spaceshipFlickering->Stop();
+	_spaceshipAnimation->Start();
+
+	_isDamaged = false;
 }
 
 
 
-void Spaceship::Update(sf::Time deltaTime)
+void Spaceship::Update(const sf::Time& deltaTime)
 {
 	//============temporary===============
 	enum class GameActions {
@@ -215,8 +220,6 @@ void Spaceship::Update(sf::Time deltaTime)
 			_inputAccumulatedTime = sf::milliseconds(0);
 		}
 	}
-
-	
 	if (_input.GetState(static_cast<int>(GameActions::SuperShoot), stateSuperShoot) && stateSuperShoot == ButtonsState::JustPressed)
 	{
 		PowerfulShoot();
@@ -225,40 +228,35 @@ void Spaceship::Update(sf::Time deltaTime)
 	{
 		OrdinaryShoot();
 	}
+	//==========================only for test============================================
+	if (_input.GetState(static_cast<int>(GameActions::Choose), stateShoot) && stateShoot == ButtonsState::JustPressed)
+	{
+		SetFlickeringMode();
+	}
+	//===================================================================================
 
 	_timeAfterPowerfulShot += deltaTime;
+	_timeAfterBulletShot += deltaTime;
 	RigidBody::Update(deltaTime.asSeconds());
 	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
 	_spaceshipAnimation->Update(deltaTime);
+	_spaceshipFlickering->Update(deltaTime);
 
-	for (auto bullet : _bullets)
+	if (_isDamaged)
 	{
-		if (bullet->GetLifeStatus())
+		if (_timeAfterDamage < _flickeringTime)
 		{
-			bullet->Update(deltaTime);
+			_timeAfterDamage += deltaTime;
 		}
 		else
 		{
-			_ordinaryBulletStorage.Put(bullet);
-			bullet->Reset();
+			SetNormalMode();
 		}
 	}
-	for (auto rocket : _rockets)
-	{
-		if (rocket->GetLifeStatus())
-		{
-			rocket->Update(deltaTime);
-		}
-		else
-		{
-			_rocketStorage.Put(rocket);
-			rocket->Reset();
-		}
-	}
+
 }
 
-
-void Spaceship::Add()
+void Spaceship::AddToDrawableManager()
 {
 	DrawableManager::getInstance()._drawableObjects.push_back(this);
 	DrawableManager::getInstance().SortDrawableVector();
@@ -276,4 +274,6 @@ void Spaceship::Draw(sf::RenderWindow& window)
 
 Spaceship::~Spaceship()
 {
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID , _tokenForCollisionEventBetweenAsteroidAndSpaceship);
 }

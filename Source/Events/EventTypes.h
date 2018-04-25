@@ -5,8 +5,17 @@ enum EventTypes : EventID_t
 {
 	firstEventID = 1,
 	secondEventID,
+    resizeWindowEventID,
 	debugCommandManagerEventID,
 	debugConsoleKeyEventID,
 	loggerMessageEventID,
-	collisionEventID
+	collisionEventID,
+	collisionEventBetweenAsteroidsID,
+	collisionEventBetweenAsteroidAndBulletID,
+	collisionEventBetweenAsteroidAndRocketID,
+	collisionEventBetweenAsteroidAndSpaceshipID,
+	createBulletEventID,
+	createRocketEventID,
+	deleteRocketEventID,
+	deleteBulletEventID,
 };

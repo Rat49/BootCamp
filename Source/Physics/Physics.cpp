@@ -128,15 +128,15 @@ bool Collided(RigidBody go1, RigidBody go2)
 
 void RandomFill(RigidBody * RigidBodysFunc, int length)
 {
-  std::srand(std::time(nullptr));
+  std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
   for(int i = 0; i < length; ++i)
   {
-    RigidBodysFunc[i].SetRadius(10 + std::rand() / ((RAND_MAX + 1u) / 100));
+    RigidBodysFunc[i].SetRadius(10.f + std::rand() / ((RAND_MAX + 1u) / 100));
     RigidBodysFunc[i].SetCoordinates({static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / WindowResolution::_W)),
                                       static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / WindowResolution::_H))});
     RigidBodysFunc[i].SetSpeed({static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)),
                                 static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 15))});
-    RigidBodysFunc[i].SetMass(10 + std::rand() / ((RAND_MAX + 1u) / 20));
+    RigidBodysFunc[i].SetMass(10.f + std::rand() / ((RAND_MAX + 1u) / 20));
   }
 }

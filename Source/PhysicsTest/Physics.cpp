@@ -57,7 +57,7 @@ void             MainLoop(RigidBody * RigidBodysFunc)
               circles[i].setFillColor(sf::Color::Red);
               circles[j].setFillColor(sf::Color::Red);
               collisionEvent.setObjs(RigidBodysFunc[i], RigidBodysFunc[j]);
-              dispatcher.Send(collisionEvent, collisionEventID);
+              dispatcher.Send(collisionEvent, EventTypes::collisionEventBetweenAsteroidsID);
               ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
             }
           }
