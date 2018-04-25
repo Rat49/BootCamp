@@ -9,3 +9,6 @@
 #include "CollisionEvent.h"
 #include "DebugConsole.h"
 #include "Logger.h"
+#include "Spaceship.h"
+#include "BulletManager.h"
+#include "AnimationPlayer.h"

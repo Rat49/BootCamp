@@ -18,7 +18,7 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
 	, _rechargeRocketTime(sf::seconds(3.0f))
-	, _rechargeBulletTime(sf::seconds(0.5f))
+	, _rechargeBulletTime(sf::seconds(0.15f))
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
 {

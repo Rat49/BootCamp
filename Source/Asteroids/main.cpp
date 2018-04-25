@@ -8,6 +8,7 @@ enum class GameActions {
 	Exit,
 	Choose,
 	Shoot,
+	PowerfullShoot,
 	Console
 };
 
@@ -35,14 +36,17 @@ int main()
 {
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
-
+	DrawableManager& drawableManager = DrawableManager::getInstance();
 	/*
 	ResourceManager Initialization
 	*/
 
+	
+
 	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
 	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").getParams()));
 	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").getParams()));
+	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").getParams()));
 	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").getParams();
 	resourceConfig.insert(std::make_pair("ImageSequenceResource", imageSequenceCategory));
 	std::vector<std::multimap<const std::string, const std::string>> imageSequenceSettings(imageSequenceCategory.size());
@@ -76,6 +80,7 @@ int main()
 	ButtonsState previousStateExit = ButtonsState::Released;
 	ButtonsState previousStateChoose = ButtonsState::Released;
 	ButtonsState previousStateShoot = ButtonsState::Released;
+	ButtonsState previousPowerfullShoot = ButtonsState::Released;
 
 	ButtonsState stateMoveUp;
 	ButtonsState stateMoveDown;
@@ -84,6 +89,19 @@ int main()
 	ButtonsState stateExit;
 	ButtonsState stateChoose;
 	ButtonsState stateShoot;
+	ButtonsState statePowerfullShoot;
+	/*
+	For SpaceShip
+	*/
+
+	ImageSequenceResource* spaceshipImgseq = rm->GetResource<ImageSequenceResource>("spaceship");
+	ImageSequenceResource* flickeringImgseq = rm->GetResource<ImageSequenceResource>("spaceshipFlickering");
+	TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
+	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
+
+	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), input, *spaceshipImgseq, *flickeringImgseq);
+	spaceship->AddToDrawableManager();
+	BulletManager bulletManager(*bulletTexture, *rocketTexture);
 
 	/*
 	For Physics
@@ -122,9 +140,8 @@ int main()
 
 	//sf::RenderWindow rw(sf::VideoMode::getDesktopMode(), "Asteroids");
 	sf::RenderWindow rw(sf::VideoMode(1200, 800), "Asteroids");
+	WindowResolution::SetResolution(rw);
 	sf::Event sysEvent;
-	sf::Clock clock;
-	sf::Time  deltaTime;
 
 	/*
 	For Debug Console
@@ -135,12 +152,18 @@ int main()
 	For Log
 	*/
 	Logger& log = Logger::GetInstance();
-
+	sf::Clock clock;
+	sf::Time timer = clock.getElapsedTime();
+	sf::Time deltaTime;
 
 	while (rw.isOpen())
 	{
-		const float delta = clock.restart().asMicroseconds() / 1e3;
-		accumulatedFrameTime += delta;
+		/*const float delta = clock.restart().asMicroseconds() / 1e3;
+		accumulatedFrameTime += delta;*/
+
+		auto now = clock.getElapsedTime();
+		deltaTime = now - timer;
+		timer = now;
 
 		if (rw.pollEvent(sysEvent))
 		{
@@ -189,6 +212,11 @@ int main()
 				std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
 				previousStateChoose = stateChoose;
 			}
+			if (input.GetState(static_cast<int>(GameActions::PowerfullShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
+			{
+				std::cout << "Choose state - " << GetNameForState(statePowerfullShoot) << std::endl;
+				previousPowerfullShoot = statePowerfullShoot;
+			}
 			if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
 			{
 				std::cout << "Shoot state - " << GetNameForState(stateShoot) << std::endl;
@@ -197,9 +225,13 @@ int main()
 		}
 		//Audio update
 		//Logic update
+
+		spaceship->Update(deltaTime);
+		bulletManager.Update(deltaTime);
+
 		//Physics update
 		{
-			for (int i = 0; i < numOfObjects; ++i)
+			/*for (int i = 0; i < numOfObjects; ++i)
 				circles[i].setFillColor(sf::Color::White);
 			while (accumulatedFrameTime >= physicsStepTargetFrameTime)
 			{
@@ -225,26 +257,27 @@ int main()
 					RigidBodies[i].Update(physicsStepTargetFrameTime / 1e3);
 					circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
 				}
-			}
+			}*/
 		}
 		//...
 
 		rw.clear();
 		//Rendering update
-		for (int i = 0; i < numOfObjects; ++i)
-		{
-			rw.draw(circles[i]);
-		}
-		
+		//for (int i = 0; i < numOfObjects; ++i)
+		//{
+		//	rw.draw(circles[i]);
+		//}
+		//
 		//DebugConsole 
 		if (debugConsole.getActiveConsoleStatus())
 		{
 			debugConsole.Draw(rw);
 		}
-
+		drawableManager.DrawScene(rw);
 		//Display
 		rw.display();
 	}
+
 	delete[] RigidBodies;
 	delete cm1;
 	return 0;

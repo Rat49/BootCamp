@@ -80,7 +80,6 @@
     <ClInclude Include="EventTypes.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="CollisionEvent.cpp" />
     <ClCompile Include="Dispatcher.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
