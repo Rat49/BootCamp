@@ -92,7 +92,7 @@ private:
 	std::vector<std::pair<float, sf::Color>> colors;
 	
 	
-	void Add() override;
+	void AddToDrawableManager() override;
 	void ResetParticle(std::size_t index);
 	void ChangeColor(const float lifeTime, sf::Vertex& vertex);
 };
