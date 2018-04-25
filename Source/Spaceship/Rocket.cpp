@@ -21,11 +21,11 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 	_rocketSprite.setTexture(*_rocketTexture);
 	_rocketSprite.setScale(_rocketScale);
 	_rocketSprite.setOrigin(sf::Vector2f(_rocketTexture->getSize().x / 2.0f, _rocketTexture->getSize().y / 2.0f));
-	float angle = std::atan(_direction.x / -_direction.y) * 180.0f / M_PI;
+	float degreeAngle = RadiansToDegrees(std::atan(_direction.x / -_direction.y));
 	if (_direction.y > 0)
-		angle += 180.0f;
+		degreeAngle += 180.0f;
 
-	_rocketSprite.setRotation(angle);
+	_rocketSprite.setRotation(degreeAngle);
 	
 	SetSpeed(rocketDirection * _speedValue);
 	_timeAfterShot = sf::seconds(0.0f);

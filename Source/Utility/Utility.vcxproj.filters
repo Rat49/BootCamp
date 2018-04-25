@@ -27,9 +27,6 @@
     <ClInclude Include="Drawable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="DrawableManager.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Mathematics.h">
       <Filter>Header Files</Filter>
     </ClInclude>

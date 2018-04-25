@@ -3,6 +3,7 @@
 #include "DrawableManager.h"
 #include "Physics.h"
 #include "Pool.h"
+#include "Mathematics.h"
 #include <math.h>
 
 class Bullet : public Drawable, public RigidBody, public PoolElement
