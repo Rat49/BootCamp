@@ -1,7 +1,7 @@
 #include "OrdinaryBullet.h"
 
 OrdinaryBullet::OrdinaryBullet()
-	: _speedValue(200.0f)
+	: _speedValuePixelsPerSecond(200.0f)
 	, _ordinaryBulletSprite()
 	, _bulletTexture()
 	, _bulletScale(1.0f, 1.0f)
@@ -18,13 +18,14 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 	_ordinaryBulletSprite.setTexture(*_bulletTexture);
 	_ordinaryBulletSprite.setScale(_bulletScale);
 	_ordinaryBulletSprite.setOrigin(sf::Vector2f(_bulletTexture->getSize().x / 2.0f, _bulletTexture->getSize().y / 2.0f));
-	float angle = std::atan(bulletDirection.x / -bulletDirection.y) * 180.0f / M_PI;
+	float degreeAngle = RadiansToDegrees(std::atan(bulletDirection.x / -bulletDirection.y));
 	if (bulletDirection.y > 0)
-		angle += 180.0f;
+		degreeAngle += 180.0f;
 	
-	_ordinaryBulletSprite.setRotation(angle);
-	SetSpeed(bulletDirection * _speedValue);
-	SetCoordinates(sf::Vector2f(position.x + bulletDirection.x * _bulletTexture->getSize().y / 2.0f, position.y + bulletDirection.y * _bulletTexture->getSize().y / 2.0f));
+	_ordinaryBulletSprite.setRotation(degreeAngle);
+	SetSpeed(bulletDirection * _speedValuePixelsPerSecond);
+	//???
+	//SetCoordinates(sf::Vector2f(position.x + bulletDirection.x * _bulletTexture->getSize().y / 2.0f, position.y + bulletDirection.y * _bulletTexture->getSize().y / 2.0f));
 }
 
 const sf::Sprite* OrdinaryBullet::GetSprite()

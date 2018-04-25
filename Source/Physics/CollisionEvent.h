@@ -1,5 +1,6 @@
+
 #pragma once
-#include "EventSystem.h"
+#include "Event.h"
 
 class Spaceship;
 class Asteroid;

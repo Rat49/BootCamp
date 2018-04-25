@@ -1,7 +1,7 @@
 #include "Rocket.h"
 
 Rocket::Rocket()
-	: _speedValue(200.0f)
+	: _speedValuePixelsPerSecond(200.0f)
 	, _rocketSprite()
 	, _rocketTexture()
 	, _speedDelayTime(sf::seconds(1.0f))
@@ -21,13 +21,13 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 	_rocketSprite.setTexture(*_rocketTexture);
 	_rocketSprite.setScale(_rocketScale);
 	_rocketSprite.setOrigin(sf::Vector2f(_rocketTexture->getSize().x / 2.0f, _rocketTexture->getSize().y / 2.0f));
-	float angle = std::atan(_direction.x / -_direction.y) * 180.0f / M_PI;
+	float degreeAngle = RadiansToDegrees(std::atan(_direction.x / -_direction.y));
 	if (_direction.y > 0)
-		angle += 180.0f;
+		degreeAngle += 180.0f;
 
-	_rocketSprite.setRotation(angle);
+	_rocketSprite.setRotation(degreeAngle);
 	
-	SetSpeed(rocketDirection * _speedValue);
+	SetSpeed(rocketDirection * _speedValuePixelsPerSecond);
 	_timeAfterShot = sf::seconds(0.0f);
 	SetCoordinates(sf::Vector2f(position.x + rocketDirection.x * _rocketTexture->getSize().y / 2.0f, position.y + rocketDirection.y * _rocketTexture->getSize().y / 2.0f));
 }
@@ -49,7 +49,7 @@ void Rocket::Update(const sf::Time& deltaTime)
 	_timeAfterShot += deltaTime;
 	if (_timeAfterShot.asSeconds() > _speedDelayTime.asSeconds())
 	{
-		SetSpeed(_direction * (_speedValue + _deltaSpeedValue));
+		SetSpeed(_direction * (_speedValuePixelsPerSecond + _deltaSpeedValue));
 	}
 
 	_rocketSprite.setPosition(GetCoordinates());

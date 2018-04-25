@@ -6,7 +6,7 @@ class Rocket final : public Bullet
 private:
 	sf::Texture* _rocketTexture;
 	sf::Sprite _rocketSprite;
-	const float _speedValue;
+	const float _speedValuePixelsPerSecond;
 	const sf::Time _speedDelayTime;
 	sf::Vector2f _direction;
 	const float _deltaSpeedValue;
