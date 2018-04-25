@@ -30,6 +30,24 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 
 BulletManager::~BulletManager()
 {
+	for (auto& bullet: _bullets)
+	{
+		if (!(_ordinaryBulletStorage.Count() == _ordinaryBulletStorage.MaxCount()))
+		{
+			bullet->Reset();
+			_ordinaryBulletStorage.Put(bullet);
+		}
+	}
+
+	for (auto& rocket : _rockets)
+	{
+		if (!(_rocketStorage.Count() == _rocketStorage.MaxCount()))
+		{
+			rocket->Reset();
+			_rocketStorage.Put(rocket);
+		}
+	}
+
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Disconnect(createBulletEventID, _bulletCreation);
 	dispatcher.Disconnect(deleteBulletEventID, _bulletDeletion);

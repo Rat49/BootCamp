@@ -44,8 +44,30 @@ int main()
 	sf::Clock clock;
 	sf::Time timer = clock.getElapsedTime();
 	sf::Time deltaTime;
+	sf::Event event;
+	bool exit = false;
 	while (window.isOpen())
 	{
+		while (window.pollEvent(event))
+		{
+			switch (event.type)
+			{
+			case sf::Event::Closed:
+				exit = true;
+				break;
+			case sf::Event::KeyPressed:
+				if (event.key.code == sf::Keyboard::Escape)
+				{
+					exit = true;
+				}
+			}
+			if (exit)
+			{
+
+				window.close();
+			}
+		}
+		
 		auto now = clock.getElapsedTime();
 		deltaTime = now - timer;
 		timer = now;
