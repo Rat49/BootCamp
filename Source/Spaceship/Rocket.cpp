@@ -9,14 +9,14 @@ Rocket::Rocket()
 	, _rocketScale(1.0f, 1.0f)
 {
 	_zOrder = 3;	
-	_life = false;
+	_isAlive = false;
 }
 
 void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture, RocketParticle& rocketParticle)
 {
 	AddToDrawableManager();
 	
-	_life = true;
+	_isAlive = true;
 	_rocketScale = sf::Vector2f(0.8f, 0.8f);
 	_direction = rocketDirection;
 	_rocketTexture = &rocketTexture;
@@ -66,7 +66,7 @@ void Rocket::Update(const sf::Time& deltaTime)
 	{
 		_rocketParticle->Stop();
 		if (_rocketParticle->IsEnd())
-			_life = false;
+			_isAlive = false;
 	}
 
 	_rocketSprite.setPosition(GetCoordinates());
@@ -74,7 +74,7 @@ void Rocket::Update(const sf::Time& deltaTime)
 
 void Rocket::Reset()
 {
-	_life = false;
+	_isAlive = false;
 	_rocketSprite.setOrigin(0, 0);
 	_rocketSprite.setPosition(0, 0);
 	_rocketSprite.setRotation(0);
@@ -86,7 +86,7 @@ void Rocket::Reset()
 
 bool Rocket::GetLifeStatus() const
 {
-	return _life;
+	return _isAlive;
 }
 
 void Rocket::AddToDrawableManager()
