@@ -111,8 +111,7 @@ int main()
 					}
 				}
 			}
-
-
+			space.Update(accumulatedFrameTime);
 		}
 
 		dm.DrawScene(window);

@@ -30,9 +30,41 @@ void Space::AddSomeAsteroids(const int count, const sf::Sprite& sprite)
 	}
 }
 
-void Space::Update()
+void Space::Update(const float physicsStepTargetFrameTime)
 {
+	for (size_t i = 0; i < _asteroids.size(); ++i)
+	{ 
+		Asteroid *asteroid = _asteroids[i];
+		if (asteroid->_life == false)
+		{
+			if (asteroid->_type != AsteroidType::Small)
+			{
+				for (int j = 0; j < 4; ++j)
+				{
+					if (!_poolAsteroid.Empty())
+					{
+						Asteroid* asteroidNew = _poolAsteroid.Get();
+						asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace);
+						_asteroids.push_back(asteroidNew);
+					}
+				}
+			}
 
+			if (!(_poolAsteroid.Count() == _poolAsteroid.MaxCount()))
+			{
+				asteroid->Remove();
+				_poolAsteroid.Put(asteroid);
+				_asteroids.erase(std::find(_asteroids.begin(), _asteroids.end(), asteroid));
+				--i;
+			}
+		}
+		asteroid->Update(physicsStepTargetFrameTime / 1e3);
+	}
+
+	for (auto *star : _stars)
+	{
+		star->Update(physicsStepTargetFrameTime / 1e3);
+	}
 }
 
 
