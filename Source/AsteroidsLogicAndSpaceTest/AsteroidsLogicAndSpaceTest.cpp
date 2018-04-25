@@ -59,7 +59,7 @@ int main()
 
 
 	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
-	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200);
+	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 20;
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
@@ -111,30 +111,12 @@ int main()
 					}
 				}
 			}
-
-
+			space.Update(physicsStepTargetFrameTime/1e3);
 		}
 
 		dm.DrawScene(window);
 		window.display();
 	}
 
-	for (auto &asteroid : space._asteroids)
-	{
-		if (!(space._poolAsteroid.Count() == space._poolAsteroid.MaxCount()))
-		{
-			asteroid->Remove();
-			space._poolAsteroid.Put(asteroid);
-		}
-	}
-
-	for (auto &star : space._stars)
-	{
-		if (!(space._poolStar.Count() == space._poolStar.MaxCount()))
-		{
-			star->Remove();
-			space._poolStar.Put(star);
-		}
-	}
 	return 0;
 }

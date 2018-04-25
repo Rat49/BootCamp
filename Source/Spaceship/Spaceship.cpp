@@ -71,8 +71,8 @@ void Spaceship::OrdinaryShoot()
 	if (_timeAfterBulletShot.asSeconds() < _rechargeBulletTime.asSeconds())
 	{
 		return;
-	}
-	
+	}	
+
 	CreateBulletEvent createBullet(_spaceshipSprite->getPosition(),_spaceshipDirection);
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createBullet, EventTypes::createBulletEventID);
