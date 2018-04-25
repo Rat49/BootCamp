@@ -12,7 +12,8 @@ class ResourceManager final
 {
 public:
 	ResourceManager(const std::map<std::string, std::multimap<const std::string, const std::string>>& resourceConfig);
-	
+	ResourceManager();
+
 	template <typename T> 
 	T* GetResource(const std::string& key)
 	{
