@@ -20,12 +20,12 @@ void Space::AddSomeStars(const int count)
 	}
 }
 
-void Space::AddSomeAsteroids(const int count, const sf::Texture texture)
+void Space::AddSomeAsteroids(const int count, const sf::Sprite& sprite)
 {
 	for (int i = 1; i <= count; ++i)
 	{
 		Asteroid* asteroid = _poolAsteroid.Get();
-		asteroid->Init(sf::Sprite(texture), _sizeSpace);
+		asteroid->Init(sprite, _sizeSpace);
 		_asteroids.push_back(asteroid);
 	}
 }

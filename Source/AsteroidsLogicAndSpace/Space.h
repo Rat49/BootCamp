@@ -8,7 +8,7 @@ public:
 	Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize);
 	
 	void AddSomeStars(const int count);
-	void AddSomeAsteroids(const int count, const sf::Texture texture);
+	void AddSomeAsteroids(const int count, const sf::Sprite& sprite);
 
 	Pool<Asteroid> _poolAsteroid;
 	std::vector<Asteroid *> _asteroids;

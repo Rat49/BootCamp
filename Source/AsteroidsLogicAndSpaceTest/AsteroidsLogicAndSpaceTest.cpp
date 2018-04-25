@@ -60,9 +60,9 @@ int main()
 	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
 	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200);
 	//int _nAsteroids = 2;
-
+	sf::Sprite spriteAsteroid(asteroidTexture);
 	space.AddSomeStars(_nStars);
-	space.AddSomeAsteroids(_nAsteroids, asteroidTexture);
+	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
 
 	bool exit = false;
 	while (window.isOpen())
