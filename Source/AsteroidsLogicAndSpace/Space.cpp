@@ -58,12 +58,12 @@ void Space::Update(const float physicsStepTargetFrameTime)
 				--i;
 			}
 		}
-		asteroid->Update(physicsStepTargetFrameTime / 1e3);
+		asteroid->Update(physicsStepTargetFrameTime);
 	}
 
 	for (auto *star : _stars)
 	{
-		star->Update(physicsStepTargetFrameTime / 1e3);
+		star->Update(physicsStepTargetFrameTime);
 	}
 }
 
