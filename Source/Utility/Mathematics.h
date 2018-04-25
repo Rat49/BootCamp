@@ -45,7 +45,7 @@ inline float DegreesToRadians(float degreeAngle)
 {
 	return degreeAngle * M_PI / 180.0f;
 }
-sf::Vector2f RotateVector(sf::Vector2f vector, float degreeAngle)
+inline sf::Vector2f RotateVector(sf::Vector2f vector, float degreeAngle)
 {
 	float radianAngle = DegreesToRadians(degreeAngle);
 
