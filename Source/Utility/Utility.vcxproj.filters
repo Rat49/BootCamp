@@ -35,9 +35,6 @@
     <ClCompile Include="Logger.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Drawable.h">
-      <Filter>Header Files</Filter>
-    </ClCompile>
     <ClCompile Include="LoggerMessageEvent.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
