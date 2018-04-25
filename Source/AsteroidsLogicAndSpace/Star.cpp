@@ -57,6 +57,7 @@ void Star::Init(const sf::Vector2u &size)
 
 	_star.setPosition(GetRandomPosition());
 
+	_zOrder = 6;
 	AddToDrawableManager();
 }
 

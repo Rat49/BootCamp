@@ -11,7 +11,8 @@
 //	PowerfullShoot,
 //	Console
 //};
-
+const int WINDOW_WIDTH = 1200;
+const int WINDOW_HEIGHT = 800;
 
 std::string GetNameForState(ButtonsState bState) {
 
@@ -102,7 +103,7 @@ int main()
 	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture, *rocketTexture);
-
+	
 	/*
 	For Physics
 	*/
@@ -144,6 +145,26 @@ int main()
 	sf::Event sysEvent;
 
 	/*
+	For Space
+	*/
+
+	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroidTexture");
+	sf::Texture asteroidTexture = asteroid->Get();
+	sf::Sprite spriteAsteroid(asteroidTexture);
+
+	std::srand(std::time(nullptr));
+
+	const int totalCountAsteroids = 100;
+	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
+	Space space(totalCountAsteroids, totalCountStar, rw.getSize());
+
+
+	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
+	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 20;
+
+	space.AddSomeStars(_nStars);
+	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
+	/*
 	For Debug Console
 	*/
 	DebugConsole debugConsole(rw);
@@ -158,8 +179,6 @@ int main()
 
 	while (rw.isOpen())
 	{
-		/*const float delta = clock.restart().asMicroseconds() / 1e3;
-		accumulatedFrameTime += delta;*/
 
 		auto now = clock.getElapsedTime();
 		deltaTime = now - timer;
@@ -225,6 +244,24 @@ int main()
 		}
 		//Audio update
 		//Logic update
+
+		size_t n = space._asteroids.size() - 1;
+		size_t m = space._asteroids.size();
+		for (size_t i = 0; i < n; ++i)
+		{
+			for (size_t j = i + 1; j < m; ++j)
+			{
+				if (Collided(*space._asteroids[i], *space._asteroids[j]))
+				{
+					collisionEvent._asteroid1 = space._asteroids[i];
+					collisionEvent._asteroid2 = space._asteroids[j];
+					ResolveCollision(*space._asteroids[i], *space._asteroids[j]);
+					dispatcher.Send(collisionEvent, collisionEventID, space._asteroids[i]->_token);
+					dispatcher.Send(collisionEvent, collisionEventID, space._asteroids[j]->_token);
+				}
+			}
+		}
+		space.Update(deltaTime.asMilliseconds() / 1e3);
 
 		spaceship->Update(deltaTime);
 		bulletManager.Update(deltaTime);

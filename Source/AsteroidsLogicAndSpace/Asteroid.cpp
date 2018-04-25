@@ -165,6 +165,7 @@ void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 
 	_halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
 
+	_zOrder = 2;
 	AddToDrawableManager();
 }
 

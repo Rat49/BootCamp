@@ -12,3 +12,4 @@
 #include "Spaceship.h"
 #include "BulletManager.h"
 #include "AnimationPlayer.h"
+#include "Space.h"
