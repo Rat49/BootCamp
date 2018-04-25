@@ -10,7 +10,8 @@ enum class GameActions {
 	MoveRight,
 	Exit,
 	Choose,
-	Shoot
+	Shoot,
+	SuperShoot
 };
 
 InputManager::InputManager()
@@ -27,13 +28,14 @@ InputManager::InputManager()
 	{ static_cast<int>(GameActions::MoveRight), sf::Keyboard::D },
 	{ static_cast<int>(GameActions::Exit), sf::Keyboard::Escape },
 	{ static_cast<int>(GameActions::Choose), sf::Keyboard::Return },
-	{ static_cast<int>(GameActions::Shoot), sf::Keyboard::Space }
+	{ static_cast<int>(GameActions::Shoot), sf::Keyboard::Space },
+	{ static_cast<int>(GameActions::SuperShoot), sf::Keyboard::LAlt }
 	};
 
 
 	for (auto actionIt = std::cbegin(customActions); actionIt != std::cend(customActions); ++actionIt)
 	{
-		std::vector<localButtonsConfig>::iterator it = std::find_if(
+		auto it = std::find_if(
 			buttonsState.begin(),
 			buttonsState.end(),
 			[actionIt](const localButtonsConfig & current) -> bool {
@@ -56,7 +58,7 @@ InputManager::InputManager(const std::multimap<Action_t, ButtonKey_t>& buttonsKe
 {
 	for (auto actionIt = std::cbegin(buttonsKeyFromConfig); actionIt != std::cend(buttonsKeyFromConfig); ++actionIt)
 	{
-		std::vector<localButtonsConfig>::iterator it = std::find_if(
+		auto it = std::find_if(
 			buttonsState.begin(),
 			buttonsState.end(),
 			[actionIt](const localButtonsConfig & current) -> bool {

@@ -1,57 +1,66 @@
 #pragma once
-#include "ImageSequenceResource.h"
+#include "EventSystem.h"
+#include "CollisionEvent.h"
+#include "BulletManagerEvents.h"
 #include "AnimationPlayer.h"
-#include "OrdinaryBullet.h"
+#include "ImageSequenceResource.h"
+#include "Input.h"
 #include "Physics.h"
+#include "Pool.h"
+#include "DrawableManager.h"
+#include <math.h>
+#include <algorithm>
 
-//#include "Pool.h"
-
-class Spaceship : public RigidBody //, public PoolElement //
+class Spaceship : public RigidBody, public Drawable
 {
 public:
-	Spaceship(sf::Vector2f position, sf::Vector2f spaceshipDirection, sf::Vector2f speed, InputManager& input,
-		AnimationPlayer& spaceshipAnimation, AnimationPlayer& ordinaryShotAnimation, AnimationPlayer& powerfulShotAnimation);
+	Spaceship(const sf::Vector2f& position, const sf::Vector2f& speed, InputManager& input, 
+		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);
+	~Spaceship();
 
 	void Accelerate();
 	void Decelerate();
 	void PowerfulShoot();
 	void OrdinaryShoot();
-	void RotateSpaceship(float angle);	
-	void Update(sf::Time deltaTime);
-
-	~Spaceship();
-
+	void RotateSpaceship(float angle);
+	void Update(const sf::Time& deltaTime);
+	void AddToDrawableManager() override;
 private:
-	//Pool<OrdinaryBullet> _bulletStorage;
-	//sf::Vector2f _speed;  //remove when include physics
+	unsigned int _liveCount;
+	bool _isDamaged;
+	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;
-
+	sf::Vector2f _speedDirection;
+	sf::Sprite* _spaceshipSprite;
+	AnimationPlayer* _spaceshipAnimation;
+	ImageSequenceResource& _spaceshipAnimationImseq;
+	AnimationPlayer* _spaceshipFlickering;
+	ImageSequenceResource& _spaceshipFlickeringImseq;
 	const float _rotationAngle;
-	float _currentAngle;
-	const sf::Vector2f _deltaSpeed;
-	const sf::Time _rechargeTime;
-	bool _isRecharged;	
-	sf::Time _timeAfterPowerfulShot;
-	const float _rebound;
-	const float _powerfulRebound;
+	const float _acceleration;
+	const float _maxSquareSpeed;
+	sf::Time _flickeringTime;
+	sf::Time _timeAfterDamage;
+
+	Token_t _tokenForCollisionEventBetweenAsteroidAndSpaceship;
+	InputManager& _input;
 	const sf::Time _inputTime;
 	sf::Time _inputAccumulatedTime;
-	const float _bulletDeltaAngle;
-	const float _maxSquareSpeed;
 
-	sf::Sprite* _spaceshipSprite;
-	sf::Sprite* _ordinaryShootSprite;
-	sf::Sprite* _powerfulShootSprite;
-	AnimationPlayer& _spaceshipAnimation;
-	AnimationPlayer& _ordinaryShotAnimation;
-	AnimationPlayer& _powerfulShotAnimation;
-	// tmp!
-	//AnimationPlayer* _ordinaryShotAnimation;
-	//AnimationPlayer* _powerfulShotAnimation;
+	const sf::Time _rechargeRocketTime;
+	const sf::Time _rechargeBulletTime;
+	sf::Time _timeAfterPowerfulShot;
+	sf::Time _timeAfterBulletShot;
+	const float _bulletRebound;
+	const float _rocketRebound;
 
-	InputManager& _input;
-
-	void ChangeSpeed(float deltaSpeed);
-	float GetSquareSpeed(sf::Vector2f speed) const;
-	sf::Vector2f NormalizedDirection();
+	void ControlSpeed(float deltaSpeed);
+	float GetSquareLength(const sf::Vector2f& speed) const;
+	sf::Vector2f RotateDirection(float angle) const;
+	sf::Vector2f NormalizeSpeed() const;
+	void GainRebound(float reboundValue);
+	void SetFlickeringMode();
+	void SetNormalMode();
+	int GetZOrder() const override;
+	void Draw(sf::RenderWindow& window) override;
 };

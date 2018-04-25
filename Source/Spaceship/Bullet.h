@@ -1,15 +1,13 @@
 #pragma once
-#include "ImageSequenceResource.h"
-#include "AnimationPlayer.h"
-#include "Drawable.h"
+#include "CollisionEvent.h"
+#include "DrawableManager.h"
 #include "Physics.h"
+#include "Pool.h"
+#include <math.h>
 
-class Bullet : public Drawable, public RigidBody
+class Bullet : public Drawable, public RigidBody, public PoolElement
 {
 public:
-	float _speedValue; 
-	bool _life; //???
-
 	virtual ~Bullet() = 0 {};
-	virtual void Update(sf::Time deltaTime) = 0;
+	virtual void Update(const sf::Time& deltaTime) = 0;
 };

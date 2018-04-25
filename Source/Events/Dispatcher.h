@@ -27,7 +27,7 @@ public:
 
 	static Dispatcher& getInstance();
 
-	int Connect(const EventID_t eventID, const EventHandler_t& handler);
+	Token_t Connect(const EventID_t eventID, const EventHandler_t& handler);
 
 	void Send(const Event& event, EventID_t eventId);
 

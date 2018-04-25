@@ -5,7 +5,7 @@
 #include "Widget.h"
 #include <cassert>
 
-typedef struct PercentXY
+struct PercentXY
 {
 	PercentXY(const float x, const float y)
 	{
