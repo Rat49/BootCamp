@@ -7,6 +7,18 @@
 using Action_t = int;
 using ButtonKey_t = int;
 
+enum class GameActions {
+	MoveUp,
+	MoveDown,
+	MoveLeft,
+	MoveRight,
+	Exit,
+	Choose,
+	Shoot,
+	SuperShoot,
+	Console
+};
+
 enum class ButtonsState 
 {
 	JustPressed,

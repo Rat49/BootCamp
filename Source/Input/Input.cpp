@@ -3,57 +3,6 @@
 #include <iostream>
 #include <algorithm>
 
-enum class GameActions {
-	MoveUp,
-	MoveDown,
-	MoveLeft,
-	MoveRight,
-	Exit,
-	Choose,
-	Shoot,
-	SuperShoot
-};
-
-InputManager::InputManager()
-{
-
-	std::multimap<int, ButtonKey_t> customActions = {
-		{ static_cast<int>(GameActions::MoveUp), sf::Keyboard::Up },
-	{ static_cast<int>(GameActions::MoveUp), sf::Keyboard::W },
-	{ static_cast<int>(GameActions::MoveDown), sf::Keyboard::Down },
-	{ static_cast<int>(GameActions::MoveDown), sf::Keyboard::S },
-	{ static_cast<int>(GameActions::MoveLeft), sf::Keyboard::Left },
-	{ static_cast<int>(GameActions::MoveLeft), sf::Keyboard::A },
-	{ static_cast<int>(GameActions::MoveRight), sf::Keyboard::Right },
-	{ static_cast<int>(GameActions::MoveRight), sf::Keyboard::D },
-	{ static_cast<int>(GameActions::Exit), sf::Keyboard::Escape },
-	{ static_cast<int>(GameActions::Choose), sf::Keyboard::Return },
-	{ static_cast<int>(GameActions::Shoot), sf::Keyboard::Space },
-	{ static_cast<int>(GameActions::SuperShoot), sf::Keyboard::LAlt }
-	};
-
-
-	for (auto actionIt = std::cbegin(customActions); actionIt != std::cend(customActions); ++actionIt)
-	{
-		auto it = std::find_if(
-			buttonsState.begin(),
-			buttonsState.end(),
-			[actionIt](const localButtonsConfig & current) -> bool {
-			return current.action == actionIt->first;
-		});
-
-		if (it != buttonsState.end())
-		{
-			it->alternatively = actionIt->second;
-		}
-		else
-		{
-			localButtonsConfig config = { actionIt->first, ButtonsState::Released, actionIt->second, sf::Keyboard::Unknown };
-			buttonsState.insert(buttonsState.begin(), config);
-		}
-	}
-}
-
 InputManager::InputManager(const std::multimap<Action_t, ButtonKey_t>& buttonsKeyFromConfig)
 {
 	for (auto actionIt = std::cbegin(buttonsKeyFromConfig); actionIt != std::cend(buttonsKeyFromConfig); ++actionIt)
@@ -103,7 +52,7 @@ ButtonsState InputManager::ChangeStateWhenPressed(ButtonsState currentState)
 	case ButtonsState::Released:
 		return ButtonsState::JustPressed;
 	default:
-		return ButtonsState::Pressed;
+		return ButtonsState::Block;
 	}
 };
 
@@ -120,7 +69,7 @@ ButtonsState InputManager::ChangeStateWhenReleased(ButtonsState currentState)
 	case ButtonsState::Released:
 		return ButtonsState::Released;
 	default:
-		return ButtonsState::Released;
+		return ButtonsState::Block;
 	}
 };
 
@@ -141,6 +90,7 @@ void InputManager::Update()
 			{
 				ConsoleMode();
 				_mode = (GetMode() == InputMode::Raw) ? InputMode::Normal : InputMode::Raw;
+				
 			}
 		}
 		else

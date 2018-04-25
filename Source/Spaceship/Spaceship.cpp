@@ -21,6 +21,7 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	, _rechargeBulletTime(sf::seconds(0.15f))
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
+	, _shotIndentValue(50.0f)
 {
 	_zOrder = 1;
 	_speedDirection = GetNormalizedVelocity(GetSpeed());
@@ -57,7 +58,9 @@ void Spaceship::PowerfulShoot()
 		return;
 	}
 
-	CreateRocketEvent createRocket(_spaceshipSprite->getPosition(), _spaceshipDirection);
+	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
+
+	CreateRocketEvent createRocket(_spaceshipSprite->getPosition() + indent, _spaceshipDirection);
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createRocket, EventTypes::createRocketEventID);
 	
@@ -73,7 +76,9 @@ void Spaceship::OrdinaryShoot()
 		return;
 	}	
 
-	CreateBulletEvent createBullet(_spaceshipSprite->getPosition(),_spaceshipDirection);
+	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
+
+	CreateBulletEvent createBullet(_spaceshipSprite->getPosition() + indent, _spaceshipDirection);
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createBullet, EventTypes::createBulletEventID);
 
@@ -133,18 +138,6 @@ void Spaceship::SetNormalMode()
 
 void Spaceship::Update(const sf::Time& deltaTime)
 {
-	//============temporary===============
-	enum class GameActions {
-		MoveUp,
-		MoveDown,
-		MoveLeft,
-		MoveRight,
-		Exit,
-		Choose,
-		Shoot,
-		SuperShoot
-	};
-	//====================================
 
 	ButtonsState stateMoveLeft;
 	ButtonsState stateMoveRight;
@@ -206,12 +199,12 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	{
 		PowerfulShoot();
 	}
-	if (_input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && stateShoot == ButtonsState::JustPressed)
+	if (_input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && (stateShoot == ButtonsState::JustPressed || stateShoot == ButtonsState::Pressed))
 	{
 		OrdinaryShoot();
 	}
 	//==========================only for test============================================
-	if (_input.GetState(static_cast<int>(GameActions::Choose), stateShoot) && stateShoot == ButtonsState::JustPressed)
+	if (_input.GetState(static_cast<int>(GameActions::Choose), stateShoot) && (stateShoot == ButtonsState::JustPressed || stateShoot == ButtonsState::Pressed))
 	{
 		SetFlickeringMode();
 	}
