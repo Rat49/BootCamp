@@ -51,6 +51,27 @@ void Dispatcher::Send(const Event& event, EventID_t eventID)
 	}
 }
 
+void Dispatcher::Send(const Event& event, EventID_t eventID, Token_t token)
+{
+	std::map<EventID_t, std::map<Token_t, EventHandler_t>>::iterator listenersForCurrentEvent = _listeners.find(eventID);
+
+	if (listenersForCurrentEvent == _listeners.end())
+	{
+		return;
+	}
+
+	auto& listenersForEvent = listenersForCurrentEvent->second;
+
+	auto handlerIt = listenersForEvent.find(token);
+
+	if (handlerIt == listenersForEvent.end())
+	{
+		return;
+	}
+
+	handlerIt->second(event);
+}
+
 void Dispatcher::Disconnect(const EventID_t eventID, const Token_t token)
 {
 	std::map<EventID_t, std::map <Token_t, EventHandler_t>>::iterator listenersForCurrentEvent = _listeners.find(eventID);

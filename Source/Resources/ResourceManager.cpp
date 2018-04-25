@@ -41,7 +41,7 @@ ResourceManager::ResourceManager()
 	_resources.insert(std::pair<std::string, Resource*>
 		("booom", new AudioResource("booom", "Resources\\audio\\booom.wav")));
 	_resources.insert(std::pair<std::string, Resource*>
-		("asteroid", new PictureResource("asteroid", "Resources\\graphics\\aster.bmp")));
+		("asteroid", new TextureResource("asteroid", "Resources\\graphics\\asteroid.png")));
 	_resources.insert(std::pair<std::string, Resource*>
 		("smallasteroid", new PictureResource("smallasteroid", "Resources\\graphics\\smallasteroid.png")));
 	_resources.insert(std::pair<std::string, Resource*>

@@ -20,7 +20,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CollisionEvent.h">
+    <ClInclude Include="CollisionEventPhysicstest.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

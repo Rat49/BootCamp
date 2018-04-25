@@ -12,8 +12,8 @@ Leaderboard* Leaderboard::Create() {
 	return new Leaderboard();
 }
 
-void Leaderboard::Login(const std::string& customID, bool createAccount=false) {
-
+void Leaderboard::Login(const std::string& customID, bool createAccount)
+{
 	LoginWithCustomIDRequest request;
 	request.CreateAccount = createAccount;
 	request.CustomId = customID;
