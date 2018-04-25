@@ -115,7 +115,7 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Utility;$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -126,7 +126,7 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Utility;$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
