@@ -47,6 +47,7 @@ int main()
 
 	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroidTexture");
 	sf::Texture asteroidTexture = asteroid->Get();
+	sf::Sprite spriteAsteroid(asteroidTexture);
 
 	std::srand(std::time(nullptr));
 
@@ -59,8 +60,7 @@ int main()
 
 	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
 	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200);
-	//int _nAsteroids = 2;
-	sf::Sprite spriteAsteroid(asteroidTexture);
+
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
 
@@ -112,28 +112,7 @@ int main()
 				}
 			}
 
-			for (size_t i = 0; i < space._asteroids.size(); ++i)
-			{
-				if (space._asteroids[i]->_life == false)
-				{
-					if (!(space._poolAsteroid.Count() == space._poolAsteroid.MaxCount()))
-					{
-						space._asteroids[i]->Remove();
-						space._poolAsteroid.Put(space._asteroids[i]);
-						space._asteroids.erase(std::find(space._asteroids.begin(), space._asteroids.end(), space._asteroids[i]));
-						--i;
-					}
-				}
-			}
 
-			for (auto *asteroid : space._asteroids)
-			{
-				asteroid->Update(physicsStepTargetFrameTime / 1e3);
-			}
-			for (auto *star : space._stars)
-			{
-				star->Update(physicsStepTargetFrameTime / 1e3);
-			}
 		}
 
 		dm.DrawScene(window);

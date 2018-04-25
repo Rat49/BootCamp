@@ -30,6 +30,11 @@ void Space::AddSomeAsteroids(const int count, const sf::Sprite& sprite)
 	}
 }
 
+void Space::Update()
+{
+
+}
+
 
 Space::~Space()
 {

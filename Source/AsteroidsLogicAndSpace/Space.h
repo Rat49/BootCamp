@@ -9,6 +9,7 @@ public:
 	
 	void AddSomeStars(const int count);
 	void AddSomeAsteroids(const int count, const sf::Sprite& sprite);
+	void Update();
 
 	Pool<Asteroid> _poolAsteroid;
 	std::vector<Asteroid *> _asteroids;
@@ -34,3 +35,26 @@ private:
 //	//std::cout << "Broke! ";
 //	return true;
 //}
+
+for (size_t i = 0; i < space._asteroids.size(); ++i)
+{
+	if (space._asteroids[i]->_life == false)
+	{
+		if (!(space._poolAsteroid.Count() == space._poolAsteroid.MaxCount()))
+		{
+			space._asteroids[i]->Remove();
+			space._poolAsteroid.Put(space._asteroids[i]);
+			space._asteroids.erase(std::find(space._asteroids.begin(), space._asteroids.end(), space._asteroids[i]));
+			--i;
+		}
+	}
+}
+
+for (auto *asteroid : space._asteroids)
+{
+	asteroid->Update(physicsStepTargetFrameTime / 1e3);
+}
+for (auto *star : space._stars)
+{
+	star->Update(physicsStepTargetFrameTime / 1e3);
+}
