@@ -1,6 +1,7 @@
 #include "Physics.h"
+#include "CollisionEvent.h"
 #include "EventSystem.h"
-#include "CollisionEventPhysicstest.h"
+//#include "CollisionEventPhysicstest.h"
 
 
 constexpr size_t numOfObjects = 20;
@@ -15,7 +16,7 @@ void             MainLoop(RigidBody * RigidBodysFunc)
   sf::CircleShape circles[numOfObjects];
   sf::CircleShape circlesCenters[numOfObjects];
 
-  CollisionEventPhysicstest collisionEvent;
+  CollisionEventBetweenAsteroids collisionEvent;
   Dispatcher &   dispatcher = Dispatcher::getInstance();
 
   for(int i = 0; i < numOfObjects; ++i)
@@ -54,7 +55,9 @@ void             MainLoop(RigidBody * RigidBodysFunc)
             {
               circles[i].setFillColor(sf::Color::Red);
               circles[j].setFillColor(sf::Color::Red);
-              collisionEvent.setObjs(RigidBodysFunc[i], RigidBodysFunc[j]);
+			  collisionEvent._asteroid1 = &RigidBodysFunc[i];
+			  collisionEvent._asteroid2 = &RigidBodysFunc[j];
+              //collisionEvent.setObjs(RigidBodysFunc[i], RigidBodysFunc[j]);
               dispatcher.Send(collisionEvent, EventTypes::collisionEventBetweenAsteroidsID);
               ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
           }
@@ -79,14 +82,6 @@ void             MainLoop(RigidBody * RigidBodysFunc)
   }
 }
 
-CollisionEventPhysicstest::CollisionEventPhysicstest() {}
-
-CollisionEventPhysicstest::~CollisionEventPhysicstest() {}
-void CollisionEventPhysicstest::setObjs(RigidBody & o1, RigidBody & o2)
-{
-	obj1 = o1;
-	obj2 = o2;
-}
 
 void Test()
 {

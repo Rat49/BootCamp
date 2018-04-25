@@ -88,7 +88,7 @@ int main()
 	/*
 	For Physics
 	*/
-	CollisionEvent collisionEvent;
+	CollisionEventBetweenAsteroids collisionEvent;
 	constexpr size_t numOfObjects = 10;
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
@@ -212,7 +212,8 @@ int main()
 						{
 							circles[i].setFillColor(sf::Color::Red);
 							circles[j].setFillColor(sf::Color::Red);
-							collisionEvent.setObjs(RigidBodies[i], RigidBodies[j]);
+							collisionEvent._asteroid1 = &RigidBodies[i];
+							collisionEvent._asteroid2 = &RigidBodies[j];
 							dispatcher.Send(collisionEvent, collisionEventID);
 							ResolveCollision(RigidBodies[i], RigidBodies[j]);
 						}
