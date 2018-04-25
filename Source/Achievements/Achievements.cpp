@@ -1,8 +1,10 @@
 #include "Achievements.h"
 #include "ConfigManager.h"
+#include "EventSystem.h"
+#include "EventForAchiev.h"
+#include "Physics.h"
+#include "UI.h"
 #include <cstdlib>
-#include <conio.h>
-
 
 Achievement::Achievement()
 {
@@ -28,27 +30,39 @@ void	Achievement::SetDisplayName(std::string name) { _displayName = name; }
 void	Achievement::SetDisplayDescriptionName(std::string descriptionName) { _displayDescriptionName = descriptionName; }
 void	Achievement::SetAchievedActive(bool active) { _achievedActive = active; }
 
-void	UnlockAchievement()
+void	ConditionAchievement(Achievement *achieves, int num, sf::RenderWindow window)
 {
-
-}
-
-void	ConditionAchievement()
-{
-
-}
-
-void	ViewCollectionAchievement()
-{
-
-}
-void	ViewUnlockAchievement()
-{
-
+	for (int i = 1; i < maxEventID; ++i)
+	{
+		if (achieves[i].GetAchievedActive() == false)
+		{
+			std::map<EventAchievID_t, Token_t> _tokens;
+			int countOfHandlerResponce = achieves[i - 1].GetProgressState();
+			std::map<EventAchievID_t, Token_t>::iterator tokenForCurrentEvent = _tokens.find(i);
+			std::function<void(const Event&)> handler = [&](const Event &e)
+			{
+				achieves[i - 1].SetProgressState(++countOfHandlerResponce);
+				if (achieves[i].GetProgressFinishState() == achieves[i].GetProgressState())
+				{
+					achieves[i].SetAchievedActive(true);
+					UI mui(window);
+					sf::Font font;
+					font.loadFromFile("font/arial.ttf");
+					mui.CreateAchivementShower(font, PercentXY(80, 80));
+					sf::Image * img = new sf::Image();
+					img->loadFromFile("img/asteroid.png");
+					mui.OnAchive(achieves[num].GetDisplayName(), img);
+				}
+			};
+		}
+	}
 }
 
 int main()
 {
+	sf::RenderWindow window(sf::VideoMode::getDesktopMode(), "Asteroids");
+	sf::Event sysEvent;
+
 	ConfigManager* achievCM = ConfigManager::Create("testAchievement.INI");
 	int num = atoi((achievCM->GetCategory("NUM_ACHIEVEMENT").GetValue("_numAchievements")).c_str());
 	std::cout << num;
@@ -65,5 +79,4 @@ int main()
 	}
 	delete[]achieves;
 	delete achievCM;
-	
 }

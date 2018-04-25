@@ -13,15 +13,6 @@ int main()
 	//spr.setTextureRect(sf::IntRect(200,200, 100, 100));
 	spr.setTexture(texture, true);
 
-
-
-
-
-
-
-
-
-
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Space");
 	UI mui(window);
 	mui.CreateButton(sf::Vector2f(100,100), PercentXY(20,30),"start");
