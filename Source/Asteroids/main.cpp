@@ -1,16 +1,16 @@
 #include "Asteroids.h"
 
-enum class GameActions {
-	MoveUp,
-	MoveDown,
-	MoveLeft,
-	MoveRight,
-	Exit,
-	Choose,
-	Shoot,
-	PowerfullShoot,
-	Console
-};
+//enum class GameActions {
+//	MoveUp,
+//	MoveDown,
+//	MoveLeft,
+//	MoveRight,
+//	Exit,
+//	Choose,
+//	Shoot,
+//	PowerfullShoot,
+//	Console
+//};
 
 
 std::string GetNameForState(ButtonsState bState) {
@@ -212,7 +212,7 @@ int main()
 				std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
 				previousStateChoose = stateChoose;
 			}
-			if (input.GetState(static_cast<int>(GameActions::PowerfullShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
+			if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
 			{
 				std::cout << "Choose state - " << GetNameForState(statePowerfullShoot) << std::endl;
 				previousPowerfullShoot = statePowerfullShoot;

@@ -138,19 +138,6 @@ void Spaceship::SetNormalMode()
 
 void Spaceship::Update(const sf::Time& deltaTime)
 {
-	std::cout << deltaTime.asMilliseconds() << std::endl;
-	//============temporary===============
-	enum class GameActions {
-		MoveUp,
-		MoveDown,
-		MoveLeft,
-		MoveRight,
-		Exit,
-		Choose,
-		Shoot,
-		SuperShoot
-	};
-	//====================================
 
 	ButtonsState stateMoveLeft;
 	ButtonsState stateMoveRight;
@@ -212,12 +199,12 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	{
 		PowerfulShoot();
 	}
-	if (_input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && stateShoot == ButtonsState::JustPressed)
+	if (_input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && (stateShoot == ButtonsState::JustPressed || stateShoot == ButtonsState::Pressed))
 	{
 		OrdinaryShoot();
 	}
 	//==========================only for test============================================
-	if (_input.GetState(static_cast<int>(GameActions::Choose), stateShoot) && stateShoot == ButtonsState::JustPressed)
+	if (_input.GetState(static_cast<int>(GameActions::Choose), stateShoot) && (stateShoot == ButtonsState::JustPressed || stateShoot == ButtonsState::Pressed))
 	{
 		SetFlickeringMode();
 	}
