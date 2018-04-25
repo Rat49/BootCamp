@@ -62,7 +62,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Events;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;$(SolutionDir)SFML\include;$(SolutionDir)Source\Resources;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Events;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;$(SolutionDir)SFML\include;$(SolutionDir)Source\Resources;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\DebugCommandManager;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -100,12 +100,14 @@
   <ItemGroup>
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Object.cpp" />
+    <ClCompile Include="Space.cpp" />
     <ClCompile Include="Star.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Mathematics.h" />
     <ClInclude Include="Object.h" />
+    <ClInclude Include="Space.h" />
     <ClInclude Include="Star.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

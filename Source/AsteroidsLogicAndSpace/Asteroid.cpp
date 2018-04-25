@@ -27,6 +27,7 @@ void Asteroid::DefaultInit()
 	_sprite.setOrigin(0, 0);
 
 	SetMass(0.005f);
+	
 }
 
 void Asteroid::RandomInit()
@@ -103,7 +104,7 @@ void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &posit
 
 	_halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
 	
-	Add();
+	AddToDrawableManager();
 }
 
 Asteroid::Asteroid()
@@ -121,10 +122,10 @@ void Asteroid::Reset()
 void Asteroid::OnCollisionHandler(const Event& cEvent)
 {
 	//std::cout << "|| Collision! Resolve is ";
-	const CollisionEvent<Asteroid> &collisionEvent = dynamic_cast<const CollisionEvent<Asteroid>&>(cEvent);
+	const CollisionEventBetweenAsteroids &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroids&>(cEvent);
 	
-	Asteroid *obj1 = collisionEvent._obj1;
-	Asteroid *obj2 = collisionEvent._obj2;
+	Asteroid *obj1 = collisionEvent._asteroid1;
+	Asteroid *obj2 = collisionEvent._asteroid2;
 	if (this == obj1)
 	{
 		if (_defense < obj2->_damage)
@@ -139,7 +140,7 @@ void Asteroid::OnCollisionHandler(const Event& cEvent)
 	{
 		//Log
 	}
-	if (IsDead(collisionEvent._poolOwner,collisionEvent._owner))
+	if (_health <= 0)
 	{
 		_life = false;
 	}	
@@ -150,9 +151,8 @@ void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 	_sprite = sprite;
 	_sizeSpace = size;
 
-	//_type = static_cast<AsteroidType>(std::rand() % static_cast<uint8_t>(AsteroidType::Count));
-	_type = AsteroidType::Big;
-
+	_type = static_cast<AsteroidType>(std::rand() % static_cast<uint8_t>(AsteroidType::Count));
+	
 	SetParametersFromType(_type);
 	
 	_sprite.setScale(sf::Vector2f(_startScale, _startScale));
@@ -165,12 +165,12 @@ void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 
 	_halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
 
-	Add();
+	AddToDrawableManager();
 }
 
-void Asteroid::Add()
+void Asteroid::AddToDrawableManager()
 {
-	Object::Add();
+	Object::AddToDrawableManager();
 
 	_token = Dispatcher::getInstance().Connect(EventTypes::collisionEventID, std::bind(&Asteroid::OnCollisionHandler, this, std::placeholders::_1));
 }
@@ -244,36 +244,5 @@ void Asteroid::Draw(sf::RenderWindow &window)
 	physicsShape.setOutlineThickness(1);
 
 	//window.draw(physicsShape);
-}
-
-bool Asteroid::IsDead(Pool<Asteroid> &poolOwner, std::vector<Asteroid*> &asteroids)
-{
-	if (_health <= 0)
-	{
-		if (_type == AsteroidType::Small)
-		{
-			//std::cout << "Death! ";
-			return true;
-		}
-		else
-		{
-			for (int j = 0; j < 4; ++j)
-			{
-				if (!poolOwner.Empty())
-				{
-					Asteroid* asteroidNew = poolOwner.Get();
-					asteroidNew->InitFromCrash(_sprite, GetCoordinates(), _type, _sizeSpace);
-					asteroids.push_back(asteroidNew);
-				}
-			}
-			//std::cout << "Broke! ";
-			return true;
-		}
-	}
-	else
-	{
-		//std::cout << "Damaged! ";
-		return false;
-	}
 }
 

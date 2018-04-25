@@ -62,13 +62,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Events;$(SolutionDir)SFML\include;$(SolutionDir)Source\Physics;$(SolutionDir)Source\Resources;$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\AsteroidsLogicAndSpaceTest;$(SolutionDir)Source\Utility;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Events;$(SolutionDir)SFML\include;$(SolutionDir)Source\Physics;$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)Source\Resources;$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\AsteroidsLogicAndSpaceTest;$(SolutionDir)Source\Utility;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Resources_d.lib;AsteroidsLogicAndSpace_d.lib;Utility_d.lib;Physics_d.lib;Events_d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Resources_d.lib;AsteroidsLogicAndSpace_d.lib;Utility_d.lib;Physics_d.lib;Events_d.lib;ConfigManager_d.lib;DebugCommandManager_d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -88,7 +88,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-network.lib;sfml-audio.lib;sfml-graphics.lib;Resources.lib;AsteroidsLogicAndSpace.lib;Utility.lib;Physics.lib;Events.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-system.lib;sfml-window.lib;sfml-network.lib;sfml-audio.lib;sfml-graphics.lib;Resources.lib;AsteroidsLogicAndSpace.lib;Utility.lib;Physics.lib;Events.lib;ConfigManager.lib;DebugCommandManager.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

@@ -11,7 +11,9 @@ public:
 	void Update(float time) override;
 	void Draw(sf::RenderWindow &window) override;
 	void Reset() override;
+	void Remove() override;
 
+	~Star() {};
 private:
 
 	sf::CircleShape _star;

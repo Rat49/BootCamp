@@ -27,7 +27,7 @@ public:
 	void Update(float time) override;
 	void Draw(sf::RenderWindow &window) override;
 	void Reset() override;
-	void Add() override;
+	void AddToDrawableManager() override;
 	void Remove() override;
 	void OnCollisionHandler(const Event& cEvent);
 	
@@ -44,11 +44,10 @@ public:
 	int _radius;
 	float _halfLenght;
 	float _startScale;
-
+	~Asteroid() {};
 private:
 	void DefaultInit();
 	void RandomInit();
 	void SetParametersFromType(AsteroidType type);
-	bool IsDead(Pool<Asteroid> &poolOwner,std::vector<Asteroid *> &asteroids);
 
 };

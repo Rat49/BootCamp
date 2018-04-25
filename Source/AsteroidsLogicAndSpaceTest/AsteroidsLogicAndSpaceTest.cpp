@@ -3,10 +3,9 @@
 #include "DrawableManager.h"
 #include "EventSystem.h"
 #include "ResourceManager.h"
+#include "ConfigManager.h"
 #include "Star.h"
-
-#include <thread>
-#include <chrono>
+#include "Space.h"
 
 const int WINDOW_WIDTH = 800;
 const int WINDOW_HEIGHT = 800;
@@ -14,6 +13,26 @@ const int WINDOW_HEIGHT = 800;
 int main()
 {
 	sf::Clock clock;
+	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
+
+	/*
+	ResourceManager Initialization
+	*/
+
+	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
+	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").getParams()));
+	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").getParams()));
+	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").getParams();
+	resourceConfig.insert(std::make_pair("ImageSequenceResource", imageSequenceCategory));
+	std::vector<std::multimap<const std::string, const std::string>> imageSequenceSettings(imageSequenceCategory.size());
+
+	for (auto i : imageSequenceCategory)
+	{
+		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first,
+			cm1->GetCategory("ImageSequenceResource." + i.first).getParams()));
+	}
+	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").getParams()));
+
 
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
@@ -23,42 +42,27 @@ int main()
 	DrawableManager& dm = DrawableManager::getInstance();
 
 	sf::RenderWindow window(sf::VideoMode(WINDOW_WIDTH, WINDOW_HEIGHT), "Asteroid!");
+	
+	ResourceManager *rm = new ResourceManager(resourceConfig);
 
-	ResourceManager *rm = new ResourceManager();
-
-	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroid");
+	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroidTexture");
 	sf::Texture asteroidTexture = asteroid->Get();
 
 	std::srand(std::time(nullptr));
 
 	const int totalCountAsteroids = 100;
-	Pool<Asteroid> poolAsteroid(totalCountAsteroids);
-	std::vector<Asteroid *> asteroids;
-
-	CollisionEvent<Asteroid> collisionEvent(poolAsteroid, asteroids);
 	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
-	Pool<Star> poolStar(totalCountStar);
-	std::vector<Star *> stars;
+	Space space(totalCountAsteroids, totalCountStar, window.getSize());
 
-	sf::Sprite sprite;
-	sprite.setTexture(asteroidTexture);
+	CollisionEventBetweenAsteroids collisionEvent;
+
 
 	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
 	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200);
 	//int _nAsteroids = 2;
 
-	for (int i = 0; i < _nStars; ++i)
-	{
-		Star* star = poolStar.Get();
-		star->Init(window.getSize());
-		stars.push_back(star);
-	}
-	for (int i = 1; i <= _nAsteroids; ++i)
-	{
-		Asteroid* asteroid = poolAsteroid.Get();
-		asteroid->Init(sprite,window.getSize());
-		asteroids.push_back(asteroid);
-	}
+	space.AddSomeStars(_nStars);
+	space.AddSomeAsteroids(_nAsteroids, asteroidTexture);
 
 	bool exit = false;
 	while (window.isOpen())
@@ -91,42 +95,42 @@ int main()
 		{
 			accumulatedFrameTime -= physicsStepTargetFrameTime;
 
-			size_t n = asteroids.size() - 1;
-		    size_t m = asteroids.size();
+			size_t n = space._asteroids.size() - 1;
+		    size_t m = space._asteroids.size();
 			for (size_t i = 0; i < n; ++i)
 			{
 				for (size_t j = i + 1; j < m; ++j)
 				{
-					if (Collided(*asteroids[i], *asteroids[j]))
+					if (Collided(*space._asteroids[i], *space._asteroids[j]))
 					{
-						collisionEvent._obj1 = asteroids[i];
-						collisionEvent._obj2 = asteroids[j];
-						ResolveCollision(*asteroids[i], *asteroids[j]);
-						dispatcher.Send(collisionEvent, collisionEventID, asteroids[i]->_token);
-						dispatcher.Send(collisionEvent, collisionEventID, asteroids[j]->_token);
+						collisionEvent._asteroid1 = space._asteroids[i];
+						collisionEvent._asteroid2 = space._asteroids[j];
+						ResolveCollision(*space._asteroids[i], *space._asteroids[j]);
+						dispatcher.Send(collisionEvent, collisionEventID, space._asteroids[i]->_token);
+						dispatcher.Send(collisionEvent, collisionEventID, space._asteroids[j]->_token);
 					}
 				}
 			}
 
-			for (size_t i = 0; i < asteroids.size(); ++i)
+			for (size_t i = 0; i < space._asteroids.size(); ++i)
 			{
-				if (asteroids[i]->_life == false)
+				if (space._asteroids[i]->_life == false)
 				{
-					if (!(poolAsteroid.Count() == poolAsteroid.MaxCount()))
+					if (!(space._poolAsteroid.Count() == space._poolAsteroid.MaxCount()))
 					{
-						asteroids[i]->Remove();
-						poolAsteroid.Put(asteroids[i]);
-						asteroids.erase(std::find(asteroids.begin(), asteroids.end(), asteroids[i]));
+						space._asteroids[i]->Remove();
+						space._poolAsteroid.Put(space._asteroids[i]);
+						space._asteroids.erase(std::find(space._asteroids.begin(), space._asteroids.end(), space._asteroids[i]));
 						--i;
 					}
 				}
 			}
 
-			for (auto *asteroid : asteroids)
+			for (auto *asteroid : space._asteroids)
 			{
 				asteroid->Update(physicsStepTargetFrameTime / 1e3);
 			}
-			for (auto *star : stars)
+			for (auto *star : space._stars)
 			{
 				star->Update(physicsStepTargetFrameTime / 1e3);
 			}
@@ -136,21 +140,21 @@ int main()
 		window.display();
 	}
 
-	for (auto &asteroid : asteroids)
+	for (auto &asteroid : space._asteroids)
 	{
-		if (!(poolAsteroid.Count() == poolAsteroid.MaxCount()))
+		if (!(space._poolAsteroid.Count() == space._poolAsteroid.MaxCount()))
 		{
 			asteroid->Remove();
-			poolAsteroid.Put(asteroid);
+			space._poolAsteroid.Put(asteroid);
 		}
 	}
 
-	for (auto &star : stars)
+	for (auto &star : space._stars)
 	{
-		if (!(poolStar.Count() == poolStar.MaxCount()))
+		if (!(space._poolStar.Count() == space._poolStar.MaxCount()))
 		{
 			star->Remove();
-			poolStar.Put(star);
+			space._poolStar.Put(star);
 		}
 	}
 	return 0;

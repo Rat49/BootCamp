@@ -5,7 +5,7 @@ sf::Vector2u Object::GetSizeWindow() const
 	return _sizeSpace;
 }
 
-void Object::Add()
+void Object::AddToDrawableManager()
 {
 	DrawableManager::getInstance()._drawableObjects.push_back(this);
 	DrawableManager::getInstance().SortDrawableVector();

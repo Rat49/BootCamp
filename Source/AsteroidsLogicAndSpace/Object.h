@@ -16,7 +16,7 @@ public:
 
 	void Draw(sf::RenderWindow & window) override {}
 	virtual void Update(float time) {}
-	void Add() override;
+	void AddToDrawableManager() override;
 	virtual void Remove();
 
 	virtual ~Object() 	{}

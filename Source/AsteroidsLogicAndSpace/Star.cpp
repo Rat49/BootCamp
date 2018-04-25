@@ -44,6 +44,11 @@ void Star::Reset()
 	DefaultInit();
 }
 
+void Star::Remove()
+{
+	Object::Remove();
+}
+
 void Star::Init(const sf::Vector2u &size)
 {
 	_sizeSpace = size;
@@ -52,7 +57,7 @@ void Star::Init(const sf::Vector2u &size)
 
 	_star.setPosition(GetRandomPosition());
 
-	Add();
+	AddToDrawableManager();
 }
 
 void Star::Update(float time)
