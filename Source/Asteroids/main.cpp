@@ -202,7 +202,7 @@ int main()
 				std::cout << "MoveRight state - " << GetNameForState(stateMoveRight) << std::endl;
 				previousStateMoveRight = stateMoveRight;
 			}
-			if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && previousStateExit != stateExit)
+			if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && stateExit == ButtonsState::JustPressed)
 			{
 				rw.close();
 				//previousStateExit = stateExit;

@@ -103,7 +103,7 @@ ButtonsState InputManager::ChangeStateWhenPressed(ButtonsState currentState)
 	case ButtonsState::Released:
 		return ButtonsState::JustPressed;
 	default:
-		return ButtonsState::Pressed;
+		return ButtonsState::Block;
 	}
 };
 
@@ -120,7 +120,7 @@ ButtonsState InputManager::ChangeStateWhenReleased(ButtonsState currentState)
 	case ButtonsState::Released:
 		return ButtonsState::Released;
 	default:
-		return ButtonsState::Released;
+		return ButtonsState::Block;
 	}
 };
 
@@ -141,6 +141,7 @@ void InputManager::Update()
 			{
 				ConsoleMode();
 				_mode = (GetMode() == InputMode::Raw) ? InputMode::Normal : InputMode::Raw;
+				
 			}
 		}
 		else

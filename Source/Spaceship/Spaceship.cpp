@@ -133,6 +133,7 @@ void Spaceship::SetNormalMode()
 
 void Spaceship::Update(const sf::Time& deltaTime)
 {
+	std::cout << deltaTime.asMilliseconds() << std::endl;
 	//============temporary===============
 	enum class GameActions {
 		MoveUp,
