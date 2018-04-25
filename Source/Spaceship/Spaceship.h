@@ -8,6 +8,7 @@
 #include "Physics.h"
 #include "Pool.h"
 #include "DrawableManager.h"
+#include "Mathematics.h"
 #include <math.h>
 #include <algorithm>
 
@@ -55,9 +56,6 @@ private:
 	const float _rocketRebound;
 
 	void ControlSpeed(float deltaSpeed);
-	float GetSquareLength(const sf::Vector2f& speed) const;
-	sf::Vector2f RotateDirection(float angle) const;
-	sf::Vector2f NormalizeSpeed() const;
 	void GainRebound(float reboundValue);
 	void SetFlickeringMode();
 	void SetNormalMode();
