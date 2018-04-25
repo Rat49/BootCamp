@@ -17,22 +17,22 @@ void RigidBody::Update(float t)
   _coords.x += _speed.x * t;
   _coords.y += _speed.y * t;
 
-  if(_coords.x > W)
-  {
-    _coords.x = 0;
-  }
-  if(_coords.x < 0)
-  {
-    _coords.x = W;
-  }
-  if(_coords.y > H)
-  {
-    _coords.y = 0;
-  }
-  if(_coords.y < 0)
-  {
-    _coords.y = H;
-  }
+  //if(_coords.x > WindowResolution::_W)
+  //{
+  //  _coords.x = 0;
+  //}
+  //if(_coords.x < 0)
+  //{
+  //  _coords.x = WindowResolution::_W;
+  //}
+  //if(_coords.y > WindowResolution::_H)
+  //{
+  //  _coords.y = 0;
+  //}
+  //if(_coords.y < 0)
+  //{
+  //  _coords.y = WindowResolution::_H;
+  //}
 }
 
 void RigidBody::SetRadius(float r) { _radius = r; }
@@ -45,15 +45,19 @@ void RigidBody::SetY(float arg) { _coords.y = arg; }
 
 void RigidBody::SetSpeed(sf::Vector2f s) { _speed = s; }
 
-float RigidBody::GetRadius() { return _radius; }
+float RigidBody::GetRadius() const { return _radius; }
 
-float RigidBody::GetX() { return _coords.x; }
+float RigidBody::GetX() const { return _coords.x; }
 
-float RigidBody::GetY() { return _coords.y; }
+float RigidBody::GetY() const { return _coords.y; }
 
-float RigidBody::GetMass() { return _mass; }
-float RigidBody::GetSpeedX() { return _speed.x; }
-float RigidBody::GetSpeedY() { return _speed.y; }
+sf::Vector2f RigidBody::GetCoordinates() const { return _coords; }
+
+float RigidBody::GetMass() const { return _mass; }
+float RigidBody::GetSpeedX() const { return _speed.x; }
+float RigidBody::GetSpeedY() const { return _speed.y; }
+sf::Vector2f RigidBody::GetSpeed() const { return _speed; }
+
 
 void RigidBody::SetSpeedX(float arg) { _speed.x = arg; }
 void RigidBody::SetSpeedY(float arg) { _speed.y = arg; }
@@ -129,8 +133,8 @@ void RandomFill(RigidBody * RigidBodysFunc, int length)
   for(int i = 0; i < length; ++i)
   {
     RigidBodysFunc[i].SetRadius(10 + std::rand() / ((RAND_MAX + 1u) / 100));
-    RigidBodysFunc[i].SetCoordinates({static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / W)),
-                                      static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / H))});
+    RigidBodysFunc[i].SetCoordinates({static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / WindowResolution::_W)),
+                                      static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / WindowResolution::_H))});
     RigidBodysFunc[i].SetSpeed({static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 200)),
                                 static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 15))});
     RigidBodysFunc[i].SetMass(10 + std::rand() / ((RAND_MAX + 1u) / 20));

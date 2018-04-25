@@ -137,6 +137,16 @@ void ImageSequenceResource::SetMaskFromColor(sf::Image* image, sf::Color color)
 	CreateFrames(image);
 }
 
+const int ImageSequenceResource::GetHeight() const
+{
+	return _heightFrame;
+}
+
+const int ImageSequenceResource::GetWidth() const
+{
+	return _widthFrame;
+}
+
 void ImageSequenceResource::CreateFrames(sf::Image* image)
 {
 	_textures.clear();

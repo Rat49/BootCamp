@@ -8,5 +8,12 @@ enum EventTypes : EventID_t
 	debugCommandManagerEventID,
 	debugConsoleKeyEventID,
 	loggerMessageEventID,
-	collisionEventID
+	collisionEventBetweenAsteroidsID,
+	collisionEventBetweenAsteroidAndBulletID,
+	collisionEventBetweenAsteroidAndRocketID,
+	collisionEventBetweenAsteroidAndSpaceshipID,
+	createBulletEventID,
+	createRocketEventID,
+	deleteRocketEventID,
+	deleteBulletEventID
 };
