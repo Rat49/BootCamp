@@ -1,12 +1,33 @@
+#include "ConfigManager.h"
+#include "DebugCommandManager.h"
 #include "DrawableManager.h"
 #include "Spaceship.h"
 #include "BulletManager.h"
 
 int main()
 {
-	ResourceManager *rm = new ResourceManager();
+	ConfigManager* cm1 = ConfigManager::Create("Config.INI");
 
-	ImageSequenceResource* spaceshipImgseq = rm->GetResource<ImageSequenceResource>("spaceshipNormal");
+	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
+
+	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").getParams()));
+	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").getParams()));
+	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").getParams()));
+
+	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").getParams();
+
+	resourceConfig.insert(std::make_pair("ImageSequenceResource", imageSequenceCategory));
+
+	std::vector<std::multimap<const std::string, const std::string>> imageSequenceSettings(imageSequenceCategory.size());
+
+	for (auto i : imageSequenceCategory)
+	{
+		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first, cm1->GetCategory("ImageSequenceResource." + i.first).getParams()));
+	}
+
+	ResourceManager *rm = new ResourceManager(resourceConfig);
+
+	ImageSequenceResource* spaceshipImgseq = rm->GetResource<ImageSequenceResource>("spaceship");
 	ImageSequenceResource* flickeringImgseq = rm->GetResource<ImageSequenceResource>("spaceshipFlickering");
 	TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");

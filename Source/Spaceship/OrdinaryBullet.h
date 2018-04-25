@@ -6,7 +6,7 @@ class OrdinaryBullet final : public Bullet
 private:
 	sf::Texture* _bulletTexture;
 	sf::Sprite _ordinaryBulletSprite;
-	const float _speedValue;
+	const float _speedValuePixelsPerSecond;
 	sf::Vector2f _bulletScale;
 public:
 	OrdinaryBullet();

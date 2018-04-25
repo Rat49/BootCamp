@@ -22,6 +22,12 @@ ResourceManager::ResourceManager(const std::map<std::string, std::multimap<const
 					imageSequence.second, 
 					resourceConfig.find("ImageSequenceResource." + imageSequence.first)->second)));
 	}
+	const std::multimap<const std::string, const std::string>& textureResource = resourceConfig.find("TextureResource")->second;
+	for (auto texture : textureResource)
+	{
+		_resources.insert(std::pair<std::string, Resource*>
+			(texture.first, new TextureResource(texture.first, texture.second)));
+	}
 }
 
 ResourceManager::ResourceManager()

@@ -1,7 +1,7 @@
 #include "OrdinaryBullet.h"
 
 OrdinaryBullet::OrdinaryBullet()
-	: _speedValue(200.0f)
+	: _speedValuePixelsPerSecond(200.0f)
 	, _ordinaryBulletSprite()
 	, _bulletTexture()
 	, _bulletScale(1.0f, 1.0f)
@@ -23,8 +23,9 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 		degreeAngle += 180.0f;
 	
 	_ordinaryBulletSprite.setRotation(degreeAngle);
-	SetSpeed(bulletDirection * _speedValue);
-	SetCoordinates(sf::Vector2f(position.x + bulletDirection.x * _bulletTexture->getSize().y / 2.0f, position.y + bulletDirection.y * _bulletTexture->getSize().y / 2.0f));
+	SetSpeed(bulletDirection * _speedValuePixelsPerSecond);
+	//???
+	//SetCoordinates(sf::Vector2f(position.x + bulletDirection.x * _bulletTexture->getSize().y / 2.0f, position.y + bulletDirection.y * _bulletTexture->getSize().y / 2.0f));
 }
 
 const sf::Sprite* OrdinaryBullet::GetSprite()
