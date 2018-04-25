@@ -2,23 +2,29 @@
 #include "SFML/Graphics.hpp"
 #include "Pool.h"
 #include "Drawable.h"
+#include "DrawableManager.h"
+#include "EventSystem.h"
 class Object :
-	public PoolElement, public Drawable
+	public Drawable, public PoolElement
 {
 public:
-	Object() :_window(nullptr), _live(200.0){}
 
-	virtual void Draw() {}
+	//TODO: move to ObjectManager
+	static std::vector<Object*> _allObjects;
 
-	virtual void Update(sf::Time time) {}
+	Object() :_sizeSpace() {}
+
+	void Draw(sf::RenderWindow & window) override {}
+	virtual void Update(float time) {}
+	void Add() override;
+	virtual void Remove();
 
 	virtual ~Object() 	{}
 
-	float _live;
 protected:
-	void DrawInWindow(const sf::Drawable & obj);
-	sf::Vector2u GetSizeWindow() const;
-	void SetWindowOneTime(sf::RenderWindow & window);
-private:
-	sf::RenderWindow *_window;
+
+	int GetZOrder() const  override;
+	sf::Vector2u _sizeSpace;
+    sf::Vector2u GetSizeWindow() const;
+
 };

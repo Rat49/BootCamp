@@ -29,7 +29,9 @@ public:
 
 	Token_t Connect(const EventID_t eventID, const EventHandler_t& handler);
 
-	void Send(const Event& event, EventID_t eventId);
+	void Send(const Event& event, EventID_t eventID);
+
+	void Send(const Event& event, EventID_t eventID, Token_t token);
 
 	void Disconnect(const EventID_t eventID, const Token_t token);
 };
