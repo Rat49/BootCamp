@@ -1,25 +1,35 @@
 #pragma once
-#include "SFML\Graphics.hpp"
-#include "ResourceManager.h"
+#include <ResourceManager.h>
+
+namespace sf
+{
+	class Sprite;
+	class Texture;
+}
 
 class AnimationPlayer final
 {
 public:
-	AnimationPlayer(sf::Sprite& animatedSprite, ImageSequenceResource& animation, bool isLooped);
 	AnimationPlayer();
+	AnimationPlayer(sf::Sprite* animatedSprite, ImageSequenceResource* animation, bool isLooped);
+	~AnimationPlayer();
+
 	void Init(sf::Sprite* animatedSprite, ImageSequenceResource* animation, bool isLooped);
+
 	void Start();
 	void Start(sf::Time AnimationTime);
 	void Pause();
 	void Stop();
 	void Reset();
+
 	void Update(sf::Time deltaTime);
+
 	void SetLooped(bool isLooped);
-	sf::Sprite* GetSprite();
+	sf::Sprite* GetSprite() const;
 	int GetWidth() const;
 	int GetHeight() const;
 
-	~AnimationPlayer();
+	
 
 private:
 	sf::Sprite* _animatedSprite;

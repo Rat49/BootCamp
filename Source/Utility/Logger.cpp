@@ -1,145 +1,235 @@
 #include "Logger.h"
+#include "EventSystem.h"
+#include "LoggerMessageEvent.h"
+#include <windows.h>
+#include <algorithm>
+#include <ctime>
+#include <sstream>
+//#include <stdarg.h>
 
-int levelColors[] = { 15,11,14,12,79 };
 
-Logger* Logger::p_instance = 0;
-LoggerDestroyer Logger::_destroyer;
-std::string Logger::GetLevelName(LogLevel level){
-	switch (level)
-	{
-	case LogLevel::Debug:
-		return "DEBUG";
-	case LogLevel::Info:
-		return "INFO";
-	case LogLevel::Warning:
-		return "WARNING";
-	case LogLevel::Error:
-		return "ERROR";
-	case LogLevel::Fatal:
-		return "FATAL";
-	default:
-		return "UNDEFINED";
-	}
-	
-}
-void Logger::SetFrame(uint64_t frame) {
-	_frame = frame;
-}
-
-void Logger::GetStaringInfo(LogLevel level)
+void OutputTarget::SetSeverity(LogLevel severity)
 {
-	struct tm newtime;
-	time_t now = time(0);
-	localtime_s(&newtime, &now);
-	_os << "[" << _currentChannel << "]";
-	_os << "[" << GetLevelName(level) << "]";
-	char buff[100];
-	strftime(buff, 100, "%H:%M:%S", &newtime);
-	_os << "[" << buff << "]";
-	char fr[16];
-	sprintf_s(fr,"%llu", _frame);
-	_os << "[" << fr << "] ";
+	_severity = severity;
 }
 
-void Logger::formatMessage(va_list args, const char* msg) {
-
-	std::size_t max_buffer_size = 256;
-	::strncpy_s(buffer, max_buffer_size, _os.str().c_str(), max_buffer_size);
-	std::size_t const prefix_len = std::strlen(buffer);
-	::vsnprintf(buffer + prefix_len, max_buffer_size - prefix_len, msg, args);
-	_os.str("");
+void OutputTarget::IncludeChannel(const std::string& channel)
+{
+	_channels.emplace_back(channel);
 }
 
-void Logger::NotifyTargets(LogLevel level) {
+bool OutputTarget::ContainsChannel(const std::string& channel)
+{
+	return std::find_if(_channels.cbegin(), _channels.cend(), [&](const std::string& ch) { return (ch == channel || ch == "All"); }) != _channels.cend();
+}
 
-	for (auto target : _outputTargets){
-		if (target->Severity() <= static_cast<int>(level) &&  target->ContainsChannel(_currentChannel))
-			target->Write(buffer);
+void OutputTarget::ExcludeChannel(const std::string& channel)
+{
+	auto it = std::find(_channels.cbegin(), _channels.cend(), channel);
+	if (it != _channels.cend())
+	{
+		_channels.erase(it);
 	}
-	SetConsoleTextAttribute(_hConsole, 15);
 }
 
-LoggerDestroyer::~LoggerDestroyer(){
-	delete p_instance;
-};
+LogLevel OutputTarget::Severity() const
+{
+	return _severity;
+}
 
-void LoggerDestroyer::Initialize(Logger* p){
-	p_instance = p;
-};
-
-Logger& Logger::GetInstance(){
-	if (!p_instance)     {
-		p_instance = new Logger();
-		_destroyer.Initialize(p_instance);
+FileTarget::FileTarget(const std::string& path)
+{
+	_stream.open(path, std::ofstream::app);
+	if (!_stream)
+	{
+		Logger::GetInstance().Error("Unable to open file %s", path.c_str());
 	}
-	return *p_instance;
-};
+}
 
-FileTarget* Logger::AddFileTarget(std::string path) {
-	FileTarget *ft = new FileTarget(path);
-	_outputTargets.insert(_outputTargets.begin(), ft);
+void FileTarget::Write(char* buffer)
+{
+	if (_stream)
+	{
+		_stream << buffer << std::endl;
+	}
+}
+
+void CmdTarget::Write(char* buffer)
+{
+	std::cout << buffer << std::endl;
+}
+
+void DebugConsoleTarget::Write(char* buffer)
+{
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	LoggerMessageEvent _loggerMessage(buffer);
+	dispatcher.Send(_loggerMessage, EventTypes::loggerMessageEventID);
+}
+
+namespace
+{
+	Logger instance;
+
+	WORD levelColors[] = { 15, 11, 14, 12, 79 };
+
+	__int64 frame = 0;
+	std::ostringstream os;
+	std::string currentChannel;
+	std::vector<OutputTarget*> outputTargets;
+	HANDLE hConsole;
+
+	char formatBuffer[256];
+	char infoBuffer[32];
+
+	const char* GetLevelName(LogLevel level)
+	{
+		switch (level)
+		{
+		case LogLevel::Debug:
+			return "DEBUG";
+		case LogLevel::Info:
+			return "INFO";
+		case LogLevel::Warning:
+			return "WARNING";
+		case LogLevel::Error:
+			return "ERROR";
+		case LogLevel::Fatal:
+			return "FATAL";
+		default:
+			return "UNDEFINED";
+		}
+	}
+
+	void GetStaringInfo(LogLevel level)
+	{
+		tm newtime;
+		time_t now = time(0);
+		localtime_s(&newtime, &now);
+
+		os << "[" << currentChannel << "]";
+		os << "[" << GetLevelName(level) << "]";
+
+		strftime(infoBuffer, 32, "%H:%M:%S", &newtime);
+		os << "[" << infoBuffer << "]";
+		sprintf_s(infoBuffer, "%llu", frame);
+		os << "[" << infoBuffer << "] ";
+	}
+
+	void PrepareMessage(va_list args, const char* msg)
+	{
+		strncpy_s(formatBuffer, 256, os.str().c_str(), 256);
+		const size_t prefix_len = strlen(formatBuffer);
+		vsnprintf(formatBuffer + prefix_len, 256 - prefix_len, msg, args);
+		os.str("");
+	}
+
+	void NotifyTargets(LogLevel level)
+	{
+		for (auto target : outputTargets)
+		{
+			if (target->Severity() <= level && target->ContainsChannel(currentChannel))
+			{
+				target->Write(formatBuffer);
+			}
+		}
+
+		SetConsoleTextAttribute(hConsole, 15);
+	}
+
+	void OutputMessageImpl(const char* msg, va_list args, LogLevel level)
+	{
+		GetStaringInfo(level);
+		SetConsoleTextAttribute(hConsole, levelColors[level]);
+		PrepareMessage(args, msg);
+		NotifyTargets(level);
+	}
+}
+
+Logger::Logger()
+{
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+}
+
+Logger::~Logger()
+{
+	for (auto ot : outputTargets)
+	{
+		delete ot;
+	}
+}
+
+void Logger::SetFrame(__int64 f)
+{
+	frame = f;
+}
+
+Logger& Logger::GetInstance()
+{
+	return instance;
+}
+
+FileTarget* Logger::AddFileTarget(const std::string& path)
+{
+	FileTarget* ft = new FileTarget(path);
+	outputTargets.emplace_back(ft);
 	return ft;
 }
-CmdTarget* Logger::AddCmdTarget() {
-	CmdTarget *cmdTarget = new CmdTarget();
-	_outputTargets.insert(_outputTargets.begin(), cmdTarget);
-	return cmdTarget;
-}
-
-DebugConsoleTarget* Logger::AddDebugTarget() {
-	DebugConsoleTarget *debugTarget = new DebugConsoleTarget();
-	_outputTargets.insert(_outputTargets.begin(), debugTarget);
-	return debugTarget;
-}
-
-Logger& Logger::operator () (std::string channel)
+CmdTarget* Logger::AddCmdTarget()
 {
-	_currentChannel = channel;
+	CmdTarget* ct = new CmdTarget();
+	outputTargets.emplace_back(ct);
+	return ct;
+}
+
+DebugConsoleTarget* Logger::AddDebugTarget()
+{
+	DebugConsoleTarget* dt = new DebugConsoleTarget();
+	outputTargets.emplace_back(dt);
+	return dt;
+}
+
+Logger& Logger::operator()(const std::string& channel)
+{
+	currentChannel = channel;
 	return (*this);
 }
-void Logger::OutputMessageImpl(const char* msg, va_list args, LogLevel level)
+
+void Logger::Fatal(const char* msg, ...)
 {
-	GetStaringInfo(level);
-	HANDLE _hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-	SetConsoleTextAttribute(_hConsole, levelColors[level]);
-	formatMessage(args, msg);
-	NotifyTargets(level);
-}
-
-void Logger::Fatal(const char* msg, ...) {
-
-	::va_list args;
+	va_list args;
 	va_start(args, msg);
 	OutputMessageImpl(msg, args, LogLevel::Fatal);
 	va_end(args);
 }
-void  Logger::Error(const char* msg, ...) {
 
-	::va_list args;
+void Logger::Error(const char* msg, ...)
+{
+	va_list args;
 	va_start(args, msg);
 	OutputMessageImpl(msg, args, LogLevel::Error);
 	va_end(args);
 }
-void  Logger::Warning(const char* msg, ...) {
 
-	::va_list args;
+void Logger::Warning(const char* msg, ...)
+{
+	va_list args;
 	va_start(args, msg);
 	OutputMessageImpl(msg, args, LogLevel::Warning);
 	va_end(args);
 }
-void  Logger::Info(const char* msg, ...) {
 
-	::va_list args;
+void Logger::Info(const char* msg, ...)
+{
+	va_list args;
 	va_start(args, msg);
 	OutputMessageImpl(msg, args, LogLevel::Info);
 	va_start(args, msg);
 }
-void  Logger::Debug(const char* msg, ...) {
 
-	::va_list args;
+void Logger::Debug(const char* msg, ...)
+{
+	va_list args;
 	va_start(args, msg);
 	OutputMessageImpl(msg, args, LogLevel::Debug);
 	va_end(args);
 }
-
-
