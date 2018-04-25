@@ -1,5 +1,5 @@
 #include "Physics.h"
-#include "CollisionEvent.h"
+#include "CollisionEventForTest.h"
 #include "EventSystem.h"
 //#include "CollisionEventPhysicstest.h"
 
@@ -16,7 +16,7 @@ void             MainLoop(RigidBody * RigidBodysFunc)
   sf::CircleShape circles[numOfObjects];
   sf::CircleShape circlesCenters[numOfObjects];
 
-  CollisionEventBetweenAsteroids collisionEvent;
+  CollisionEventForTest collisionEvent;
   Dispatcher &   dispatcher = Dispatcher::getInstance();
 
   for(int i = 0; i < numOfObjects; ++i)
@@ -55,10 +55,9 @@ void             MainLoop(RigidBody * RigidBodysFunc)
             {
               circles[i].setFillColor(sf::Color::Red);
               circles[j].setFillColor(sf::Color::Red);
-			  collisionEvent._asteroid1 = &RigidBodysFunc[i];
-			  collisionEvent._asteroid2 = &RigidBodysFunc[j];
-              //collisionEvent.setObjs(RigidBodysFunc[i], RigidBodysFunc[j]);
-              dispatcher.Send(collisionEvent, EventTypes::collisionEventBetweenAsteroidsID);
+			  collisionEvent._rigidBody1 = &RigidBodysFunc[i];
+			  collisionEvent._rigidBody2 = &RigidBodysFunc[j];
+              dispatcher.Send(collisionEvent, firstEventID); //EventType and ID doesn't match in test, but should in 
               ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
           }
         }
