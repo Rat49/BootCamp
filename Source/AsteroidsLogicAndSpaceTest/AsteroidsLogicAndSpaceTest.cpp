@@ -111,29 +111,12 @@ int main()
 					}
 				}
 			}
-			space.Space::Update(physicsStepTargetFrameTime/1e3);
+			space.Update(physicsStepTargetFrameTime/1e3);
 		}
 
 		dm.DrawScene(window);
 		window.display();
 	}
 
-	for (auto &asteroid : space._asteroids)
-	{
-		if (!(space._poolAsteroid.Count() == space._poolAsteroid.MaxCount()))
-		{
-			asteroid->Remove();
-			space._poolAsteroid.Put(asteroid);
-		}
-	}
-
-	for (auto &star : space._stars)
-	{
-		if (!(space._poolStar.Count() == space._poolStar.MaxCount()))
-		{
-			star->Remove();
-			space._poolStar.Put(star);
-		}
-	}
 	return 0;
 }

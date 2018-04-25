@@ -70,4 +70,22 @@ void Space::Update(const float physicsStepTargetFrameTime)
 
 Space::~Space()
 {
+
+	for (auto &asteroid : _asteroids)
+	{
+		if (!(_poolAsteroid.Count() == _poolAsteroid.MaxCount()))
+		{
+			asteroid->Remove();
+			_poolAsteroid.Put(asteroid);
+		}
+	}
+
+	for (auto &star : _stars)
+	{
+		if (!(_poolStar.Count() == _poolStar.MaxCount()))
+		{
+			star->Remove();
+			_poolStar.Put(star);
+		}
+	}
 }

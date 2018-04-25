@@ -11,12 +11,14 @@ public:
 	void AddSomeAsteroids(const int count, const sf::Sprite& sprite);
 	void Update(const float physicsStepTargetFrameTime);
 
-	Pool<Asteroid> _poolAsteroid;
 	std::vector<Asteroid *> _asteroids;
-	Pool<Star> _poolStar;
-	std::vector<Star *> _stars;
+
 	~Space();
 private:
+	Pool<Asteroid> _poolAsteroid;
+	std::vector<Star *> _stars;
+	Pool<Star> _poolStar;
+	
 	sf::Vector2u _sizeSpace;
 
 };
