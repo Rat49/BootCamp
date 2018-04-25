@@ -81,7 +81,6 @@
     <ClInclude Include="Pool.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Drawable.h" />
     <ClCompile Include="DrawableManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="LoggerMessageEvent.cpp" />
