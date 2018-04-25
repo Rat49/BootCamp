@@ -8,6 +8,7 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 	, _ordinaryBulletTexture(ordinaryBulletTexture)
 	, _rocketTexture(rocketTexture)
 	, _bulletDeflection(5.0f)
+	, _particleStorage(Pool<RocketParticle>(_totalRocketCount))
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_bulletDeletion = dispatcher.Connect(createBulletEventID, [&](const Event& event)
@@ -91,7 +92,10 @@ void BulletManager::CreateRocket(const Event & event)
 	const CreateRocketEvent& currentEvent = static_cast<const CreateRocketEvent&>(event);
 
 	Rocket* rocket = _rocketStorage.Get();
-	rocket->Init(currentEvent._position, currentEvent._direction, _rocketTexture.Get());
+	RocketParticle * rocketParticle = _particleStorage.Get();
+
+	rocket->Init(currentEvent._position, currentEvent._direction, _rocketTexture.Get(), *rocketParticle);
+
 
 	_rockets.push_back(rocket);
 }

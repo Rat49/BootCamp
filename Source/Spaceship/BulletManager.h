@@ -5,6 +5,7 @@
 #include "ResourceManager.h"
 #include "OrdinaryBullet.h"
 #include "Rocket.h"
+#include "ParticleAssets.h"
 #include "SFML\Graphics.hpp"
 
 class BulletManager final 
@@ -14,6 +15,7 @@ private:
 	const int _totalRocketCount;
 	Pool<OrdinaryBullet> _ordinaryBulletStorage;
 	Pool<Rocket> _rocketStorage;
+	Pool<RocketParticle> _particleStorage;
 	std::vector<OrdinaryBullet*> _bullets;
 	std::vector<Rocket*> _rockets;
 	TextureResource& _ordinaryBulletTexture;

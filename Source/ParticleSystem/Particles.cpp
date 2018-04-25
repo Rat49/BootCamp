@@ -10,7 +10,7 @@ ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize) :
 	_canvasSize(canvasSize),
 	_emitterVelocity(0, 0)
 {
-	_zOrder = 5;
+	_zOrder = 2;
 	InitializeParticles();
 	AddToDrawableManager();
 

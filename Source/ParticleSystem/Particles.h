@@ -7,6 +7,7 @@
 #include <SFML/System.hpp>
 #include "Drawable.h"
 #include "DrawableManager.h"
+static std::random_device rd{};
 
 struct Particle
 {
@@ -87,7 +88,6 @@ private:
 	float _sigma = 10;
 	int _range = 360;
 	float _speed = 140.f;
-	std::random_device rd{};
 	std::mt19937 gen{ rd() };
 	std::vector<std::pair<float, sf::Color>> colors;
 	
