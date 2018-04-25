@@ -14,6 +14,8 @@ public:
 	std::vector<sf::Texture>& Get();
 	sf::Time& GetTime();
 	void SetMaskFromColor(sf::Image* image, sf::Color color);
+	const int GetHeight() const;
+	const int GetWidth() const;
 
 	~ImageSequenceResource() override;
 

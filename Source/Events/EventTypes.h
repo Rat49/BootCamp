@@ -10,4 +10,12 @@ enum EventTypes : EventID_t
 	loggerMessageEventID,
 	collisionEventID,
 	resizeWindowEventId
+	collisionEventBetweenAsteroidsID,
+	collisionEventBetweenAsteroidAndBulletID,
+	collisionEventBetweenAsteroidAndRocketID,
+	collisionEventBetweenAsteroidAndSpaceshipID,
+	createBulletEventID,
+	createRocketEventID,
+	deleteRocketEventID,
+	deleteBulletEventID
 };
