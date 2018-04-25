@@ -33,3 +33,4 @@ public:
 	Spaceship* _spaceship;
 	RigidBody* _asteroid;
 };
+

@@ -12,7 +12,7 @@ enum class enumParams
 
 std::vector<std::string> settingsParams = { "Width", "Height", "FrameCount", "AnimationTime" };
 
-ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::string& name, const std::multimap<std::string, std::string>& settings):PictureResource(id, name)
+ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::string& name, const std::multimap<const std::string, const std::string>& settings):PictureResource(id, name)
 {
 	for (int param = 0; param < settingsParams.size(); ++param)
 	{

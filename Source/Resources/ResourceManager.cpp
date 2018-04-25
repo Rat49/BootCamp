@@ -1,16 +1,27 @@
 #include "ResourceManager.h"
 
 
-ResourceManager::ResourceManager()
+ResourceManager::ResourceManager(const std::map<std::string, std::multimap<const std::string, const std::string>>& resourceConfig)
 {
-	std::multimap<std::string, std::string> _settingsForGirl;
-	_settingsForGirl.insert(std::make_pair("Width", "110"));
-	_settingsForGirl.insert(std::make_pair("Height", "151"));
-	_settingsForGirl.insert(std::make_pair("FrameCount", "27"));
-	_settingsForGirl.insert(std::make_pair("AnimationTime", "1350"));
-	_settingsForGirl.insert(std::make_pair("Color", "150 2 2"));
-	_settingsForGirl.insert(std::make_pair("Color", "255 255 255"));
-	_settingsForGirl.insert(std::make_pair("Color", "0 0 0"));
+	const std::multimap<const std::string, const std::string>& audioResource = resourceConfig.find("AudioResource")->second;
+	for (auto audio : audioResource)
+	{
+		_resources.insert(std::pair<std::string, Resource*>
+		(audio.first, new AudioResource(audio.first, audio.second)));
+	}
+	const std::multimap<const std::string, const std::string>& pictureResource = resourceConfig.find("PictureResource")->second;
+	for (auto picture : pictureResource)
+	{
+		_resources.insert(std::pair<std::string, Resource*>
+			(picture.first, new PictureResource(picture.first, picture.second)));
+	}
+	for (const auto imageSequence : resourceConfig.find("ImageSequenceResource")->second)
+	{
+		_resources.insert(std::pair<std::string, Resource*>
+				(imageSequence.first, new ImageSequenceResource(imageSequence.first, 
+					imageSequence.second, 
+					resourceConfig.find("ImageSequenceResource." + imageSequence.first)->second)));
+	}
 
 	std::multimap<std::string, std::string> _settingsForCat;
 	_settingsForCat.insert(std::make_pair("Width", "512"));

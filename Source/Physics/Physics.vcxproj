@@ -87,6 +87,7 @@
     <ClInclude Include="WindowResolution.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="CollisionEvent.cpp" />
     <ClCompile Include="Physics.cpp" />
     <ClCompile Include="WindowResolution.cpp" />
   </ItemGroup>

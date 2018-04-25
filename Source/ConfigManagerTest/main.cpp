@@ -11,16 +11,13 @@ namespace ConfigManagerTest {
 		ConfigManager* cm1 = ConfigManager::Create("testCcccconfig.INI");
 		std::cout << "Correct input file:" << std::endl;
 		ConfigManager* cm2 = ConfigManager::Create("testConfig.INI");
+		LogCategory input = cm2->GetCategory("Input");
+		LogCategory audio = cm2->GetCategory("Audio");
 
-		std::cout << "Test config values" << std::endl;
-		std::cout << "Correct values:" << std::endl;
-		std::cout << "returned value: " << cm2->GetCategory("Input").GetValue("SHOOT") << std::endl;
-		std::cout << "Wrong category value:" << std::endl;
-		std::cout << "returned value: " << cm2->GetCategory("Innnput").GetValue("SHOOT") << std::endl;
-		std::cout << "Wrong config value:" << std::endl;
-		std::cout << "returned value: " << cm2->GetCategory("Input").GetValue("SHOOOOT") << std::endl;
-		std::cout << "Wrong category and config values:" << std::endl;
-		std::cout << "returned value: " << cm2->GetCategory("Innnput").GetValue("SHOOOOT") << std::endl;
+		for (auto value : cm2->GetCategory("Input").GetValues("SHOOT"))
+		{
+			std::cout << "returned value: " << value.second << std::endl;
+		}
 
 		
 		if (cm1 != NULL) {

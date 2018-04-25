@@ -46,12 +46,10 @@ void             MainLoop(RigidBody * RigidBodysFunc)
     while(accumulatedFrameTime >= physicsStepTargetFrameTime)
     {
       accumulatedFrameTime -= physicsStepTargetFrameTime;
-      for(int i = 0; i < numOfObjects; ++i)
+      for(int i = 0; i < numOfObjects - 1; ++i)
       {
-        for(int j = 0; j < numOfObjects; ++j)
+        for(int j = i + 1; j < numOfObjects; ++j)
         {
-          if(i != j)
-          {
             if(Collided(RigidBodysFunc[i], RigidBodysFunc[j]))
             {
               circles[i].setFillColor(sf::Color::Red);
@@ -59,7 +57,6 @@ void             MainLoop(RigidBody * RigidBodysFunc)
               collisionEvent.setObjs(RigidBodysFunc[i], RigidBodysFunc[j]);
               dispatcher.Send(collisionEvent, EventTypes::collisionEventBetweenAsteroidsID);
               ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
-            }
           }
         }
       }
