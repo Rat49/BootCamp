@@ -1,16 +1,5 @@
 #include "Asteroids.h"
 
-//enum class GameActions {
-//	MoveUp,
-//	MoveDown,
-//	MoveLeft,
-//	MoveRight,
-//	Exit,
-//	Choose,
-//	Shoot,
-//	PowerfullShoot,
-//	Console
-//};
 const int WINDOW_WIDTH = 1200;
 const int WINDOW_HEIGHT = 800;
 
@@ -108,8 +97,8 @@ int main()
 	TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
 
-	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), input, *spaceshipImgseq, *flickeringImgseq);
-	//spaceship->SetMass(10000);
+	std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
+	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture, *rocketTexture);
 	
@@ -120,7 +109,6 @@ int main()
 	CollisionEventBetweenAsteroidAndSpaceship collisionAsteroidVsSpaceship;
 	CollisionEventBetweenAsteroidAndRocket collisionAsteroidVsRocket;
 	CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
-
 	constexpr size_t numOfObjects = 10;
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
@@ -146,8 +134,20 @@ int main()
 		circles[i].setRadius(RigidBodies[i].GetRadius());
 		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
 	}
-	
 
+	/*
+	DebugCommandManager manager
+	*/
+	DebugCommandManager manager;
+	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
+	{
+		spaceship->SetDamage(0);
+	} });
+	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
+	{
+		spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
+	} });
+	
 	/*
 	Game Loop
 	*/
@@ -316,38 +316,6 @@ int main()
 		spaceship->Update(deltaTime);
 		bulletManager.Update(deltaTime);
 
-		//Physics update
-		{
-			/*for (int i = 0; i < numOfObjects; ++i)
-				circles[i].setFillColor(sf::Color::White);
-			while (accumulatedFrameTime >= physicsStepTargetFrameTime)
-			{
-				accumulatedFrameTime -= physicsStepTargetFrameTime;
-				for (int i = 0; i < numOfObjects - 1; ++i)
-				{
-					for (int j = i + 1; j < numOfObjects; ++j)
-					{
-						if (Collided(RigidBodies[i], RigidBodies[j]))
-						{
-							circles[i].setFillColor(sf::Color::Red);
-							circles[j].setFillColor(sf::Color::Red);
-							collisionAsteroidVsAsteroid._asteroid1 = &RigidBodies[i];
-							collisionAsteroidVsAsteroid._asteroid2 = &RigidBodies[j];
-							dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID);
-							ResolveCollision(RigidBodies[i], RigidBodies[j]);
-						}
-					}
-				}
-
-				for (int i = 0; i < numOfObjects; ++i)
-				{
-					RigidBodies[i].Update(physicsStepTargetFrameTime / 1e3);
-					circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
-				}
-			}*/
-		}
-		//...
-
 		rw.clear();
 		//Rendering update
 		//for (int i = 0; i < numOfObjects; ++i)
@@ -365,7 +333,6 @@ int main()
 		rw.display();
 	}
 
-	delete[] RigidBodies;
 	delete cm1;
 	return 0;
 }

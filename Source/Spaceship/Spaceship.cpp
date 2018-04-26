@@ -1,9 +1,8 @@
 #include "Spaceship.h"
-#include <iostream>
-Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, InputManager & input,
-	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
-	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / coefficientOfAnimation, 1.0f)
-	, _liveCount(3)
+
+Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
+	: RigidBody({ 0, 0 }, {0, 0}, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
@@ -25,22 +24,54 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	, _shotIndentValue(50.0f)
 	
 {
+	spaceshipConfig;
+	float positionX = atof(spaceshipConfig.find("PositionX")->second.c_str());
+	float positionY = atof(spaceshipConfig.find("PositionY")->second.c_str());
+	float speedX = atof(spaceshipConfig.find("SpeedX")->second.c_str());
+	float speedY = atof(spaceshipConfig.find("SpeedY")->second.c_str());
+	RigidBody::SetCoordinates({ positionX, positionY});
+	RigidBody::SetSpeed({ speedX, speedY});
+	_liveCount = atoi(spaceshipConfig.find("LifeCount")->second.c_str());
+	_HP = atoi(spaceshipConfig.find("HP")->second.c_str());
+	_damage = atoi(spaceshipConfig.find("Damage")->second.c_str());
 	_zOrder = 1;
 	_spaceshipSprite = new sf::Sprite();
 	_speedDirection = GetNormalizedVelocity(GetSpeed());
 	_spaceshipAnimation = new AnimationPlayer(_spaceshipSprite, &spaceshipAnimationImseq, true);
 	_spaceshipFlickering = new AnimationPlayer(_spaceshipSprite, &spaceshipFlickeringImseq, true);
-	_spaceshipSprite->setPosition(position);
+	_spaceshipSprite->setPosition({positionX, positionY});
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
 	_spaceshipAnimation->Start();
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
 		[&](const Event& event)
-	{
-		const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
-		//currentEvent._spaceship minus life
-	});
+		{
+			const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
+			SetFlickeringMode();
+			if (_HP == 0)
+			{
+				--_liveCount;
+				if (_liveCount == 0)
+				{
+					std::cout << "Game Over" << std::endl;
+					GameOverEvent gameOverEvent;
+					dispatcher.Send(gameOverEvent, EventTypes::gameOverEventID);
+					return;
+				}
+				else
+				{
+					SpaceshipRespawnEvent spaceshipRespawnEvent;
+					dispatcher.Send(spaceshipRespawnEvent, EventTypes::spaceshipRespawnEventID);
+					_HP = 100;
+				}
+			}
+			else
+			{
+				_HP -= _damage;
+			}
+			std::cout << "lifeCount = " << _liveCount << "\t HP = " << _HP << std::endl;
+		});
 }
 
 void Spaceship::Accelerate()
@@ -260,18 +291,18 @@ void Spaceship::Update(const sf::Time& deltaTime)
 void Spaceship::AddToDrawableManager()
 {
 	DrawableManager::getInstance().AddDrawableObject(this);
-	_tokenForCollisionEventBetweenAsteroidAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
-		[&](const Event& event)
-	{
-		OnCollisionHandler(event);
-	});
+	//_tokenForCollisionEventBetweenAsteroidAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
+	//	[&](const Event& event)
+	//{
+	//	OnCollisionHandler(event);
+	//});
 }
 
-void Spaceship::OnCollisionHandler(const Event& event)
-{
-	std::cout << "                     ___________________ Flick" << std::endl;
-	SetFlickeringMode();
-}
+//void Spaceship::OnCollisionHandler(const Event& event)
+//{
+//	std::cout << "                     ___________________ Flick" << std::endl;
+//	SetFlickeringMode();
+//}
 
 int Spaceship::GetZOrder() const
 {
@@ -295,6 +326,11 @@ void Spaceship::Draw(sf::RenderWindow& window)
 	//circleCenter.setFillColor(sf::Color::Green);
 	//window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
+}
+
+void Spaceship::SetDamage(unsigned int damage)
+{
+	_damage = damage;
 }
 
 Spaceship::~Spaceship()

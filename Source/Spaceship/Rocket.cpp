@@ -43,6 +43,11 @@ const sf::Sprite* Rocket::GetSprite()
 	return &_rocketSprite;
 }
 
+const float Rocket::GetHalfSpriteLength()
+{
+	return _halfSpriteLength;
+}
+
 void Rocket::Draw(sf::RenderWindow& window)
 {
 	window.draw(_rocketSprite);
