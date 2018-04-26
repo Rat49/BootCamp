@@ -62,6 +62,8 @@ private:
 	sf::Time _timeAfterBulletShot;
 	const float _bulletRebound;
 	const float _rocketRebound;
+	unsigned int _bulletCount = 60;
+	unsigned int _rocketCount = 7;
 
 	unsigned int _liveCount;
 	unsigned int _HP;

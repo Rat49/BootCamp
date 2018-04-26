@@ -291,18 +291,18 @@ void Spaceship::Update(const sf::Time& deltaTime)
 void Spaceship::AddToDrawableManager()
 {
 	DrawableManager::getInstance().AddDrawableObject(this);
-	_tokenForCollisionEventBetweenAsteroidAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
-		[&](const Event& event)
-	{
-		OnCollisionHandler(event);
-	});
+	//_tokenForCollisionEventBetweenAsteroidAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
+	//	[&](const Event& event)
+	//{
+	//	OnCollisionHandler(event);
+	//});
 }
 
-void Spaceship::OnCollisionHandler(const Event& event)
-{
-	std::cout << "                     ___________________ Flick" << std::endl;
-	SetFlickeringMode();
-}
+//void Spaceship::OnCollisionHandler(const Event& event)
+//{
+//	std::cout << "                     ___________________ Flick" << std::endl;
+//	SetFlickeringMode();
+//}
 
 int Spaceship::GetZOrder() const
 {
