@@ -1,4 +1,5 @@
 #include "Achievements.h"
+#include "AchievementsManager.h"
 #include "EventSystem.h"
 #include "EventForAchiev.h"
 #include "Physics.h"
@@ -40,15 +41,5 @@ int main()
 {
 	
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
-	LogCategory achievementsListNumberCategory = achievementCM->GetCategory("AchievementsListNumber");
-
-	std::vector<Achievement> achievementsStorage;
-	std::multimap<const std::string, const std::string> achievementsList = achievementCM->GetCategory("AchievementsList").GetParams();
-
-	for (const auto& i : achievementsList)
-	{
-		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("AchievementsList." + i.first).GetParams();
-		Achievement achievement(achievementsConfig);
-		achievementsStorage.push_back(achievement);
-	}
+	AchievementsManager achievementsManager(achievementCM);
 }
