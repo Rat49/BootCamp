@@ -40,7 +40,7 @@ void Asteroid::RandomInit()
 	SetSpeed(_linearVelocity);
 
 	_sprite.setPosition(sf::Vector2f(GetRandomValue(0, GetSizeWindow().x), GetRandomValue(0, GetSizeWindow().y)));
-	SetCoordinates(sf::Vector2f(GetRandomValue(0, GetSizeWindow().x), GetRandomValue(0, GetSizeWindow().y)));
+	SetCoordinates(_sprite.getPosition());
 }
 
 void Asteroid::SetParametersFromType(AsteroidType type)
@@ -100,7 +100,7 @@ void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &posit
 	_sprite.setScale(sf::Vector2f(_startScale, _startScale));
 
 	_sprite.setPosition(sf::Vector2f(GetRandomValue(position.x - 50.0, position.x + 50.0), GetRandomValue(position.y - 50.0, position.y + 50.0)));
-	SetCoordinates(sf::Vector2f(GetRandomValue(position.x - 50.0, position.x + 50.0), GetRandomValue(position.y - 50.0, position.y + 50.0)));
+	SetCoordinates(_sprite.getPosition());
 
 	_halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
 	
