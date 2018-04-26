@@ -9,8 +9,11 @@
 #include "Pool.h"
 #include "DrawableManager.h"
 #include "Mathematics.h"
+#include "WindowResolution.h"
 #include <math.h>
 #include <algorithm>
+
+static float coefficientOfAnimation = 2.5f;
 
 class Spaceship : public RigidBody, public Drawable
 {
@@ -26,6 +29,7 @@ public:
 	void RotateSpaceship(float angle);
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
+	void OnCollisionHandler(const Event& event);
 private:
 	unsigned int _liveCount;
 	bool _isDamaged;
@@ -33,7 +37,7 @@ private:
 	sf::Vector2f _spaceshipDirection;
 	sf::Vector2f _speedDirection;
 	sf::Sprite* _spaceshipSprite;
-	sf::Vector2f _spaceshipScale;
+	//sf::Vector2f _spaceshipScale;
 	AnimationPlayer* _spaceshipAnimation;
 	ImageSequenceResource& _spaceshipAnimationImseq;
 	AnimationPlayer* _spaceshipFlickering;

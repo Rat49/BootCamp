@@ -1,13 +1,13 @@
 #include "Spaceship.h"
-
+#include <iostream>
 Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, InputManager & input,
 	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
-	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / coefficientOfAnimation, 1.0f)
 	, _liveCount(3)
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
-	, _spaceshipScale(0.7f, 0.7f)
+	//, _spaceshipScale(0.7f, 0.7f)
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 	, _spaceshipFlickeringImseq(spaceshipFlickeringImseq)
 	, _rotationAngle(17.0f)
@@ -215,8 +215,26 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	_timeAfterPowerfulShot += deltaTime;
 	_timeAfterBulletShot += deltaTime;
 	RigidBody::Update(deltaTime.asSeconds());
-	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
-	_spaceshipSprite->setOrigin(-RigidBody::GetRadius(), -RigidBody::GetRadius());
+
+	if(GetX() > WindowResolution::_W)
+	{
+		SetX(0);
+	}
+	if(GetX() < 0)
+	{
+		SetX(WindowResolution::_W);
+	}
+	if(GetY() > WindowResolution::_H)
+	{
+		SetY(0);
+	}
+	if(GetY() < 0)
+	{
+		SetY(WindowResolution::_H);
+	}
+
+	sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
+	_spaceshipSprite->setPosition(rigidCoordinates.x + _spaceshipSprite->getLocalBounds().width / coefficientOfAnimation, rigidCoordinates.y + _spaceshipSprite->getLocalBounds().height / coefficientOfAnimation);
 	_spaceshipAnimation->Update(deltaTime);
 	_spaceshipFlickering->Update(deltaTime);
 
@@ -237,6 +255,17 @@ void Spaceship::Update(const sf::Time& deltaTime)
 void Spaceship::AddToDrawableManager()
 {
 	DrawableManager::getInstance().AddDrawableObject(this);
+	_tokenForCollisionEventBetweenAsteroidAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
+		[&](const Event& event)
+	{
+		OnCollisionHandler(event);
+	});
+}
+
+void Spaceship::OnCollisionHandler(const Event& event)
+{
+	std::cout << "                     ___________________ Flick" << std::endl;
+	SetFlickeringMode();
 }
 
 int Spaceship::GetZOrder() const
@@ -246,7 +275,6 @@ int Spaceship::GetZOrder() const
 
 void Spaceship::Draw(sf::RenderWindow& window)
 {
-	window.draw(*(_spaceshipAnimation->GetSprite()));
 	sf::CircleShape physicsShape(GetRadius());
 	physicsShape.setPosition(GetCoordinates());
 	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
@@ -261,6 +289,7 @@ void Spaceship::Draw(sf::RenderWindow& window)
 	circleCenter.setRadius(1.f);
 	circleCenter.setFillColor(sf::Color::Green);
 	window.draw(circleCenter);
+	window.draw(*(_spaceshipAnimation->GetSprite()));
 }
 
 Spaceship::~Spaceship()
