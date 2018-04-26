@@ -16,10 +16,12 @@ private:
 	sf::Time _timeAfterShot;
 	sf::Vector2f _rocketScale;
 	bool _isAlive;
+	float _halfSpriteLength;
 public:
 	Rocket();
 	void Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture, RocketParticle& rocketParticle);
 	const sf::Sprite* GetSprite();
+	const float GetHalfSpriteLength();
 	bool GetLifeStatus() const;
 	void AddToDrawableManager() override;
 	int GetZOrder() const override;

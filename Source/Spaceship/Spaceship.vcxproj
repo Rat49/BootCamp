@@ -121,7 +121,6 @@
     <ClInclude Include="Spaceship.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="BulletManagerEvents.cpp" />
     <ClCompile Include="OrdinaryBullet.cpp" />
