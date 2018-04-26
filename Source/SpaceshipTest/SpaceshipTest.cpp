@@ -10,11 +10,11 @@ int main()
 
 	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
 
-	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").getParams()));
-	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").getParams()));
-	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").getParams()));
+	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").GetParams()));
+	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").GetParams()));
+	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").GetParams()));
 
-	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").getParams();
+	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").GetParams();
 
 	resourceConfig.insert(std::make_pair("ImageSequenceResource", imageSequenceCategory));
 
@@ -22,7 +22,7 @@ int main()
 
 	for (auto i : imageSequenceCategory)
 	{
-		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first, cm1->GetCategory("ImageSequenceResource." + i.first).getParams()));
+		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first, cm1->GetCategory("ImageSequenceResource." + i.first).GetParams()));
 	}
 
 	ResourceManager *rm = new ResourceManager(resourceConfig);
@@ -35,8 +35,18 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(900, 900), "SFML works!");
 	WindowResolution::SetResolution(window);
 
-	InputManager* input = new InputManager();
-	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), *input, *spaceshipImgseq, *flickeringImgseq);
+	std::multimap<int, ButtonKey_t> actions;
+	LogCategory category = cm1->GetCategory("Input");
+	std::multimap<const std::string, const std::string> inputCategory = category.GetParams();
+	for (auto i : inputCategory)
+	{
+		int a = atoi(i.first.c_str());
+		int b = atoi(i.second.c_str());
+		actions.insert(std::pair<int, int>(a, b));
+	}
+	InputManager input(actions);
+
+	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture,*rocketTexture);
 	DrawableManager& drawableManager = DrawableManager::getInstance();

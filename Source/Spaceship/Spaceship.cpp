@@ -4,6 +4,7 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
 	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
 	, _liveCount(3)
+	, _HP(100)
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
@@ -37,10 +38,32 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
 		[&](const Event& event)
-	{
-		const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
-		//currentEvent._spaceship minus life
-	});
+		{
+			const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
+			SetFlickeringMode();
+			if (_HP == 0)
+			{
+				--_liveCount;
+				if (_liveCount == 0)
+				{
+					std::cout << "Game Over" << std::endl;
+					GameOverEvent gameOverEvent;
+					dispatcher.Send(gameOverEvent, EventTypes::gameOverEventID);
+					return;
+				}
+				else
+				{
+					SpaceshipRespawnEvent spaceshipRespawnEvent;
+					dispatcher.Send(spaceshipRespawnEvent, EventTypes::spaceshipRespawnEventID);
+					_HP = 100;
+				}
+			}
+			else
+			{
+				_HP -= 25;
+			}
+			std::cout << "lifeCount = " << _liveCount << "\t HP = " << _HP << std::endl;
+		});
 }
 
 void Spaceship::Accelerate()

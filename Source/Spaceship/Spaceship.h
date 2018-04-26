@@ -1,14 +1,17 @@
 #pragma once
-#include "EventSystem.h"
-#include "CollisionEvent.h"
-#include "BulletManagerEvents.h"
 #include "AnimationPlayer.h"
+#include "BulletManagerEvents.h"
+#include "CollisionEvent.h"
+#include "DrawableManager.h"
+#include "EventSystem.h"
+#include "GameOverEvent.h"
 #include "ImageSequenceResource.h"
 #include "Input.h"
+#include "Mathematics.h"
 #include "Physics.h"
 #include "Pool.h"
-#include "DrawableManager.h"
-#include "Mathematics.h"
+#include "SpaceshipRespawnEvent.h"
+
 #include <math.h>
 #include <algorithm>
 
@@ -28,6 +31,7 @@ public:
 	void AddToDrawableManager() override;
 private:
 	unsigned int _liveCount;
+	unsigned int _HP;
 	bool _isDamaged;
 	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;
