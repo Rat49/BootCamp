@@ -135,6 +135,19 @@ int main()
 		circles[i].setRadius(RigidBodies[i].GetRadius());
 		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
 	}
+
+	/*
+	DebugCommandManager manager
+	*/
+	DebugCommandManager manager;
+	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
+	{
+		spaceship->SetDamage(0);
+	} });
+	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
+	{
+		spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
+	} });
 	
 
 	/*
