@@ -2,7 +2,7 @@
 
 Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, const sf::Vector2f& position, const sf::Vector2f& speed,
 	InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
-	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	: RigidBody({ 0, 0 }, {0, 0}, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
 
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
@@ -25,6 +25,13 @@ Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaces
 	, _shotIndentValue(50.0f)
 	
 {
+	spaceshipConfig;
+	float positionX = atof(spaceshipConfig.find("PositionX")->second.c_str());
+	float positionY = atof(spaceshipConfig.find("PositionY")->second.c_str());
+	float speedX = atof(spaceshipConfig.find("SpeedX")->second.c_str());
+	float speedY = atof(spaceshipConfig.find("SpeedY")->second.c_str());
+	RigidBody::SetCoordinates({ positionX, positionY});
+	RigidBody::SetSpeed({ speedX, speedY});
 	_liveCount = atoi(spaceshipConfig.find("LifeCount")->second.c_str());
 	_HP = atoi(spaceshipConfig.find("HP")->second.c_str());
 	_damage = atoi(spaceshipConfig.find("Damage")->second.c_str());
