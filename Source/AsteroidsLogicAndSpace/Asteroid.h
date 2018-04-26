@@ -46,6 +46,8 @@ public:
 	int _radius;
 	float _halfLenght;
 	float _startScale;
+	float _spawnBoundHeight;
+	float _spawnBoundWidth;
 	~Asteroid() {};
 private:
 	void DefaultInit();

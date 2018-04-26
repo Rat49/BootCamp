@@ -28,11 +28,11 @@ void             MainLoop(RigidBody * RigidBodysFunc)
     circlesCenters[i].setRadius(1.f);
     circlesCenters[i].setFillColor(sf::Color::Green);
   }
-  constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
+  constexpr float physicsStepTargetFrameTime = 1000.0f / 60.f;
   float           accumulatedFrameTime       = 0.f;
   while(app.isOpen())
   {
-    const float delta = clock.restart().asMicroseconds() / 1e3;
+    const float delta = clock.restart().asMicroseconds() / 1000.0f;
     accumulatedFrameTime += delta;
     sf::Event event;
     while(app.pollEvent(event))
@@ -65,7 +65,7 @@ void             MainLoop(RigidBody * RigidBodysFunc)
 
       for(int i = 0; i < numOfObjects; ++i)
       {
-        RigidBodysFunc[i].Update(physicsStepTargetFrameTime / 1e3);
+        RigidBodysFunc[i].Update(physicsStepTargetFrameTime / 1000.0f);
         circles[i].setPosition(RigidBodysFunc[i].GetX(), RigidBodysFunc[i].GetY());
         circlesCenters[i].setPosition(RigidBodysFunc[i].GetX() + RigidBodysFunc[i].GetRadius(),
                                       RigidBodysFunc[i].GetY() + RigidBodysFunc[i].GetRadius());
