@@ -172,8 +172,8 @@ int main()
 	Space space(totalCountAsteroids, totalCountStar, rw.getSize());
 
 
-	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
-	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 20;
+	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50)-300;
+	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 5;
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
