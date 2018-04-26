@@ -91,8 +91,7 @@ private:
 	std::mt19937 gen{ rd() };
 	std::vector<std::pair<float, sf::Color>> colors;
 	
-	
-	void Add() override;
+	void Add();
 	void ResetParticle(std::size_t index);
 	void ChangeColor(const float lifeTime, sf::Vertex& vertex);
 };

@@ -9,6 +9,6 @@
 class Bullet : public Drawable, public RigidBody, public PoolElement
 {
 public:
-	virtual ~Bullet() = 0 {};
+	virtual ~Bullet() {}
 	virtual void Update(const sf::Time& deltaTime) = 0;
 };

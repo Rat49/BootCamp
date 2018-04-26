@@ -112,9 +112,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SpaceshipTest", "Source\Spa
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "UI", "Source\UI\UI.vcxproj", "{36EAA57C-A1F0-411F-9A5D-7A8889C4ABB3}"
-	ProjectSection(ProjectDependencies) = postProject
-		{176C4C58-FAB5-457B-BE6D-81EDE35612B2} = {176C4C58-FAB5-457B-BE6D-81EDE35612B2}
-	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Particle", "Source\ParticleSystem\Particle.vcxproj", "{9651A00D-2762-496F-B31A-7B156E28A629}"
 EndProject

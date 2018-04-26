@@ -1,5 +1,5 @@
-#include "PictureResource.h"
 #include "ImageSequenceResource.h"
+#include "PictureResource.h"
 #include <cassert>
 
 enum class enumParams
@@ -12,77 +12,78 @@ enum class enumParams
 
 std::vector<std::string> settingsParams = { "Width", "Height", "FrameCount", "AnimationTime" };
 
-ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::string& name, const std::multimap<const std::string, const std::string>& settings):PictureResource(id, name)
+ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::string& name, const std::multimap<const std::string, const std::string>& settings)
+	: PictureResource(id, name)
 {
 	for (int param = 0; param < settingsParams.size(); ++param)
 	{
 		auto currentParam = settings.find(settingsParams[param]);
 		if (currentParam != settings.cend())
 		{
-			switch (param)
+			switch (static_cast<enumParams>(param))
 			{
-			case static_cast<int>(enumParams::Width):
+			case enumParams::Width:
 				_widthFrame = std::stoi(currentParam->second);
 				break;
-			case static_cast<int>(enumParams::Height):
+			case enumParams::Height:
 				_heightFrame = std::stoi(currentParam->second);
 				break;
-			case static_cast<int>(enumParams::FrameCount):
+			case enumParams::FrameCount:
 				_countFrames = std::stoi(currentParam->second);
 				break;
-			case static_cast<int>(enumParams::AnimationTime):
+			case enumParams::AnimationTime:
 				_timeAnimation = sf::milliseconds(std::stoi(currentParam->second));
 				break;
 			}
 		}
 		else
 		{
-			switch (param)
+			switch (static_cast<enumParams>(param))
 			{
-			case static_cast<int>(enumParams::Width) :
-				assert(false && "Failed: the Width of frame doesn't find in settings from Config!");
-			case static_cast<int>(enumParams::Height) :
-				assert(false && "Failed: the Height of frame doesn't find in settings from Config!");
-			case static_cast<int>(enumParams::FrameCount) :
-				assert(false && "Failed: the FrameCount doesn't find in settings from Config!");
-			case static_cast<int>(enumParams::AnimationTime) :
-				assert(false && "Failed: the AnimationTime doesn't find in settings from Config!");
+			case enumParams::Width:
+				assert(false && "Failed: the Width of frame couldn't be found in settings from Config!");
+				break;
+			case enumParams::Height:
+				assert(false && "Failed: the Height of frame couldn't be found in settings from Config!");
+				break;
+			case enumParams::FrameCount:
+				assert(false && "Failed: the FrameCount couldn't be found settings from Config!");
+				break;
+			case enumParams::AnimationTime:
+				assert(false && "Failed: the AnimationTime couldn't be found in settings from Config!");
+				break;
 			}
 		}
-			
 	}
 
 	auto colors = settings.equal_range("Color");
-
 	if (colors.first != settings.cend())
 	{
-
 		for (auto currentColor = colors.first; currentColor != colors.second; ++currentColor)
 		{
-
 			std::string stringColor(currentColor->second);
 			std::string delimiter = " ";
 
 			size_t pos = 0;
 
-			int r = 0;
-			int g = 0;
-			int b = 0;
+			unsigned char r = 0;
+			unsigned char g = 0;
+			unsigned char b = 0;
 
 			pos = stringColor.find(delimiter);
 
-			for (int counter = 0; counter < 3; ++counter) {
-
+			for (int counter = 0; counter < 3; ++counter)
+			{
 				switch (counter)
 				{
 				case 0:
-					r = std::stoi(stringColor.substr(0, pos));
+					r = static_cast<unsigned char>(std::stoul(stringColor.substr(0, pos)));
 					break;
 				case 1:
-					g = std::stoi(stringColor.substr(0, pos));
+					g = static_cast<unsigned char>(std::stoi(stringColor.substr(0, pos)));
 					break;
 				case 2:
-					b = std::stoi(stringColor.substr(0, pos));
+					b = static_cast<unsigned char>(std::stoi(stringColor.substr(0, pos)));
 					break;
 				}
 				stringColor.erase(0, pos + delimiter.length());
@@ -93,18 +94,23 @@ ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::s
 	}
 }
 
+ImageSequenceResource::~ImageSequenceResource()
+{
+}
+
 void ImageSequenceResource::Load() 
 {
 	PictureResource::Load();
 	_image = PictureResource::Get();
 	if (_colorForMask.empty())
 	{
-		sf::Color _colorFirstPixel(_image->getPixel(0, 0));
-		SetMaskFromColor(_image, _colorFirstPixel);
+		_colorFirstPixel = new sf::Color(_image->getPixel(0, 0));
+		SetMaskFromColor(_image, *_colorFirstPixel);
 	}
 	else
 	{
-		for (auto &color : _colorForMask) {
+		for (auto &color : _colorForMask)
+		{
 			SetMaskFromColor(_image, color);
 		}
 	}
@@ -124,11 +130,6 @@ std::vector<sf::Texture>& ImageSequenceResource::Get()
 sf::Time& ImageSequenceResource::GetTime()
 {
 	return _timeAnimation;
-}
-
-ImageSequenceResource::~ImageSequenceResource()
-{
-
 }
 
 void ImageSequenceResource::SetMaskFromColor(sf::Image* image, sf::Color color)
@@ -175,5 +176,4 @@ void ImageSequenceResource::CreateFrames(sf::Image* image)
 			++_currentCountFrames;
 		}
 	}
-
 }

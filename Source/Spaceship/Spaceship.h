@@ -26,6 +26,7 @@ public:
 	void RotateSpaceship(float angle);
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
+
 private:
 	unsigned int _liveCount;
 	bool _isDamaged;
