@@ -91,6 +91,14 @@ int main()
 	ButtonsState stateChoose;
 	ButtonsState stateShoot;
 	ButtonsState statePowerfullShoot;
+	
+	/*
+	For Audio
+	*/
+
+	//AudioResource* shootingSound = rm->GetResource<AudioResource>("piupiu");
+	//AudioResource* explosionSound = rm->GetResource<AudioResource>("booom");
+	
 	/*
 	For SpaceShip
 	*/
