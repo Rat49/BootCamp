@@ -24,7 +24,7 @@ public:
 class CollisionEventBetweenAsteroidAndRocket : public Event
 {
 public:
-	Rocket* _bullet;
+	Rocket* _rocket;
 	Asteroid* _asteroid;
 };
 

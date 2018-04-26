@@ -14,3 +14,4 @@
 #include "AnimationPlayer.h"
 #include "Space.h"
 #include "ParticleAssets.h"
+#include "AudioResource.h"

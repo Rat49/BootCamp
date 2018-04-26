@@ -1,12 +1,13 @@
 #include "Spaceship.h"
-
+#include <iostream>
 Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, InputManager & input,
 	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
-	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / coefficientOfAnimation, 1.0f)
 	, _liveCount(3)
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
+	//, _spaceshipScale(0.7f, 0.7f)
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 	, _spaceshipFlickeringImseq(spaceshipFlickeringImseq)
 	, _rotationAngle(17.0f)
@@ -18,7 +19,7 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
 	, _rechargeRocketTime(sf::seconds(3.0f))
-	, _rechargeBulletTime(sf::seconds(0.15f))
+	, _rechargeBulletTime(sf::seconds(0.2f))
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
 	, _shotIndentValue(50.0f)
@@ -54,10 +55,12 @@ void Spaceship::Decelerate()
 
 void Spaceship::PowerfulShoot()
 {
-	if (_timeAfterPowerfulShot.asSeconds() < _rechargeRocketTime.asSeconds())
+	if (_timeAfterPowerfulShot.asSeconds() < _rechargeRocketTime.asSeconds() || _rocketCount <= 0)
 	{
 		return;
 	}
+	--_rocketCount;
+	std::cout << _rocketCount << std::endl;
 
 	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
 
@@ -72,10 +75,12 @@ void Spaceship::PowerfulShoot()
 
 void Spaceship::OrdinaryShoot()
 {
-	if (_timeAfterBulletShot.asSeconds() < _rechargeBulletTime.asSeconds())
+	if (_timeAfterBulletShot.asSeconds() < _rechargeBulletTime.asSeconds() || _bulletCount <= 0)
 	{
 		return;
 	}	
+	_bulletCount -= 3;;
+	std::cout << _bulletCount << std::endl;
 
 	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
 
@@ -198,11 +203,12 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	}
 	if (_input.GetState(static_cast<int>(GameActions::SuperShoot), stateSuperShoot) && stateSuperShoot == ButtonsState::JustPressed)
 	{
-		PowerfulShoot();
+			PowerfulShoot();
+	
 	}
 	if (_input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && (stateShoot == ButtonsState::JustPressed || stateShoot == ButtonsState::Pressed))
 	{
-		OrdinaryShoot();
+			OrdinaryShoot();
 	}
 	//==========================only for test============================================
 	if (_input.GetState(static_cast<int>(GameActions::Choose), stateShoot) && (stateShoot == ButtonsState::JustPressed || stateShoot == ButtonsState::Pressed))
@@ -214,7 +220,26 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	_timeAfterPowerfulShot += deltaTime;
 	_timeAfterBulletShot += deltaTime;
 	RigidBody::Update(deltaTime.asSeconds());
-	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
+
+	if(GetX() > WindowResolution::_W)
+	{
+		SetX(0);
+	}
+	if(GetX() < 0)
+	{
+		SetX(WindowResolution::_W);
+	}
+	if(GetY() > WindowResolution::_H)
+	{
+		SetY(0);
+	}
+	if(GetY() < 0)
+	{
+		SetY(WindowResolution::_H);
+	}
+
+	sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
+	_spaceshipSprite->setPosition(rigidCoordinates.x + _spaceshipSprite->getLocalBounds().width / coefficientOfAnimation, rigidCoordinates.y + _spaceshipSprite->getLocalBounds().height / coefficientOfAnimation);
 	_spaceshipAnimation->Update(deltaTime);
 	_spaceshipFlickering->Update(deltaTime);
 
@@ -235,6 +260,17 @@ void Spaceship::Update(const sf::Time& deltaTime)
 void Spaceship::AddToDrawableManager()
 {
 	DrawableManager::getInstance().AddDrawableObject(this);
+	_tokenForCollisionEventBetweenAsteroidAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
+		[&](const Event& event)
+	{
+		OnCollisionHandler(event);
+	});
+}
+
+void Spaceship::OnCollisionHandler(const Event& event)
+{
+	std::cout << "                     ___________________ Flick" << std::endl;
+	SetFlickeringMode();
 }
 
 int Spaceship::GetZOrder() const
@@ -244,6 +280,20 @@ int Spaceship::GetZOrder() const
 
 void Spaceship::Draw(sf::RenderWindow& window)
 {
+	//sf::CircleShape physicsShape(GetRadius());
+	//physicsShape.setPosition(GetCoordinates());
+	////physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	//physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	//physicsShape.setFillColor(sf::Color::Transparent);
+	//physicsShape.setOutlineThickness(1);
+
+	//window.draw(physicsShape);
+	//sf::CircleShape circleCenter(1);
+	//circleCenter.setPosition(GetX() + GetRadius(),
+	//	GetY() + GetRadius());
+	//circleCenter.setRadius(1.f);
+	//circleCenter.setFillColor(sf::Color::Green);
+	//window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
 }
 

@@ -65,9 +65,9 @@ ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::s
 
 			size_t pos = 0;
 
-			int r = 0;
-			int g = 0;
-			int b = 0;
+			uint8_t r = 0;
+			uint8_t g = 0;
+			uint8_t b = 0;
 
 			pos = stringColor.find(delimiter);
 
@@ -76,13 +76,13 @@ ImageSequenceResource::ImageSequenceResource(const std::string& id, const std::s
 				switch (counter)
 				{
 				case 0:
-					r = std::stoi(stringColor.substr(0, pos));
+					r = static_cast<uint8_t>(std::stoi(stringColor.substr(0, pos)));
 					break;
 				case 1:
-					g = std::stoi(stringColor.substr(0, pos));
+					g = static_cast<uint8_t>(std::stoi(stringColor.substr(0, pos)));
 					break;
 				case 2:
-					b = std::stoi(stringColor.substr(0, pos));
+					b = static_cast<uint8_t>(std::stoi(stringColor.substr(0, pos)));
 					break;
 				}
 				stringColor.erase(0, pos + delimiter.length());
@@ -99,8 +99,7 @@ void ImageSequenceResource::Load()
 	_image = PictureResource::Get();
 	if (_colorForMask.empty())
 	{
-		sf::Color _colorFirstPixel(_image->getPixel(0, 0));
-		SetMaskFromColor(_image, _colorFirstPixel);
+		SetMaskFromColor(_image, _image->getPixel(0, 0));
 	}
 	else
 	{
@@ -113,7 +112,6 @@ void ImageSequenceResource::Load()
 void ImageSequenceResource::Unload()
 {
 	PictureResource::Unload();
-	delete _colorFirstPixel;
 }
 
 std::vector<sf::Texture>& ImageSequenceResource::Get()

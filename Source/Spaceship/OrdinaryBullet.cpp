@@ -13,7 +13,9 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 {
 	AddToDrawableManager();
 	
-	_bulletScale = sf::Vector2f(0.5f, 0.5f);
+	SetRadius(5);
+	Bullet::_damage = 400;
+	_bulletScale = sf::Vector2f(0.3f, 0.3f);
 	_bulletTexture = &bulletTexture;
 	_ordinaryBulletSprite.setTexture(*_bulletTexture);
 	_ordinaryBulletSprite.setScale(_bulletScale);
@@ -34,6 +36,21 @@ const sf::Sprite* OrdinaryBullet::GetSprite()
 
 void OrdinaryBullet::Draw(sf::RenderWindow& window)
 {
+	sf::CircleShape physicsShape(GetRadius());
+	auto t = GetRadius();
+	physicsShape.setPosition(GetCoordinates());
+	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	physicsShape.setFillColor(sf::Color::Transparent);
+	physicsShape.setOutlineThickness(1);
+
+	window.draw(physicsShape);
+	sf::CircleShape circleCenter(1);
+	circleCenter.setPosition(GetX() + GetRadius(),
+		GetY() + GetRadius());
+	circleCenter.setRadius(1.f);
+	circleCenter.setFillColor(sf::Color::Green);
+	window.draw(circleCenter);
 	window.draw(_ordinaryBulletSprite);
 }
 
