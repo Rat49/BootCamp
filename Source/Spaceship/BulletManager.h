@@ -17,8 +17,7 @@ private:
 	Pool<OrdinaryBullet> _ordinaryBulletStorage;
 	Pool<Rocket> _rocketStorage;
 	Pool<RocketParticle> _particleStorage;
-	std::vector<OrdinaryBullet*> _bullets;
-	std::vector<Rocket*> _rockets;
+	
 	TextureResource& _ordinaryBulletTexture;
 	TextureResource& _rocketTexture;
 	const float _bulletDeflection;
@@ -30,6 +29,8 @@ private:
 public:
 	BulletManager(TextureResource& ordinaryBulletTexture, TextureResource& rocketTexture);
 	~BulletManager();
+	std::vector<OrdinaryBullet*> bullets;
+	std::vector<Rocket*> rockets;
 
 	void CreateBullet(const Event& event);
 	void DeleteBullet(const Event& event);

@@ -32,6 +32,10 @@ public:
 	void OnCollisionHandler(const Event& event);
 private:
 	unsigned int _liveCount;
+	unsigned int _bulletCount = 60;
+	unsigned int _rocketCount = 7;
+	const unsigned int _totalBulletCount = 150;
+	const unsigned int _totalRocketCount = 10;
 	bool _isDamaged;
 	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;

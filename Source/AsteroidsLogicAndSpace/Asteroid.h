@@ -30,6 +30,8 @@ public:
 	void AddToDrawableManager() override;
 	void Remove() override;
 	void OnCollisionHandler(const Event& cEvent);
+
+	void OnBulletCollisionHandler(const Event & cEvent);
 	
 	AsteroidType _type;
 	float _health;
