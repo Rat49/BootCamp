@@ -68,7 +68,7 @@ Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaces
 			}
 			else
 			{
-				_HP -= 25;
+				_HP -= _damage;
 			}
 			std::cout << "lifeCount = " << _liveCount << "\t HP = " << _HP << std::endl;
 		});
@@ -326,6 +326,11 @@ void Spaceship::Draw(sf::RenderWindow& window)
 	//circleCenter.setFillColor(sf::Color::Green);
 	//window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
+}
+
+void Spaceship::SetDamage(unsigned int damage)
+{
+	_damage = damage;
 }
 
 Spaceship::~Spaceship()

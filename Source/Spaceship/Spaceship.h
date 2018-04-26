@@ -31,7 +31,7 @@ public:
 	void RotateSpaceship(float angle);
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
-	void OnCollisionHandler(const Event& event);
+	void SetDamage(unsigned int damage);
 private:
 	
 	bool _isDamaged;
