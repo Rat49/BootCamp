@@ -17,7 +17,7 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 	AddToDrawableManager();
 	
 	_isAlive = true;
-	_rocketScale = sf::Vector2f(0.8f, 0.8f);
+	_rocketScale = sf::Vector2f(0.5f, 0.5f);
 	_direction = rocketDirection;
 	_rocketTexture = &rocketTexture;
 	_rocketSprite.setTexture(*_rocketTexture);

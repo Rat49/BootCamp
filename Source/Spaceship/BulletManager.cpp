@@ -61,10 +61,10 @@ void BulletManager::CreateBullet(const Event& event)
 	const CreateBulletEvent& currentEvent = static_cast<const CreateBulletEvent&>(event);
 
 	OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
-	bulletLeft->Init(currentEvent._position, DeflectBullets(_bulletDeflection, currentEvent._direction), _ordinaryBulletTexture.Get());
+	bulletLeft->Init(currentEvent._position, RotateVector(currentEvent._direction,_bulletDeflection), _ordinaryBulletTexture.Get());
 
 	OrdinaryBullet* bulletRight = _ordinaryBulletStorage.Get();
-	bulletRight->Init(currentEvent._position, DeflectBullets(-_bulletDeflection, currentEvent._direction), _ordinaryBulletTexture.Get());
+	bulletRight->Init(currentEvent._position, RotateVector(currentEvent._direction, -_bulletDeflection), _ordinaryBulletTexture.Get());
 
 	OrdinaryBullet* bulletCentr = _ordinaryBulletStorage.Get();
 	bulletCentr->Init(currentEvent._position, currentEvent._direction, _ordinaryBulletTexture.Get());
@@ -126,11 +126,4 @@ void BulletManager::Update(const sf::Time& deltaTime)
 	{
 		rocket->Update(deltaTime);
 	}
-}
-
-sf::Vector2f BulletManager::DeflectBullets(float angle,const sf::Vector2f& direction) const
-{
-	float radianAngle = angle * static_cast<float>(M_PI) / 180.0f;
-	return sf::Vector2f(direction.x * std::cos(radianAngle) - direction.y * std::sin(radianAngle),
-		direction.x * std::sin(radianAngle) + direction.y * std::cos(radianAngle));
 }
