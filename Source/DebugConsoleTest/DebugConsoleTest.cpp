@@ -4,12 +4,6 @@
 #include "Logger.h"
 #include "SFML\Graphics.hpp"
 
-//=================INPUT TEST PART==================
-enum class GameActions 
-{
-	Console
-};
-
 std::multimap<int, ButtonKey_t> init() 
 {
 	std::multimap<int, ButtonKey_t> customActions = 
