@@ -12,6 +12,8 @@
 #include <math.h>
 #include <algorithm>
 
+static float coefficientOfAnimation = 2.5f;
+
 class Spaceship : public RigidBody, public Drawable
 {
 public:

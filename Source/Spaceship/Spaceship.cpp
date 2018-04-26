@@ -2,7 +2,7 @@
 
 Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, InputManager & input,
 	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
-	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	: RigidBody(sf::Vector2f(position.x,position.y), speed, spaceshipAnimationImseq.GetWidth() / coefficientOfShipScale, 1.0f)
 	, _liveCount(3)
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
@@ -30,7 +30,7 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	_speedDirection = GetNormalizedVelocity(GetSpeed());
 	_spaceshipAnimation = new AnimationPlayer(_spaceshipSprite, &spaceshipAnimationImseq, true);
 	_spaceshipFlickering = new AnimationPlayer(_spaceshipSprite, &spaceshipFlickeringImseq, true);
-	_spaceshipSprite->setPosition(position);
+	//_spaceshipSprite->setPosition(0,0);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
 	_spaceshipAnimation->Start();
 
@@ -215,7 +215,8 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	_timeAfterPowerfulShot += deltaTime;
 	_timeAfterBulletShot += deltaTime;
 	RigidBody::Update(deltaTime.asSeconds());
-	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
+	sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
+	_spaceshipSprite->setPosition(rigidCoordinates.x + _spaceshipSprite->getLocalBounds().width / coefficientOfShipScale, rigidCoordinates.y + _spaceshipSprite->getLocalBounds().height / coefficientOfShipScale );
 	_spaceshipAnimation->Update(deltaTime);
 	_spaceshipFlickering->Update(deltaTime);
 
@@ -245,6 +246,20 @@ int Spaceship::GetZOrder() const
 
 void Spaceship::Draw(sf::RenderWindow& window)
 {
+	sf::CircleShape physicsShape(GetRadius());
+	physicsShape.setPosition(GetCoordinates());
+	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	physicsShape.setFillColor(sf::Color::Transparent);
+	physicsShape.setOutlineThickness(1);
+
+	window.draw(physicsShape);
+	sf::CircleShape circleCenter(1);
+	circleCenter.setPosition(GetX() + GetRadius(),
+		GetY() + GetRadius());
+	circleCenter.setRadius(1.f);
+	circleCenter.setFillColor(sf::Color::Green);
+	window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
 }
 
