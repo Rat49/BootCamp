@@ -18,10 +18,8 @@
 class Spaceship : public RigidBody, public Drawable
 {
 public:
-	/*Spaceship( const sf::Vector2f& position, const sf::Vector2f& speed, InputManager& input, 
-		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);*/
-	Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, const sf::Vector2f& position, const sf::Vector2f& speed,
-		InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);
+	Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, 
+		ImageSequenceResource& spaceshipFlickeringImseq);
 	~Spaceship();
 
 	void Accelerate();
