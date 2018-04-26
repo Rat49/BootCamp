@@ -81,7 +81,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>sfml-window.lib;sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;Events.lib;ConfigManager.lib;DebugCommandManager.lib;DebugConsole.lib;Animation.lib;Resources.lib;Input.lib;Physics.lib;Spaceship.lib;Utility.lib;AsteroidsLogicAndSpace.lib;Particle.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>sfml-window.lib;sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;Events.lib;DebugCommandManager.lib;DebugConsole.lib;Animation.lib;Resources.lib;Input.lib;Physics.lib;Spaceship.lib;Utility.lib;AsteroidsLogicAndSpace.lib;Particle.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>

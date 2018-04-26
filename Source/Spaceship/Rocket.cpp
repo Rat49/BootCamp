@@ -1,4 +1,6 @@
 #include "Rocket.h"
+#include "CollisionEvent.h"
+
 
 Rocket::Rocket()
 	: _speedValuePixelsPerSecond(200.0f)
@@ -16,21 +18,26 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 {
 	AddToDrawableManager();
 	
+	SetRadius(15);
 	_isAlive = true;
 	_rocketScale = sf::Vector2f(0.5f, 0.5f);
 	_direction = rocketDirection;
 	_rocketTexture = &rocketTexture;
 	_rocketSprite.setTexture(*_rocketTexture);
 	_rocketSprite.setScale(_rocketScale);
-	_rocketSprite.setOrigin(sf::Vector2f(_rocketTexture->getSize().x / 2.0f, _rocketTexture->getSize().y / 2.0f));
+	_rocketSprite.setOrigin(sf::Vector2f(_rocketTexture->getSize().x / 2.0f , 
+		_rocketTexture->getSize().y / 2.0f ));
 	float degreeAngle = RadiansToDegrees(std::atan(_direction.x / -_direction.y));
 	if (_direction.y > 0)
 		degreeAngle += 180.0f;
+	
+	sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
 
 	_rocketSprite.setRotation(degreeAngle);
 
 	_rocketParticle = &rocketParticle;
-	_rocketParticle->SetPosition(sf::Vector2f(position.x + rocketDirection.x * _rocketTexture->getSize().y / 2.0f, position.y + rocketDirection.y * _rocketTexture->getSize().y / 2.0f));
+	_rocketParticle->SetPosition(sf::Vector2f(position.x + rocketDirection.x * _rocketTexture->getSize().x / 2.0f, 
+		position.y + rocketDirection.y * _rocketTexture->getSize().y / 2.0f));
 	_rocketParticle->SetVelocity(rocketDirection * _speedValuePixelsPerSecond);
 	
 	SetSpeed(rocketDirection * _speedValuePixelsPerSecond);
@@ -45,6 +52,20 @@ const sf::Sprite* Rocket::GetSprite()
 
 void Rocket::Draw(sf::RenderWindow& window)
 {
+	sf::CircleShape physicsShape(GetRadius());
+	physicsShape.setPosition(GetCoordinates());
+	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	physicsShape.setFillColor(sf::Color::Transparent);
+	physicsShape.setOutlineThickness(1);
+
+	window.draw(physicsShape);
+	sf::CircleShape circleCenter(1);
+	circleCenter.setPosition(GetX() + GetRadius(),
+		GetY() + GetRadius());
+	circleCenter.setRadius(1.f);
+	circleCenter.setFillColor(sf::Color::Green);
+	window.draw(circleCenter);
 	window.draw(_rocketSprite);
 }
 
@@ -69,6 +90,9 @@ void Rocket::Update(const sf::Time& deltaTime)
 			_isAlive = false;
 	}
 
+	sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
+	_rocketSprite.setPosition(rigidCoordinates.x + _rocketSprite.getLocalBounds().width / 3,
+		rigidCoordinates.y + _rocketSprite.getLocalBounds().height / 3);
 	_rocketSprite.setPosition(GetCoordinates());
 }
 
@@ -89,8 +113,24 @@ bool Rocket::GetLifeStatus() const
 	return _isAlive;
 }
 
+
+void Rocket::OnCollisionHandler(const Event& cEvent)
+{
+	const CollisionEventBetweenAsteroidAndRocket &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndRocket&>(cEvent);
+
+	SetRadius(50);
+	SetSpeed(sf::Vector2f(0, 0));
+}
+
+
 void Rocket::AddToDrawableManager()
 {
+	_tokens[collisionEventBetweenAsteroidAndRocketID] = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndRocketID,
+		[&](const Event& event)
+	{
+		OnCollisionHandler(event);
+	});
+
 	DrawableManager::getInstance().AddDrawableObject(this);
 }
 

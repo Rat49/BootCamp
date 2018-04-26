@@ -162,6 +162,8 @@ int main()
 	*/
 
 	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroidTexture");
+	TextureResource* bulletBig = rm->GetResource<TextureResource>("bulletBig");
+
 	sf::Texture asteroidTexture = asteroid->Get();
 	sf::Sprite spriteAsteroid(asteroidTexture);
 
@@ -258,8 +260,8 @@ int main()
 		//Audio update
 		//Logic update
 
-		size_t n = space._asteroids.size() - 1;
-		size_t m = space._asteroids.size();
+		size_t n = space.asteroids.size() - 1;
+		size_t m = space.asteroids.size();
 		size_t bulletsSize = bulletManager.bullets.size();
 		size_t rocketSize = bulletManager.rockets.size();
 
@@ -267,45 +269,55 @@ int main()
 		{
 			for (size_t j = i + 1; j < m; ++j)
 			{
-				if (Collided(*space._asteroids[i], *space._asteroids[j]))
+				if (Collided(*space.asteroids[i], *space.asteroids[j]))
 				{
-					collisionAsteroidVsAsteroid._asteroid1 = space._asteroids[i];
-					collisionAsteroidVsAsteroid._asteroid2 = space._asteroids[j];
-					ResolveCollision(*space._asteroids[i], *space._asteroids[j]);
-					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space._asteroids[i]->_tokens[collisionEventID]);
-					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space._asteroids[j]->_tokens[collisionEventID]);
+					collisionAsteroidVsAsteroid._asteroid1 = space.asteroids[i];
+					collisionAsteroidVsAsteroid._asteroid2 = space.asteroids[j];
+					ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
+					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
+					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
 				}
 			}
 
-			if (Collided(*space._asteroids[i],*spaceship))
+			if (Collided(*space.asteroids[i],*spaceship))
 			{
-				collisionAsteroidVsSpaceship._asteroid = space._asteroids[i];
+				collisionAsteroidVsSpaceship._asteroid = space.asteroids[i];
 				collisionAsteroidVsSpaceship._spaceship = spaceship;
-				ResolveCollision(*space._asteroids[i], *spaceship);
-				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space._asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+				ResolveCollision(*space.asteroids[i], *spaceship);
+				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
 				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
 			}
 
-			/*for (size_t j = 0; j < rocketSize; ++j)
+			for (size_t j = 0; j < rocketSize; ++j)
 			{
-				if (Collided(*space._asteroids[i], *bulletManager.rockets[j]))
+				if (Collided(*space.asteroids[i], *bulletManager.rockets[j]))
 				{
-					collisionAsteroidVsRocket._asteroid = space._asteroids[i];
+					collisionAsteroidVsRocket._asteroid = space.asteroids[i];
 					collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
-					ResolveCollision(*space._asteroids[i], *bulletManager.rockets[j]);
-					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space._asteroids[i]->_token);
-					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_token);
+					ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
+					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+					for (size_t k = 0; k < n; ++k) {
+						if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
+						{
+							collisionAsteroidVsRocket._asteroid = space.asteroids[k];
+							collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
+							ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
+							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+						}
+					}
 				}
 			}
-*/
+
 			for (size_t j = 0; j < bulletsSize; ++j)
 			{
-				if (Collided(*space._asteroids[i], *bulletManager.bullets[j]))
+				if (Collided(*space.asteroids[i], *bulletManager.bullets[j]))
 				{
-					collisionAsteroidVsBullet._asteroid = space._asteroids[i];
+					collisionAsteroidVsBullet._asteroid = space.asteroids[i];
 					collisionAsteroidVsBullet._bullet = bulletManager.bullets[j];
-					ResolveCollision(*space._asteroids[i], *bulletManager.bullets[j]);
-					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space._asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
+					ResolveCollision(*space.asteroids[i], *bulletManager.bullets[j]);
+					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
 					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager.bullets[j]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
 				}
 			}

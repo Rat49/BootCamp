@@ -137,12 +137,14 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Ammunition.cpp" />
     <ClCompile Include="Asteroid.cpp" />
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Space.cpp" />
     <ClCompile Include="Star.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ammunition.h" />
     <ClInclude Include="Asteroid.h" />
     <ClInclude Include="Mathematics.h" />
     <ClInclude Include="Object.h" />

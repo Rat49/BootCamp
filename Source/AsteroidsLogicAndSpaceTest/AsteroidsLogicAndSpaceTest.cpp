@@ -95,19 +95,19 @@ int main()
 		{
 			accumulatedFrameTime -= physicsStepTargetFrameTime;
 
-			size_t n = space._asteroids.size() - 1;
-		    size_t m = space._asteroids.size();
+			size_t n = space.asteroids.size() - 1;
+		    size_t m = space.asteroids.size();
 			for (size_t i = 0; i < n; ++i)
 			{
 				for (size_t j = i + 1; j < m; ++j)
 				{
-					if (Collided(*space._asteroids[i], *space._asteroids[j]))
+					if (Collided(*space.asteroids[i], *space.asteroids[j]))
 					{
-						collisionEvent._asteroid1 = space._asteroids[i];
-						collisionEvent._asteroid2 = space._asteroids[j];
-						ResolveCollision(*space._asteroids[i], *space._asteroids[j]);
-						dispatcher.Send(collisionEvent, collisionEventID, space._asteroids[i]->_token);
-						dispatcher.Send(collisionEvent, collisionEventID, space._asteroids[j]->_token);
+						collisionEvent._asteroid1 = space.asteroids[i];
+						collisionEvent._asteroid2 = space.asteroids[j];
+						ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
+						dispatcher.Send(collisionEvent, collisionEventID, space.asteroids[i]->_token);
+						dispatcher.Send(collisionEvent, collisionEventID, space.asteroids[j]->_token);
 					}
 				}
 			}

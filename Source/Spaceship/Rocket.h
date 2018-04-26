@@ -1,6 +1,8 @@
 #pragma once
 #include "Bullet.h"
 #include "ParticleAssets.h"
+#include "EventSystem.h"
+#include "CollisionEvent.h"
 
 
 class Rocket final : public Bullet
@@ -21,6 +23,7 @@ public:
 	void Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture, RocketParticle& rocketParticle);
 	const sf::Sprite* GetSprite();
 	bool GetLifeStatus() const;
+	void OnCollisionHandler(const Event & cEvent);
 	void AddToDrawableManager() override;
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;

@@ -27,6 +27,9 @@
     <ClCompile Include="Space.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Ammunition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Asteroid.h">
@@ -42,6 +45,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Space.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ammunition.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -26,6 +26,8 @@ public:
 	void Remove() override;
 	void OnCollisionHandler(const Event& cEvent);
 
+	void OnRocketCollisionHandler(const Event & cEvent);
+
 	void OnBulletCollisionHandler(const Event & cEvent);
 	
 	AsteroidType _type;
