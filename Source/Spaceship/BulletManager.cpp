@@ -8,7 +8,6 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 	, _ordinaryBulletTexture(ordinaryBulletTexture)
 	, _rocketTexture(rocketTexture)
 	, _bulletDeflection(5.0f)
-	, _particleStorage(Pool<RocketParticle>(_totalRocketCount))
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_bulletDeletion = dispatcher.Connect(createBulletEventID, [&](const Event& event)
@@ -31,7 +30,7 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 
 BulletManager::~BulletManager()
 {
-	for (auto& bullet: bullets)
+	for (auto& bullet: _bullets)
 	{
 		if (!(_ordinaryBulletStorage.Count() == _ordinaryBulletStorage.MaxCount()))
 		{
@@ -40,7 +39,7 @@ BulletManager::~BulletManager()
 		}
 	}
 
-	for (auto& rocket : rockets)
+	for (auto& rocket : _rockets)
 	{
 		if (!(_rocketStorage.Count() == _rocketStorage.MaxCount()))
 		{
@@ -61,37 +60,30 @@ void BulletManager::CreateBullet(const Event& event)
 	const CreateBulletEvent& currentEvent = static_cast<const CreateBulletEvent&>(event);
 
 	OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
-	bulletLeft->Init(currentEvent._position, RotateVector(currentEvent._direction,_bulletDeflection), _ordinaryBulletTexture.Get());
+	bulletLeft->Init(currentEvent._position, DeflectBullets(_bulletDeflection, currentEvent._direction), _ordinaryBulletTexture.Get());
 
 	OrdinaryBullet* bulletRight = _ordinaryBulletStorage.Get();
-	bulletRight->Init(currentEvent._position, RotateVector(currentEvent._direction, -_bulletDeflection), _ordinaryBulletTexture.Get());
+	bulletRight->Init(currentEvent._position, DeflectBullets(-_bulletDeflection, currentEvent._direction), _ordinaryBulletTexture.Get());
 
 	OrdinaryBullet* bulletCentr = _ordinaryBulletStorage.Get();
 	bulletCentr->Init(currentEvent._position, currentEvent._direction, _ordinaryBulletTexture.Get());
 
-	bullets.push_back(bulletLeft);
-	bullets.push_back(bulletRight);
-	bullets.push_back(bulletCentr);
+	_bullets.push_back(bulletLeft);
+	_bullets.push_back(bulletRight);
+	_bullets.push_back(bulletCentr);
 }
 
 void BulletManager::DeleteBullet(const Event& event)
 {
 	const DeleteBulletEvent& currentEvent = static_cast<const DeleteBulletEvent&>(event);
 
-	/*OrdinaryBullet* ptrBullet = currentEvent._deletedBullet;
+	OrdinaryBullet* ptrBullet = currentEvent._deletedBullet;
 
-	bullets.erase(std::remove(bullets.begin(), bullets.end(), ptrBullet), bullets.end());
+	_bullets.erase(std::remove(_bullets.begin(), _bullets.end(), ptrBullet), _bullets.end());
 	_ordinaryBulletStorage.Put(ptrBullet);
-	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrBullet));*/
-
-
-
-
-
-		/*_drawableObjects.erase
+	DrawableManager::getInstance()._drawableObjects.erase
 	(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrBullet)),
 			DrawableManager::getInstance()._drawableObjects.end());
-	*/
 }
 
 void BulletManager::CreateRocket(const Event & event)
@@ -99,53 +91,39 @@ void BulletManager::CreateRocket(const Event & event)
 	const CreateRocketEvent& currentEvent = static_cast<const CreateRocketEvent&>(event);
 
 	Rocket* rocket = _rocketStorage.Get();
-	RocketParticle * rocketParticle = _particleStorage.Get();
+	rocket->Init(currentEvent._position, currentEvent._direction, _rocketTexture.Get());
 
-	rocket->Init(currentEvent._position, currentEvent._direction, _rocketTexture.Get(), *rocketParticle);
-
-
-	rockets.push_back(rocket);
+	_rockets.push_back(rocket);
 }
 
 void BulletManager::DeleteRocket(const Event & event)
 {
 	const DeleteRocketEvent& currentEvent = static_cast<const DeleteRocketEvent&>(event);
 
-	/*Rocket* ptrRocket = currentEvent._deletedRocket;
+	Rocket* ptrRocket = currentEvent._deletedRocket;
 
-	rockets.erase(std::remove(rockets.begin(), rockets.end(), ptrRocket), rockets.end());
+	_rockets.erase(std::remove(_rockets.begin(), _rockets.end(), ptrRocket), _rockets.end());
 	_rocketStorage.Put(ptrRocket);
-	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrRocket));*/
-		
-	
-	
-	/*_drawableObjects.erase
+	DrawableManager::getInstance()._drawableObjects.erase
 	(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrRocket)),
-		DrawableManager::getInstance()._drawableObjects.end());*/
+		DrawableManager::getInstance()._drawableObjects.end());
 }
 
 void BulletManager::Update(const sf::Time& deltaTime)
 {
-	for (auto& bullet : bullets)
+	for (auto& bullet : _bullets)
 	{
 		bullet->Update(deltaTime);
-		if (bullet->GetSprite()->getPosition().x < -bullet->GetHalfSpriteLength()
-			|| bullet->GetSprite()->getPosition().x > WindowResolution::_W + bullet->GetHalfSpriteLength()
-			|| bullet->GetSprite()->getPosition().y > WindowResolution::_H + bullet->GetHalfSpriteLength()
-			|| bullet->GetSprite()->getPosition().y < -bullet->GetHalfSpriteLength())
-		{
-			Dispatcher::getInstance().Send(DeleteBulletEvent(bullet), deleteBulletEventID);
-		}
 	}
-	for (auto& rocket : rockets)
+	for (auto& rocket : _rockets)
 	{
 		rocket->Update(deltaTime);
-		if (rocket->GetSprite()->getPosition().x < -rocket->GetHalfSpriteLength()
-			|| rocket->GetSprite()->getPosition().x > WindowResolution::_W + rocket->GetHalfSpriteLength()
-			|| rocket->GetSprite()->getPosition().y > WindowResolution::_H + rocket->GetHalfSpriteLength()
-			|| rocket->GetSprite()->getPosition().y < -rocket->GetHalfSpriteLength())
-		{
-			Dispatcher::getInstance().Send(DeleteRocketEvent(rocket), deleteRocketEventID);
-		}
 	}
+}
+
+sf::Vector2f BulletManager::DeflectBullets(float angle,const sf::Vector2f& direction) const
+{
+	float radianAngle = angle * static_cast<float>(M_PI) / 180.0f;
+	return sf::Vector2f(direction.x * std::cos(radianAngle) - direction.y * std::sin(radianAngle),
+		direction.x * std::sin(radianAngle) + direction.y * std::cos(radianAngle));
 }

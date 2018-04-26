@@ -2,22 +2,31 @@
 #include "EventSystem.h"
 #include "BulletManagerEvents.h"
 #include "Pool.h"
-#include "ResourceManager.h"
+#include "TextureResource.h"
 #include "OrdinaryBullet.h"
 #include "Rocket.h"
-#include "ParticleAssets.h"
-#include "Mathematics.h"
 #include "SFML\Graphics.hpp"
 
 class BulletManager final 
 {
+public:
+	BulletManager(TextureResource& ordinaryBulletTexture, TextureResource& rocketTexture);
+	~BulletManager();
+
+	void CreateBullet(const Event& event);
+	void DeleteBullet(const Event& event);
+	void CreateRocket(const Event& event);
+	void DeleteRocket(const Event& event);
+	void Update(const sf::Time& deltaTime);
+	sf::Vector2f DeflectBullets(float angle, const sf::Vector2f& direction) const;
+
 private:
 	const int _totalBulletCount;
 	const int _totalRocketCount;
 	Pool<OrdinaryBullet> _ordinaryBulletStorage;
 	Pool<Rocket> _rocketStorage;
-	Pool<RocketParticle> _particleStorage;
-	
+	std::vector<OrdinaryBullet*> _bullets;
+	std::vector<Rocket*> _rockets;
 	TextureResource& _ordinaryBulletTexture;
 	TextureResource& _rocketTexture;
 	const float _bulletDeflection;
@@ -26,16 +35,5 @@ private:
 	Token_t _rocketDeletion;
 	Token_t _bulletCreation;
 	Token_t _rocketCreation;
-public:
-	BulletManager(TextureResource& ordinaryBulletTexture, TextureResource& rocketTexture);
-	~BulletManager();
-	std::vector<OrdinaryBullet*> bullets;
-	std::vector<Rocket*> rockets;
-
-	void CreateBullet(const Event& event);
-	void DeleteBullet(const Event& event);
-	void CreateRocket(const Event& event);
-	void DeleteRocket(const Event& event);
-	void Update(const sf::Time& deltaTime);
 };
 

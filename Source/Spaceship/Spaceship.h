@@ -1,27 +1,22 @@
 #pragma once
-#include "AnimationPlayer.h"
-#include "BulletManagerEvents.h"
-#include "CollisionEvent.h"
-#include "DrawableManager.h"
 #include "EventSystem.h"
-#include "GameOverEvent.h"
+#include "CollisionEvent.h"
+#include "BulletManagerEvents.h"
+#include "AnimationPlayer.h"
 #include "ImageSequenceResource.h"
 #include "Input.h"
-#include "Mathematics.h"
 #include "Physics.h"
 #include "Pool.h"
-#include "SpaceshipRespawnEvent.h"
-
+#include "DrawableManager.h"
+#include "Mathematics.h"
 #include <math.h>
 #include <algorithm>
-
-static float coefficientOfAnimation = 2.5f;
 
 class Spaceship : public RigidBody, public Drawable
 {
 public:
-	Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, 
-		ImageSequenceResource& spaceshipFlickeringImseq);
+	Spaceship(const sf::Vector2f& position, const sf::Vector2f& speed, InputManager& input, 
+		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);
 	~Spaceship();
 
 	void Accelerate();
@@ -31,15 +26,14 @@ public:
 	void RotateSpaceship(float angle);
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
-	void SetDamage(unsigned int damage);
+
 private:
-	
+	unsigned int _liveCount;
 	bool _isDamaged;
 	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;
 	sf::Vector2f _speedDirection;
 	sf::Sprite* _spaceshipSprite;
-	//sf::Vector2f _spaceshipScale;
 	AnimationPlayer* _spaceshipAnimation;
 	ImageSequenceResource& _spaceshipAnimationImseq;
 	AnimationPlayer* _spaceshipFlickering;
@@ -62,12 +56,6 @@ private:
 	sf::Time _timeAfterBulletShot;
 	const float _bulletRebound;
 	const float _rocketRebound;
-	unsigned int _bulletCount = 60;
-	unsigned int _rocketCount = 7;
-
-	unsigned int _liveCount;
-	unsigned int _HP;
-	unsigned int _damage;
 
 	void ControlSpeed(float deltaSpeed);
 	void GainRebound(float reboundValue);

@@ -1,16 +1,16 @@
 #include "Widget.h"
 
-
-
-Widget::Widget(const std::string & name, const sf::Vector2f position,sf::RenderWindow &owner) :
-	_window(owner),
-	_name(name),
-	_position(position),
-	_scale(1,1)
+Widget::Widget(const std::string& name, const sf::Vector2f position, sf::RenderWindow& owner)
+	: _window(owner)
+	, _name(name)
+	, _position(position)
+	, _scale(1,1)
 {
-
 }
 
+Widget::~Widget()
+{
+}
 
 sf::Vector2f Widget::GetPosition() const
 {
@@ -36,9 +36,5 @@ void Widget::Resize()
 {
 	_position.x = _position.x*_scale.x;
 	_position.y = _position.y*_scale.y;
-	this->OnResize();
-}
-
-Widget::~Widget()
-{
+	OnResize();
 }
