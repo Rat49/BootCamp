@@ -24,7 +24,6 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 	
 	_ordinaryBulletSprite.setRotation(degreeAngle);
 	SetSpeed(bulletDirection * _speedValuePixelsPerSecond);
-	//???
 	SetCoordinates(sf::Vector2f(position.x, position.y));
 }
 
