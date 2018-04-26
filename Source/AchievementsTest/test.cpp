@@ -40,18 +40,18 @@ int main()
 	sf::Event sysEvent;
 
 	ConfigManager* achievCM = ConfigManager::Create("testAchievement.INI");
-	int num = atoi((achievCM->GetCategory("NUM_ACHIEVEMENT").GetValue("_numAchievements")).c_str());
+	int num = atoi((achievCM->GetCategory("NUM_ACHIEVEMENT").GetValues("_numAchievements")).c_str());
 	std::cout << num;
 	Achievement *achieves = new Achievement[num];
 	for (int i = 0; i < num; ++i)
 	{
 		std::string str = std::to_string(i);
-		achieves[i].SetIdAchievement(atoi((achievCM->GetCategory(str).GetValue("_idAchievement")).c_str()));
-		achieves[i].SetProgressState(atof((achievCM->GetCategory(str).GetValue("_progressState")).c_str()));
-		achieves[i].SetProgressFinishState(atof((achievCM->GetCategory(str).GetValue("_progressFinishState")).c_str()));
-		achieves[i].SetDisplayName((achievCM->GetCategory(str).GetValue("_displayName")).c_str());
-		achieves[i].SetDisplayDescriptionName((achievCM->GetCategory(str).GetValue("_displayDescriptionName")).c_str());
-		achieves[i].SetAchievedActive(atoi((achievCM->GetCategory(str).GetValue("_achievedActive")).c_str()));
+		achieves[i].SetIdAchievement(atoi((achievCM->GetCategory(str).GetValues("_idAchievement")).c_str()));
+		achieves[i].SetProgressState(atof((achievCM->GetCategory(str).GetValues("_progressState")).c_str()));
+		achieves[i].SetProgressFinishState(atof((achievCM->GetCategory(str).GetValues("_progressFinishState")).c_str()));
+		achieves[i].SetDisplayName((achievCM->GetCategory(str).GetValues("_displayName")).c_str());
+		achieves[i].SetDisplayDescriptionName((achievCM->GetCategory(str).GetValues("_displayDescriptionName")).c_str());
+		achieves[i].SetAchievedActive(atoi((achievCM->GetCategory(str).GetValues("_achievedActive")).c_str()));
 	}
 	delete[]achieves;
 	delete achievCM;

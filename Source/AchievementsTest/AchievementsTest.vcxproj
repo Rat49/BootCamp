@@ -73,7 +73,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Achievements;$(SolutionDir)Source\Physics; $(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Events; $(SolutionDir)Source\UI; $(SolutionDir)SFML\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Achievements;$(SolutionDir)Source\Physics;$(SolutionDir)Source\Events;$(SolutionDir)Source\UI;$(SolutionDir)SFML\include;$(SolutionDir)Source\Utility</AdditionalIncludeDirectories>
     </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">

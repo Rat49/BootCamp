@@ -10,7 +10,10 @@ int main()
 	mui.CreateButton(sf::Vector2f(20, 30), PercentXY(21, 15), "test");
 	mui.CreateScrollBar(100, PercentXY(46, 30), "scroll");
 	sf::Font font;
+
 	font.loadFromFile("font/arial.ttf");
+
+	mui.CreateAchivementShower(font, PercentXY(20, 30));
 	mui.CreateLabel("hello",font, PercentXY(1,1),"label");
 	mui.Get<ScrollBar>("scroll")->SetFillColor(sf::Color::Green);
 	mui.Get<ScrollBar>("scroll")->SetLength(200);
@@ -43,6 +46,8 @@ int main()
 					break;
 				case sf::Event::Closed:
 					window.close();
+					break;
+				case sf::Event::KeyPressed:
 					break;
 				default:
 					break;
