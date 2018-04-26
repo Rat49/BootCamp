@@ -26,6 +26,9 @@ void Asteroid::DefaultInit()
 	_sprite.setScale(_startScale, _startScale);
 	_sprite.setOrigin(0, 0);
 
+	_spawnBoundHeight = 100.0f;
+	_spawnBoundWidth = 100.0f;
+
 	SetMass(0.005f);
 	
 }
@@ -39,8 +42,13 @@ void Asteroid::RandomInit()
 	_linearVelocity = sf::Vector2f(GetRandomValue(-300, 300), GetRandomValue(-300, 300));
 	SetSpeed(_linearVelocity);
 
-	_sprite.setPosition(sf::Vector2f(GetRandomValue(0, GetSizeWindow().x), GetRandomValue(0, GetSizeWindow().y)));
-	SetCoordinates(_sprite.getPosition());
+	float positionBoundX = GetRandomValue(-_spawnBoundWidth, _spawnBoundWidth);
+	float positionBoundY = GetRandomValue(-_spawnBoundHeight, _spawnBoundHeight);
+	float positionX = positionBoundX > 0 ? GetSizeWindow().x + positionBoundX : positionBoundX;
+	float positionY = positionBoundY > 0 ? GetSizeWindow().y + positionBoundY : positionBoundY;
+
+	_sprite.setPosition(sf::Vector2f(positionX, positionY));
+	SetCoordinates(sf::Vector2f(positionX, positionY));
 }
 
 void Asteroid::SetParametersFromType(AsteroidType type)
