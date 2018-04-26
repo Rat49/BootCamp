@@ -98,7 +98,7 @@ int main()
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
 
 	std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
-	Spaceship* spaceship = new Spaceship(spaceshipConfig, sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), input, *spaceshipImgseq, *flickeringImgseq);
+	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture, *rocketTexture);
 	

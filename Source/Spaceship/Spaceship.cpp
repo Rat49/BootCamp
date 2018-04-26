@@ -1,7 +1,6 @@
 #include "Spaceship.h"
 
-Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, const sf::Vector2f& position, const sf::Vector2f& speed,
-	InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
+Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
 	: RigidBody({ 0, 0 }, {0, 0}, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
 
 	, _isDamaged(false)
@@ -40,7 +39,7 @@ Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaces
 	_speedDirection = GetNormalizedVelocity(GetSpeed());
 	_spaceshipAnimation = new AnimationPlayer(_spaceshipSprite, &spaceshipAnimationImseq, true);
 	_spaceshipFlickering = new AnimationPlayer(_spaceshipSprite, &spaceshipFlickeringImseq, true);
-	_spaceshipSprite->setPosition(position);
+	_spaceshipSprite->setPosition({positionX, positionY});
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
 	_spaceshipAnimation->Start();
 
