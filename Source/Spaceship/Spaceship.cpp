@@ -1,10 +1,9 @@
 #include "Spaceship.h"
 
-Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, InputManager & input,
-	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
+Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, const sf::Vector2f& position, const sf::Vector2f& speed,
+	InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
 	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
-	, _liveCount(3)
-	, _HP(100)
+
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
@@ -26,6 +25,9 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	, _shotIndentValue(50.0f)
 	
 {
+	_liveCount = atoi(spaceshipConfig.find("LifeCount")->second.c_str());
+	_HP = atoi(spaceshipConfig.find("HP")->second.c_str());
+	_damage = atoi(spaceshipConfig.find("Damage")->second.c_str());
 	_zOrder = 1;
 	_spaceshipSprite = new sf::Sprite();
 	_speedDirection = GetNormalizedVelocity(GetSpeed());

@@ -18,8 +18,10 @@
 class Spaceship : public RigidBody, public Drawable
 {
 public:
-	Spaceship(const sf::Vector2f& position, const sf::Vector2f& speed, InputManager& input, 
-		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);
+	/*Spaceship( const sf::Vector2f& position, const sf::Vector2f& speed, InputManager& input, 
+		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);*/
+	Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, const sf::Vector2f& position, const sf::Vector2f& speed,
+		InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);
 	~Spaceship();
 
 	void Accelerate();
@@ -30,8 +32,7 @@ public:
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
 private:
-	unsigned int _liveCount;
-	unsigned int _HP;
+	
 	bool _isDamaged;
 	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;
@@ -60,6 +61,10 @@ private:
 	sf::Time _timeAfterBulletShot;
 	const float _bulletRebound;
 	const float _rocketRebound;
+
+	unsigned int _liveCount;
+	unsigned int _HP;
+	unsigned int _damage;
 
 	void ControlSpeed(float deltaSpeed);
 	void GainRebound(float reboundValue);
