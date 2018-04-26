@@ -22,12 +22,12 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
 	, _shotIndentValue(50.0f)
+	, _spaceshipSprite()
 {
 	_zOrder = 1;
 	_speedDirection = GetNormalizedVelocity(GetSpeed());
-	_spaceshipSprite = new sf::Sprite();
-	_spaceshipAnimation = new AnimationPlayer(*_spaceshipSprite, spaceshipAnimationImseq, true);
-	_spaceshipFlickering = new AnimationPlayer(*_spaceshipSprite, spaceshipFlickeringImseq, true);
+	_spaceshipAnimation = new AnimationPlayer(_spaceshipSprite, &spaceshipAnimationImseq, true);
+	_spaceshipFlickering = new AnimationPlayer(_spaceshipSprite, &spaceshipFlickeringImseq, true);
 	_spaceshipSprite->setPosition(position);
 	_spaceshipSprite->setOrigin(_spaceshipAnimation->GetWidth() / 2, _spaceshipAnimation->GetHeight() / 2);
 	_spaceshipAnimation->Start();
@@ -94,7 +94,7 @@ void Spaceship::RotateSpaceship(float degreeAngle)
 
 void Spaceship::ControlSpeed(float deltaSpeed)
 {
-	float speedValue = std::sqrt(GetSquareLength(GetSpeed()));
+	float speedValue = std::sqrt(GetSquaredLength(GetSpeed()));
 
 	if (!((_speedDirection == _spaceshipDirection) || (_speedDirection == -_spaceshipDirection)))
 	{
@@ -105,7 +105,7 @@ void Spaceship::ControlSpeed(float deltaSpeed)
 
 	sf::Vector2f newSpeed = GetSpeed() + deltaSpeed * _spaceshipDirection;
 
-	if (GetSquareLength(newSpeed) < _maxSquareSpeed)
+	if (GetSquaredLength(newSpeed) < _maxSquareSpeed)
 	{
 		SetSpeed(newSpeed);
 	}
