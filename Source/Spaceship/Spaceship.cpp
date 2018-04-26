@@ -22,9 +22,10 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
 	, _shotIndentValue(50.0f)
-	, _spaceshipSprite()
+	
 {
 	_zOrder = 1;
+	_spaceshipSprite = new sf::Sprite();
 	_speedDirection = GetNormalizedVelocity(GetSpeed());
 	_spaceshipAnimation = new AnimationPlayer(_spaceshipSprite, &spaceshipAnimationImseq, true);
 	_spaceshipFlickering = new AnimationPlayer(_spaceshipSprite, &spaceshipFlickeringImseq, true);
