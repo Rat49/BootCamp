@@ -13,7 +13,7 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 {
 	AddToDrawableManager();
 	
-	_bulletScale = sf::Vector2f(0.5f, 0.5f);
+	_bulletScale = sf::Vector2f(0.3f, 0.3f);
 	_bulletTexture = &bulletTexture;
 	_ordinaryBulletSprite.setTexture(*_bulletTexture);
 	_ordinaryBulletSprite.setScale(_bulletScale);
@@ -24,7 +24,6 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 	
 	_ordinaryBulletSprite.setRotation(degreeAngle);
 	SetSpeed(bulletDirection * _speedValuePixelsPerSecond);
-	//???
 	SetCoordinates(sf::Vector2f(position.x, position.y));
 }
 
