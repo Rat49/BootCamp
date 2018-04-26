@@ -105,10 +105,10 @@ void ResolveCollision(RigidBody & go1, RigidBody & go2)
     (dpNorm2 * (go2.GetMass() - go1.GetMass()) + 2.0f * go1.GetMass() * dpNorm1) / (go1.GetMass() + go2.GetMass());
 
   // Update ball velocities
-  go1.SetSpeedX(tx * dpTan1 + nx * m1);
-  go1.SetSpeedY(ty * dpTan1 + ny * m1);
-  go2.SetSpeedX(tx * dpTan2 + nx * m2);
-  go2.SetSpeedY(ty * dpTan2 + ny * m2);
+  go1.SetSpeedX((tx * dpTan1 + nx * m1)*0.7);
+  go1.SetSpeedY((ty * dpTan1 + ny * m1)*0.7);
+  go2.SetSpeedX((tx * dpTan2 + nx * m2)*0.7);
+  go2.SetSpeedY((ty * dpTan2 + ny * m2)*0.7);
 
 }
 
