@@ -35,8 +35,18 @@ int main()
 	sf::RenderWindow window(sf::VideoMode(900, 900), "SFML works!");
 	WindowResolution::SetResolution(window);
 
-	InputManager* input = new InputManager();
-	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), *input, *spaceshipImgseq, *flickeringImgseq);
+	std::multimap<int, ButtonKey_t> actions;
+	LogCategory category = cm1->GetCategory("Input");
+	std::multimap<const std::string, const std::string> inputCategory = category.GetParams();
+	for (auto i : inputCategory)
+	{
+		int a = atoi(i.first.c_str());
+		int b = atoi(i.second.c_str());
+		actions.insert(std::pair<int, int>(a, b));
+	}
+	InputManager input(actions);
+
+	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture,*rocketTexture);
 	DrawableManager& drawableManager = DrawableManager::getInstance();

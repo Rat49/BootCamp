@@ -18,4 +18,6 @@ enum EventTypes : EventID_t
 	createRocketEventID,
 	deleteRocketEventID,
 	deleteBulletEventID,
+	spaceshipRespawnEventID,
+	gameOverEventID
 };

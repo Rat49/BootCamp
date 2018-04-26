@@ -1,15 +1,17 @@
 #pragma once
-#include "EventSystem.h"
-#include "CollisionEvent.h"
-#include "BulletManagerEvents.h"
 #include "AnimationPlayer.h"
+#include "BulletManagerEvents.h"
+#include "CollisionEvent.h"
+#include "DrawableManager.h"
+#include "EventSystem.h"
+#include "GameOverEvent.h"
 #include "ImageSequenceResource.h"
 #include "Input.h"
+#include "Mathematics.h"
 #include "Physics.h"
 #include "Pool.h"
-#include "DrawableManager.h"
-#include "Mathematics.h"
-#include "WindowResolution.h"
+#include "SpaceshipRespawnEvent.h"
+
 #include <math.h>
 #include <algorithm>
 
@@ -32,10 +34,7 @@ public:
 	void OnCollisionHandler(const Event& event);
 private:
 	unsigned int _liveCount;
-	unsigned int _bulletCount = 60;
-	unsigned int _rocketCount = 7;
-	const unsigned int _totalBulletCount = 150;
-	const unsigned int _totalRocketCount = 10;
+	unsigned int _HP;
 	bool _isDamaged;
 	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;
