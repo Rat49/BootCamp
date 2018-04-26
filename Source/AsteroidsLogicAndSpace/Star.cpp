@@ -18,10 +18,10 @@ void Star::DefaultInit()
 
 void Star::RandomInit()
 {
-	_radius = GetFloatRandomValue(0.1, 1.0);
+	_radius = GetFloatRandomValue(0.1f, 1.0f);
 	_star.setRadius(_radius);
 
-	if (_radius < 0.5)
+	if (_radius < 0.5f)
 		_alfaColor = 100;
 	else
 		_alfaColor = 255;
@@ -31,7 +31,7 @@ void Star::RandomInit()
 
 sf::Vector2f Star::GetRandomPosition()
 {
-	return sf::Vector2f(GetRandomValue(0, GetSizeWindow().x), GetRandomValue(0, GetSizeWindow().y));
+	return sf::Vector2f(GetFloatRandomValue(0.0f, static_cast<float>(GetSizeWindow().x)), GetFloatRandomValue(0.0f, static_cast<float>(GetSizeWindow().y)));
 }
 
 Star::Star()
@@ -63,14 +63,14 @@ void Star::Init(const sf::Vector2u &size)
 
 void Star::Update(float time)
 {	
-	if (_radius < 4.0)
+	if (_radius < 4.0f)
 	{
 		_radius += time;
 
 		if (_alfaColor < 255)
-			_alfaColor += _radius;
+			_alfaColor += static_cast<uint8_t>(_radius);
 	}
-	else if (_radius >= 4.0 && _radius < 6.0)
+	else if (_radius >= 4.0f && _radius < 6.0f)
 	{
 		_radius += time;
 
