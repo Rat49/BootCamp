@@ -196,13 +196,13 @@ void Asteroid::AddToDrawableManager()
 {
 	Object::AddToDrawableManager();
 
-	_token = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidsID,
+	_tokens[collisionEventBetweenAsteroidsID] = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidsID,
 		[&](const Event& event)
 	{
 		OnCollisionHandler(event);
 	});
 
-	_token2 = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndBulletID,
+	_tokens[collisionEventBetweenAsteroidAndBulletID] = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndBulletID,
 		[&](const Event& event)
 	{
 		OnBulletCollisionHandler(event);
@@ -213,7 +213,8 @@ void Asteroid::Remove()
 {
 	Object::Remove();
 
-	Dispatcher::getInstance().Disconnect(EventTypes::collisionEventID, _token);
+	Dispatcher::getInstance().Disconnect(EventTypes::collisionEventBetweenAsteroidsID, _tokens[collisionEventBetweenAsteroidsID]);
+	Dispatcher::getInstance().Disconnect(EventTypes::collisionEventBetweenAsteroidAndBulletID, _tokens[collisionEventBetweenAsteroidAndBulletID]);
 }
 
 void Asteroid::Update(float time)

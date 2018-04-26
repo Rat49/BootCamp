@@ -272,8 +272,8 @@ int main()
 					collisionAsteroidVsAsteroid._asteroid1 = space._asteroids[i];
 					collisionAsteroidVsAsteroid._asteroid2 = space._asteroids[j];
 					ResolveCollision(*space._asteroids[i], *space._asteroids[j]);
-					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space._asteroids[i]->_token);
-					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space._asteroids[j]->_token);
+					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space._asteroids[i]->_tokens[collisionEventID]);
+					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space._asteroids[j]->_tokens[collisionEventID]);
 				}
 			}
 
@@ -282,8 +282,8 @@ int main()
 				collisionAsteroidVsSpaceship._asteroid = space._asteroids[i];
 				collisionAsteroidVsSpaceship._spaceship = spaceship;
 				ResolveCollision(*space._asteroids[i], *spaceship);
-				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space._asteroids[i]->_token);
-				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_token);
+				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space._asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
 			}
 
 			/*for (size_t j = 0; j < rocketSize; ++j)
@@ -305,8 +305,8 @@ int main()
 					collisionAsteroidVsBullet._asteroid = space._asteroids[i];
 					collisionAsteroidVsBullet._bullet = bulletManager.bullets[j];
 					ResolveCollision(*space._asteroids[i], *bulletManager.bullets[j]);
-					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space._asteroids[i]->_token);
-					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager.bullets[j]->_token);
+					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space._asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
+					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager.bullets[j]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
 				}
 			}
 
