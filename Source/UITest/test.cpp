@@ -27,7 +27,7 @@ int main()
 					mui.Get<ScrollBar>("scroll")->ChangeStateGrab(sf::Vector2i(curEvent.mouseButton.x, curEvent.mouseButton.y));
 					if (mui.Get<SfmlButton>("start")->IsClicked(sf::Vector2i(curEvent.mouseButton.x, curEvent.mouseButton.y)))
 					{
-						mui.SetPostion("start", PercentXY((rand() % 1000)/10, (rand() % 1000)/10));
+						mui.SetPostion("start", PercentXY((rand() % 1000)/10.0f, (rand() % 1000)/10.0f));
 						mui.Get<SfmlButton>("start")->SetFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256, rand() % 256));
 					}
 					if (mui.Get<SfmlButton>("test")->IsClicked(sf::Vector2i(curEvent.mouseButton.x, curEvent.mouseButton.y)))

@@ -1,16 +1,5 @@
 #include "Asteroids.h"
 
-//enum class GameActions {
-//	MoveUp,
-//	MoveDown,
-//	MoveLeft,
-//	MoveRight,
-//	Exit,
-//	Choose,
-//	Shoot,
-//	PowerfullShoot,
-//	Console
-//};
 const int WINDOW_WIDTH = 1200;
 const int WINDOW_HEIGHT = 800;
 
@@ -120,34 +109,7 @@ int main()
 	CollisionEventBetweenAsteroidAndSpaceship collisionAsteroidVsSpaceship;
 	CollisionEventBetweenAsteroidAndRocket collisionAsteroidVsRocket;
 	CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
-
-	constexpr size_t numOfObjects = 10;
-	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
-	float           accumulatedFrameTime = 0.f;
-	sf::CircleShape circles[numOfObjects];
-	RigidBody * RigidBodies = new RigidBody[numOfObjects];
-	/*Init rigid bodies and implementation for them*/
-	for (int i = 0; i < numOfObjects / 2; i++)
-	{
-		const int idx = i * 2;
-		RigidBodies[idx].SetRadius(10);
-		RigidBodies[idx].SetCoordinates({ 500, 200.f + 60 * i });
-		RigidBodies[idx].SetSpeed({ 60, 15 });
-		RigidBodies[idx].SetMass(0.005f);
-
-		RigidBodies[idx + 1].SetRadius(25);
-		RigidBodies[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
-		RigidBodies[idx + 1].SetSpeed({ -100, 40});
-		RigidBodies[idx + 1].SetMass(0.01f);
-	}
-
-	for (int i = 0; i < numOfObjects; ++i)
-	{
-		circles[i].setRadius(RigidBodies[i].GetRadius());
-		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
-	}
 	
-
 	/*
 	Game Loop
 	*/
@@ -316,38 +278,6 @@ int main()
 		spaceship->Update(deltaTime);
 		bulletManager.Update(deltaTime);
 
-		//Physics update
-		{
-			/*for (int i = 0; i < numOfObjects; ++i)
-				circles[i].setFillColor(sf::Color::White);
-			while (accumulatedFrameTime >= physicsStepTargetFrameTime)
-			{
-				accumulatedFrameTime -= physicsStepTargetFrameTime;
-				for (int i = 0; i < numOfObjects - 1; ++i)
-				{
-					for (int j = i + 1; j < numOfObjects; ++j)
-					{
-						if (Collided(RigidBodies[i], RigidBodies[j]))
-						{
-							circles[i].setFillColor(sf::Color::Red);
-							circles[j].setFillColor(sf::Color::Red);
-							collisionAsteroidVsAsteroid._asteroid1 = &RigidBodies[i];
-							collisionAsteroidVsAsteroid._asteroid2 = &RigidBodies[j];
-							dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID);
-							ResolveCollision(RigidBodies[i], RigidBodies[j]);
-						}
-					}
-				}
-
-				for (int i = 0; i < numOfObjects; ++i)
-				{
-					RigidBodies[i].Update(physicsStepTargetFrameTime / 1e3);
-					circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
-				}
-			}*/
-		}
-		//...
-
 		rw.clear();
 		//Rendering update
 		//for (int i = 0; i < numOfObjects; ++i)
@@ -365,7 +295,6 @@ int main()
 		rw.display();
 	}
 
-	delete[] RigidBodies;
 	delete cm1;
 	return 0;
 }

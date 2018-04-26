@@ -10,11 +10,11 @@ int main()
 
 	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
 
-	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").getParams()));
-	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").getParams()));
-	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").getParams()));
+	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").GetParams()));
+	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").GetParams()));
+	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").GetParams()));
 
-	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").getParams();
+	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").GetParams();
 
 	resourceConfig.insert(std::make_pair("ImageSequenceResource", imageSequenceCategory));
 
@@ -22,7 +22,7 @@ int main()
 
 	for (auto i : imageSequenceCategory)
 	{
-		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first, cm1->GetCategory("ImageSequenceResource." + i.first).getParams()));
+		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first, cm1->GetCategory("ImageSequenceResource." + i.first).GetParams()));
 	}
 
 	ResourceManager *rm = new ResourceManager(resourceConfig);

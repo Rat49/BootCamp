@@ -81,7 +81,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>UI_d.lib;UI.lib;
+      <AdditionalDependencies>UI_d.lib;
 sfml-window.lib
 ;sfml-system.lib
 ;sfml-graphics.lib;

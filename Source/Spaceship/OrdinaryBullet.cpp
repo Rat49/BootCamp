@@ -37,7 +37,7 @@ const sf::Sprite* OrdinaryBullet::GetSprite()
 void OrdinaryBullet::Draw(sf::RenderWindow& window)
 {
 	sf::CircleShape physicsShape(GetRadius());
-	auto t = GetRadius();
+	//auto t = GetRadius();
 	physicsShape.setPosition(GetCoordinates());
 	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
 	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));

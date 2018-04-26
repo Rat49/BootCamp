@@ -103,7 +103,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Resources;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\ParticleSystem;$(SolutionDir)SFML\include;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -121,7 +121,6 @@
     <ClInclude Include="Spaceship.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="BulletManager.cpp" />
     <ClCompile Include="BulletManagerEvents.cpp" />
     <ClCompile Include="OrdinaryBullet.cpp" />
