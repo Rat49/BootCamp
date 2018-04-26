@@ -9,6 +9,7 @@
 #include "Pool.h"
 #include "DrawableManager.h"
 #include "Mathematics.h"
+#include "WindowResolution.h"
 #include <math.h>
 #include <algorithm>
 
@@ -34,7 +35,7 @@ private:
 	sf::Vector2f _spaceshipDirection;
 	sf::Vector2f _speedDirection;
 	sf::Sprite* _spaceshipSprite;
-	sf::Vector2f _spaceshipScale;
+	//sf::Vector2f _spaceshipScale;
 	AnimationPlayer* _spaceshipAnimation;
 	ImageSequenceResource& _spaceshipAnimationImseq;
 	AnimationPlayer* _spaceshipFlickering;

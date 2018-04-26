@@ -7,7 +7,7 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
-	, _spaceshipScale(0.7f, 0.7f)
+	//, _spaceshipScale(0.7f, 0.7f)
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 	, _spaceshipFlickeringImseq(spaceshipFlickeringImseq)
 	, _rotationAngle(17.0f)
@@ -215,6 +215,24 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	_timeAfterPowerfulShot += deltaTime;
 	_timeAfterBulletShot += deltaTime;
 	RigidBody::Update(deltaTime.asSeconds());
+
+	if(GetX() > WindowResolution::_W)
+	{
+		SetX(0);
+	}
+	if(GetX() < 0)
+	{
+		SetX(WindowResolution::_W);
+	}
+	if(GetY() > WindowResolution::_H)
+	{
+		SetY(0);
+	}
+	if(GetY() < 0)
+	{
+		SetY(WindowResolution::_H);
+	}
+
 	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
 	_spaceshipAnimation->Update(deltaTime);
 	_spaceshipFlickering->Update(deltaTime);
