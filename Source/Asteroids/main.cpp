@@ -107,7 +107,8 @@ int main()
 	/*
 	For Physics
 	*/
-	CollisionEventBetweenAsteroids collisionEvent;
+	CollisionEventBetweenAsteroids collisionAsteroidVsAsteroid;
+	CollisionEventBetweenAsteroidAndSpaceship collisionAsteroidVsSpaceship;
 	constexpr size_t numOfObjects = 10;
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
@@ -253,12 +254,20 @@ int main()
 			{
 				if (Collided(*space._asteroids[i], *space._asteroids[j]))
 				{
-					collisionEvent._asteroid1 = space._asteroids[i];
-					collisionEvent._asteroid2 = space._asteroids[j];
+					collisionAsteroidVsAsteroid._asteroid1 = space._asteroids[i];
+					collisionAsteroidVsAsteroid._asteroid2 = space._asteroids[j];
 					ResolveCollision(*space._asteroids[i], *space._asteroids[j]);
-					dispatcher.Send(collisionEvent, collisionEventID, space._asteroids[i]->_token);
-					dispatcher.Send(collisionEvent, collisionEventID, space._asteroids[j]->_token);
+					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space._asteroids[i]->_token);
+					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space._asteroids[j]->_token);
 				}
+			}
+			if (Collided(*space._asteroids[i],*spaceship))
+			{
+				collisionAsteroidVsSpaceship._asteroid = space._asteroids[i];
+				collisionAsteroidVsSpaceship._spaceship = spaceship;
+				ResolveCollision(*space._asteroids[i], *spaceship);
+				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space._asteroids[i]->_token);
+				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_token);
 			}
 		}
 		space.Update(deltaTime.asMilliseconds() / 1e3);
@@ -281,9 +290,9 @@ int main()
 						{
 							circles[i].setFillColor(sf::Color::Red);
 							circles[j].setFillColor(sf::Color::Red);
-							collisionEvent._asteroid1 = &RigidBodies[i];
-							collisionEvent._asteroid2 = &RigidBodies[j];
-							dispatcher.Send(collisionEvent, collisionEventID);
+							collisionAsteroidVsAsteroid._asteroid1 = &RigidBodies[i];
+							collisionAsteroidVsAsteroid._asteroid2 = &RigidBodies[j];
+							dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID);
 							ResolveCollision(RigidBodies[i], RigidBodies[j]);
 						}
 					}
