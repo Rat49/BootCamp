@@ -1,7 +1,6 @@
 #include "Achievements.h"
 #include "AchievementsManager.h"
 #include "EventSystem.h"
-#include "EventForAchiev.h"
 #include "Physics.h"
 #include "ConfigManager.h"
 #include "UI.h"
@@ -39,7 +38,7 @@
 
 int main()
 {
-	
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
 	AchievementsManager achievementsManager(achievementCM);
+
 }
