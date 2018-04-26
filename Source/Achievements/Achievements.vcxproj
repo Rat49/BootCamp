@@ -58,6 +58,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
     <OutDir>$(SolutionDir)Bin\</OutDir>
+    <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
     <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
