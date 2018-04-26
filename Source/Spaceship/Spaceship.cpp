@@ -55,10 +55,12 @@ void Spaceship::Decelerate()
 
 void Spaceship::PowerfulShoot()
 {
-	if (_timeAfterPowerfulShot.asSeconds() < _rechargeRocketTime.asSeconds())
+	if (_timeAfterPowerfulShot.asSeconds() < _rechargeRocketTime.asSeconds() || _rocketCount <= 0)
 	{
 		return;
 	}
+	--_rocketCount;
+	std::cout << _rocketCount << std::endl;
 
 	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
 
@@ -73,10 +75,12 @@ void Spaceship::PowerfulShoot()
 
 void Spaceship::OrdinaryShoot()
 {
-	if (_timeAfterBulletShot.asSeconds() < _rechargeBulletTime.asSeconds())
+	if (_timeAfterBulletShot.asSeconds() < _rechargeBulletTime.asSeconds() || _bulletCount <= 0)
 	{
 		return;
 	}	
+	_bulletCount -= 3;;
+	std::cout << _bulletCount << std::endl;
 
 	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
 
@@ -199,11 +203,12 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	}
 	if (_input.GetState(static_cast<int>(GameActions::SuperShoot), stateSuperShoot) && stateSuperShoot == ButtonsState::JustPressed)
 	{
-		PowerfulShoot();
+			PowerfulShoot();
+	
 	}
 	if (_input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && (stateShoot == ButtonsState::JustPressed || stateShoot == ButtonsState::Pressed))
 	{
-		OrdinaryShoot();
+			OrdinaryShoot();
 	}
 	//==========================only for test============================================
 	if (_input.GetState(static_cast<int>(GameActions::Choose), stateShoot) && (stateShoot == ButtonsState::JustPressed || stateShoot == ButtonsState::Pressed))
@@ -275,20 +280,20 @@ int Spaceship::GetZOrder() const
 
 void Spaceship::Draw(sf::RenderWindow& window)
 {
-	sf::CircleShape physicsShape(GetRadius());
-	physicsShape.setPosition(GetCoordinates());
-	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
-	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
-	physicsShape.setFillColor(sf::Color::Transparent);
-	physicsShape.setOutlineThickness(1);
+	//sf::CircleShape physicsShape(GetRadius());
+	//physicsShape.setPosition(GetCoordinates());
+	////physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	//physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	//physicsShape.setFillColor(sf::Color::Transparent);
+	//physicsShape.setOutlineThickness(1);
 
-	window.draw(physicsShape);
-	sf::CircleShape circleCenter(1);
-	circleCenter.setPosition(GetX() + GetRadius(),
-		GetY() + GetRadius());
-	circleCenter.setRadius(1.f);
-	circleCenter.setFillColor(sf::Color::Green);
-	window.draw(circleCenter);
+	//window.draw(physicsShape);
+	//sf::CircleShape circleCenter(1);
+	//circleCenter.setPosition(GetX() + GetRadius(),
+	//	GetY() + GetRadius());
+	//circleCenter.setRadius(1.f);
+	//circleCenter.setFillColor(sf::Color::Green);
+	//window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
 }
 

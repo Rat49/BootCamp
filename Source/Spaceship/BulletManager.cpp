@@ -31,7 +31,7 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 
 BulletManager::~BulletManager()
 {
-	for (auto& bullet: _bullets)
+	for (auto& bullet: bullets)
 	{
 		if (!(_ordinaryBulletStorage.Count() == _ordinaryBulletStorage.MaxCount()))
 		{
@@ -40,7 +40,7 @@ BulletManager::~BulletManager()
 		}
 	}
 
-	for (auto& rocket : _rockets)
+	for (auto& rocket : rockets)
 	{
 		if (!(_rocketStorage.Count() == _rocketStorage.MaxCount()))
 		{
@@ -69,9 +69,9 @@ void BulletManager::CreateBullet(const Event& event)
 	OrdinaryBullet* bulletCentr = _ordinaryBulletStorage.Get();
 	bulletCentr->Init(currentEvent._position, currentEvent._direction, _ordinaryBulletTexture.Get());
 
-	_bullets.push_back(bulletLeft);
-	_bullets.push_back(bulletRight);
-	_bullets.push_back(bulletCentr);
+	bullets.push_back(bulletLeft);
+	bullets.push_back(bulletRight);
+	bullets.push_back(bulletCentr);
 }
 
 void BulletManager::DeleteBullet(const Event& event)
@@ -80,7 +80,7 @@ void BulletManager::DeleteBullet(const Event& event)
 
 	OrdinaryBullet* ptrBullet = currentEvent._deletedBullet;
 
-	_bullets.erase(std::remove(_bullets.begin(), _bullets.end(), ptrBullet), _bullets.end());
+	bullets.erase(std::remove(bullets.begin(), bullets.end(), ptrBullet), bullets.end());
 	_ordinaryBulletStorage.Put(ptrBullet);
 	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrBullet));
 		/*_drawableObjects.erase
@@ -99,7 +99,7 @@ void BulletManager::CreateRocket(const Event & event)
 	rocket->Init(currentEvent._position, currentEvent._direction, _rocketTexture.Get(), *rocketParticle);
 
 
-	_rockets.push_back(rocket);
+	rockets.push_back(rocket);
 }
 
 void BulletManager::DeleteRocket(const Event & event)
@@ -108,7 +108,7 @@ void BulletManager::DeleteRocket(const Event & event)
 
 	Rocket* ptrRocket = currentEvent._deletedRocket;
 
-	_rockets.erase(std::remove(_rockets.begin(), _rockets.end(), ptrRocket), _rockets.end());
+	rockets.erase(std::remove(rockets.begin(), rockets.end(), ptrRocket), rockets.end());
 	_rocketStorage.Put(ptrRocket);
 	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrRocket));
 		/*_drawableObjects.erase
@@ -118,11 +118,11 @@ void BulletManager::DeleteRocket(const Event & event)
 
 void BulletManager::Update(const sf::Time& deltaTime)
 {
-	for (auto& bullet : _bullets)
+	for (auto& bullet : bullets)
 	{
 		bullet->Update(deltaTime);
 	}
-	for (auto& rocket : _rockets)
+	for (auto& rocket : rockets)
 	{
 		rocket->Update(deltaTime);
 	}

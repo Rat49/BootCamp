@@ -148,11 +148,26 @@ void Asteroid::OnCollisionHandler(const Event& cEvent)
 	{
 		//Log
 	}
+	 if (_health <= 0)
+	{
+		_life = false;
+ 	}	
+}  
+
+void Asteroid::OnBulletCollisionHandler(const Event& cEvent)
+{
+ 	//std::cout << "|| Collision! Resolve is ";
+	const CollisionEventBetweenAsteroidAndBullet &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndBullet&>(cEvent);
+
+	Asteroid *obj1 = collisionEvent._asteroid;
+	this->_health -= 1000;
+	
 	if (_health <= 0)
 	{
 		_life = false;
-	}	
+	}
 }
+
 
 void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 {		
@@ -181,7 +196,17 @@ void Asteroid::AddToDrawableManager()
 {
 	Object::AddToDrawableManager();
 
-	_token = Dispatcher::getInstance().Connect(EventTypes::collisionEventID, std::bind(&Asteroid::OnCollisionHandler, this, std::placeholders::_1));
+	_token = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidsID,
+		[&](const Event& event)
+	{
+		OnCollisionHandler(event);
+	});
+
+	_token2 = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndBulletID,
+		[&](const Event& event)
+	{
+		OnBulletCollisionHandler(event);
+	});
 }
 
 void Asteroid::Remove()

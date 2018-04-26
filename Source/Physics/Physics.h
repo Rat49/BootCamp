@@ -16,6 +16,7 @@ private:
 public:
 
 	size_t _token;
+	size_t _token2;
 
 	RigidBody();
 	RigidBody(sf::Vector2f, sf::Vector2f, float, float);
