@@ -173,7 +173,11 @@ void Asteroid::AddToDrawableManager()
 {
 	Object::AddToDrawableManager();
 
-	_token = Dispatcher::getInstance().Connect(EventTypes::collisionEventID, std::bind(&Asteroid::OnCollisionHandler, this, std::placeholders::_1));
+	_token = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidsID,
+		[&](const Event& event)
+	{
+		OnCollisionHandler(event);
+	});
 }
 
 void Asteroid::Remove()

@@ -1,5 +1,5 @@
 #include "Spaceship.h"
-
+#include <iostream>
 Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, InputManager & input,
 	ImageSequenceResource &spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
 	: RigidBody(position, speed, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
@@ -235,6 +235,17 @@ void Spaceship::Update(const sf::Time& deltaTime)
 void Spaceship::AddToDrawableManager()
 {
 	DrawableManager::getInstance().AddDrawableObject(this);
+	_tokenForCollisionEventBetweenAsteroidAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
+		[&](const Event& event)
+	{
+		OnCollisionHandler(event);
+	});
+}
+
+void Spaceship::OnCollisionHandler(const Event& event)
+{
+	std::cout << "                     ___________________ Flick" << std::endl;
+	SetFlickeringMode();
 }
 
 int Spaceship::GetZOrder() const

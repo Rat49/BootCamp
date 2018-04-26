@@ -101,6 +101,7 @@ int main()
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
 
 	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), input, *spaceshipImgseq, *flickeringImgseq);
+	//spaceship->SetMass(10000);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture, *rocketTexture);
 	
