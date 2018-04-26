@@ -17,7 +17,7 @@ public:
 private:
 
 	sf::CircleShape _star;
-	int _alfaColor;
+	uint8_t _alfaColor;
 	float _radius;
 	sf::Vector2f GetRandomPosition();
 	void DefaultInit();

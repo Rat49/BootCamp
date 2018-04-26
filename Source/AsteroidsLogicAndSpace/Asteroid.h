@@ -15,11 +15,6 @@ class Asteroid : public Object, public RigidBody
 {
 public:
 
-	//TODO: manager?
-	//static Pool<Asteroid> *poolAsteroid;
-	//TODO: move to physics
-	//static std::vector<RigidBody *> rigidBodies;
-
 	Asteroid();
 
 	void Init(const sf::Sprite &sprite, const sf::Vector2u &size);
@@ -43,7 +38,7 @@ public:
 	sf::Vector2f _linearVelocity;
 	float _angularVelocity;
 	float _rotationSpeed;
-	int _radius;
+	float _radius;
 	float _halfLenght;
 	float _startScale;
 	float _spawnBoundHeight;

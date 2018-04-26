@@ -20,21 +20,21 @@ int main()
 	*/
 
 	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
-	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").getParams()));
-	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").getParams()));
-	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").getParams();
+	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").GetParams()));
+	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").GetParams()));
+	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").GetParams();
 	resourceConfig.insert(std::make_pair("ImageSequenceResource", imageSequenceCategory));
 	std::vector<std::multimap<const std::string, const std::string>> imageSequenceSettings(imageSequenceCategory.size());
 
 	for (auto i : imageSequenceCategory)
 	{
 		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first,
-			cm1->GetCategory("ImageSequenceResource." + i.first).getParams()));
+			cm1->GetCategory("ImageSequenceResource." + i.first).GetParams()));
 	}
-	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").getParams()));
+	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").GetParams()));
 
 
-	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
+	constexpr float physicsStepTargetFrameTime = 1000.0f / 60.f;
 	float           accumulatedFrameTime = 0.f;
 
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
@@ -67,7 +67,7 @@ int main()
 	bool exit = false;
 	while (window.isOpen())
 	{
-		const float delta = clock.restart().asMicroseconds() / 1e3;
+		const float delta = clock.restart().asMicroseconds() / 1000.0f;
 		accumulatedFrameTime += delta;
 
 		sf::Event event;
@@ -111,7 +111,7 @@ int main()
 					}
 				}
 			}
-			space.Update(physicsStepTargetFrameTime/1e3);
+			space.Update(physicsStepTargetFrameTime/1000.0f);
 		}
 
 		dm.DrawScene(window);
