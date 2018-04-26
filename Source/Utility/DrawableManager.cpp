@@ -24,3 +24,15 @@ void DrawableManager::DrawScene(sf::RenderWindow& window)
 		drawableObject->Draw(window);
 	}
 }
+
+void DrawableManager::AddDrawableObject(Drawable* object)
+{
+	_drawableObjects.emplace_back(object);
+	SortDrawableVector();
+}
+
+void DrawableManager::RemoveDrawableObject(Drawable* object)
+{
+	_drawableObjects.erase(std::find(_drawableObjects.begin(), _drawableObjects.end(), object));
+	SortDrawableVector();
+}

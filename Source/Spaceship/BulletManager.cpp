@@ -82,9 +82,11 @@ void BulletManager::DeleteBullet(const Event& event)
 
 	_bullets.erase(std::remove(_bullets.begin(), _bullets.end(), ptrBullet), _bullets.end());
 	_ordinaryBulletStorage.Put(ptrBullet);
-	DrawableManager::getInstance()._drawableObjects.erase
+	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrBullet));
+		/*_drawableObjects.erase
 	(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrBullet)),
 			DrawableManager::getInstance()._drawableObjects.end());
+	*/
 }
 
 void BulletManager::CreateRocket(const Event & event)
@@ -108,9 +110,10 @@ void BulletManager::DeleteRocket(const Event & event)
 
 	_rockets.erase(std::remove(_rockets.begin(), _rockets.end(), ptrRocket), _rockets.end());
 	_rocketStorage.Put(ptrRocket);
-	DrawableManager::getInstance()._drawableObjects.erase
+	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrRocket));
+		/*_drawableObjects.erase
 	(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrRocket)),
-		DrawableManager::getInstance()._drawableObjects.end());
+		DrawableManager::getInstance()._drawableObjects.end());*/
 }
 
 void BulletManager::Update(const sf::Time& deltaTime)

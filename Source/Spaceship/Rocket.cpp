@@ -91,8 +91,7 @@ bool Rocket::GetLifeStatus() const
 
 void Rocket::AddToDrawableManager()
 {
-	DrawableManager::getInstance()._drawableObjects.push_back(this);
-	DrawableManager::getInstance().SortDrawableVector();
+	DrawableManager::getInstance().AddDrawableObject(this);
 }
 
 int Rocket::GetZOrder() const

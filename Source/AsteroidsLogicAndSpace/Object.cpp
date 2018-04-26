@@ -7,15 +7,12 @@ sf::Vector2u Object::GetSizeWindow() const
 
 void Object::AddToDrawableManager()
 {
-	DrawableManager::getInstance()._drawableObjects.push_back(this);
-	DrawableManager::getInstance().SortDrawableVector();
+	DrawableManager::getInstance().AddDrawableObject(this);
 }
 
 void Object::Remove()
 {
-	std::vector<Drawable*> &drawableObjects = DrawableManager::getInstance()._drawableObjects;
-	drawableObjects.erase(std::find(drawableObjects.begin(), drawableObjects.end(), this));
-	DrawableManager::getInstance().SortDrawableVector();
+	DrawableManager::getInstance().RemoveDrawableObject(this);
 }
 
 int Object::GetZOrder() const

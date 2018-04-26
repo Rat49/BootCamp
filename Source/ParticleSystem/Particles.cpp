@@ -204,8 +204,7 @@ void ParticleSystem::Draw(sf::RenderWindow & window)
 
 void ParticleSystem::AddToDrawableManager()
 {
-	DrawableManager::getInstance()._drawableObjects.push_back(this);
-	DrawableManager::getInstance().SortDrawableVector();
+	DrawableManager::getInstance().AddDrawableObject(this);
 }
 
 int ParticleSystem::GetZOrder() const

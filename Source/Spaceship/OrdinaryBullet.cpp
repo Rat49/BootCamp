@@ -55,8 +55,7 @@ void OrdinaryBullet::Reset()
 
 void OrdinaryBullet::AddToDrawableManager()
 {
-	DrawableManager::getInstance()._drawableObjects.push_back(this);
-	DrawableManager::getInstance().SortDrawableVector();
+	DrawableManager::getInstance().AddDrawableObject(this);
 }
 
 int OrdinaryBullet::GetZOrder() const
