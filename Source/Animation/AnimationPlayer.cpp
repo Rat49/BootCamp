@@ -1,52 +1,51 @@
 #include "AnimationPlayer.h"
-#include "ResourceManager.h"
-
-AnimationPlayer::AnimationPlayer(sf::Sprite& animatedSprite, ImageSequenceResource& animation, bool isLooped)
-{
-	_animation = &animation;
-	_animatedSprite = &animatedSprite;
-	_spriteSheet = _animation->Get();
-	_isLooped = isLooped;
-	_currentFrame = 0;
-	_isStopped = true;
-	_framesCount = _spriteSheet.size();
-	_animationTime = _animation->GetTime();
-	_frameTime = _animationTime / static_cast<float>(_framesCount);
-	_playingTime = sf::seconds(0.0f);
-	_defaultAnimationTime = _animationTime;
-}
+#include <SFML\Graphics.hpp>
 
 AnimationPlayer::AnimationPlayer()
 {
-	
+	Init(nullptr, nullptr, false);
+}
+
+AnimationPlayer::AnimationPlayer(sf::Sprite* animatedSprite, ImageSequenceResource* animation, bool isLooped)
+{
+	Init(animatedSprite, animation, isLooped);
 }
 
 void AnimationPlayer::Init(sf::Sprite* animatedSprite, ImageSequenceResource* animation, bool isLooped)
 {
 	_animation = animation;
 	_animatedSprite = animatedSprite;
-	_spriteSheet = _animation->Get();
+	_spriteSheet = _animation == nullptr ? std::vector<sf::Texture>() : _animation->Get();
 	_isLooped = isLooped;
 	_currentFrame = 0;
 	_isStopped = true;
 	_framesCount = _spriteSheet.size();
-	_animationTime = _animation->GetTime();
-	_frameTime = _animationTime / static_cast<float>(_framesCount);
+	_animationTime = _animation == nullptr ? sf::Time::Zero : _animation->GetTime();
+	_frameTime = _framesCount == 0 ? sf::Time::Zero : (_animationTime / static_cast<float>(_framesCount));
 	_playingTime = sf::seconds(0.0f);
 	_defaultAnimationTime = _animationTime;
 }
 
+AnimationPlayer::~AnimationPlayer()
+{
+	_animation->DecRefCounter();
+}
+
 void AnimationPlayer::Start()
 {
+	assert(_framesCount != 0);
+
 	_animationTime = _defaultAnimationTime;
-	_frameTime = _animationTime / static_cast<float> (_framesCount);
+	_frameTime = _animationTime / static_cast<float>(_framesCount);
 	_isStopped = false;
 }
 
 void AnimationPlayer::Start(sf::Time animationTime)
 {
+	assert(_framesCount != 0);
+
 	_animationTime = animationTime;
-	_frameTime = _animationTime / static_cast<float> (_framesCount);
+	_frameTime = _animationTime / static_cast<float>(_framesCount);
 	_isStopped = false;
 }
 
@@ -70,7 +69,6 @@ void AnimationPlayer::Reset()
 	_isStopped = false;
 }
 
-
 void AnimationPlayer::Update(sf::Time deltaTime)
 {	
 	if (_isStopped)
@@ -79,27 +77,31 @@ void AnimationPlayer::Update(sf::Time deltaTime)
 	}
 
 	_playingTime += deltaTime;
-	if (_playingTime > _frameTime)
+	if (_playingTime <= _frameTime)
 	{
-		_playingTime = sf::milliseconds(0);
-		int64_t frameNumber = _currentFrame + 1;
+		return;
+	}
 
-		if (_isLooped)
+	assert(_animatedSprite != nullptr);
+
+	_playingTime = sf::milliseconds(0);
+	int64_t frameNumber = _currentFrame + 1;
+
+	if (_isLooped)
+	{
+		_currentFrame = frameNumber == _framesCount ? 0 : frameNumber;
+		_animatedSprite->setTexture(_spriteSheet[_currentFrame], true);
+	}
+	else
+	{
+		if (frameNumber < _framesCount)
 		{
-			_currentFrame = frameNumber == _framesCount ? 0 : frameNumber;
+			_currentFrame = frameNumber;
 			_animatedSprite->setTexture(_spriteSheet[_currentFrame], true);
 		}
 		else
 		{
-			if (frameNumber < _framesCount)
-			{
-				_currentFrame = frameNumber;
-				_animatedSprite->setTexture(_spriteSheet[_currentFrame], true);
-			}
-			else
-			{
-				Stop();
-			}
+			Stop();
 		}
 	}
 }
@@ -109,7 +111,7 @@ void AnimationPlayer::SetLooped(bool isLooped)
 	_isLooped = isLooped;
 }
 
-sf::Sprite* AnimationPlayer::GetSprite()
+sf::Sprite* AnimationPlayer::GetSprite() const
 {
 	return _animatedSprite;
 }
@@ -122,9 +124,4 @@ int AnimationPlayer::GetWidth() const
 int AnimationPlayer::GetHeight() const
 {
 	return _animation->GetHeight();
-}
-
-AnimationPlayer::~AnimationPlayer()
-{
-	_animation->DecRefCounter();
 }

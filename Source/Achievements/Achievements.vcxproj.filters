@@ -23,8 +23,5 @@
     <ClInclude Include="Achievements.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EventForAchiev.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

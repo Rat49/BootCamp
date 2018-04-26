@@ -6,13 +6,14 @@
 
 class DebugCommandManager
 {
-	Parser _parser;
-	Token_t _token;
-
 public:
 	DebugCommandManager();
 	~DebugCommandManager();
 	void handleConsoleCommand(std::string& ConsoleCommand);
 	void addConsoleCommand(const ConsoleCommand& command);
+
+private:
+	Parser _parser;
+	Token_t _token;
 };
 
