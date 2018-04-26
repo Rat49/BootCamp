@@ -132,6 +132,7 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ParticleAssets.h" />
     <ClInclude Include="Particles.h" />
   </ItemGroup>
   <ItemGroup>

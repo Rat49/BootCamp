@@ -7,7 +7,7 @@
 
 void Asteroid::DefaultInit()
 {
-	_angularVelocity = 0;
+	_angularVelocity = 0.0f;
 	_rotationSpeed = 0;
 	_sprite.setRotation(_angularVelocity);
 
@@ -17,7 +17,7 @@ void Asteroid::DefaultInit()
 	_sprite.setPosition(sf::Vector2f(0, 0));
 	SetCoordinates(sf::Vector2f(0, 0));
 
-	_radius = 1;
+	_radius = 1.0f;
 	SetRadius(_radius);
 
 	_type = AsteroidType::Small;
@@ -26,21 +26,29 @@ void Asteroid::DefaultInit()
 	_sprite.setScale(_startScale, _startScale);
 	_sprite.setOrigin(0, 0);
 
+	_spawnBoundHeight = 100.0f;
+	_spawnBoundWidth = 100.0f;
+
 	SetMass(0.005f);
 	
 }
 
 void Asteroid::RandomInit()
 {
-	_angularVelocity = GetRandomValue(-15, 15);
-	_rotationSpeed = GetRandomValue(1, 80);
+	_angularVelocity = GetFloatRandomValue(-15.0, 15.0);
+	_rotationSpeed = GetFloatRandomValue(1, 80);
 	_sprite.setRotation(_angularVelocity);
 		
-	_linearVelocity = sf::Vector2f(GetRandomValue(-300, 300), GetRandomValue(-300, 300));
+	_linearVelocity = sf::Vector2f(GetFloatRandomValue(-300, 300), GetFloatRandomValue(-300, 300));
 	SetSpeed(_linearVelocity);
 
-	_sprite.setPosition(sf::Vector2f(GetRandomValue(0, GetSizeWindow().x), GetRandomValue(0, GetSizeWindow().y)));
-	SetCoordinates(sf::Vector2f(GetRandomValue(0, GetSizeWindow().x), GetRandomValue(0, GetSizeWindow().y)));
+	float positionBoundX = GetFloatRandomValue(-_spawnBoundWidth, _spawnBoundWidth);
+	float positionBoundY = GetFloatRandomValue(-_spawnBoundHeight, _spawnBoundHeight);
+	float positionX = positionBoundX > 0 ? GetSizeWindow().x + positionBoundX : positionBoundX;
+	float positionY = positionBoundY > 0 ? GetSizeWindow().y + positionBoundY : positionBoundY;
+
+	_sprite.setPosition(sf::Vector2f(positionX, positionY));
+	SetCoordinates(sf::Vector2f(positionX, positionY));
 }
 
 void Asteroid::SetParametersFromType(AsteroidType type)
@@ -99,8 +107,8 @@ void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &posit
 	_sprite.setOrigin(_sprite.getLocalBounds().width / 2, _sprite.getLocalBounds().width / 2);
 	_sprite.setScale(sf::Vector2f(_startScale, _startScale));
 
-	_sprite.setPosition(sf::Vector2f(GetRandomValue(position.x - 50.0, position.x + 50.0), GetRandomValue(position.y - 50.0, position.y + 50.0)));
-	SetCoordinates(sf::Vector2f(GetRandomValue(position.x - 50.0, position.x + 50.0), GetRandomValue(position.y - 50.0, position.y + 50.0)));
+	_sprite.setPosition(sf::Vector2f(GetFloatRandomValue(position.x - 50.0f, position.x + 50.0f), GetFloatRandomValue(position.y - 50.0f, position.y + 50.0f)));
+	SetCoordinates(_sprite.getPosition());
 
 	_halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
 	
@@ -140,11 +148,38 @@ void Asteroid::OnCollisionHandler(const Event& cEvent)
 	{
 		//Log
 	}
+	 if (_health <= 0)
+	{
+		_life = false;
+ 	}	
+}  
+
+
+void Asteroid::OnRocketCollisionHandler(const Event& cEvent)
+{
+	const CollisionEventBetweenAsteroidAndRocket &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndRocket&>(cEvent);
+	
+	this->_health -= 1000;
+
 	if (_health <= 0)
 	{
 		_life = false;
-	}	
+	}
 }
+
+
+void Asteroid::OnBulletCollisionHandler(const Event& cEvent)
+{
+	const CollisionEventBetweenAsteroidAndBullet &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndBullet&>(cEvent);
+
+	this->_health -= 1000;
+	
+	if (_health <= 0)
+	{
+		_life = false;
+	}
+}
+
 
 void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 {		
@@ -165,6 +200,7 @@ void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 
 	_halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
 
+	_zOrder = 2;
 	AddToDrawableManager();
 }
 
@@ -172,14 +208,31 @@ void Asteroid::AddToDrawableManager()
 {
 	Object::AddToDrawableManager();
 
-	_token = Dispatcher::getInstance().Connect(EventTypes::collisionEventID, std::bind(&Asteroid::OnCollisionHandler, this, std::placeholders::_1));
+	_tokens[collisionEventBetweenAsteroidsID] = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidsID,
+		[&](const Event& event)
+	{
+		OnCollisionHandler(event);
+	});
+
+	_tokens[collisionEventBetweenAsteroidAndBulletID] = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndBulletID,
+		[&](const Event& event)
+	{
+		OnBulletCollisionHandler(event);
+	});
+
+	_tokens[collisionEventBetweenAsteroidAndRocketID] = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndRocketID,
+		[&](const Event& event)
+	{
+		OnRocketCollisionHandler(event);
+	});
 }
 
 void Asteroid::Remove()
 {
 	Object::Remove();
 
-	Dispatcher::getInstance().Disconnect(EventTypes::collisionEventID, _token);
+	Dispatcher::getInstance().Disconnect(EventTypes::collisionEventBetweenAsteroidsID, _tokens[collisionEventBetweenAsteroidsID]);
+	Dispatcher::getInstance().Disconnect(EventTypes::collisionEventBetweenAsteroidAndBulletID, _tokens[collisionEventBetweenAsteroidAndBulletID]);
 }
 
 void Asteroid::Update(float time)
@@ -228,18 +281,18 @@ void Asteroid::Draw(sf::RenderWindow &window)
 	switch (_type)
 	{
 	case AsteroidType::Small:
-		color = _health / 200.0 * 255.0;
+		color = _health / 200.0f * 255.0f;
 		break;
 	case AsteroidType::Middle:
-		color = _health / 300.0 * 255.0;
+		color = _health / 300.0f * 255.0f;
 		break;
 	case AsteroidType::Big:
 	default:
-		color = _health / 400.0 * 255.0;
+		color = _health / 400.0f * 255.0f;
 		break;
 	}
 
-	physicsShape.setOutlineColor(sf::Color(255, color, color, 255));
+	physicsShape.setOutlineColor(sf::Color(255, static_cast<uint8_t>(color), static_cast<uint8_t>(color), 255));
 	physicsShape.setFillColor(sf::Color::Transparent);
 	physicsShape.setOutlineThickness(1);
 

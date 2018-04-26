@@ -75,7 +75,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\Particle;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\</AdditionalLibraryDirectories>
@@ -88,7 +88,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\Particle;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\</AdditionalLibraryDirectories>
@@ -103,7 +103,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -116,9 +116,11 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="BulletManager.h" />
     <ClInclude Include="BulletManagerEvents.h" />
+    <ClInclude Include="GameOverEvent.h" />
     <ClInclude Include="OrdinaryBullet.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Spaceship.h" />
+    <ClInclude Include="SpaceshipRespawnEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BulletManager.cpp" />

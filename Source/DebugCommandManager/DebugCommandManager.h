@@ -1,7 +1,7 @@
 #pragma once
 #include "Dispatcher.h"
-#include "ConsoleCommands.h"
 #include "Parser.h"
+#include "ConsoleCommands.h"
 #include <functional> 
 
 class DebugCommandManager

@@ -26,15 +26,15 @@ void Space::AddSomeAsteroids(const int count, const sf::Sprite& sprite)
 	{
 		Asteroid* asteroid = _poolAsteroid.Get();
 		asteroid->Init(sprite, _sizeSpace);
-		_asteroids.push_back(asteroid);
+		asteroids.push_back(asteroid);
 	}
 }
 
 void Space::Update(const float physicsStepTargetFrameTime)
 {
-	for (size_t i = 0; i < _asteroids.size(); ++i)
+	for (size_t i = 0; i < asteroids.size(); ++i)
 	{ 
-		Asteroid *asteroid = _asteroids[i];
+		Asteroid *asteroid = asteroids[i];
 		if (asteroid->_life == false)
 		{
 			if (asteroid->_type != AsteroidType::Small)
@@ -45,7 +45,7 @@ void Space::Update(const float physicsStepTargetFrameTime)
 					{
 						Asteroid* asteroidNew = _poolAsteroid.Get();
 						asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace);
-						_asteroids.push_back(asteroidNew);
+						asteroids.push_back(asteroidNew);
 					}
 				}
 			}
@@ -54,7 +54,7 @@ void Space::Update(const float physicsStepTargetFrameTime)
 			{
 				asteroid->Remove();
 				_poolAsteroid.Put(asteroid);
-				_asteroids.erase(std::find(_asteroids.begin(), _asteroids.end(), asteroid));
+				asteroids.erase(std::find(asteroids.begin(), asteroids.end(), asteroid));
 				--i;
 			}
 		}
@@ -71,7 +71,7 @@ void Space::Update(const float physicsStepTargetFrameTime)
 Space::~Space()
 {
 
-	for (auto &asteroid : _asteroids)
+	for (auto &asteroid : asteroids)
 	{
 		if (!(_poolAsteroid.Count() == _poolAsteroid.MaxCount()))
 		{

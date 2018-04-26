@@ -1,6 +1,7 @@
 #pragma once
 #include "Asteroid.h"
 #include "Star.h"
+#include "Ammunition.h"
 
 class Space
 {
@@ -11,7 +12,8 @@ public:
 	void AddSomeAsteroids(const int count, const sf::Sprite& sprite);
 	void Update(const float physicsStepTargetFrameTime);
 
-	std::vector<Asteroid *> _asteroids;
+	std::vector<Asteroid *> asteroids;
+	//Ammunition ammunition;
 
 	~Space();
 private:

@@ -5,6 +5,10 @@
 #include <cmath>
 #include <SFML/Graphics.hpp>
 #include "WindowResolution.h"
+#include <functional>
+
+using EventID_t = int;
+using Token_t = std::size_t;
 
 class RigidBody {
 private:
@@ -14,8 +18,8 @@ private:
 	float _mass;
 
 public:
-
-	size_t _token;
+	
+	std::map<EventID_t, Token_t> _tokens;
 
 	RigidBody();
 	RigidBody(sf::Vector2f, sf::Vector2f, float, float);

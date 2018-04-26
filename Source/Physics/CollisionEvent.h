@@ -6,6 +6,7 @@ class Spaceship;
 class Asteroid;
 class Rocket;
 class OrdinaryBullet;
+class Ammunition;
 
 class CollisionEventBetweenAsteroids : public Event
 {
@@ -24,7 +25,7 @@ public:
 class CollisionEventBetweenAsteroidAndRocket : public Event
 {
 public:
-	Rocket* _bullet;
+	Rocket* _rocket;
 	Asteroid* _asteroid;
 };
 
@@ -35,3 +36,23 @@ public:
 	Asteroid* _asteroid;
 };
 
+class CollisionEventBetweenAmmunitionAndSpaceship : public Event
+{
+public:
+	Spaceship * _spaceship;
+	Ammunition* ammunition;
+};
+
+class CollisionEventBetweenAmmunitionAndBullet : public Event
+{
+public:
+	OrdinaryBullet * _bullet;
+	Ammunition* ammunition;
+};
+
+class CollisionEventBetweenAmmunitionAndRocket : public Event
+{
+public:
+	Rocket * _rocket;
+	Ammunition* ammunition;
+};

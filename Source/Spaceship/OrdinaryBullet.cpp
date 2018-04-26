@@ -5,6 +5,7 @@ OrdinaryBullet::OrdinaryBullet()
 	, _ordinaryBulletSprite()
 	, _bulletTexture()
 	, _bulletScale(1.0f, 1.0f)
+	, _halfSpriteLength(0.0f)
 {
 	_zOrder = 4;
 }
@@ -13,7 +14,9 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 {
 	AddToDrawableManager();
 	
-	_bulletScale = sf::Vector2f(0.5f, 0.5f);
+	SetRadius(5);
+	Bullet::_damage = 400;
+	_bulletScale = sf::Vector2f(0.3f, 0.3f);
 	_bulletTexture = &bulletTexture;
 	_ordinaryBulletSprite.setTexture(*_bulletTexture);
 	_ordinaryBulletSprite.setScale(_bulletScale);
@@ -23,8 +26,9 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 		degreeAngle += 180.0f;
 	
 	_ordinaryBulletSprite.setRotation(degreeAngle);
+	_halfSpriteLength = GetLenght(sf::Vector2f(_bulletTexture->getSize())) / 2.0f;
+
 	SetSpeed(bulletDirection * _speedValuePixelsPerSecond);
-	//???
 	SetCoordinates(sf::Vector2f(position.x, position.y));
 }
 
@@ -33,8 +37,28 @@ const sf::Sprite* OrdinaryBullet::GetSprite()
 	return &_ordinaryBulletSprite;
 }
 
+const float OrdinaryBullet::GetHalfSpriteLength()
+{
+	return _halfSpriteLength;
+}
+
 void OrdinaryBullet::Draw(sf::RenderWindow& window)
 {
+	sf::CircleShape physicsShape(GetRadius());
+	//auto t = GetRadius();
+	physicsShape.setPosition(GetCoordinates());
+	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	physicsShape.setFillColor(sf::Color::Transparent);
+	physicsShape.setOutlineThickness(1);
+
+	window.draw(physicsShape);
+	sf::CircleShape circleCenter(1);
+	circleCenter.setPosition(GetX() + GetRadius(),
+		GetY() + GetRadius());
+	circleCenter.setRadius(1.f);
+	circleCenter.setFillColor(sf::Color::Green);
+	window.draw(circleCenter);
 	window.draw(_ordinaryBulletSprite);
 }
 
@@ -55,8 +79,7 @@ void OrdinaryBullet::Reset()
 
 void OrdinaryBullet::AddToDrawableManager()
 {
-	DrawableManager::getInstance()._drawableObjects.push_back(this);
-	DrawableManager::getInstance().SortDrawableVector();
+	DrawableManager::getInstance().AddDrawableObject(this);
 }
 
 int OrdinaryBullet::GetZOrder() const

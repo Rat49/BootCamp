@@ -10,6 +10,8 @@ public:
 
 	void SortDrawableVector();
 	void DrawScene(sf::RenderWindow& window);
+	void AddDrawableObject(Drawable* object);
+	void RemoveDrawableObject(Drawable* object);
 
 private:
 	DrawableManager(DrawableManager const&) = delete;

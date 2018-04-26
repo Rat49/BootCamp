@@ -1,17 +1,7 @@
 #include "Asteroids.h"
 
-//enum class GameActions {
-//	MoveUp,
-//	MoveDown,
-//	MoveLeft,
-//	MoveRight,
-//	Exit,
-//	Choose,
-//	Shoot,
-//	PowerfullShoot,
-//	Console
-//};
-
+const int WINDOW_WIDTH = 1200;
+const int WINDOW_HEIGHT = 800;
 
 std::string GetNameForState(ButtonsState bState) {
 
@@ -44,17 +34,17 @@ int main()
 	
 
 	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
-	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").getParams()));
-	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").getParams()));
-	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").getParams()));
-	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").getParams();
+	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").GetParams()));
+	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").GetParams()));
+	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").GetParams()));
+	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").GetParams();
 	resourceConfig.insert(std::make_pair("ImageSequenceResource", imageSequenceCategory));
 	std::vector<std::multimap<const std::string, const std::string>> imageSequenceSettings(imageSequenceCategory.size());
 
 	for (auto i : imageSequenceCategory)
 	{
 		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first, 
-			cm1->GetCategory("ImageSequenceResource." + i.first).getParams()));
+			cm1->GetCategory("ImageSequenceResource." + i.first).GetParams()));
 	}
 
 	ResourceManager *rm = new ResourceManager(resourceConfig);
@@ -65,7 +55,7 @@ int main()
 
 	std::multimap<int, ButtonKey_t> actions;
 	LogCategory category = cm1->GetCategory("Input");
-	std::multimap<const std::string, const std::string> inputCategory = category.getParams();
+	std::multimap<const std::string, const std::string> inputCategory = category.GetParams();
 	for (auto i : inputCategory)
 	{
 		int a = atoi(i.first.c_str());
@@ -90,6 +80,14 @@ int main()
 	ButtonsState stateChoose;
 	ButtonsState stateShoot;
 	ButtonsState statePowerfullShoot;
+	
+	/*
+	For Audio
+	*/
+
+	//AudioResource* shootingSound = rm->GetResource<AudioResource>("piupiu");
+	//AudioResource* explosionSound = rm->GetResource<AudioResource>("booom");
+	
 	/*
 	For SpaceShip
 	*/
@@ -99,14 +97,18 @@ int main()
 	TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
 
-	Spaceship* spaceship = new Spaceship(sf::Vector2f(450.0f, 450.0f), sf::Vector2f(0.0f, 15.0f), input, *spaceshipImgseq, *flickeringImgseq);
+	std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
+	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture, *rocketTexture);
-
+	
 	/*
 	For Physics
 	*/
-	CollisionEventBetweenAsteroids collisionEvent;
+	CollisionEventBetweenAsteroids collisionAsteroidVsAsteroid;
+	CollisionEventBetweenAsteroidAndSpaceship collisionAsteroidVsSpaceship;
+	CollisionEventBetweenAsteroidAndRocket collisionAsteroidVsRocket;
+	CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
 	constexpr size_t numOfObjects = 10;
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
@@ -132,8 +134,20 @@ int main()
 		circles[i].setRadius(RigidBodies[i].GetRadius());
 		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
 	}
-	
 
+	/*
+	DebugCommandManager manager
+	*/
+	DebugCommandManager manager;
+	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
+	{
+		spaceship->SetDamage(0);
+	} });
+	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
+	{
+		spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
+	} });
+	
 	/*
 	Game Loop
 	*/
@@ -143,6 +157,28 @@ int main()
 	WindowResolution::SetResolution(rw);
 	sf::Event sysEvent;
 
+	/*
+	For Space
+	*/
+
+	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroidTexture");
+	TextureResource* bulletBig = rm->GetResource<TextureResource>("bulletBig");
+
+	sf::Texture asteroidTexture = asteroid->Get();
+	sf::Sprite spriteAsteroid(asteroidTexture);
+
+	std::srand(std::time(nullptr));
+
+	const int totalCountAsteroids = 100;
+	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
+	Space space(totalCountAsteroids, totalCountStar, rw.getSize());
+
+
+	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50)-300;
+	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 5;
+
+	space.AddSomeStars(_nStars);
+	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
 	/*
 	For Debug Console
 	*/
@@ -158,8 +194,6 @@ int main()
 
 	while (rw.isOpen())
 	{
-		/*const float delta = clock.restart().asMicroseconds() / 1e3;
-		accumulatedFrameTime += delta;*/
 
 		auto now = clock.getElapsedTime();
 		deltaTime = now - timer;
@@ -226,40 +260,73 @@ int main()
 		//Audio update
 		//Logic update
 
-		spaceship->Update(deltaTime);
-		bulletManager.Update(deltaTime);
+		size_t n = space.asteroids.size() - 1;
+		size_t m = space.asteroids.size();
+		size_t bulletsSize = bulletManager.bullets.size();
+		size_t rocketSize = bulletManager.rockets.size();
 
-		//Physics update
+		for (size_t i = 0; i < n; ++i)
 		{
-			/*for (int i = 0; i < numOfObjects; ++i)
-				circles[i].setFillColor(sf::Color::White);
-			while (accumulatedFrameTime >= physicsStepTargetFrameTime)
+			for (size_t j = i + 1; j < m; ++j)
 			{
-				accumulatedFrameTime -= physicsStepTargetFrameTime;
-				for (int i = 0; i < numOfObjects - 1; ++i)
+				if (Collided(*space.asteroids[i], *space.asteroids[j]))
 				{
-					for (int j = i + 1; j < numOfObjects; ++j)
-					{
-						if (Collided(RigidBodies[i], RigidBodies[j]))
+					collisionAsteroidVsAsteroid._asteroid1 = space.asteroids[i];
+					collisionAsteroidVsAsteroid._asteroid2 = space.asteroids[j];
+					ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
+					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
+					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
+				}
+			}
+
+			if (Collided(*space.asteroids[i],*spaceship))
+			{
+				collisionAsteroidVsSpaceship._asteroid = space.asteroids[i];
+				collisionAsteroidVsSpaceship._spaceship = spaceship;
+				ResolveCollision(*space.asteroids[i], *spaceship);
+				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+			}
+
+			for (size_t j = 0; j < rocketSize; ++j)
+			{
+				if (Collided(*space.asteroids[i], *bulletManager.rockets[j]))
+				{
+					collisionAsteroidVsRocket._asteroid = space.asteroids[i];
+					collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
+					ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
+					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+					for (size_t k = 0; k < n; ++k) {
+						if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
 						{
-							circles[i].setFillColor(sf::Color::Red);
-							circles[j].setFillColor(sf::Color::Red);
-							collisionEvent._asteroid1 = &RigidBodies[i];
-							collisionEvent._asteroid2 = &RigidBodies[j];
-							dispatcher.Send(collisionEvent, collisionEventID);
-							ResolveCollision(RigidBodies[i], RigidBodies[j]);
+							collisionAsteroidVsRocket._asteroid = space.asteroids[k];
+							collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
+							ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
+							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 						}
 					}
 				}
+			}
 
-				for (int i = 0; i < numOfObjects; ++i)
+			for (size_t j = 0; j < bulletsSize; ++j)
+			{
+				if (Collided(*space.asteroids[i], *bulletManager.bullets[j]))
 				{
-					RigidBodies[i].Update(physicsStepTargetFrameTime / 1e3);
-					circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
+					collisionAsteroidVsBullet._asteroid = space.asteroids[i];
+					collisionAsteroidVsBullet._bullet = bulletManager.bullets[j];
+					ResolveCollision(*space.asteroids[i], *bulletManager.bullets[j]);
+					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
+					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager.bullets[j]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
 				}
-			}*/
+			}
+
 		}
-		//...
+		space.Update(deltaTime.asMilliseconds() / 1e3);
+
+		spaceship->Update(deltaTime);
+		bulletManager.Update(deltaTime);
 
 		rw.clear();
 		//Rendering update
@@ -278,7 +345,6 @@ int main()
 		rw.display();
 	}
 
-	delete[] RigidBodies;
 	delete cm1;
 	return 0;
 }

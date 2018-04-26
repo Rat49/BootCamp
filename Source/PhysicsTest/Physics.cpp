@@ -1,5 +1,5 @@
 #include "Physics.h"
-#include "CollisionEvent.h"
+#include "CollisionEventForTest.h"
 #include "EventSystem.h"
 //#include "CollisionEventPhysicstest.h"
 
@@ -16,7 +16,7 @@ void             MainLoop(RigidBody * RigidBodysFunc)
   sf::CircleShape circles[numOfObjects];
   sf::CircleShape circlesCenters[numOfObjects];
 
-  CollisionEventBetweenAsteroids collisionEvent;
+  CollisionEventForTest collisionEvent;
   Dispatcher &   dispatcher = Dispatcher::getInstance();
 
   for(int i = 0; i < numOfObjects; ++i)
@@ -28,11 +28,11 @@ void             MainLoop(RigidBody * RigidBodysFunc)
     circlesCenters[i].setRadius(1.f);
     circlesCenters[i].setFillColor(sf::Color::Green);
   }
-  constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
+  constexpr float physicsStepTargetFrameTime = 1000.0f / 60.f;
   float           accumulatedFrameTime       = 0.f;
   while(app.isOpen())
   {
-    const float delta = clock.restart().asMicroseconds() / 1e3;
+    const float delta = clock.restart().asMicroseconds() / 1000.0f;
     accumulatedFrameTime += delta;
     sf::Event event;
     while(app.pollEvent(event))
@@ -55,10 +55,9 @@ void             MainLoop(RigidBody * RigidBodysFunc)
             {
               circles[i].setFillColor(sf::Color::Red);
               circles[j].setFillColor(sf::Color::Red);
-			  collisionEvent._asteroid1 = &RigidBodysFunc[i];
-			  collisionEvent._asteroid2 = &RigidBodysFunc[j];
-              //collisionEvent.setObjs(RigidBodysFunc[i], RigidBodysFunc[j]);
-              dispatcher.Send(collisionEvent, EventTypes::collisionEventBetweenAsteroidsID);
+			  collisionEvent._rigidBody1 = &RigidBodysFunc[i];
+			  collisionEvent._rigidBody2 = &RigidBodysFunc[j];
+              dispatcher.Send(collisionEvent, firstEventID); //EventType and ID doesn't match in test, but should in 
               ResolveCollision(RigidBodysFunc[i], RigidBodysFunc[j]);
           }
         }
@@ -66,7 +65,7 @@ void             MainLoop(RigidBody * RigidBodysFunc)
 
       for(int i = 0; i < numOfObjects; ++i)
       {
-        RigidBodysFunc[i].Update(physicsStepTargetFrameTime / 1e3);
+        RigidBodysFunc[i].Update(physicsStepTargetFrameTime / 1000.0f);
         circles[i].setPosition(RigidBodysFunc[i].GetX(), RigidBodysFunc[i].GetY());
         circlesCenters[i].setPosition(RigidBodysFunc[i].GetX() + RigidBodysFunc[i].GetRadius(),
                                       RigidBodysFunc[i].GetY() + RigidBodysFunc[i].GetRadius());
