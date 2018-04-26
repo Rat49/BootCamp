@@ -1,11 +1,12 @@
 #pragma once
 #include <string>
 #include <ctime>
+#include <map>
 
 class Achievement
 {
 public:
-	Achievement();
+	Achievement(std::multimap<const std::string, const std::string>& AchievementList);
 	~Achievement();
 
 	int GetIdAchievement() const;

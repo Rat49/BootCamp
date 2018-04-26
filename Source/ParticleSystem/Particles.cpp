@@ -160,22 +160,22 @@ void ParticleSystem::ResetParticle(std::size_t index)
 	float emitterVelocityNorm = sqrt(_emitterVelocity.x*_emitterVelocity.x + _emitterVelocity.y*_emitterVelocity.y);
 	if (_emitterVelocity.x >= 0 && _emitterVelocity.y > 0)
 	{
-		_emitterAngle = acos((_emitterVelocity.x * 0 + _emitterVelocity.y * 1) / emitterVelocityNorm)* 180.0 / 3.14;
+		_emitterAngle = acos((_emitterVelocity.x * 0 + _emitterVelocity.y * 1) / emitterVelocityNorm)* 180.0f / 3.14f;
 		_emitterAngle = 270 - _emitterAngle;
 	}
 	if (_emitterVelocity.x >= 0 && _emitterVelocity.y < 0)
 	{
-		_emitterAngle = acos((_emitterVelocity.x * 1 + _emitterVelocity.y * 0) / emitterVelocityNorm)* 180.0 / 3.14;
+		_emitterAngle = acos((_emitterVelocity.x * 1 + _emitterVelocity.y * 0) / emitterVelocityNorm)* 180.0f / 3.14f;
 		_emitterAngle = 180 - _emitterAngle;
 	}
 	if (_emitterVelocity.x < 0 && _emitterVelocity.y >= 0)
 	{
-		_emitterAngle = acos((-_emitterVelocity.x * 1 + _emitterVelocity.y * 0) / emitterVelocityNorm)* 180.0 / 3.14;
+		_emitterAngle = acos((-_emitterVelocity.x * 1 + _emitterVelocity.y * 0) / emitterVelocityNorm)* 180.0f / 3.14f;
 		_emitterAngle = 0 - _emitterAngle;
 	}
 	if (_emitterVelocity.x < 0 && _emitterVelocity.y < 0)
 	{
-		_emitterAngle = acos((_emitterVelocity.x * 0 - _emitterVelocity.y * 1) / emitterVelocityNorm)* 180.0 / 3.14;
+		_emitterAngle = acos((_emitterVelocity.x * 0 - _emitterVelocity.y * 1) / emitterVelocityNorm)* 180.0f / 3.14f;
 		_emitterAngle = 90 - _emitterAngle;
 	}
 

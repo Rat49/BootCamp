@@ -22,10 +22,10 @@ public:
 
 	void SetVelocity(sf::Vector2f velocity) {
 		particles.SetEmitterVelocity(velocity);
-		particles.AddCircleForceBehind(0.5, 20, -2);
-		particles.AddCircleForceBehind(1.5, 20, 0.3);
-		particles.AddCircleForceBehind(2.5, 20, -2);
-		particles.AddCircleForceBehind(3.5, 20, 0.5);
+		particles.AddCircleForceBehind(0.5f, 20, -2);
+		particles.AddCircleForceBehind(1.5f, 20, 0.3f);
+		particles.AddCircleForceBehind(2.5f, 20, -2);
+		particles.AddCircleForceBehind(3.5f, 20, 0.5f);
 	}
 
 	void Reset(){}
@@ -46,7 +46,7 @@ public:
 class ExplosionParticle {
 public:
 	ParticleSystem particles;
-	sf::Time reccomendedLifeTime = sf::seconds(0.2);
+	sf::Time reccomendedLifeTime = sf::seconds(0.2f);
 
 	ExplosionParticle(unsigned int quantity, sf::Vector2u window) :
 		particles(1000, window) {
@@ -95,8 +95,8 @@ public:
 
 	void SetVelocity(sf::Vector2f velocity) {
 		particles.SetEmitterVelocity(velocity);
-		particles.AddCircleForceBehind(0.5, 20, -1);
-		particles.AddCircleForceBehind(1.5, 20, 0.7);
+		particles.AddCircleForceBehind(0.5f, 20, -1);
+		particles.AddCircleForceBehind(1.5f, 20, 0.7f);
 	}
 
 	void Stop() {

@@ -5,6 +5,7 @@ OrdinaryBullet::OrdinaryBullet()
 	, _ordinaryBulletSprite()
 	, _bulletTexture()
 	, _bulletScale(1.0f, 1.0f)
+	, _halfSpriteLength(0.0f)
 {
 	_zOrder = 4;
 }
@@ -25,6 +26,8 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 		degreeAngle += 180.0f;
 	
 	_ordinaryBulletSprite.setRotation(degreeAngle);
+	_halfSpriteLength = GetLenght(sf::Vector2f(_bulletTexture->getSize())) / 2.0f;
+
 	SetSpeed(bulletDirection * _speedValuePixelsPerSecond);
 	SetCoordinates(sf::Vector2f(position.x, position.y));
 }
@@ -34,10 +37,15 @@ const sf::Sprite* OrdinaryBullet::GetSprite()
 	return &_ordinaryBulletSprite;
 }
 
+const float OrdinaryBullet::GetHalfSpriteLength()
+{
+	return _halfSpriteLength;
+}
+
 void OrdinaryBullet::Draw(sf::RenderWindow& window)
 {
 	sf::CircleShape physicsShape(GetRadius());
-	auto t = GetRadius();
+	//auto t = GetRadius();
 	physicsShape.setPosition(GetCoordinates());
 	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
 	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));

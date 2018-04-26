@@ -8,6 +8,8 @@
 #include "Physics.h"
 #include "CollisionEvent.h"
 #include "DebugConsole.h"
+#include "DebugCommandManager.h"
+#include "DebugCommandManagerEvent.h"
 #include "Logger.h"
 #include "Spaceship.h"
 #include "BulletManager.h"

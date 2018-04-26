@@ -1,7 +1,14 @@
 #include "Achievements.h"
 
-Achievement::Achievement()
+Achievement::Achievement(std::multimap<const std::string, const std::string>& AchievementList)
 {
+	_idAchievement = atoi(AchievementList.find("_idAchievement")->second.c_str());
+	_progressState = atof(AchievementList.find("_progressState")->second.c_str());
+	_progressFinishState = atof(AchievementList.find("_progressFinishState")->second.c_str());
+	_displayName = AchievementList.find("_displayName")->second;
+	_displayDescriptionName = AchievementList.find("_displayDescriptionName")->second;
+	_achievedActive = atoi(AchievementList.find("_achievedActive")->second.c_str());
+	_dateCompleteAchievements = atoi(AchievementList.find("_dateCompleteAchievements")->second.c_str());
 }
 
 Achievement::~Achievement()

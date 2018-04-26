@@ -1,15 +1,17 @@
 #pragma once
-#include "EventSystem.h"
-#include "CollisionEvent.h"
-#include "BulletManagerEvents.h"
 #include "AnimationPlayer.h"
+#include "BulletManagerEvents.h"
+#include "CollisionEvent.h"
+#include "DrawableManager.h"
+#include "EventSystem.h"
+#include "GameOverEvent.h"
 #include "ImageSequenceResource.h"
 #include "Input.h"
+#include "Mathematics.h"
 #include "Physics.h"
 #include "Pool.h"
-#include "DrawableManager.h"
-#include "Mathematics.h"
-#include "WindowResolution.h"
+#include "SpaceshipRespawnEvent.h"
+
 #include <math.h>
 #include <algorithm>
 
@@ -18,8 +20,8 @@ static float coefficientOfAnimation = 2.5f;
 class Spaceship : public RigidBody, public Drawable
 {
 public:
-	Spaceship(const sf::Vector2f& position, const sf::Vector2f& speed, InputManager& input, 
-		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);
+	Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, 
+		ImageSequenceResource& spaceshipFlickeringImseq);
 	~Spaceship();
 
 	void Accelerate();
@@ -29,13 +31,9 @@ public:
 	void RotateSpaceship(float angle);
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
-	void OnCollisionHandler(const Event& event);
+	void SetDamage(unsigned int damage);
 private:
-	unsigned int _liveCount;
-	unsigned int _bulletCount = 60;
-	unsigned int _rocketCount = 7;
-	const unsigned int _totalBulletCount = 150;
-	const unsigned int _totalRocketCount = 10;
+	
 	bool _isDamaged;
 	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;
@@ -64,6 +62,12 @@ private:
 	sf::Time _timeAfterBulletShot;
 	const float _bulletRebound;
 	const float _rocketRebound;
+	unsigned int _bulletCount = 60;
+	unsigned int _rocketCount = 7;
+
+	unsigned int _liveCount;
+	unsigned int _HP;
+	unsigned int _damage;
 
 	void ControlSpeed(float deltaSpeed);
 	void GainRebound(float reboundValue);

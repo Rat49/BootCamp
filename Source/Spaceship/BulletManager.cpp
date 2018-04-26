@@ -78,11 +78,16 @@ void BulletManager::DeleteBullet(const Event& event)
 {
 	const DeleteBulletEvent& currentEvent = static_cast<const DeleteBulletEvent&>(event);
 
-	OrdinaryBullet* ptrBullet = currentEvent._deletedBullet;
+	/*OrdinaryBullet* ptrBullet = currentEvent._deletedBullet;
 
 	bullets.erase(std::remove(bullets.begin(), bullets.end(), ptrBullet), bullets.end());
 	_ordinaryBulletStorage.Put(ptrBullet);
-	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrBullet));
+	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrBullet));*/
+
+
+
+
+
 		/*_drawableObjects.erase
 	(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrBullet)),
 			DrawableManager::getInstance()._drawableObjects.end());
@@ -106,12 +111,15 @@ void BulletManager::DeleteRocket(const Event & event)
 {
 	const DeleteRocketEvent& currentEvent = static_cast<const DeleteRocketEvent&>(event);
 
-	Rocket* ptrRocket = currentEvent._deletedRocket;
+	/*Rocket* ptrRocket = currentEvent._deletedRocket;
 
 	rockets.erase(std::remove(rockets.begin(), rockets.end(), ptrRocket), rockets.end());
 	_rocketStorage.Put(ptrRocket);
-	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrRocket));
-		/*_drawableObjects.erase
+	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrRocket));*/
+		
+	
+	
+	/*_drawableObjects.erase
 	(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrRocket)),
 		DrawableManager::getInstance()._drawableObjects.end());*/
 }
@@ -121,9 +129,23 @@ void BulletManager::Update(const sf::Time& deltaTime)
 	for (auto& bullet : bullets)
 	{
 		bullet->Update(deltaTime);
+		if (bullet->GetSprite()->getPosition().x < -bullet->GetHalfSpriteLength()
+			|| bullet->GetSprite()->getPosition().x > WindowResolution::_W + bullet->GetHalfSpriteLength()
+			|| bullet->GetSprite()->getPosition().y > WindowResolution::_H + bullet->GetHalfSpriteLength()
+			|| bullet->GetSprite()->getPosition().y < -bullet->GetHalfSpriteLength())
+		{
+			Dispatcher::getInstance().Send(DeleteBulletEvent(bullet), deleteBulletEventID);
+		}
 	}
 	for (auto& rocket : rockets)
 	{
 		rocket->Update(deltaTime);
+		if (rocket->GetSprite()->getPosition().x < -rocket->GetHalfSpriteLength()
+			|| rocket->GetSprite()->getPosition().x > WindowResolution::_W + rocket->GetHalfSpriteLength()
+			|| rocket->GetSprite()->getPosition().y > WindowResolution::_H + rocket->GetHalfSpriteLength()
+			|| rocket->GetSprite()->getPosition().y < -rocket->GetHalfSpriteLength())
+		{
+			Dispatcher::getInstance().Send(DeleteRocketEvent(rocket), deleteRocketEventID);
+		}
 	}
 }

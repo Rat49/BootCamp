@@ -18,9 +18,15 @@
     <ClCompile Include="Achievements.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AchievementsManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Achievements.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AchievementsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
