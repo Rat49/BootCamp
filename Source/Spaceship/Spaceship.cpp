@@ -1,7 +1,7 @@
 #include "Spaceship.h"
 
 Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
-	: RigidBody({ 0, 0 }, { 0, 0 }, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	: RigidBody({ 0, 0 }, { 0, 0 }, spaceshipAnimationImseq.GetWidth() / coefficientOfAnimation, 1.0f)
 
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
@@ -11,13 +11,13 @@ Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaces
 	, _spaceshipFlickeringImseq(spaceshipFlickeringImseq)
 	, _rotationAngle(17.0f)
 	, _acceleration(15.0f)
-	, _maxSquareSpeed(12000.0f)
+	, _maxSquareSpeed(500.0f)
 	, _flickeringTime(sf::seconds(1.0f))
 	, _timeAfterDamage(sf::seconds(0.0f))
 	, _input(input)
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
-	, _rechargeRocketTime(sf::seconds(3.0f))
+	, _rechargeRocketTime(sf::seconds(2.3f))
 	, _rechargeBulletTime(sf::seconds(0.2f))
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
@@ -126,7 +126,7 @@ void Spaceship::RotateSpaceship(float degreeAngle)
 
 void Spaceship::ControlSpeed(float deltaSpeed)
 {
-	float speedValue = std::sqrt(GetSquaredLength(GetSpeed()));
+	float speedValue = GetLength(GetSpeed());
 
 	if (!((_speedDirection == _spaceshipDirection) || (_speedDirection == -_spaceshipDirection)))
 	{
@@ -136,8 +136,8 @@ void Spaceship::ControlSpeed(float deltaSpeed)
 	}
 
 	sf::Vector2f newSpeed = GetSpeed() + deltaSpeed * _spaceshipDirection;
-
-	if (GetSquaredLength(newSpeed) < _maxSquareSpeed)
+	
+	if (GetLength(newSpeed)  < _maxSquareSpeed)
 	{
 		SetSpeed(newSpeed);
 	}
@@ -177,6 +177,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	ButtonsState stateMoveDown;
 	ButtonsState stateShoot;
 	ButtonsState stateSuperShoot;
+	RigidBody::Update(deltaTime.asSeconds());
 
 	_input.Update();
 	if (_input.GetState(static_cast<int>(GameActions::MoveLeft), stateMoveLeft) && (stateMoveLeft == ButtonsState::JustPressed || stateMoveLeft == ButtonsState::Pressed))
@@ -244,8 +245,28 @@ void Spaceship::Update(const sf::Time& deltaTime)
 
 	_timeAfterPowerfulShot += deltaTime;
 	_timeAfterBulletShot += deltaTime;
-	RigidBody::Update(deltaTime.asSeconds());
-	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
+	//RigidBody::Update(deltaTime.asSeconds());
+
+		if (GetX() > WindowResolution::_W)
+		{
+			SetX(0);
+		}
+		if (GetX() < 0)
+		{
+			SetX(WindowResolution::_W);
+		}
+		if (GetY() > WindowResolution::_H)
+		{
+			SetY(0);
+		}
+		if (GetY() < 0)
+		{
+			SetY(WindowResolution::_H);
+		}
+
+	sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
+	_spaceshipSprite->setPosition(rigidCoordinates.x + _spaceshipSprite->getLocalBounds().width / coefficientOfAnimation, rigidCoordinates.y + _spaceshipSprite->getLocalBounds().height / coefficientOfAnimation);
+
 	_spaceshipAnimation->Update(deltaTime);
 	_spaceshipFlickering->Update(deltaTime);
 
@@ -260,6 +281,8 @@ void Spaceship::Update(const sf::Time& deltaTime)
 			SetNormalMode();
 		}
 	}
+	auto t = GetSpeed();
+	std::cout << t.x*t.x+t.y*t.y << " " << t.y << std::endl;
 
 }
 
@@ -275,6 +298,20 @@ int Spaceship::GetZOrder() const
 
 void Spaceship::Draw(sf::RenderWindow& window)
 {
+	sf::CircleShape physicsShape(GetRadius());
+	physicsShape.setPosition(GetCoordinates());
+		//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	physicsShape.setFillColor(sf::Color::Transparent);
+	physicsShape.setOutlineThickness(1);
+	
+	window.draw(physicsShape);
+	sf::CircleShape circleCenter(1);
+	circleCenter.setPosition(GetX() + GetRadius(),
+	GetY() + GetRadius());
+	circleCenter.setRadius(1.f);
+	circleCenter.setFillColor(sf::Color::Green);
+	window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
 }
 

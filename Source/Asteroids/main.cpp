@@ -197,7 +197,7 @@ int main()
     sf::Clock clock;
     sf::Time deltaTime;
     sf::Time fixedTime;
-    const sf::Time fixedUpdateTime = sf::milliseconds(2);
+    const sf::Time fixedUpdateTime = sf::milliseconds(1);
 
     while (rw.isOpen())
     {
