@@ -3,7 +3,6 @@
 AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture)
 	:_achievementPicture(achievementPicture)
 {
-
 	auto achievementsListCategory = achievementCM->GetCategory("TimeAchievementsList").GetParams();
 	for (const auto& achiev : achievementsListCategory)
 	{
