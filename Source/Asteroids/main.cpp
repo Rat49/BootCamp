@@ -91,9 +91,10 @@ int main()
 	*/
 
 	AudioResource* bulletSound = rm->GetResource<AudioResource>("shoot");
-	//AudioResource* explosionSound = rm->GetResource<AudioResource>("booom");
-	//AudioResource* collisionSound = rm->GetResource<AudioResource>("");
 	AudioResource* rocketSound = rm->GetResource<AudioResource>("rocket");
+	AudioResource* explosionSound = rm->GetResource<AudioResource>("crash");
+	AudioResource* collisionSound = rm->GetResource<AudioResource>("collision");
+	
 
     /*
     For SpaceShip
@@ -248,7 +249,7 @@ int main()
                         dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
                         dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
 
-						//collisionSound->Get().play();
+						collisionSound->Get().play();
                     }
                 }
 
@@ -260,7 +261,7 @@ int main()
                     dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
                     dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
 
-					//collisionSound->Get().play();
+					collisionSound->Get().play();
                 }
 
                 for (size_t j = 0; j < rocketSize; ++j)
@@ -273,7 +274,7 @@ int main()
                         dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
                         dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 
-						//explosionSound->Get().play();
+						explosionSound->Get().play();
 
                         for (size_t k = 0; k < n; ++k)
                         {
@@ -285,7 +286,7 @@ int main()
                                 dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
                                 dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 
-								//explosionSound->Get().play();
+								explosionSound->Get().play();
                             }
                         }
                     }
@@ -301,7 +302,7 @@ int main()
                         dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
                         dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager.bullets[j]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
 
-						//explosionSound->Get().play();
+						explosionSound->Get().play();
                     }
                 }
             }
