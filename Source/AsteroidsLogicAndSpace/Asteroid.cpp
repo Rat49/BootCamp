@@ -14,8 +14,8 @@ void Asteroid::DefaultInit()
 	_linearVelocity = sf::Vector2f(0, 0);
 	SetSpeed(_linearVelocity);
 
-	_sprite.setPosition(sf::Vector2f(0, 0));
 	SetCoordinates(sf::Vector2f(0, 0));
+	_sprite.setPosition(GetCoordinates());
 
 	_radius = 1.0f;
 	SetRadius(_radius);
@@ -47,7 +47,6 @@ void Asteroid::RandomInit()
 	float positionX = positionBoundX > 0 ? GetSizeWindow().x + positionBoundX : positionBoundX;
 	float positionY = positionBoundY > 0 ? GetSizeWindow().y + positionBoundY : positionBoundY;
 
-	_sprite.setPosition(sf::Vector2f(positionX, positionY));
 	SetCoordinates(sf::Vector2f(positionX, positionY));
 }
 
@@ -107,8 +106,7 @@ void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &posit
 	_sprite.setOrigin(_sprite.getLocalBounds().width / 2, _sprite.getLocalBounds().width / 2);
 	_sprite.setScale(sf::Vector2f(_startScale, _startScale));
 
-	_sprite.setPosition(sf::Vector2f(GetFloatRandomValue(position.x - 50.0f, position.x + 50.0f), GetFloatRandomValue(position.y - 50.0f, position.y + 50.0f)));
-	SetCoordinates(_sprite.getPosition());
+	SetCoordinates(sf::Vector2f(GetFloatRandomValue(position.x - 50.0f, position.x + 50.0f), GetFloatRandomValue(position.y - 50.0f, position.y + 50.0f)));
 
 	_halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
 	
@@ -264,7 +262,7 @@ void Asteroid::Update(float time)
 		SetCoordinates(nextPosition);
 	}
 
-	_sprite.setPosition(GetCoordinates());
+	_sprite.setPosition(GetCoordinates().x + GetRadius(), GetCoordinates().y + GetRadius());
 	_sprite.setRotation(_angularVelocity);
 }
 
@@ -273,8 +271,7 @@ void Asteroid::Draw(sf::RenderWindow &window)
 	window.draw(_sprite);
 	
 	sf::CircleShape physicsShape(GetRadius());
-	physicsShape.setPosition(GetCoordinates()); 
-	physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	physicsShape.setPosition(GetCoordinates());
 	
 	float color;
 
@@ -296,6 +293,6 @@ void Asteroid::Draw(sf::RenderWindow &window)
 	physicsShape.setFillColor(sf::Color::Transparent);
 	physicsShape.setOutlineThickness(1);
 
-	//window.draw(physicsShape);
+	window.draw(physicsShape);
 }
 
