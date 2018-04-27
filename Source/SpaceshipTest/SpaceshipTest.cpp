@@ -3,6 +3,7 @@
 #include "DrawableManager.h"
 #include "Spaceship.h"
 #include "BulletManager.h"
+#include "ResourceManager.h"
 
 int main()
 {
@@ -47,7 +48,10 @@ int main()
 	InputManager input(actions);
 
 	std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
-	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq);
+	sf::Vector2f spaceshipPosition = sf::Vector2f(atof(spaceshipConfig.find("PositionX")->second.c_str()), atof(spaceshipConfig.find("PositionY")->second.c_str()));
+	sf::Vector2f spaceshipSpeed = sf::Vector2f(atof(spaceshipConfig.find("SpeedX")->second.c_str()), atof(spaceshipConfig.find("SpeedY")->second.c_str()));
+
+	Spaceship* spaceship = new Spaceship(spaceshipPosition, spaceshipSpeed, input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture,*rocketTexture);
 	DrawableManager& drawableManager = DrawableManager::getInstance();

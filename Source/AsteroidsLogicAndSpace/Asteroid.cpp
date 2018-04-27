@@ -242,7 +242,7 @@ void Asteroid::Update(float time)
 	RigidBody::Update(time);
 
 	_angularVelocity = _angularVelocity + time * _rotationSpeed;
-    sf::Vector2f nextPosition = GetCoordinates();// +GetSpeed() * time;
+    sf::Vector2f nextPosition = GetCoordinates();
 
 	if (nextPosition.y - _halfLenght > GetSizeWindow().y)
 	{

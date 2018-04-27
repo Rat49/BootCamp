@@ -13,7 +13,6 @@ const int WINDOW_HEIGHT = 800;
 
 int main()
 {
-	sf::Clock clock;
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
 
 	/*
@@ -35,8 +34,10 @@ int main()
 	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").GetParams()));
 
 
-	constexpr float physicsStepTargetFrameTime = 1000.0f / 60.f;
-	float           accumulatedFrameTime = 0.f;
+	sf::Clock clock;
+	sf::Time deltaTime;
+	sf::Time fixedTime;
+	const sf::Time fixedUpdateTime = sf::milliseconds(2);
 
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 
@@ -68,8 +69,8 @@ int main()
 	bool exit = false;
 	while (window.isOpen())
 	{
-		const float delta = clock.restart().asMicroseconds() / 1000.0f;
-		accumulatedFrameTime += delta;
+		deltaTime = clock.restart();
+		fixedTime += deltaTime;
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -92,9 +93,8 @@ int main()
 			}
 		}
 		window.clear();
-		while (accumulatedFrameTime >= physicsStepTargetFrameTime)
+		if (fixedTime > fixedUpdateTime)
 		{
-			accumulatedFrameTime -= physicsStepTargetFrameTime;
 
 			size_t n = space.asteroids.size() - 1;
 		    size_t m = space.asteroids.size();
@@ -107,14 +107,13 @@ int main()
 						collisionEvent._asteroid1 = space.asteroids[i];
 						collisionEvent._asteroid2 = space.asteroids[j];
 						ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
-						dispatcher.Send(collisionEvent, collisionEventID, space.asteroids[i]->_token);
-						dispatcher.Send(collisionEvent, collisionEventID, space.asteroids[j]->_token);
+						dispatcher.Send(collisionEvent, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
+						dispatcher.Send(collisionEvent, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
 					}
 				}
 			}
-			space.Update(physicsStepTargetFrameTime/1000.0f);
 		}
-
+		space.Update(fixedTime);
 		dm.DrawScene(window);
 		window.display();
 	}
