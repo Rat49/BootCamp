@@ -56,14 +56,22 @@ void Space::Update(const sf::Time& deltaTime)
 				_poolAsteroid.Put(asteroid);
 				asteroids.erase(std::find(asteroids.begin(), asteroids.end(), asteroid));
 				--i;
+				++_countSmallDeadAsteroids;
+			}
+			if (_countSmallDeadAsteroids >= 16)
+			{
+				Asteroid* asteroidNew = _poolAsteroid.Get();
+				asteroidNew->Init(asteroid->_sprite, _sizeSpace);
+				asteroids.push_back(asteroidNew);
+				_countSmallDeadAsteroids = 0;
 			}
 		}
-		asteroid->Update(deltaTime.asSeconds()/1000.0f);
+		asteroid->Update(deltaTime.asSeconds());
 	}
 
 	for (auto *star : _stars)
 	{
-		star->Update(deltaTime.asSeconds()/1000.0f);
+		star->Update(deltaTime.asSeconds());
 	}
 }
 

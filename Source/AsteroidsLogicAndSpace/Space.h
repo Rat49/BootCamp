@@ -22,5 +22,6 @@ private:
 	Pool<Star> _poolStar;
 	
 	sf::Vector2u _sizeSpace;
+	size_t _countSmallDeadAsteroids;
 
 };
