@@ -56,7 +56,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LibraryPath>$(SolutionDir)Bin;$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(LibraryPath)</LibraryPath>
     <OutDir>$(SolutionDir)Bin\</OutDir>
     <IntDir>$(SolutionDir)Temp\$(ProjectName)\$(Configuration)\</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
@@ -99,7 +99,7 @@ sfml-network.lib</AdditionalDependencies>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>UI_d.lib;UI.lib;
+      <AdditionalDependencies>UI_d.lib;
 sfml-window.lib
 ;sfml-system.lib
 ;sfml-graphics.lib;
@@ -120,7 +120,7 @@ sfml-network.lib</AdditionalDependencies>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>UI_d.lib;UI.lib;
+      <AdditionalDependencies>UI.lib;
 sfml-window.lib
 ;sfml-system.lib
 ;sfml-graphics.lib;
@@ -129,20 +129,12 @@ sfml-network.lib</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)SFML\bin\openal32.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-audio-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-graphics-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-network-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-system-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-xcopy "$(SolutionDir)SFML\bin\sfml-window-2.dll" "$(OutDir)\*.*" /F /R /Y /I
-</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="test.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <Font Include="font\arial.ttf" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

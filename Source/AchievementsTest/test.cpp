@@ -1,44 +1,56 @@
+#pragma once
 #include "Achievements.h"
 #include "AchievementsManager.h"
-#include "EventSystem.h"
-#include "Physics.h"
-#include "ConfigManager.h"
-#include "UI.h"
 #include "SFML\Graphics.hpp"
 #include <cstdlib>
 #include <map>
 
-//void ConditionAchievement(Achievement* achieves, int num, sf::RenderWindow window)
-//{
-//	for (int i = 1; i < maxEventID; ++i)
-//	{
-//		if (achieves[i].GetAchievedActive() == false)
-//		{
-//			std::map<EventAchievID_t, Token_t> _tokens;
-//			int countOfHandlerResponce = achieves[i - 1].GetProgressState();
-//			std::map<EventAchievID_t, Token_t>::iterator tokenForCurrentEvent = _tokens.find(i);
-//			std::function<void(const Event&)> handler = [&](const Event &e)
-//			{
-//				achieves[i - 1].SetProgressState(++countOfHandlerResponce);
-//				if (achieves[i].GetProgressFinishState() == achieves[i].GetProgressState())
-//				{
-//					achieves[i].SetAchievedActive(true);
-//					UI mui(window);
-//					sf::Font font;
-//					font.loadFromFile("font/arial.ttf");
-//					mui.CreateAchivementShower(font, PercentXY(80, 80));
-//					sf::Image * img = new sf::Image();
-//					img->loadFromFile("img/asteroid.png");
-//					mui.OnAchive(achieves[num].GetDisplayName(), img);
-//				}
-//			};
-//		}
-//	}
-//}
-
 int main()
 {
+	sf::RenderWindow window(sf::VideoMode(1280, 800), "AchievementTest");
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
-	AchievementsManager achievementsManager(achievementCM);
-
+	UI ui(window);
+	sf::Font font;
+	font.loadFromFile("arial.ttf");
+	ui.CreateAchivementShower(font, PercentXY(1, 1));
+	sf::Image* image = new sf::Image();
+	image->loadFromFile("achievement.png");
+	AchievementsManager achievementsManager(achievementCM,image);
+	
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	Asteroid* asteroid = new Asteroid();
+	asteroid->_type = AsteroidType::Middle;
+	CollisionEventBetweenAsteroidAndBullet eventAchiev;
+	eventAchiev._asteroid = asteroid;
+	
+	sf::Clock clock;
+	sf::Time deltaTime;
+	sf::Time fixedTime;
+	const sf::Time fixedUpdateTime = sf::milliseconds(2);
+	window.setVerticalSyncEnabled(true);
+	sf::Event event;
+	while (window.isOpen())
+	{
+		deltaTime = clock.restart();
+		fixedTime += deltaTime;
+		window.clear();
+				
+ 		while (window.pollEvent(event))
+		{
+				
+			if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::Space)
+			{
+				dispatcher.Send(eventAchiev, EventTypes::collisionEventBetweenAsteroidAndBulletID);
+			}
+		}
+		achievementsManager.Update(deltaTime);
+		achievementsManager.ShowAchievement(ui);
+		ui.Render();
+		//window.display();
+	}
+		
 }
+	
+	
+	
+
