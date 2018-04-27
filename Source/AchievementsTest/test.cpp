@@ -1,9 +1,6 @@
+#pragma once
 #include "Achievements.h"
 #include "AchievementsManager.h"
-#include "EventSystem.h"
-#include "Physics.h"
-#include "ConfigManager.h"
-#include "UI.h"
 #include "SFML\Graphics.hpp"
 #include <cstdlib>
 #include <map>
@@ -38,7 +35,29 @@
 
 int main()
 {
+	sf::RenderWindow window(sf::VideoMode(1280, 800), "AchievementTest");
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
-	AchievementsManager achievementsManager(achievementCM);
+	UI ui(window);
+	sf::Image* image = new sf::Image();
+	image->loadFromFile("achievement.png");
+	AchievementsManager achievementsManager(achievementCM,image);
+	
+	sf::Event event;
+	while (window.isOpen())
+	{
+		window.clear();
 
+		while (window.pollEvent(event))
+		{
+				
+
+		}
+
+		window.display();
+	}
+		
 }
+	
+	
+	
+

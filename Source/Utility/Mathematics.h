@@ -18,7 +18,7 @@ inline float GetSquaredLength(sf::Vector2f vector)
 	return vector.x * vector.x + vector.y * vector.y;
 }
 
-inline float GetLenght(sf::Vector2f vector)
+inline float GetLength(sf::Vector2f vector)
 {
 	return std::sqrt(GetSquaredLength(vector));
 }
@@ -30,18 +30,18 @@ inline float GetFloatRandomValue(float start, float end)
 
 inline sf::Vector2f GetNormalizedVelocity(sf::Vector2f vector)
 {
-	float length = GetLenght(vector);
+	float length = GetLength(vector);
 	return sf::Vector2f(vector.x / length, vector.y / length);
 }
 
 inline float RadiansToDegrees(float radianAngle)
 {
-	return radianAngle * 180.0f / M_PI;
+	return static_cast<float>(radianAngle * 180.0f / M_PI);
 }
 
 inline float DegreesToRadians(float degreeAngle)
 {
-	return degreeAngle * M_PI / 180.0f;
+	return static_cast<float>(degreeAngle * M_PI / 180.0f);
 }
 
 inline sf::Vector2f RotateVector(sf::Vector2f vector, float degreeAngle)
