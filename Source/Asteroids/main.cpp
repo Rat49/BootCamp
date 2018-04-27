@@ -97,39 +97,33 @@ int main()
 	TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
 
-    std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
-    sf::Vector2f spaceshipPosition = sf::Vector2f(atof(spaceshipConfig.find("PositionX")->second.c_str()), atof(spaceshipConfig.find("PositionY")->second.c_str()));
-    sf::Vector2f spaceshipSpeed = sf::Vector2f(atof(spaceshipConfig.find("SpeedX")->second.c_str()), atof(spaceshipConfig.find("SpeedY")->second.c_str()));
+	std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
+	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq);
+	spaceship->AddToDrawableManager();
+	BulletManager bulletManager(*bulletTexture, *rocketTexture);
+	
+	/*
+	For Physics
+	*/
+	CollisionEventBetweenAsteroids collisionAsteroidVsAsteroid;
+	CollisionEventBetweenAsteroidAndSpaceship collisionAsteroidVsSpaceship;
+	CollisionEventBetweenAsteroidAndRocket collisionAsteroidVsRocket;
+	CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
+	DeleteBulletEvent deleteBulletEvent;
 
-    Spaceship* spaceship = new Spaceship(spaceshipPosition, spaceshipSpeed, input, *spaceshipImgseq, *flickeringImgseq);
-    spaceship->AddToDrawableManager();
-    BulletManager bulletManager(*bulletTexture, *rocketTexture);
-
-    /*
-    For Physics
-    */
-    CollisionEventBetweenAsteroids collisionAsteroidVsAsteroid;
-    CollisionEventBetweenAsteroidAndSpaceship collisionAsteroidVsSpaceship;
-    CollisionEventBetweenAsteroidAndRocket collisionAsteroidVsRocket;
-    CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
-
-	CollisionEventBetweenAmmunitionAndBullet collisionAmmunitionVsBullett;
-	CollisionEventBetweenAmmunitionAndRocket collisionAmmunitionVsRocket;
-	CollisionEventBetweenAmmunitionAndSpaceship collisionAmmunitionVsSpaceship;
-
-    constexpr size_t numOfObjects = 10;
-    constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
-    float           accumulatedFrameTime = 0.f;
-    sf::CircleShape circles[numOfObjects];
-    RigidBody * RigidBodies = new RigidBody[numOfObjects];
-    /*Init rigid bodies and implementation for them*/
-    for (int i = 0; i < numOfObjects / 2; i++)
-    {
-        const int idx = i * 2;
-        RigidBodies[idx].SetRadius(10);
-        RigidBodies[idx].SetCoordinates({ 500, 200.f + 60 * i });
-        RigidBodies[idx].SetSpeed({ 60, 15 });
-        RigidBodies[idx].SetMass(0.005f);
+	constexpr size_t numOfObjects = 10;
+	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
+	float           accumulatedFrameTime = 0.f;
+	sf::CircleShape circles[numOfObjects];
+	RigidBody * RigidBodies = new RigidBody[numOfObjects];
+	/*Init rigid bodies and implementation for them*/
+	for (int i = 0; i < numOfObjects / 2; i++)
+	{
+		const int idx = i * 2;
+		RigidBodies[idx].SetRadius(10);
+		RigidBodies[idx].SetCoordinates({ 500, 200.f + 60 * i });
+		RigidBodies[idx].SetSpeed({ 60, 15 });
+		RigidBodies[idx].SetMass(0.005f);
 
 		RigidBodies[idx + 1].SetRadius(25);
 		RigidBodies[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
@@ -187,7 +181,6 @@ int main()
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
-	space.AddAmmunition(rm);
 	/*
 	For Debug Console
 	*/
@@ -276,10 +269,6 @@ int main()
 
 		for (size_t i = 0; i < n; ++i)
 		{
-			if (Collided(*space.asteroids[i], *space.ammunition))
-			{
-				ResolveCollision(*space.asteroids[i], *space.ammunition);
-			}
 			for (size_t j = i + 1; j < m; ++j)
 			{
 				if (Collided(*space.asteroids[i], *space.asteroids[j]))

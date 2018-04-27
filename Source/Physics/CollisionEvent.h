@@ -36,13 +36,6 @@ public:
 	Asteroid* _asteroid;
 };
 
-class CollisionEventBetweenAmmunitionAndAsteroid : public Event
-{
-public:
-	Asteroid * asteroid;
-	Ammunition* ammunition;
-};
-
 class CollisionEventBetweenAmmunitionAndSpaceship : public Event
 {
 public:
