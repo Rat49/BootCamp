@@ -58,12 +58,12 @@ void Space::Update(const sf::Time& deltaTime)
 				--i;
 			}
 		}
-		asteroid->Update(deltaTime.asSeconds());
+		asteroid->Update(deltaTime.asSeconds()/1000.0f);
 	}
 
 	for (auto *star : _stars)
 	{
-		star->Update(deltaTime.asSeconds());
+		star->Update(deltaTime.asSeconds()/1000.0f);
 	}
 }
 

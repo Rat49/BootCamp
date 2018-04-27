@@ -7,7 +7,7 @@ int main()
 	DebugCommandManager manager;
 	DebugCommandManagerEvent newEvent("help");
 
-	manager.addConsoleCommand({ "help", [](const std::vector<std::string>& args)
+	manager.addConsoleCommand({ "help", [](const std::vector<std::string>& /*args*/)
 	{
 		std::cout << "help" << std::endl;
 		return 0;
