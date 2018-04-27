@@ -195,7 +195,7 @@ int main()
 
 
 	int _nStars = (WindowResolution::_W / 50) * (WindowResolution::_H / 50) - 300;
-	int _nAsteroids = (WindowResolution::_W / 200) + (WindowResolution::_H / 200) + 5;
+	int _nAsteroids = (WindowResolution::_W / 200) + (WindowResolution::_H / 200) - 5;
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);

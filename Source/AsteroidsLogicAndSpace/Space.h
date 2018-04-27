@@ -30,5 +30,6 @@ private:
 	Pool<ExplosionParticle> _poolExplosion;
 	std::vector<ExplosionParticle *> _explosions;
 	sf::Vector2u _sizeSpace;
+	size_t _countSmallDeadAsteroids;
 
 };

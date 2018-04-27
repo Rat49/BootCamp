@@ -36,7 +36,7 @@ void DrawableManager::RemoveDrawableObject(Drawable* object)
 	auto deletedObject = std::find(_drawableObjects.begin(), _drawableObjects.end(), object);
 	if (deletedObject != _drawableObjects.cend())
 	{
-		_drawableObjects.erase(std::find(_drawableObjects.begin(), _drawableObjects.end(), object));
+		_drawableObjects.erase(std::remove(_drawableObjects.begin(), _drawableObjects.end(), object), _drawableObjects.end());
 	}
 	SortDrawableVector();
 }
