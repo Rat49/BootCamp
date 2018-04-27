@@ -1,10 +1,13 @@
 #include "ScrollBar.h"
 
+ScrollBar::~ScrollBar()
+{
+}
 
-ScrollBar::ScrollBar(const float length, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner):
-	SfmlButton(sf::Vector2f(10,20), sf::Vector2f((position.x + length/2),(position.y - 10)),name,owner),
-	_isGrabbed(false),
-	_rail(sf::Vector2f(length,5))
+ScrollBar::ScrollBar(const float length, const sf::Vector2f position, const std::string& name, sf::RenderWindow& owner)
+	: SfmlButton(sf::Vector2f(10,20), sf::Vector2f((position.x + length/2), (position.y - 10)), name, owner)
+	, _isGrabbed(false)
+	, _rail(sf::Vector2f(length,5))
 {
 	_rail.setPosition(GetPosition());
 }
@@ -13,10 +16,12 @@ void ScrollBar::ChangeStateGrab(sf::Vector2i position)
 {
 	_isGrabbed =  IsClicked(position);	
 }
+
 void ScrollBar::UnGrab()
 {
 	_isGrabbed = false;
 }
+
 void ScrollBar::SetSliderPosition(const float position)
 {
 	_sliderValue = position;
@@ -26,23 +31,32 @@ void ScrollBar::SetSliderPosition(const float position)
 		_body.setPosition(GetPosition());
 	}	
 }
+
 float ScrollBar::GetSliderPosition() const
 {
 	return _sliderValue;
 }
+
 void ScrollBar::SetFillColor(const sf::Color & color)
 {
 	_rail.setFillColor(color);
 	_body.setFillColor(color);
 }
+
+void ScrollBar::SetOutlineColor(const sf::Color&)
+{
+}
+
 void ScrollBar::SetLength(const float size)
 {
 	_rail.setSize(sf::Vector2f(size,5));
 }
+
 float ScrollBar::GetLength() const
 {
 	return _rail.getSize().x;
 }
+
 void ScrollBar::UpdatePosition() 
 {	
 	auto cursorPosition = sf::Mouse::getPosition(_window);
@@ -64,9 +78,3 @@ void ScrollBar::Draw()
 	_window.draw(_body);
 	_window.draw(_rail);
 }
-
-
-ScrollBar::~ScrollBar()
-{
-}
-

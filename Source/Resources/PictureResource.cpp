@@ -2,8 +2,12 @@
 #include <cassert>
 
 PictureResource::PictureResource(const std::string& id, const std::string& name)
-	: Resource(id, name),
-	_resource(nullptr)
+	: Resource(id, name)
+	, _resource(nullptr)
+{
+}
+
+PictureResource::~PictureResource()
 {
 }
 
@@ -30,10 +34,4 @@ sf::Image* PictureResource::Get()
 {
 	assert(GetRefCounter() != 0 && "Resource references not found");
 	return _resource;
-}
-
-
-PictureResource::~PictureResource()
-{
-	
 }
