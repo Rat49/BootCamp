@@ -20,7 +20,7 @@ enum EventTypes : EventID_t
 	deleteBulletEventID,
 	collisionEventBetweenAmmunitionAndSpaceshipId,
 	collisionEventBetweenAmmunitionAndBulletId,
-	collisionEventBetweenAmmunitionAndRocketId
+	collisionEventBetweenAmmunitionAndRocketId,
 	spaceshipRespawnEventID,
 	gameOverEventID
 };
