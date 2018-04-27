@@ -40,5 +40,4 @@ int main()
 {
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
 	AchievementsManager achievementsManager(achievementCM);
-
 }

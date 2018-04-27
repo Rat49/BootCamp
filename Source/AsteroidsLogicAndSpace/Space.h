@@ -10,7 +10,7 @@ public:
 	
 	void AddSomeStars(const int count);
 	void AddSomeAsteroids(const int count, const sf::Sprite& sprite);
-	void Update(const float physicsStepTargetFrameTime);
+	void Update(const sf::Time& deltaTime);
 
 	std::vector<Asteroid *> asteroids;
 	//Ammunition ammunition;
@@ -22,5 +22,6 @@ private:
 	Pool<Star> _poolStar;
 	
 	sf::Vector2u _sizeSpace;
+	size_t _countSmallDeadAsteroids;
 
 };

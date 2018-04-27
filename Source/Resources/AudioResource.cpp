@@ -1,11 +1,14 @@
 #include "AudioResource.h"
 #include <cassert>
 
-AudioResource::AudioResource(const std::string& id, const std::string& name):
-	Resource(id, name), 
-	_resource(nullptr)
+AudioResource::AudioResource(const std::string& id, const std::string& name)
+	: Resource(id, name)
+	, _resource(nullptr)
 {
-	
+}
+
+AudioResource::~AudioResource()
+{
 }
 
 void AudioResource::Load()
@@ -31,8 +34,4 @@ sf::Music& AudioResource::Get()
 {
 	assert(GetRefCounter() != 0 && "Resource references not found");
 	return *_resource;
-}
-
-AudioResource::~AudioResource()
-{
 }
