@@ -2,7 +2,6 @@
 #include "UI.h"
 #include "ScrollBar.h"
 
-
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Space");
