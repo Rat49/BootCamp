@@ -14,11 +14,11 @@ class AchievementsManager
 {
 private:
 	std::map<const std::string, std::vector<Achievement>> _achievementsStorage;
-	sf::Image* _achievemntPicture;
+	sf::Image* _achievementPicture;
 
 	Token_t _tokenForCollisionEventBetweenAsteroidAndBullet;
 public:
-	AchievementsManager(ConfigManager* achievementCM, sf::Image* achievemntPicture);
+	AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture);
 	~AchievementsManager();
 
 	void Update(const sf::Time& deltaTime);

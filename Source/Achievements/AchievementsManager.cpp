@@ -1,7 +1,7 @@
 #include "AchievementsManager.h"
 
-AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image* achievemntPicture)
-	:_achievemntPicture(achievemntPicture)
+AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture)
+	:_achievementPicture(achievementPicture)
 {
 
 	auto achievementsListCategory = achievementCM->GetCategory("TimeAchievementsList").GetParams();
@@ -99,7 +99,7 @@ void AchievementsManager::ShowAchievement(UI& achievUI)
 		{
 			if (it->GetAchievedActive())
 			{
-				achievUI.OnAchive(it->GetDisplayDescriptionName(), _achievemntPicture);
+				achievUI.OnAchive(it->GetDisplayDescriptionName(), _achievementPicture);
 			}
 		}
 	}
