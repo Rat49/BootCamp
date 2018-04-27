@@ -86,12 +86,14 @@ int main()
     ButtonsState stateShoot;
     ButtonsState statePowerfullShoot;
 
-    /*
-    For Audio
-    */
+	/*
+	For Audio
+	*/
 
-    //AudioResource* shootingSound = rm->GetResource<AudioResource>("piupiu");
-    //AudioResource* explosionSound = rm->GetResource<AudioResource>("booom");
+	//AudioResource* bulletSound = rm->GetResource<AudioResource>("piupiu");
+	//AudioResource* explosionSound = rm->GetResource<AudioResource>("booom");
+	//AudioResource* collisionSound = rm->GetResource<AudioResource>("");
+	//AudioResource* rocketSound = rm->GetResource<AudioResource>("");
 
     /*
     For SpaceShip
@@ -245,6 +247,8 @@ int main()
                         ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
                         dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
                         dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
+
+						//collisionSound->Get().play();
                     }
                 }
 
@@ -255,6 +259,8 @@ int main()
                     ResolveCollision(*space.asteroids[i], *spaceship);
                     dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
                     dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+
+					//collisionSound->Get().play();
                 }
 
                 for (size_t j = 0; j < rocketSize; ++j)
@@ -266,6 +272,9 @@ int main()
                         ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
                         dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
                         dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+
+						//explosionSound->Get().play();
+
                         for (size_t k = 0; k < n; ++k)
                         {
                             if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
@@ -275,6 +284,8 @@ int main()
                                 ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
                                 dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
                                 dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+
+								//explosionSound->Get().play();
                             }
                         }
                     }
@@ -289,6 +300,8 @@ int main()
                         ResolveCollision(*space.asteroids[i], *bulletManager.bullets[j]);
                         dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
                         dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager.bullets[j]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
+
+						//explosionSound->Get().play();
                     }
                 }
             }
@@ -328,11 +341,15 @@ int main()
             {
                 std::cout << "Choose state - " << GetNameForState(statePowerfullShoot) << std::endl;
                 previousPowerfullShoot = statePowerfullShoot;
+
+				//rocketSound->Get().play();
             }
             if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
             {
                 std::cout << "Shoot state - " << GetNameForState(stateShoot) << std::endl;
                 previousStateShoot = stateShoot;
+
+				//bulletSound->Get().play();
             }
 
             //Logic
