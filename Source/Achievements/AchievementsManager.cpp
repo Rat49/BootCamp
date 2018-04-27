@@ -99,8 +99,8 @@ void AchievementsManager::ShowAchievement(UI& achievUI)
 			if (it->GetAchievedActive())
 			{
 				achievUI.OnAchive(it->GetDisplayDescriptionName(), _achievementPicture);
+				it->SetAchievedActive(false);
 			}
-			it->SetAchievedActive(false);
 		}
 	}
 }
