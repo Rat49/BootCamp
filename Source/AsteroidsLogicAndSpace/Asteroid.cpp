@@ -90,6 +90,9 @@ void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &posit
 
 	switch (type)
 	{
+	case AsteroidType::Small:
+		_type = AsteroidType::Big;
+		break;
 	case AsteroidType::Big:
 		_type = AsteroidType::Middle;
 		break;
