@@ -5,6 +5,13 @@ void Ammunition::Update(float time)
 {
 	RigidBody::Update(time);
 
+
+	auto t = GetSpeed();
+	std::cout << t.x << " " << t.y << std::endl;
+
+	auto k = GetCoordinates();
+	std::cout << k.x << " " << k.y << std::endl;
+
 	_angularVelocity = _angularVelocity + time * _rotationSpeed;
 	sf::Vector2f nextPosition = GetCoordinates() + GetSpeed() * time;
 
@@ -29,8 +36,11 @@ void Ammunition::Update(float time)
 		nextPosition.x += WindowResolution::_W + _halfLenght * 2;
 		SetCoordinates(nextPosition);
 	}
-
-	_sprite.setPosition(GetCoordinates());
+	_sprite.setOrigin(_radius*2,_radius*2);
+	_sprite.setScale(sf::Vector2f(0.5f, 0.5f));
+	//SetCoordinates(sf::Vector2f(200,200));
+	auto rt = GetCoordinates();
+	_sprite.setPosition(sf::Vector2f (rt.x+_radius, rt.y+ _radius));
 	_sprite.setRotation(_angularVelocity);
 }
 
@@ -38,11 +48,41 @@ void Ammunition::Update(float time)
 
 void Ammunition::Draw(sf::RenderWindow &window)
 {
+	sf::CircleShape physicsShape(GetRadius());
+	physicsShape.setPosition(GetCoordinates());
+	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	physicsShape.setFillColor(sf::Color::Transparent);
+	physicsShape.setOutlineThickness(1);
+
+	window.draw(physicsShape);
+	sf::CircleShape circleCenter(1);
+	circleCenter.setPosition(GetX() + GetRadius(),
+		GetY() + GetRadius());
+	circleCenter.setRadius(1.f);
+	circleCenter.setFillColor(sf::Color::Green);
+	window.draw(circleCenter);
+
 	window.draw(_sprite);
 }
 
 void Ammunition::Init()
 {
+	uint8_t ammunitionNumber = 0;//std::rand() % 1;
+	
+	_radius = 25.0f;
+	SetRadius(_radius);
+
+	_sprite.setOrigin(_radius, _radius);
+
+	SetMass(0.015f);
+
+	AddToDrawableManager();
+
+	_sprite =_sprites[ammunitionNumber];
+	_ammunitionType = static_cast<AmmunitionType>(ammunitionNumber / 3);
+	_ammunitionSize = static_cast<AmmunitionSize>(ammunitionNumber % 3);
+
 	_angularVelocity = GetFloatRandomValue(-15.0, 15.0);
 	_rotationSpeed = GetFloatRandomValue(1, 80);
 	_sprite.setRotation(_angularVelocity);
@@ -59,9 +99,9 @@ void Ammunition::Init()
 	SetCoordinates(sf::Vector2f(positionX, positionY));
 }
 
-Ammunition::Ammunition(sf::Sprite sprite)
+Ammunition::Ammunition(ResourceManager *rm)
 {
-	_sprite = sprite;
+	_sprites.push_back(sf::Sprite(rm->GetResource<TextureResource>("bulletBig")->Get()));
 }
 
 

@@ -4,41 +4,37 @@
 #include "Physics.h"
 #include "Event.h"
 #include "CollisionEvent.h"
+#include "ResourceManager.h"
 
-enum class AmmunitionSize : uint8_t
+enum AmmunitionSize : uint8_t
 {
 	Small,
 	Middle,
-	Big,
-	Count
+	Big
 };
 
-enum class AmmunitionType : uint8_t
+enum AmmunitionType : uint8_t
 {
 	Bullet,
-	Rocket,
-	Count
+	Rocket
 };
 
 class Ammunition : public Drawable, public RigidBody
 {
-	void Init();
 public:
-	
-	Ammunition(sf::Sprite sprite);
+	void Init();
+	Ammunition(ResourceManager *rm);
 
 	void OnSpaceshipCollisionHandler(const Event & cEvent);
-
 	void OnRocketCollisionHandler(const Event & cEvent);
 
-
-	AmmunitionType _type;
-	AmmunitionSize _size;
+	AmmunitionType _ammunitionType;
+	AmmunitionSize _ammunitionSize;
 	void OnBulletCollisionHandler(const Event & cEvent);
 	void AddToDrawableManager();
 	int GetZOrder() const override;
 
-
+	std::vector<sf::Sprite> _sprites;
 	sf::Sprite _sprite;
 	sf::Vector2f _linearVelocity;
 	float _angularVelocity;

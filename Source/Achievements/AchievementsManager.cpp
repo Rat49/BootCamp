@@ -30,8 +30,8 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image
 		[&](const Event& event)
 	{
 		const CollisionEventBetweenAsteroidAndBullet& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndBullet&>(event);
-		DestroyAndTimeAchievementsHandler(currentEvent._asteroid->_type);
 		DestroyAchievementsHandler(currentEvent._asteroid->_type);
+		//DestroyAndTimeAchievementsHandler(currentEvent._asteroid->_type);
 	});
 }
 
@@ -99,6 +99,7 @@ void AchievementsManager::ShowAchievement(UI& achievUI)
 			if (it->GetAchievedActive())
 			{
 				achievUI.OnAchive(it->GetDisplayDescriptionName(), _achievementPicture);
+				it->SetAchievedActive(false);
 			}
 		}
 	}
