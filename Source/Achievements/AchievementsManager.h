@@ -11,15 +11,17 @@
 class AchievementsManager
 {
 private:
-	std::vector<Achievement> _achievementsStorage;
-	std::multimap<const std::string, const std::string> _achievementsList;
+	std::map<const std::string, std::vector<Achievement>> _achievementsStorage;
 
 	Token_t _tokenForCollisionEventBetweenAsteroidAndBullet;
 public:
 	AchievementsManager(ConfigManager* achievementCM);
-	~AchievementsManager(); //???
-	
+	//Destructor
+
 	void Update(sf::Time deltaTime);
-	void ShowAchievement(const Achievement& achiement);
+	void DestroyAchievementsHandler(const AsteroidType& type);
+	void TimeAchievementsHandler();
+	void DestroyAndTimeAchievementsHandler(const AsteroidType& type);
+	void ShowAchievement(sf::RenderWindow& window);
 };
 
