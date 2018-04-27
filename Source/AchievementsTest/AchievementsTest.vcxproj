@@ -97,7 +97,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Achievements;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Events;$(SolutionDir)Source\UI;$(SolutionDir)SFML\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Achievements;$(SolutionDir)Source\Physics;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Events;$(SolutionDir)Source\UI;$(SolutionDir)SFML\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
