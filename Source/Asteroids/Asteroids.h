@@ -17,3 +17,4 @@
 #include "Space.h"
 #include "ParticleAssets.h"
 #include "AudioResource.h"
+#include "BulletManagerEvents.h"

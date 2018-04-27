@@ -12,10 +12,10 @@ CreateRocketEvent::CreateRocketEvent(const sf::Vector2f& position, const sf::Vec
 	_direction = direction;
 }
 
-DeleteBulletEvent::DeleteBulletEvent(OrdinaryBullet* deletedBullet)
-{
-	_deletedBullet = deletedBullet;
-}
+//DeleteBulletEvent::DeleteBulletEvent(OrdinaryBullet* deletedBullet)
+//{
+//	_deletedBullet = deletedBullet;
+//}
 
 DeleteRocketEvent::DeleteRocketEvent(Rocket* deletedRocket)
 {

@@ -22,11 +22,16 @@ private:
 	TextureResource& _rocketTexture;
 	const float _bulletDeflection;
 
-	Token_t _bulletOutOfBoundsDeletion;
-	Token_t _rocketOutOfBoundsDeletion;
+	Token_t _bulletDeletion;
+	Token_t _rocketDeletion;
 	Token_t _bulletCreation;
 	Token_t _rocketCreation;
-	Token_t _collisionBulletvsAsteroid;
+	Token_t _collisionRocketVsAsteroid;
+
+	DeleteBulletEvent _deleteBulletEvent;
+	//DeleteRocketEvent _deleteRocketEvent;
+	//CollisionEventBetweenAsteroidAndRocket _collisionEventBetweenAsteroidAndRocket;
+
 public:
 	BulletManager(TextureResource& ordinaryBulletTexture, TextureResource& rocketTexture);
 	~BulletManager();

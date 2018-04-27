@@ -18,8 +18,6 @@ class DeleteBulletEvent : public Event
 {
 public:
 	OrdinaryBullet* _deletedBullet;
-
-	DeleteBulletEvent(OrdinaryBullet* deletedBullet);
 };
 
 class CreateRocketEvent : public Event

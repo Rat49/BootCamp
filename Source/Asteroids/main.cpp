@@ -109,6 +109,8 @@ int main()
 	CollisionEventBetweenAsteroidAndSpaceship collisionAsteroidVsSpaceship;
 	CollisionEventBetweenAsteroidAndRocket collisionAsteroidVsRocket;
 	CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
+	DeleteBulletEvent deleteBulletEvent;
+
 	constexpr size_t numOfObjects = 10;
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
@@ -310,15 +312,17 @@ int main()
 				}
 			}
 
+			// Удаление изменяет размер массива!!!
 			for (size_t j = 0; j < bulletsSize; ++j)
 			{
 				if (Collided(*space.asteroids[i], *bulletManager.bullets[j]))
 				{
 					collisionAsteroidVsBullet._asteroid = space.asteroids[i];
 					collisionAsteroidVsBullet._bullet = bulletManager.bullets[j];
+					deleteBulletEvent._deletedBullet = bulletManager.bullets[j];
 					ResolveCollision(*space.asteroids[i], *bulletManager.bullets[j]);
 					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
-					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager.bullets[j]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
+					dispatcher.Send(deleteBulletEvent, deleteBulletEventID);
 				}
 			}
 

@@ -20,11 +20,11 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 		CreateRocket(event);
 	});
 
-	_bulletOutOfBoundsDeletion = dispatcher.Connect(bulletOutOfBoundsEventID, [&](const Event& event)
+	_bulletDeletion = dispatcher.Connect(deleteBulletEventID, [&](const Event& event)
 	{
 		DeleteBullet(event);
 	});
-	_rocketOutOfBoundsDeletion = dispatcher.Connect(rocketOutOfBoundsEventID, [&](const Event& event)
+	_rocketDeletion = dispatcher.Connect(rocketOutOfBoundsEventID, [&](const Event& event)
 	{
 		DeleteRocket(event);
 	});
@@ -52,9 +52,9 @@ BulletManager::~BulletManager()
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Disconnect(createBulletEventID, _bulletCreation);
-	dispatcher.Disconnect(bulletOutOfBoundsEventID, _bulletOutOfBoundsDeletion);
+	dispatcher.Disconnect(deleteBulletEventID, _bulletDeletion);
 	dispatcher.Disconnect(createRocketEventID, _rocketCreation);
-	dispatcher.Disconnect(rocketOutOfBoundsEventID, _rocketOutOfBoundsDeletion);
+	dispatcher.Disconnect(rocketOutOfBoundsEventID, _rocketDeletion);
 }
 
 void BulletManager::CreateBullet(const Event& event)
@@ -133,7 +133,8 @@ void BulletManager::Update(const sf::Time& deltaTime)
 			|| bullet->GetSprite()->getPosition().y > WindowResolution::_H + bullet->GetHalfSpriteLength()
 			|| bullet->GetSprite()->getPosition().y < -bullet->GetHalfSpriteLength())
 		{
-			Dispatcher::getInstance().Send(DeleteBulletEvent(bullet), bulletOutOfBoundsEventID);
+			_deleteBulletEvent._deletedBullet = bullet;
+			Dispatcher::getInstance().Send(_deleteBulletEvent, deleteBulletEventID);
 		}
 	}
 	for (auto& rocket : rockets)
