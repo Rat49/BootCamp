@@ -75,7 +75,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\DebugCommandManager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\DebugCommandManager</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin;</AdditionalLibraryDirectories>
@@ -88,7 +88,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\DebugCommandManager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\DebugCommandManager</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin;</AdditionalLibraryDirectories>
@@ -103,7 +103,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\DebugCommandManager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\DebugCommandManager</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>

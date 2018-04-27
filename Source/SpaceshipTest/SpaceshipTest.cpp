@@ -3,6 +3,7 @@
 #include "DrawableManager.h"
 #include "Spaceship.h"
 #include "BulletManager.h"
+#include "ResourceManager.h"
 
 int main()
 {
@@ -49,7 +50,7 @@ int main()
 	std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
 	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
-	BulletManager bulletManager(*bulletTexture,*rocketTexture);
+	BulletManager bulletManager(*bulletTexture, *rocketTexture);
 	DrawableManager& drawableManager = DrawableManager::getInstance();
 
 	sf::Clock clock;
@@ -78,7 +79,7 @@ int main()
 				window.close();
 			}
 		}
-		
+
 		auto now = clock.getElapsedTime();
 		deltaTime = now - timer;
 		timer = now;
