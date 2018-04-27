@@ -41,7 +41,7 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 	_rocketParticle->SetVelocity(rocketDirection * _speedValuePixelsPerSecond);
 	
 	SetSpeed(rocketDirection * _speedValuePixelsPerSecond);
-	_timeAfterShot = sf::seconds(0.0f);
+	_timeAfterShot = sf::Time::Zero;
 	SetCoordinates(sf::Vector2f(position.x, position.y));
 }
 
@@ -68,7 +68,7 @@ void Rocket::Draw(sf::RenderWindow& window)
 	sf::CircleShape circleCenter(1);
 	circleCenter.setPosition(GetX() + GetRadius(),
 		GetY() + GetRadius());
-	circleCenter.setRadius(1.f);
+	circleCenter.setRadius(1.0f);
 	circleCenter.setFillColor(sf::Color::Green);
 	window.draw(circleCenter);
 	window.draw(_rocketSprite);

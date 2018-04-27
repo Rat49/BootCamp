@@ -250,7 +250,7 @@ int main()
 			}
 			if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
 			{
-				std::cout << "Choose state - " << GetNameForState(statePowerfullShoot) << std::endl;
+				std::cout << "SuperShoot state - " << GetNameForState(statePowerfullShoot) << std::endl;
 				previousPowerfullShoot = statePowerfullShoot;
 			}
 			if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
@@ -321,7 +321,7 @@ int main()
 					deleteBulletEvent._deletedBullet = bullet;
 					ResolveCollision(*space.asteroids[i], *bullet);
 					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
-					dispatcher.Send(deleteBulletEvent, deleteBulletEventID);
+					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager._collisionBulletVsAsteroid);
 				}
 			}
 		}

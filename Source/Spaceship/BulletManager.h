@@ -22,26 +22,24 @@ private:
 	TextureResource& _rocketTexture;
 	const float _bulletDeflection;
 
-	Token_t _bulletDeletion;
-	Token_t _rocketDeletion;
 	Token_t _bulletCreation;
 	Token_t _rocketCreation;
-	Token_t _collisionRocketVsAsteroid;
 
-	DeleteBulletEvent _deleteBulletEvent;
-	//DeleteRocketEvent _deleteRocketEvent;
-	//CollisionEventBetweenAsteroidAndRocket _collisionEventBetweenAsteroidAndRocket;
+	RocketOutOfBoundsEvent _rocketOutOfBoundsEvent;
 
 public:
+	Token_t _collisionRocketVsAsteroid;
+	Token_t _collisionBulletVsAsteroid;
+
 	BulletManager(TextureResource& ordinaryBulletTexture, TextureResource& rocketTexture);
 	~BulletManager();
 	std::vector<OrdinaryBullet*> bullets;
 	std::vector<Rocket*> rockets;
 
-	void CreateBullet(const Event& event);
-	void DeleteBullet(const Event& event);
-	void CreateRocket(const Event& event);
-	void DeleteRocket(const Event& event);
+	void RocketOutOfBoundsHandler(const Event& event);
+	void DeleteBullet(OrdinaryBullet* bullet);
+	void DeleteRocket(Rocket* rocket);
+
 	void Update(const sf::Time& deltaTime);
 };
 

@@ -29,10 +29,8 @@ public:
 	CreateRocketEvent(const sf::Vector2f& position, const sf::Vector2f& direction);
 };
 
-class DeleteRocketEvent : public Event
+class RocketOutOfBoundsEvent : public Event
 {
 public:
 	Rocket* _deletedRocket;
-
-	DeleteRocketEvent(Rocket* deletedRocket);
 };
