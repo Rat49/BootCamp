@@ -90,10 +90,10 @@ int main()
 	For Audio
 	*/
 
-	//AudioResource* bulletSound = rm->GetResource<AudioResource>("piupiu");
+	AudioResource* bulletSound = rm->GetResource<AudioResource>("shoot");
 	//AudioResource* explosionSound = rm->GetResource<AudioResource>("booom");
 	//AudioResource* collisionSound = rm->GetResource<AudioResource>("");
-	//AudioResource* rocketSound = rm->GetResource<AudioResource>("");
+	AudioResource* rocketSound = rm->GetResource<AudioResource>("rocket");
 
     /*
     For SpaceShip
@@ -342,14 +342,14 @@ int main()
                 std::cout << "Choose state - " << GetNameForState(statePowerfullShoot) << std::endl;
                 previousPowerfullShoot = statePowerfullShoot;
 
-				//rocketSound->Get().play();
+				rocketSound->Get().play();
             }
             if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
             {
                 std::cout << "Shoot state - " << GetNameForState(stateShoot) << std::endl;
                 previousStateShoot = stateShoot;
 
-				//bulletSound->Get().play();
+				bulletSound->Get().play();
             }
 
             //Logic
