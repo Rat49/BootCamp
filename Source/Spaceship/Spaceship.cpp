@@ -10,8 +10,8 @@ Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaces
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 	, _spaceshipFlickeringImseq(spaceshipFlickeringImseq)
 	, _rotationAngle(17.0f)
-	, _acceleration(15.0f)
-	, _maxSquareSpeed(12000.0f)
+	, _acceleration(25.0f)
+	, _maxSquareSpeed(50000.0f)
 	, _flickeringTime(sf::seconds(1.0f))
 	, _timeAfterDamage(sf::seconds(0.0f))
 	, _input(input)	
@@ -99,7 +99,7 @@ void Spaceship::PowerfulShoot()
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createRocket, EventTypes::createRocketEventID);
 	
-	_timeAfterPowerfulShot = sf::seconds(0.0f); 
+	_timeAfterPowerfulShot = sf::Time::Zero; 
 	GainRebound(_rocketRebound);
 }
 
@@ -119,7 +119,7 @@ void Spaceship::OrdinaryShoot()
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createBullet, EventTypes::createBulletEventID);
 
-	_timeAfterBulletShot = sf::seconds(0.0f);
+	_timeAfterBulletShot = sf::Time::Zero;
 	GainRebound(_bulletRebound);
 }
 
@@ -159,7 +159,7 @@ void Spaceship::SetFlickeringMode()
 	_spaceshipAnimation->Stop();
 	_spaceshipFlickering->Start();
 
-	_timeAfterDamage = sf::seconds(0.0f);
+	_timeAfterDamage = sf::Time::Zero;
 	_isDamaged = true;
 }
 
@@ -193,7 +193,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 		else 
 		{
 			RotateSpaceship(-_rotationAngle);
-			_inputAccumulatedTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::Time::Zero;
 		}
 	}
 	if (_input.GetState(static_cast<int>(GameActions::MoveRight), stateMoveRight) && (stateMoveRight == ButtonsState::JustPressed || stateMoveRight == ButtonsState::Pressed))
@@ -205,7 +205,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 		else
 		{
 			RotateSpaceship(_rotationAngle);
-			_inputAccumulatedTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::Time::Zero;
 		}
 	}
 	if (_input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && (stateMoveUp == ButtonsState::JustPressed || stateMoveUp == ButtonsState::Pressed))
@@ -217,7 +217,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 		else
 		{
 			Accelerate();
-			_inputAccumulatedTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::Time::Zero;
 		}
 	}
 	if (_input.GetState(static_cast<int>(GameActions::MoveDown), stateMoveDown) && (stateMoveDown == ButtonsState::JustPressed || stateMoveDown == ButtonsState::Pressed))
@@ -229,7 +229,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 		else
 		{
 			Decelerate();
-			_inputAccumulatedTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::Time::Zero;
 		}
 	}
 	if (_input.GetState(static_cast<int>(GameActions::SuperShoot), stateSuperShoot) && stateSuperShoot == ButtonsState::JustPressed)

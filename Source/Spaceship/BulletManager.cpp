@@ -11,19 +11,20 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 	, _particleStorage(Pool<RocketParticle>(_totalRocketCount))
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
-	_bulletDeletion = dispatcher.Connect(createBulletEventID, [&](const Event& event)
+	_bulletCreation = dispatcher.Connect(createBulletEventID, [&](const Event& event)
 	{
 		CreateBullet(event);
 	});
-	_rocketDeletion = dispatcher.Connect(createRocketEventID, [&](const Event& event)
+	_rocketCreation = dispatcher.Connect(createRocketEventID, [&](const Event& event)
 	{
 		CreateRocket(event);
 	});
-	_bulletCreation = dispatcher.Connect(deleteBulletEventID, [&](const Event& event)
+
+	_bulletOutOfBoundsDeletion = dispatcher.Connect(bulletOutOfBoundsEventID, [&](const Event& event)
 	{
 		DeleteBullet(event);
 	});
-	_rocketCreation = dispatcher.Connect(deleteRocketEventID, [&](const Event& event)
+	_rocketOutOfBoundsDeletion = dispatcher.Connect(rocketOutOfBoundsEventID, [&](const Event& event)
 	{
 		DeleteRocket(event);
 	});
@@ -51,9 +52,9 @@ BulletManager::~BulletManager()
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Disconnect(createBulletEventID, _bulletCreation);
-	dispatcher.Disconnect(deleteBulletEventID, _bulletDeletion);
+	dispatcher.Disconnect(bulletOutOfBoundsEventID, _bulletOutOfBoundsDeletion);
 	dispatcher.Disconnect(createRocketEventID, _rocketCreation);
-	dispatcher.Disconnect(deleteRocketEventID, _rocketDeletion);
+	dispatcher.Disconnect(rocketOutOfBoundsEventID, _rocketOutOfBoundsDeletion);
 }
 
 void BulletManager::CreateBullet(const Event& event)
@@ -78,15 +79,13 @@ void BulletManager::DeleteBullet(const Event& event)
 {
 	const DeleteBulletEvent& currentEvent = static_cast<const DeleteBulletEvent&>(event);
 
-	/*OrdinaryBullet* ptrBullet = currentEvent._deletedBullet;
+	OrdinaryBullet* ptrBullet = currentEvent._deletedBullet;
 
 	bullets.erase(std::remove(bullets.begin(), bullets.end(), ptrBullet), bullets.end());
 	_ordinaryBulletStorage.Put(ptrBullet);
-	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrBullet));*/
+	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrBullet));
 
-
-
-
+	std::cout << "bullets storage " << _ordinaryBulletStorage.Count() << std::endl;
 
 		/*_drawableObjects.erase
 	(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrBullet)),
@@ -111,13 +110,13 @@ void BulletManager::DeleteRocket(const Event & event)
 {
 	const DeleteRocketEvent& currentEvent = static_cast<const DeleteRocketEvent&>(event);
 
-	/*Rocket* ptrRocket = currentEvent._deletedRocket;
+	Rocket* ptrRocket = currentEvent._deletedRocket;
 
 	rockets.erase(std::remove(rockets.begin(), rockets.end(), ptrRocket), rockets.end());
 	_rocketStorage.Put(ptrRocket);
-	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrRocket));*/
-		
-	
+	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrRocket));
+
+	std::cout << "rockets storage " << _rocketStorage.Count() << std::endl;	
 	
 	/*_drawableObjects.erase
 	(std::remove(DrawableManager::getInstance()._drawableObjects.begin(), DrawableManager::getInstance()._drawableObjects.end(), static_cast<Drawable*>(ptrRocket)),
@@ -134,7 +133,7 @@ void BulletManager::Update(const sf::Time& deltaTime)
 			|| bullet->GetSprite()->getPosition().y > WindowResolution::_H + bullet->GetHalfSpriteLength()
 			|| bullet->GetSprite()->getPosition().y < -bullet->GetHalfSpriteLength())
 		{
-			Dispatcher::getInstance().Send(DeleteBulletEvent(bullet), deleteBulletEventID);
+			Dispatcher::getInstance().Send(DeleteBulletEvent(bullet), bulletOutOfBoundsEventID);
 		}
 	}
 	for (auto& rocket : rockets)
@@ -145,7 +144,7 @@ void BulletManager::Update(const sf::Time& deltaTime)
 			|| rocket->GetSprite()->getPosition().y > WindowResolution::_H + rocket->GetHalfSpriteLength()
 			|| rocket->GetSprite()->getPosition().y < -rocket->GetHalfSpriteLength())
 		{
-			Dispatcher::getInstance().Send(DeleteRocketEvent(rocket), deleteRocketEventID);
+			Dispatcher::getInstance().Send(DeleteRocketEvent(rocket), rocketOutOfBoundsEventID);
 		}
 	}
 }
