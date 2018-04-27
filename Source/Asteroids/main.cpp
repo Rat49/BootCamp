@@ -322,7 +322,7 @@ int main()
 					deleteBulletEvent._deletedBullet = bulletManager.bullets[j];
 					ResolveCollision(*space.asteroids[i], *bulletManager.bullets[j]);
 					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
-					dispatcher.Send(deleteBulletEvent, deleteBulletEventID);
+					//dispatcher.Send(deleteBulletEvent, deleteBulletEventID);
 				}
 			}
 
