@@ -66,12 +66,12 @@ void Space::Update(const sf::Time& deltaTime)
 				_countSmallDeadAsteroids = 0;
 			}
 		}
-		asteroid->Update(deltaTime.asSeconds()/1000.0f);
+		asteroid->Update(deltaTime.asSeconds());
 	}
 
 	for (auto *star : _stars)
 	{
-		star->Update(deltaTime.asSeconds()/1000.0f);
+		star->Update(deltaTime.asSeconds());
 	}
 }
 
