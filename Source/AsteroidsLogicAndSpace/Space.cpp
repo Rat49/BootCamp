@@ -30,7 +30,7 @@ void Space::AddSomeAsteroids(const int count, const sf::Sprite& sprite)
 	}
 }
 
-void Space::Update(const float physicsStepTargetFrameTime)
+void Space::Update(const sf::Time& deltaTime)
 {
 	for (size_t i = 0; i < asteroids.size(); ++i)
 	{ 
@@ -58,12 +58,12 @@ void Space::Update(const float physicsStepTargetFrameTime)
 				--i;
 			}
 		}
-		asteroid->Update(physicsStepTargetFrameTime);
+		asteroid->Update(deltaTime.asSeconds());
 	}
 
 	for (auto *star : _stars)
 	{
-		star->Update(physicsStepTargetFrameTime);
+		star->Update(deltaTime.asSeconds());
 	}
 }
 

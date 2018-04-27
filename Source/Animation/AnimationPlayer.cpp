@@ -23,7 +23,7 @@ void AnimationPlayer::Init(sf::Sprite* animatedSprite, ImageSequenceResource* an
 	_framesCount = _spriteSheet.size();
 	_animationTime = _animation == nullptr ? sf::Time::Zero : _animation->GetTime();
 	_frameTime = _framesCount == 0 ? sf::Time::Zero : (_animationTime / static_cast<float>(_framesCount));
-	_playingTime = sf::seconds(0.0f);
+	_playingTime = sf::Time::Zero;
 	_defaultAnimationTime = _animationTime;
 }
 
@@ -53,20 +53,20 @@ void AnimationPlayer::Start(sf::Time animationTime)
 void AnimationPlayer::Pause()
 {
 	_isStopped = true;
-	_playingTime = sf::milliseconds(0);
+	_playingTime = sf::Time::Zero;
 }
 
 void AnimationPlayer::Stop()
 {
 	_currentFrame = 0;
-	_playingTime = sf::milliseconds(0);
+	_playingTime = sf::Time::Zero;
 	_isStopped = true;
 }
 
 void AnimationPlayer::Reset()
 {
 	_currentFrame = 0;
-	_playingTime = sf::milliseconds(0);
+	_playingTime = sf::Time::Zero;
 	_isStopped = false;
 }
 
@@ -85,7 +85,7 @@ void AnimationPlayer::Update(sf::Time deltaTime)
 
 	assert(_animatedSprite != nullptr);
 
-	_playingTime = sf::milliseconds(0);
+	_playingTime = sf::Time::Zero;
 	int64_t frameNumber = _currentFrame + 1;
 
 	if (_isLooped)

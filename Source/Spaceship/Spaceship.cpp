@@ -156,7 +156,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 		else 
 		{
 			RotateSpaceship(-_rotationAngle);
-			_inputAccumulatedTime = sf::milliseconds(0);
+            _inputAccumulatedTime = sf::Time::Zero;
 		}
 	}
 	if (_input.GetState(static_cast<int>(GameActions::MoveRight), stateMoveRight) && (stateMoveRight == ButtonsState::JustPressed || stateMoveRight == ButtonsState::Pressed))
@@ -168,7 +168,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 		else
 		{
 			RotateSpaceship(_rotationAngle);
-			_inputAccumulatedTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::Time::Zero;
 		}
 	}
 	if (_input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && (stateMoveUp == ButtonsState::JustPressed || stateMoveUp == ButtonsState::Pressed))
@@ -180,7 +180,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 		else
 		{
 			Accelerate();
-			_inputAccumulatedTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::Time::Zero;
 		}
 	}
 	if (_input.GetState(static_cast<int>(GameActions::MoveDown), stateMoveDown) && (stateMoveDown == ButtonsState::JustPressed || stateMoveDown == ButtonsState::Pressed))
@@ -192,7 +192,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 		else
 		{
 			Decelerate();
-			_inputAccumulatedTime = sf::milliseconds(0);
+			_inputAccumulatedTime = sf::Time::Zero;
 		}
 	}
 	if (_input.GetState(static_cast<int>(GameActions::SuperShoot), stateSuperShoot) && stateSuperShoot == ButtonsState::JustPressed)
