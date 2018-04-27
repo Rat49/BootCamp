@@ -2,12 +2,26 @@
 
 AchievementsManager::AchievementsManager(ConfigManager* achievementCM)
 {
-	_achievementsList = achievementCM->GetCategory("AchievementsList").GetParams();
-	for (const auto& achiev : _achievementsList)
+	auto achievementsListCategory = achievementCM->GetCategory("TimeAchievementsList").GetParams();
+	for (const auto& achiev : achievementsListCategory)
 	{
-		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("AchievementsList." + achiev.first).GetParams();
+		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("TimeAchievementsList." + achiev.first).GetParams();
 		Achievement achievement(achievementsConfig);
-		_achievementsStorage.push_back(achievement);
+		_achievementsStorage["TimeAchievementsList"].push_back(achievement);
+	}
+	achievementsListCategory = achievementCM->GetCategory("DestroyAchievementsList").GetParams();
+	for (const auto& achiev : achievementsListCategory)
+	{
+		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("DestroyAchievementsList." + achiev.first).GetParams();
+		Achievement achievement(achievementsConfig);
+		_achievementsStorage["DestroyAchievementsList"].push_back(achievement);
+	}
+	achievementsListCategory = achievementCM->GetCategory("DestroyAndTimeAchievementsList").GetParams();
+	for (const auto& achiev : achievementsListCategory)
+	{
+		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("DestroyAndTimeAchievementsList." + achiev.first).GetParams();
+		Achievement achievement(achievementsConfig);
+		_achievementsStorage["DestroyAndTimeAchievementsList"].push_back(achievement);
 	}
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
@@ -15,39 +29,68 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM)
 		[&](const Event& event)
 	{
 		const CollisionEventBetweenAsteroidAndBullet& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndBullet&>(event);
-		for (auto& achiev : _achievementsStorage)
+		DestroyAndTimeAchievementsHandler(currentEvent._asteroid->_type);
+		DestroyAchievementsHandler(currentEvent._asteroid->_type);
+	});
+}
+
+void AchievementsManager::DestroyAchievementsHandler(const AsteroidType& type)
+{
+	if (type == AsteroidType::Big)
+	{
+		for (auto& achiev : _achievementsStorage["DestroyAchievementsList"])
 		{
-			if (currentEvent._asteroid->_type == AsteroidType::Big && achiev.GetIdAchievement() == 4 && achiev.GetIdAchievement() == 5)
-			{
-				achiev.SetProgressState(achiev.GetProgressState()+1);
-			}
-			if (currentEvent._asteroid->_type == AsteroidType::Small && achiev.GetIdAchievement() == 6)
+			if (achiev.GetIdAchievement() == 4 || achiev.GetIdAchievement() == 5)
 			{
 				achiev.SetProgressState(achiev.GetProgressState() + 1);
 			}
 		}
-	});
+	}
+	if (type == AsteroidType::Middle)
+	{
+		for (auto& achiev : _achievementsStorage["DestroyAchievementsList"])
+		{
+			if (achiev.GetIdAchievement() == 6 || achiev.GetIdAchievement() == 7)
+			{
+				achiev.SetProgressState(achiev.GetProgressState() + 1);
+			}
+		}
+	}
 }
 
-AchievementsManager::~AchievementsManager()
+void AchievementsManager::TimeAchievementsHandler()
 {
-	//???
 }
+
+void AchievementsManager::DestroyAndTimeAchievementsHandler(const AsteroidType& type)
+{
+}
+
 
 void AchievementsManager::Update(sf::Time deltaTime)
 {
 	for (auto& achiev : _achievementsStorage)
 	{
-		if (achiev.GetProgressState() != achiev.GetProgressFinishState())
+		for (auto it = achiev.second.begin(); it != achiev.second.end(); ++it)
 		{
-			return;
+			if (it->GetProgressState() == it->GetProgressFinishState())
+			{
+				it->SetAchievedActive(true);
+			}
 		}
-
-		ShowAchievement(achiev);
 	}
 }
 
-void AchievementsManager::ShowAchievement(const Achievement& achiement)
+void AchievementsManager::ShowAchievement(sf::RenderWindow& window)
 {
-	std::cout << "Achive!" << std::endl;
+	for (auto& achiev : _achievementsStorage)
+	{
+		for (auto it = achiev.second.begin(); it != achiev.second.end(); ++it)
+		{
+			if (it->GetAchievedActive())
+			{
+				//draw
+			}
+		}
+	}
 }
