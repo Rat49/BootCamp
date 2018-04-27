@@ -12,6 +12,6 @@ protected:
 	float _radius;
 	float _damage;
 public:
-	virtual ~Bullet() {}
+	virtual ~Bullet() = 0 {};
 	virtual void Update(const sf::Time& deltaTime) = 0;
 };

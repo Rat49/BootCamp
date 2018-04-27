@@ -117,7 +117,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\Physics;$(SolutionDir)Source\Events;$(SolutionDir)Source\Utility;$(SolutionDir)SFML\include;$(SolutionDir)Source\Resources;$(SolutionDir)Source\AsteroidslogicAndSpace;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Events;$(SolutionDir)Source\Utility;$(SolutionDir)SFML\include;$(SolutionDir)Source\Resources;$(SolutionDir)Source\AsteroidslogicAndSpace;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

@@ -14,8 +14,8 @@ public:
 
 	Object() :_sizeSpace() {}
 
-	void Draw(sf::RenderWindow & /*window*/) override {}
-	virtual void Update(float /*time*/) {}
+	void Draw(sf::RenderWindow & window) override {}
+	virtual void Update(float time) {}
 	void AddToDrawableManager() override;
 	virtual void Remove();
 

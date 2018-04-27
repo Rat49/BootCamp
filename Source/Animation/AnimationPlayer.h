@@ -1,5 +1,5 @@
 #pragma once
-#include <ImageSequenceResource.h>
+#include <ResourceManager.h>
 
 namespace sf
 {

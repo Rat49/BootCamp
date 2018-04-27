@@ -1,9 +1,5 @@
 #include "ResourceManager.h"
-#include "AudioResource.h"
-#include "ImageSequenceResource.h"
-#include "PictureResource.h"
-#include "Resource.h"
-#include "TextureResource.h"
+
 
 ResourceManager::ResourceManager(const std::map<std::string, std::multimap<const std::string, const std::string>>& resourceConfig)
 {

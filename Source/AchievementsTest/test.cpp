@@ -1,13 +1,15 @@
-#pragma once
 #include "Achievements.h"
 #include "AchievementsManager.h"
+#include "EventSystem.h"
+#include "Physics.h"
+#include "ConfigManager.h"
+#include "UI.h"
 #include "SFML\Graphics.hpp"
 #include <cstdlib>
 #include <map>
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1280, 800), "AchievementTest");
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
 	UI ui(window);
 	sf::Font font;
@@ -50,7 +52,3 @@ int main()
 	}
 		
 }
-	
-	
-	
-

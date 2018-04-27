@@ -33,11 +33,13 @@ namespace LeaderboardTest {
 		}
 
 	}
-}
 
-int main() {
 
-	LeaderboardTest::Test();
+	int main() {
 
-	return 0;
+		LeaderboardTest::Test();
+
+		return 0;
+	}
+
 }

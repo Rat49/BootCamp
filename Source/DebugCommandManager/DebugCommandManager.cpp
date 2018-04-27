@@ -3,7 +3,6 @@
 #include "DebugCommandManagerEvent.h"
 #include "EventSystem.h"
 #include <algorithm>
-
 extern std::vector<ConsoleCommand> Commands;
 
 DebugCommandManager::DebugCommandManager()

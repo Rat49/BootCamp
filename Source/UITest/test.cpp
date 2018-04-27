@@ -1,6 +1,5 @@
 #include "AchievementShower.h"
-#include "UI.h"
-#include "ScrollBar.h"
+
 
 int main()
 {
@@ -9,9 +8,9 @@ int main()
 	mui.CreateButton(sf::Vector2f(100,100), PercentXY(20,30),"start");
 	mui.CreateButton(sf::Vector2f(20, 30), PercentXY(21, 15), "test");
 	mui.CreateScrollBar(100, PercentXY(46, 30), "scroll");
-	/*sf::Font font;
-	auto check = font.loadFromFile("arial.ttf");
-	mui.CreateLabel("hello",font, PercentXY(1,1),"label");*/
+	sf::Font font;
+	font.loadFromFile("font/arial.ttf");
+	mui.CreateLabel("hello",font, PercentXY(1,1),"label");
 	mui.Get<ScrollBar>("scroll")->SetFillColor(sf::Color::Green);
 	mui.Get<ScrollBar>("scroll")->SetLength(200);
 	window.setVerticalSyncEnabled(true);

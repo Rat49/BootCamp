@@ -82,8 +82,13 @@
       <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(SolutionDir)SFML\bin\openal32.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-audio-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-graphics-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-network-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-system-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
@@ -99,8 +104,13 @@
       <AdditionalDependencies>sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(SolutionDir)SFML\bin\openal32.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-audio-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-graphics-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-network-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-system-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -120,8 +130,12 @@
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(SolutionDir)SFML\bin\openal32.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-audio-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-graphics-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-network-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-system-2.dll" "$(OutDir)\*.*" /F /R /Y /I
+xcopy "$(SolutionDir)SFML\bin\sfml-window-2.dll" "$(OutDir)\*.*" /F /R /Y /I</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -103,13 +103,13 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\DebugCommandManager</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\DebugCommandManager</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Spaceship.lib;Physics.lib;Utility.lib;sfml-system.lib;sfml-window.lib;sfml-network.lib;sfml-audio.lib;sfml-graphics.lib;Animation.lib;Input.lib;Resources.lib;Events.lib;DebugCommandManager.lib;Particle.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Spaceship.lib;Physics.lib;Utility.lib;sfml-system.lib;sfml-window.lib;sfml-network.lib;sfml-audio.lib;sfml-graphics.lib;Animation.lib;Input.lib;Resources.lib;Events.lib;DebugCommandManager.lib;ConfigManager.lib;Particle.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>

@@ -3,7 +3,6 @@
 #include "DrawableManager.h"
 #include "EventSystem.h"
 #include "ResourceManager.h"
-#include "TextureResource.h"
 #include "ConfigManager.h"
 #include "Star.h"
 #include "Space.h"
@@ -13,6 +12,7 @@ const int WINDOW_HEIGHT = 800;
 
 int main()
 {
+	sf::Clock clock;
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
 
 	/*
@@ -34,10 +34,8 @@ int main()
 	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").GetParams()));
 
 
-	sf::Clock clock;
-	sf::Time deltaTime;
-	sf::Time fixedTime;
-	const sf::Time fixedUpdateTime = sf::milliseconds(2);
+	constexpr float physicsStepTargetFrameTime = 1000.0f / 60.f;
+	float           accumulatedFrameTime = 0.f;
 
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 
@@ -61,16 +59,16 @@ int main()
 
 
 	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50);
-	//int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 20;
-	int _nAsteroids = 4;
+	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 20;
+
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
 
 	bool exit = false;
 	while (window.isOpen())
 	{
-		deltaTime = clock.restart();
-		fixedTime += deltaTime;
+		const float delta = clock.restart().asMicroseconds() / 1000.0f;
+		accumulatedFrameTime += delta;
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -93,8 +91,9 @@ int main()
 			}
 		}
 		window.clear();
-		if (fixedTime > fixedUpdateTime)
+		while (accumulatedFrameTime >= physicsStepTargetFrameTime)
 		{
+			accumulatedFrameTime -= physicsStepTargetFrameTime;
 
 			size_t n = space.asteroids.size() - 1;
 		    size_t m = space.asteroids.size();
@@ -107,13 +106,14 @@ int main()
 						collisionEvent._asteroid1 = space.asteroids[i];
 						collisionEvent._asteroid2 = space.asteroids[j];
 						ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
-						dispatcher.Send(collisionEvent, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
-						dispatcher.Send(collisionEvent, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
+						dispatcher.Send(collisionEvent, collisionEventID, space.asteroids[i]->_token);
+						dispatcher.Send(collisionEvent, collisionEventID, space.asteroids[j]->_token);
 					}
 				}
 			}
+			space.Update(physicsStepTargetFrameTime/1000.0f);
 		}
-		space.Update(fixedTime);
+
 		dm.DrawScene(window);
 		window.display();
 	}

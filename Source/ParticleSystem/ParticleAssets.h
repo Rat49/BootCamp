@@ -6,7 +6,7 @@ class RocketParticle : public PoolElement
 public:
 	ParticleSystem particles;
 
-	RocketParticle(unsigned int /*quantity*/, sf::Vector2u window) :
+	RocketParticle(unsigned int quantity, sf::Vector2u window) :
 		particles(700, window) {
 		particles.SetNormalDistrParams(0, 7);
 		particles.SetStandartColors();
@@ -48,7 +48,7 @@ public:
 	ParticleSystem particles;
 	sf::Time reccomendedLifeTime = sf::seconds(0.2f);
 
-	ExplosionParticle(unsigned int /*quantity*/, sf::Vector2u window) :
+	ExplosionParticle(unsigned int quantity, sf::Vector2u window) :
 		particles(1000, window) {
 		particles.SetRate(150);
 		particles.SetNormalDistrParams(0, 160);
@@ -84,7 +84,7 @@ class SpaceshipParticle {
 public:
 	ParticleSystem particles;
 
-	SpaceshipParticle(unsigned int /*quantity*/, sf::Vector2u window) :
+	SpaceshipParticle(unsigned int quantity, sf::Vector2u window) :
 		particles(1000, window) {
 		particles.SetParticlesLifetime(50);
 	}

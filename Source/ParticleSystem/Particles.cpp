@@ -3,16 +3,17 @@
 #include <SFML/System.hpp>
 
 
-ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize)
-	: _particles(count)
-	, _vertices(sf::Points, count)
-	, _emitterPosition(0, 0)
-	, _canvasSize(canvasSize)
-	, _emitterVelocity(0, 0)
+ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize) :
+	_particles(count),
+	_vertices(sf::Points, count),
+	_emitterPosition(0, 0),
+	_canvasSize(canvasSize),
+	_emitterVelocity(0, 0)
 {
-	_zOrder = 5;
+	_zOrder = 2;
 	InitializeParticles();
 	AddToDrawableManager();
+
 }
 
 void ParticleSystem::InitializeParticles()
@@ -47,43 +48,37 @@ void ParticleSystem::AddColor(float begin, sf::Color color)
 
 void ParticleSystem::SetStandartColors()
 {
-	colors = 
-		{
-			{ 1.f, sf::Color::Color(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255)) },
-			{ .9f, sf::Color::Color(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(128), static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(255)) },
-			{ .7f, sf::Color::Red },
-			{ .5f, sf::Color::Color(static_cast<sf::Uint8>(90), static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(57), static_cast<sf::Uint8>(255)) },
-			{ .1f, sf::Color::Black }
-		};
+	colors = {
+		{ 1.f, sf::Color::Color(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(255)) },
+		{ .9f, sf::Color::Color(static_cast<sf::Uint8>(255), static_cast<sf::Uint8>(128), static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(255)) },
+		{ .7f, sf::Color::Red },
+		{ .5f, sf::Color::Color(static_cast<sf::Uint8>(90), static_cast<sf::Uint8>(0), static_cast<sf::Uint8>(57), static_cast<sf::Uint8>(255)) },
+		{ .1f, sf::Color::Black }
+	};
 }
 
-void ParticleSystem::AddCircleForce(sf::Vector2f centre, float radius, float strength)
-{
+void ParticleSystem::AddCircleForce(sf::Vector2f centre, float radius, float strength) {
 	_forces.insert(_forces.begin(), circleForce{ strength, centre, centre, radius });
 }
 
-void ParticleSystem::AddCircleForceBehind(float coeff, float radius, float strength)
-{
+void ParticleSystem::AddCircleForceBehind(float coeff, float radius, float strength) {
 	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
 	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
 	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
 	AddCircleForce(_emitterPosition - sf::Vector2f(coeff * _emitterVelocity.x + radius, coeff * _emitterVelocity.y + radius), radius, strength);
 }
 
-void ParticleSystem::ChangeColor(const float lifeTime, sf::Vertex& vertex)
-{
+void ParticleSystem::ChangeColor(const float lifeTime, sf::Vertex& vertex) {
 	std::pair<float, sf::Color> tempColor(1.f, sf::Color::Black);
-	for (auto &color : colors)
-	{
+	for (auto &color : colors) {
 		if (lifeTime >= color.first)
 		{
-			vertex.color.r = static_cast<sf::Uint8>((lifeTime - color.first) * (tempColor.second.r - color.second.r) / (tempColor.first - color.first) + color.second.r);
-			vertex.color.g = static_cast<sf::Uint8>((lifeTime - color.first) * (tempColor.second.g - color.second.g) / (tempColor.first - color.first) + color.second.g);
-			vertex.color.b = static_cast<sf::Uint8>((lifeTime - color.first) * (tempColor.second.b - color.second.b) / (tempColor.first - color.first) + color.second.b);
+			vertex.color.r = (lifeTime - color.first)  *(tempColor.second.r - color.second.r) / (tempColor.first - color.first) + color.second.r;
+			vertex.color.g = (lifeTime - color.first) *(tempColor.second.g - color.second.g) / (tempColor.first - color.first) + color.second.g;
+			vertex.color.b = (lifeTime - color.first) *(tempColor.second.b - color.second.b) / (tempColor.first - color.first) + color.second.b;
 			return;
 		}
-		else
-		{
+		else {
 			tempColor = color;
 		}
 	}
@@ -94,8 +89,7 @@ void ParticleSystem::Update(sf::Time elapsed)
 	int count = 0;
 	int invisible = 0;
 
-	for (auto& force : _forces)
-	{
+	for (auto& force : _forces) {
 			force.centre.x = force.centreInitial.x + std::rand() % 16 - 8;
 			force.centre.y = force.centreInitial.y + std::rand() % 16 - 8;
 	}
@@ -105,17 +99,14 @@ void ParticleSystem::Update(sf::Time elapsed)
 		Particle& p = _particles[i];
 		p._currentLifetime -= elapsed;
 		if (p._velocity != sf::Vector2f(0, 0))
-		{
 			p._velocity += _simpleForce * elapsed.asSeconds();
-		}
 		_vertices[i].position += p._velocity * elapsed.asSeconds();
 
 		float ratio =  clamp(p._currentLifetime.asSeconds() / p._fullLifetime.asSeconds(), 0.f, 1.f);
 
 		_vertices[i].color.a = static_cast<sf::Uint8>(ratio * 255);
 
-		if (fading && (_vertices[i].color.a - 80) >= 0)
-		{
+		if (fading && (_vertices[i].color.a - 80) >= 0) {
 			_vertices[i].color.a = _vertices[i].color.a - 80;
 		}
 
@@ -127,15 +118,15 @@ void ParticleSystem::Update(sf::Time elapsed)
 
 		ChangeColor(ratio, _vertices[i]);
 
-		for (auto& force : _forces)
-		{
+		for (auto& force : _forces) {
+			
 			sf::Vector2f vec = _vertices[i].position - sf::Vector2f(force.centre.x + force.radius, force.centre.y + force.radius);
 			float lenght = sqrt(vec.x*vec.x + vec.y*vec.y);
-			if (lenght <= force.radius)
-			{
+			if (lenght <= force.radius) {
 				sf::Vector2f normal = sf::Vector2f(vec.x / sqrt(lenght), vec.y / sqrt(lenght));
 				float strength = ((force.radius - sqrt(lenght)) / force.radius) * force.strength;
 				p._velocity += normal * strength;
+
 			}
 		}
 
@@ -148,23 +139,20 @@ void ParticleSystem::Update(sf::Time elapsed)
 			ResetParticle(i);
 			count++;
 		}
-		if (_vertices[i].color.a < 10) 
-		{
+		if (_vertices[i].color.a < 10) {
 			invisible++;
 		}
 	}
 
-	for (auto& force : _forces)
-	{
+	for (auto& force : _forces) {
+
 		force.centreInitial += _emitterVelocity * elapsed.asSeconds();
 	}
 	
 	_emitterPosition += _emitterVelocity * elapsed.asSeconds();
 	
 	if (invisible == _particles.size())
-	{
 		end = true;
-	}
 }
 
 void ParticleSystem::ResetParticle(std::size_t index)
@@ -192,8 +180,7 @@ void ParticleSystem::ResetParticle(std::size_t index)
 	}
 
 	float angle;
-	if (distribution == Distribution::Normal)
-	{
+	if (distribution == Distribution::Normal) {
 		std::normal_distribution<float> normal{ _mean, _sigma };
 		angle = ((static_cast<int>(normal(gen)) % 360) * 3.14f / 180.f) + (_emitterAngle * 3.14f / 180.f);
 	}
@@ -212,12 +199,12 @@ void ParticleSystem::ResetParticle(std::size_t index)
 void ParticleSystem::Draw(sf::RenderWindow & window) 
 {
 	window.draw(_vertices);
+
 }
 
 void ParticleSystem::AddToDrawableManager()
 {
 	DrawableManager::getInstance().AddDrawableObject(this);
-	DrawableManager::getInstance().SortDrawableVector();
 }
 
 int ParticleSystem::GetZOrder() const

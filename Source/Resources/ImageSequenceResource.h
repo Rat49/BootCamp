@@ -1,13 +1,13 @@
 #pragma once
-#include <string>
 #include <SFML\Graphics.hpp>
 #include "PictureResource.h"
+#include <string>
 
 class ImageSequenceResource : public PictureResource
 {
 public:
+
 	ImageSequenceResource(const std::string& id, const std::string& name, const std::multimap<const std::string, const std::string>& settings);
-	~ImageSequenceResource() override;
 
 	void Load() override;
 	void Unload() override;
@@ -17,8 +17,9 @@ public:
 	const int GetHeight() const;
 	const int GetWidth() const;
 
+	~ImageSequenceResource() override;
+
 private:
-	void CreateFrames(sf::Image* image);
 
 	int _widthFrame;
 	int _heightFrame;
@@ -28,5 +29,7 @@ private:
 	sf::Image* _image;
 	sf::Texture _texture;
 	std::vector<sf::Texture> _textures;
+	void CreateFrames(sf::Image* image);
 	sf::Color* _colorFirstPixel;
+
 };
