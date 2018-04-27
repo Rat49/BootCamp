@@ -213,7 +213,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	_timeAfterPowerfulShot += deltaTime;
 	_timeAfterBulletShot += deltaTime;
 	RigidBody::Update(deltaTime.asSeconds());
-	_spaceshipSprite->setPosition(RigidBody::GetCoordinates());
+	_spaceshipSprite->setPosition({ RigidBody::GetCoordinates().x + _spaceshipAnimationImseq.GetWidth() / 2.f, RigidBody::GetCoordinates().y + _spaceshipAnimationImseq.GetHeight() / 2.f });
 	_spaceshipAnimation->Update(deltaTime);
 	_spaceshipFlickering->Update(deltaTime);
 
@@ -244,6 +244,19 @@ int Spaceship::GetZOrder() const
 
 void Spaceship::Draw(sf::RenderWindow& window)
 {
+	sf::CircleShape physicsShape(GetRadius());
+	physicsShape.setPosition(GetCoordinates());
+	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	physicsShape.setFillColor(sf::Color::Transparent);
+	physicsShape.setOutlineThickness(1);
+
+	window.draw(physicsShape);
+	sf::CircleShape circleCenter(1);
+	circleCenter.setPosition(GetX() + GetRadius(),
+		GetY() + GetRadius());
+	circleCenter.setRadius(1.f);
+	circleCenter.setFillColor(sf::Color::Green);
+	window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
 }
 
