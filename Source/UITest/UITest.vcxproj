@@ -99,7 +99,7 @@ sfml-network.lib</AdditionalDependencies>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>UI_d.lib;UI.lib;
+      <AdditionalDependencies>UI_d.lib;
 sfml-window.lib
 ;sfml-system.lib
 ;sfml-graphics.lib;
@@ -120,7 +120,7 @@ sfml-network.lib</AdditionalDependencies>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>UI_d.lib;UI.lib;
+      <AdditionalDependencies>UI.lib;
 sfml-window.lib
 ;sfml-system.lib
 ;sfml-graphics.lib;
