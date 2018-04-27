@@ -98,7 +98,10 @@ int main()
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
 
 	std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
-	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq);
+    sf::Vector2f spaceshipPosition = sf::Vector2f(atof(spaceshipConfig.find("PositionX")->second.c_str()), atof(spaceshipConfig.find("PositionY")->second.c_str()));
+    sf::Vector2f spaceshipSpeed = sf::Vector2f(atof(spaceshipConfig.find("SpeedX")->second.c_str()), atof(spaceshipConfig.find("SpeedY")->second.c_str()));
+
+	Spaceship* spaceship = new Spaceship(spaceshipPosition, spaceshipSpeed, input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture, *rocketTexture);
 	
@@ -138,15 +141,15 @@ int main()
 	/*
 	DebugCommandManager manager
 	*/
-	DebugCommandManager manager;
-	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
-	{
-		spaceship->SetDamage(0);
-	} });
-	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
-	{
-		spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
-	} });
+	//DebugCommandManager manager;
+	//manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
+	//{
+	//	spaceship->SetDamage(0);
+	//} });
+	//manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
+	//{
+	//	spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
+	//} });
 	
 	/*
 	Game Loop
@@ -201,7 +204,11 @@ int main()
 
 		if (rw.pollEvent(sysEvent))
 		{
-			
+            if (sysEvent.type == sf::Event::EventType::Closed)
+            {
+                break;
+            }
+
 			if (input.GetMode() == InputMode::Raw)
 			{
 				input.HandleRawEvent(sysEvent);

@@ -12,7 +12,7 @@ ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize)
 {
 	_zOrder = 5;
 	InitializeParticles();
-	Add();
+	AddToDrawableManager();
 }
 
 void ParticleSystem::InitializeParticles()
@@ -214,9 +214,9 @@ void ParticleSystem::Draw(sf::RenderWindow & window)
 	window.draw(_vertices);
 }
 
-void ParticleSystem::Add()
+void ParticleSystem::AddToDrawableManager()
 {
-	DrawableManager::getInstance()._drawableObjects.push_back(this);
+	DrawableManager::getInstance().AddDrawableObject(this);
 	DrawableManager::getInstance().SortDrawableVector();
 }
 

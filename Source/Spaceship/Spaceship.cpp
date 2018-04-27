@@ -34,9 +34,9 @@ Spaceship::Spaceship(const sf::Vector2f& position,const sf::Vector2f& speed, Inp
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
-		[&](const Event& event)
+		[&](const Event& /*event*/)
 	{
-		const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
+		//const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
 		//currentEvent._spaceship minus life
 	});
 }
@@ -233,7 +233,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 
 void Spaceship::AddToDrawableManager()
 {
-	DrawableManager::getInstance()._drawableObjects.push_back(this);
+	DrawableManager::getInstance().AddDrawableObject(this);
 	DrawableManager::getInstance().SortDrawableVector();
 }
 

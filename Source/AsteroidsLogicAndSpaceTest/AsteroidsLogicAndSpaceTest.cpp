@@ -3,6 +3,7 @@
 #include "DrawableManager.h"
 #include "EventSystem.h"
 #include "ResourceManager.h"
+#include "TextureResource.h"
 #include "ConfigManager.h"
 #include "Star.h"
 #include "Space.h"

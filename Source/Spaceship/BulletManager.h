@@ -20,13 +20,14 @@ public:
 	void Update(const sf::Time& deltaTime);
 	sf::Vector2f DeflectBullets(float angle, const sf::Vector2f& direction) const;
 
+    std::vector<OrdinaryBullet*> bullets;
+    std::vector<Rocket*> rockets;
+
 private:
 	const int _totalBulletCount;
 	const int _totalRocketCount;
 	Pool<OrdinaryBullet> _ordinaryBulletStorage;
 	Pool<Rocket> _rocketStorage;
-	std::vector<OrdinaryBullet*> _bullets;
-	std::vector<Rocket*> _rockets;
 	TextureResource& _ordinaryBulletTexture;
 	TextureResource& _rocketTexture;
 	const float _bulletDeflection;
