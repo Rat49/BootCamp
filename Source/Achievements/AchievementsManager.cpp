@@ -1,7 +1,9 @@
 #include "AchievementsManager.h"
 
-AchievementsManager::AchievementsManager(ConfigManager* achievementCM)
+AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image* achievemntPicture)
+	:_achievemntPicture(achievemntPicture)
 {
+
 	auto achievementsListCategory = achievementCM->GetCategory("TimeAchievementsList").GetParams();
 	for (const auto& achiev : achievementsListCategory)
 	{
@@ -34,6 +36,12 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM)
 	});
 }
 
+AchievementsManager::~AchievementsManager()
+{
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndBulletID, _tokenForCollisionEventBetweenAsteroidAndBullet);
+}
+
 void AchievementsManager::DestroyAchievementsHandler(const AsteroidType& type)
 {
 	if (type == AsteroidType::Big)
@@ -46,7 +54,7 @@ void AchievementsManager::DestroyAchievementsHandler(const AsteroidType& type)
 			}
 		}
 	}
-	if (type == AsteroidType::Middle)
+	else if (type == AsteroidType::Middle)
 	{
 		for (auto& achiev : _achievementsStorage["DestroyAchievementsList"])
 		{
@@ -60,14 +68,16 @@ void AchievementsManager::DestroyAchievementsHandler(const AsteroidType& type)
 
 void AchievementsManager::TimeAchievementsHandler()
 {
+	//TODO
 }
 
 void AchievementsManager::DestroyAndTimeAchievementsHandler(const AsteroidType& type)
 {
+	//TODO
 }
 
 
-void AchievementsManager::Update(sf::Time deltaTime)
+void AchievementsManager::Update(const sf::Time& deltaTime)
 {
 	for (auto& achiev : _achievementsStorage)
 	{
@@ -81,7 +91,7 @@ void AchievementsManager::Update(sf::Time deltaTime)
 	}
 }
 
-void AchievementsManager::ShowAchievement(sf::RenderWindow& window)
+void AchievementsManager::ShowAchievement(UI& achievUI)
 {
 	for (auto& achiev : _achievementsStorage)
 	{
@@ -89,7 +99,7 @@ void AchievementsManager::ShowAchievement(sf::RenderWindow& window)
 		{
 			if (it->GetAchievedActive())
 			{
-				//draw
+				achievUI.OnAchive(it->GetDisplayDescriptionName(), _achievemntPicture);
 			}
 		}
 	}
