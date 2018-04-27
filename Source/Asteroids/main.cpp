@@ -312,20 +312,18 @@ int main()
 				}
 			}
 
-			// Удаление изменяет размер массива!!!
-			for (size_t j = 0; j < bulletsSize; ++j)
+			for (auto bullet : bulletManager.bullets)
 			{
-				if (Collided(*space.asteroids[i], *bulletManager.bullets[j]))
+				if (Collided(*space.asteroids[i], *bullet))
 				{
 					collisionAsteroidVsBullet._asteroid = space.asteroids[i];
-					collisionAsteroidVsBullet._bullet = bulletManager.bullets[j];
-					deleteBulletEvent._deletedBullet = bulletManager.bullets[j];
-					ResolveCollision(*space.asteroids[i], *bulletManager.bullets[j]);
+					collisionAsteroidVsBullet._bullet = bullet;
+					deleteBulletEvent._deletedBullet = bullet;
+					ResolveCollision(*space.asteroids[i], *bullet);
 					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
-					//dispatcher.Send(deleteBulletEvent, deleteBulletEventID);
+					dispatcher.Send(deleteBulletEvent, deleteBulletEventID);
 				}
 			}
-
 		}
 		space.Update(deltaTime.asMilliseconds() / 1e3);
 
