@@ -264,7 +264,7 @@ void Asteroid::Update(float time)
 		SetCoordinates(nextPosition);
 	}
 
-	_sprite.setPosition(GetCoordinates());
+	_sprite.setPosition(GetCoordinates().x + GetRadius(), GetCoordinates().y + GetRadius());
 	_sprite.setRotation(_angularVelocity);
 }
 

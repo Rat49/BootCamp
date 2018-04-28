@@ -111,6 +111,10 @@ int main()
 	CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
 	DeleteBulletEvent deleteBulletEvent;
 
+	CollisionEventBetweenAmmunitionAndBullet collisionAmmunitionVsBullett;
+	CollisionEventBetweenAmmunitionAndRocket collisionAmmunitionVsRocket;
+	CollisionEventBetweenAmmunitionAndSpaceship collisionAmmunitionVsSpaceship;
+
 	constexpr size_t numOfObjects = 10;
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
 	float           accumulatedFrameTime = 0.f;
@@ -181,6 +185,7 @@ int main()
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
+	space.AddAmmunition(rm);
 	/*
 	For Debug Console
 	*/
@@ -271,6 +276,10 @@ int main()
 		{
 			for (size_t j = i + 1; j < m; ++j)
 			{
+				if (Collided(*space.asteroids[i], *space.ammunition))
+				{
+					ResolveCollision(*space.asteroids[i], *space.ammunition);
+				}
 				if (Collided(*space.asteroids[i], *space.asteroids[j]))
 				{
 					collisionAsteroidVsAsteroid._asteroid1 = space.asteroids[i];
