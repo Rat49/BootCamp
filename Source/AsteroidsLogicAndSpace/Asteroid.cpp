@@ -75,7 +75,7 @@ void Asteroid::SetParametersFromType(AsteroidType type)
 		_health = 100.0;
 		_damage = 20;
 		_defense = 5;
-		SetMass(0.005f);
+		SetMass(0.01f);
 		break;
 	}
 	_life = true;

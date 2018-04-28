@@ -196,15 +196,18 @@ int main()
 	*/
 	Logger& log = Logger::GetInstance();
 	sf::Clock clock;
-	sf::Time timer = clock.getElapsedTime();
+	sf::Time fixedTime;
 	sf::Time deltaTime;
+	const sf::Time fixedUpdateTime = sf::milliseconds(3);
 
 	while (rw.isOpen())
 	{
+		deltaTime = clock.restart();
+		fixedTime += deltaTime;
 
-		auto now = clock.getElapsedTime();
-		deltaTime = now - timer;
-		timer = now;
+		//std::cout << "deltaTime = " << deltaTime.asMicroseconds() << "\n";
+
+		input.Update();
 
 		if (rw.pollEvent(sysEvent))
 		{
@@ -217,128 +220,137 @@ int main()
 			else
 			{
 				debugConsole.setActiveConsoleStatus(false);
-			}
-			input.Update();
-		}
+			}			
+		}	
 
-		//Input update
+		if (fixedTime > fixedUpdateTime)
 		{
-			if (input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && previousStateMoveUp != stateMoveUp)
-			{
-				std::cout << "MoveUp state - " << GetNameForState(stateMoveUp) << std::endl;
-				previousStateMoveUp = stateMoveUp;
-			}
-			if (input.GetState(static_cast<int>(GameActions::MoveDown), stateMoveDown) && previousStateMoveDown != stateMoveDown)
-			{
-				std::cout << "MoveDown state - " << GetNameForState(stateMoveDown) << std::endl;
-				previousStateMoveDown = stateMoveDown;
-			}
-			if (input.GetState(static_cast<int>(GameActions::MoveLeft), stateMoveLeft) && previousStateMoveLeft != stateMoveLeft)
-			{
-				std::cout << "MoveLeft state - " << GetNameForState(stateMoveLeft) << std::endl;
-				previousStateMoveLeft = stateMoveLeft;
-			}
-			if (input.GetState(static_cast<int>(GameActions::MoveRight), stateMoveRight) && previousStateMoveRight != stateMoveRight)
-			{
-				std::cout << "MoveRight state - " << GetNameForState(stateMoveRight) << std::endl;
-				previousStateMoveRight = stateMoveRight;
-			}
-			if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && stateExit == ButtonsState::JustPressed)
-			{
-				rw.close();
-				//previousStateExit = stateExit;
-			}
-			if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && previousStateChoose != stateChoose)
-			{
-				std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
-				previousStateChoose = stateChoose;
-			}
-			if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
-			{
-				std::cout << "SuperShoot state - " << GetNameForState(statePowerfullShoot) << std::endl;
-				previousPowerfullShoot = statePowerfullShoot;
-			}
-			if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
-			{
-				std::cout << "Shoot state - " << GetNameForState(stateShoot) << std::endl;
-				previousStateShoot = stateShoot;
-			}
-		}
-		//Audio update
-		//Logic update
 
-		size_t n = space.asteroids.size() - 1;
-		size_t m = space.asteroids.size();
-		size_t bulletsSize = bulletManager.bullets.size();
-		size_t rocketSize = bulletManager.rockets.size();
-
-		for (size_t i = 0; i < n; ++i)
-		{
-			for (size_t j = i + 1; j < m; ++j)
+			//Input update
 			{
-				if (Collided(*space.asteroids[i], *space.ammunition))
+				if (input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && previousStateMoveUp != stateMoveUp)
 				{
-					ResolveCollision(*space.asteroids[i], *space.ammunition);
+					std::cout << "MoveUp state - " << GetNameForState(stateMoveUp) << std::endl;
+					previousStateMoveUp = stateMoveUp;
 				}
-				if (Collided(*space.asteroids[i], *space.asteroids[j]))
+				if (input.GetState(static_cast<int>(GameActions::MoveDown), stateMoveDown) && previousStateMoveDown != stateMoveDown)
 				{
-					collisionAsteroidVsAsteroid._asteroid1 = space.asteroids[i];
-					collisionAsteroidVsAsteroid._asteroid2 = space.asteroids[j];
-					ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
-					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
-					dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
+					std::cout << "MoveDown state - " << GetNameForState(stateMoveDown) << std::endl;
+					previousStateMoveDown = stateMoveDown;
+				}
+				if (input.GetState(static_cast<int>(GameActions::MoveLeft), stateMoveLeft) && previousStateMoveLeft != stateMoveLeft)
+				{
+					std::cout << "MoveLeft state - " << GetNameForState(stateMoveLeft) << std::endl;
+					previousStateMoveLeft = stateMoveLeft;
+				}
+				if (input.GetState(static_cast<int>(GameActions::MoveRight), stateMoveRight) && previousStateMoveRight != stateMoveRight)
+				{
+					std::cout << "MoveRight state - " << GetNameForState(stateMoveRight) << std::endl;
+					previousStateMoveRight = stateMoveRight;
+				}
+				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && stateExit == ButtonsState::JustPressed)
+				{
+					rw.close();
+					//previousStateExit = stateExit;
+				}
+				if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && previousStateChoose != stateChoose)
+				{
+					std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
+					previousStateChoose = stateChoose;
+				}
+				if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
+				{
+					std::cout << "SuperShoot state - " << GetNameForState(statePowerfullShoot) << std::endl;
+					previousPowerfullShoot = statePowerfullShoot;
+				}
+				if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
+				{
+					std::cout << "Shoot state - " << GetNameForState(stateShoot) << std::endl;
+					previousStateShoot = stateShoot;
 				}
 			}
+			//Audio update
+			//Logic update
 
-			if (Collided(*space.asteroids[i],*spaceship))
-			{
-				collisionAsteroidVsSpaceship._asteroid = space.asteroids[i];
-				collisionAsteroidVsSpaceship._spaceship = spaceship;
-				ResolveCollision(*space.asteroids[i], *spaceship);
-				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
-				dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
-			}
+			size_t n = space.asteroids.size() - 1;
+			size_t m = space.asteroids.size();
+			size_t bulletsSize = bulletManager.bullets.size();
+			size_t rocketSize = bulletManager.rockets.size();
 
-			for (size_t j = 0; j < rocketSize; ++j)
+			for (size_t i = 0; i < n; ++i)
 			{
-				if (Collided(*space.asteroids[i], *bulletManager.rockets[j]))
+				for (size_t j = i + 1; j < m; ++j)
 				{
-					collisionAsteroidVsRocket._asteroid = space.asteroids[i];
-					collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
-					ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
-					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-					for (size_t k = 0; k < n; ++k) {
-						if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
-						{
-							collisionAsteroidVsRocket._asteroid = space.asteroids[k];
-							collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
-							ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
-							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+					if (Collided(*space.asteroids[i], *space.ammunition))
+					{
+						ResolveCollision(*space.asteroids[i], *space.ammunition);
+					}
+					if (Collided(*space.asteroids[i], *space.asteroids[j]))
+					{
+						collisionAsteroidVsAsteroid._asteroid1 = space.asteroids[i];
+						collisionAsteroidVsAsteroid._asteroid2 = space.asteroids[j];
+						ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
+						dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
+						dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
+					}
+				}
+
+				if (Collided(*space.asteroids[i], *spaceship))
+				{
+					collisionAsteroidVsSpaceship._asteroid = space.asteroids[i];
+					collisionAsteroidVsSpaceship._spaceship = spaceship;
+					ResolveCollision(*space.asteroids[i], *spaceship);
+					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+				}
+
+				for (size_t j = 0; j < rocketSize; ++j)
+				{
+					if (Collided(*space.asteroids[i], *bulletManager.rockets[j]))
+					{
+						collisionAsteroidVsRocket._asteroid = space.asteroids[i];
+						collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
+						ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
+						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+						for (size_t k = 0; k < n; ++k) {
+							if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
+							{
+								collisionAsteroidVsRocket._asteroid = space.asteroids[k];
+								collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
+								ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
+								dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+								//dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager._collisionRocketVsAsteroid);
+							}
 						}
+					}
+				}
+
+				for (auto bullet : bulletManager.bullets)
+				{
+					if (Collided(*space.asteroids[i], *bullet))
+					{
+						collisionAsteroidVsBullet._asteroid = space.asteroids[i];
+						collisionAsteroidVsBullet._bullet = bullet;
+						deleteBulletEvent._deletedBullet = bullet;
+						ResolveCollision(*space.asteroids[i], *bullet);
+						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
+						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager._collisionBulletVsAsteroid);
 					}
 				}
 			}
 
-			for (auto bullet : bulletManager.bullets)
-			{
-				if (Collided(*space.asteroids[i], *bullet))
-				{
-					collisionAsteroidVsBullet._asteroid = space.asteroids[i];
-					collisionAsteroidVsBullet._bullet = bullet;
-					deleteBulletEvent._deletedBullet = bullet;
-					ResolveCollision(*space.asteroids[i], *bullet);
-					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
-					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager._collisionBulletVsAsteroid);
-				}
-			}
+			/*space.Update(deltaTime.asMilliseconds() / 1e3);
+			spaceship->Update(deltaTime);
+			bulletManager.Update(deltaTime);*/
+
+			//space.Update(fixedTime.asMilliseconds() / 1e3);
+			space.Update(fixedTime.asSeconds());
+			spaceship->Update(fixedTime);
+			bulletManager.Update(fixedTime);
+			
+			fixedTime = sf::Time::Zero;
 		}
-		space.Update(deltaTime.asMilliseconds() / 1e3);
-
-		spaceship->Update(deltaTime);
-		bulletManager.Update(deltaTime);
-
 		rw.clear();
 		//Rendering update
 		//for (int i = 0; i < numOfObjects; ++i)
