@@ -224,7 +224,7 @@ int main()
 
 		input.Update();
 
-		if (input.GetMode() == InputMode::Paused)
+		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
 		{
 			fixedTime = sf::Time::Zero;
 		}
@@ -232,7 +232,7 @@ int main()
 		if (rw.pollEvent(sysEvent))
 		{
 			
-			if (input.GetMode() == InputMode::Raw)
+			if (input.GetMode() == InputMode::Raw || input.GetMode() == InputMode::PausedRaw)
 			{
 				input.HandleRawEvent(sysEvent);
 				debugConsole.setActiveConsoleStatus(true);
@@ -241,7 +241,7 @@ int main()
 			{
 				debugConsole.setActiveConsoleStatus(false);
 			}			
-		}			
+		}				
 
 		if (fixedTime > fixedUpdateTime)
 		{

@@ -33,7 +33,8 @@ enum class InputMode
 {
 	Normal,
 	Raw,
-	Paused
+	Paused,
+	PausedRaw
 };
 
 class InputManager final
