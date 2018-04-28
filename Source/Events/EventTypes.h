@@ -17,6 +17,7 @@ enum EventTypes : EventID_t
 	rocketOutOfBoundsEventID,
 	createBulletEventID,
 	createRocketEventID,
+	collisionEventBetweenAmmunitionAndAsteroidId,
 	collisionEventBetweenAmmunitionAndSpaceshipId,
 	collisionEventBetweenAmmunitionAndBulletId,
 	collisionEventBetweenAmmunitionAndRocketId,

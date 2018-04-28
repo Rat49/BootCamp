@@ -47,20 +47,20 @@ public:
 class CollisionEventBetweenAmmunitionAndSpaceship : public Event
 {
 public:
-	Spaceship * _spaceship;
+	Spaceship * spaceship;
 	Ammunition* ammunition;
 };
 
 class CollisionEventBetweenAmmunitionAndBullet : public Event
 {
 public:
-	OrdinaryBullet * _bullet;
+	OrdinaryBullet * bullet;
 	Ammunition* ammunition;
 };
 
 class CollisionEventBetweenAmmunitionAndRocket : public Event
 {
 public:
-	Rocket * _rocket;
+	Rocket * rocket;
 	Ammunition* ammunition;
 };

@@ -9,7 +9,7 @@
 enum class AmmunitionSize : uint8_t
 {
 	Small,
-	Middle,
+	Medium,
 	Big
 };
 

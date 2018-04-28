@@ -111,9 +111,10 @@ int main()
 	CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
 	DeleteBulletEvent deleteBulletEvent;
 
-	CollisionEventBetweenAmmunitionAndBullet collisionAmmunitionVsBullett;
+	CollisionEventBetweenAmmunitionAndBullet collisionAmmunitionVsBullet;
 	CollisionEventBetweenAmmunitionAndRocket collisionAmmunitionVsRocket;
 	CollisionEventBetweenAmmunitionAndSpaceship collisionAmmunitionVsSpaceship;
+	CollisionEventBetweenAmmunitionAndAsteroid collisionAmmunitionVsAsteroid;
 
 	constexpr size_t numOfObjects = 10;
 	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
@@ -276,10 +277,6 @@ int main()
 		{
 			for (size_t j = i + 1; j < m; ++j)
 			{
-				if (Collided(*space.asteroids[i], *space.ammunition))
-				{
-					ResolveCollision(*space.asteroids[i], *space.ammunition);
-				}
 				if (Collided(*space.asteroids[i], *space.asteroids[j]))
 				{
 					collisionAsteroidVsAsteroid._asteroid1 = space.asteroids[i];
@@ -331,6 +328,52 @@ int main()
 					ResolveCollision(*space.asteroids[i], *bullet);
 					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
 					dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager._collisionBulletVsAsteroid);
+				}
+			}
+		}
+		{
+			for (auto asteroid : space.asteroids)
+			{
+				if (Collided(*asteroid, *space.ammunition))
+				{
+					collisionAmmunitionVsAsteroid.asteroid = asteroid;
+					collisionAmmunitionVsAsteroid.ammunition = space.ammunition;
+					ResolveCollision(*asteroid, *space.ammunition);
+					dispatcher.Send(collisionAmmunitionVsAsteroid, collisionEventID, asteroid->_tokens[collisionEventID]);
+					dispatcher.Send(collisionAmmunitionVsAsteroid, collisionEventID, space.ammunition->_tokens[collisionEventID]);
+				}
+			}
+			if (Collided(*spaceship, *space.ammunition))
+			{
+				collisionAmmunitionVsSpaceship.spaceship = spaceship;
+				collisionAmmunitionVsSpaceship.ammunition = space.ammunition;
+				ResolveCollision(*spaceship, *space.ammunition);
+				dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, spaceship->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
+				dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
+
+			}
+			for (auto rocket : bulletManager.rockets)
+			{
+				if (Collided(*rocket, *space.ammunition))
+				{
+					collisionAmmunitionVsRocket.rocket = rocket;
+					collisionAmmunitionVsRocket.ammunition = space.ammunition;
+					ResolveCollision(*rocket, *space.ammunition);
+					dispatcher.Send(collisionAmmunitionVsRocket, collisionEventBetweenAmmunitionAndRocketId, rocket->_tokens[collisionEventBetweenAmmunitionAndRocketId]);
+					dispatcher.Send(collisionAmmunitionVsRocket, collisionEventBetweenAmmunitionAndRocketId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndRocketId]);
+
+				}
+			}
+			for (auto bullet : bulletManager.bullets)
+			{
+				if (Collided(*bullet, *space.ammunition))
+				{
+					collisionAmmunitionVsBullet.bullet = bullet;
+					collisionAmmunitionVsBullet.ammunition = space.ammunition;
+					ResolveCollision(*bullet, *space.ammunition);
+					dispatcher.Send(collisionAmmunitionVsBullet, collisionEventBetweenAmmunitionAndBulletId, bullet->_tokens[collisionEventBetweenAmmunitionAndBulletId]);
+					dispatcher.Send(collisionAmmunitionVsBullet, collisionEventBetweenAmmunitionAndBulletId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndBulletId]);
+
 				}
 			}
 		}

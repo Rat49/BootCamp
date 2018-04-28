@@ -11,7 +11,7 @@
 #include "Physics.h"
 #include "Pool.h"
 #include "SpaceshipRespawnEvent.h"
-
+#include "Ammunition.h"
 #include <math.h>
 #include <algorithm>
 
@@ -30,6 +30,7 @@ public:
 	void OrdinaryShoot();
 	void RotateSpaceship(float angle);
 	void Update(const sf::Time& deltaTime);
+	void OnCollisionHandler(const Event & event);
 	void AddToDrawableManager() override;
 	void SetDamage(unsigned int damage);
 private:

@@ -288,21 +288,55 @@ void Spaceship::Update(const sf::Time& deltaTime)
 
 }
 
+
+void Spaceship::OnCollisionHandler(const Event& event)
+{
+	const CollisionEventBetweenAmmunitionAndAsteroid &collisionEvent = dynamic_cast<const CollisionEventBetweenAmmunitionAndAsteroid&>(event);
+
+	Ammunition *ammunition = collisionEvent.ammunition;
+	if (ammunition->_ammunitionType == AmmunitionType::Bullet)
+	switch (ammunition->_ammunitionSize)
+	{
+		case AmmunitionSize::Big:
+			_bulletCount += 60;
+			break;
+		case AmmunitionSize::Medium:
+			_bulletCount += 30;
+			break;
+		case AmmunitionSize::Small:
+			_bulletCount += 10;
+			break;
+		default:
+			break;
+	}
+
+	if (ammunition->_ammunitionType == AmmunitionType::Rocket)
+		switch (ammunition->_ammunitionSize)
+		{
+		case AmmunitionSize::Big:
+			_rocketCount += 8;
+			break;
+		case AmmunitionSize::Medium:
+			_rocketCount += 4;
+			break;
+		case AmmunitionSize::Small:
+			_rocketCount += 2;
+			break;
+		default:
+			break;
+		}
+}
+
+
 void Spaceship::AddToDrawableManager()
 {
 	DrawableManager::getInstance().AddDrawableObject(this);
-	//_tokenForCollisionEventBetweenAsteroidAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
-	//	[&](const Event& event)
-	//{
-	//	OnCollisionHandler(event);
-	//});
+	_tokenForCollisionEventBetweenAsteroidAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
+		[&](const Event& event)
+	{
+		OnCollisionHandler(event);
+	});
 }
-
-//void Spaceship::OnCollisionHandler(const Event& event)
-//{
-//	std::cout << "                     ___________________ Flick" << std::endl;
-//	SetFlickeringMode();
-//}
 
 int Spaceship::GetZOrder() const
 {
