@@ -10,8 +10,9 @@ class CreateBulletEvent : public Event
 public:
 	sf::Vector2f _position;
 	sf::Vector2f _direction;
+	bool _isColliderVisible;
 
-	CreateBulletEvent(const sf::Vector2f& position, const sf::Vector2f& direction);
+	CreateBulletEvent(const sf::Vector2f& position, const sf::Vector2f& direction, bool _isColliderVisible);
 };
 
 class DeleteBulletEvent : public Event
@@ -25,8 +26,9 @@ class CreateRocketEvent : public Event
 public:
 	sf::Vector2f _position;
 	sf::Vector2f _direction;
+	bool _isColliderVisible;
 
-	CreateRocketEvent(const sf::Vector2f& position, const sf::Vector2f& direction);
+	CreateRocketEvent(const sf::Vector2f& position, const sf::Vector2f& direction, bool _isColliderVisible);
 };
 
 class RocketOutOfBoundsEvent : public Event

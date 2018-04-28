@@ -21,7 +21,7 @@ private:
 	float _halfSpriteLength;
 public:
 	Rocket();
-	void Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture, RocketParticle& rocketParticle);
+	void Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture, RocketParticle& rocketParticle, bool isColliderVisible);
 	const sf::Sprite* GetSprite();
 	const float GetHalfSpriteLength();
 	bool GetLifeStatus() const;

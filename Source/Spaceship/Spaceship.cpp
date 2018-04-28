@@ -1,7 +1,7 @@
 #include "Spaceship.h"
 
 Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
-	: RigidBody({ 0, 0 }, {0, 0}, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	: RigidBody({ 0, 0 }, {0, 0}, spaceshipAnimationImseq.GetWidth() / 2.5f, 1.0f)
 
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
@@ -95,7 +95,7 @@ void Spaceship::PowerfulShoot()
 
 	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
 
-	CreateRocketEvent createRocket(_spaceshipSprite->getPosition() + indent, _spaceshipDirection);
+	CreateRocketEvent createRocket(_spaceshipSprite->getPosition() + indent, _spaceshipDirection, RigidBody::IsColliderVisible());
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createRocket, EventTypes::createRocketEventID);
 	
@@ -115,7 +115,7 @@ void Spaceship::OrdinaryShoot()
 
 	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
 
-	CreateBulletEvent createBullet(_spaceshipSprite->getPosition() + indent, _spaceshipDirection);
+	CreateBulletEvent createBullet(_spaceshipSprite->getPosition() + indent, _spaceshipDirection, RigidBody::IsColliderVisible());
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createBullet, EventTypes::createBulletEventID);
 
@@ -311,21 +311,24 @@ int Spaceship::GetZOrder() const
 
 void Spaceship::Draw(sf::RenderWindow& window)
 {
-	//sf::CircleShape physicsShape(GetRadius());
-	//physicsShape.setPosition(GetCoordinates());
-	////physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
-	//physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
-	//physicsShape.setFillColor(sf::Color::Transparent);
-	//physicsShape.setOutlineThickness(1);
-
-	//window.draw(physicsShape);
-	//sf::CircleShape circleCenter(1);
-	//circleCenter.setPosition(GetX() + GetRadius(),
-	//	GetY() + GetRadius());
-	//circleCenter.setRadius(1.f);
-	//circleCenter.setFillColor(sf::Color::Green);
-	//window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
+	if (IsColliderVisible())
+	{
+		sf::CircleShape physicsShape(GetRadius());
+		physicsShape.setPosition(GetCoordinates());
+		physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+		physicsShape.setFillColor(sf::Color::Transparent);
+		physicsShape.setOutlineThickness(1);
+
+		window.draw(physicsShape);
+		sf::CircleShape circleCenter(1);
+		circleCenter.setPosition(GetX() + GetRadius(),
+			GetY() + GetRadius());
+		circleCenter.setRadius(1.f);
+		circleCenter.setFillColor(sf::Color::Green);
+		window.draw(circleCenter);
+	}
+	
 }
 
 void Spaceship::SetDamage(unsigned int damage)
