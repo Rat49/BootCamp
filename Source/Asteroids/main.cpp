@@ -224,6 +224,11 @@ int main()
 
 		input.Update();
 
+		if (input.GetMode() == InputMode::Paused)
+		{
+			fixedTime = sf::Time::Zero;
+		}
+
 		if (rw.pollEvent(sysEvent))
 		{
 			
@@ -236,7 +241,7 @@ int main()
 			{
 				debugConsole.setActiveConsoleStatus(false);
 			}			
-		}	
+		}			
 
 		if (fixedTime > fixedUpdateTime)
 		{

@@ -16,7 +16,8 @@ enum class GameActions {
 	Choose,
 	Shoot,
 	SuperShoot,
-	Console
+	Console,
+	Pause
 };
 
 enum class ButtonsState 
@@ -31,7 +32,8 @@ enum class ButtonsState
 enum class InputMode 
 {
 	Normal,
-	Raw
+	Raw,
+	Paused
 };
 
 class InputManager final
@@ -57,6 +59,7 @@ public:
 	InputMode GetMode() const;
 	void Update();
 	void ConsoleMode();
+	void PausedMode();
 	void HandleRawEvent(const sf::Event& event);
 	InputManager(const std::multimap<Action_t, ButtonKey_t>& arr);
 	InputManager();
