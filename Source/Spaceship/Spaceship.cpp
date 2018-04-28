@@ -311,20 +311,20 @@ int Spaceship::GetZOrder() const
 
 void Spaceship::Draw(sf::RenderWindow& window)
 {
-	//sf::CircleShape physicsShape(GetRadius());
-	//physicsShape.setPosition(GetCoordinates());
-	////physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
-	//physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
-	//physicsShape.setFillColor(sf::Color::Transparent);
-	//physicsShape.setOutlineThickness(1);
+	sf::CircleShape physicsShape(GetRadius());
+	physicsShape.setPosition(GetCoordinates());
+	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	physicsShape.setFillColor(sf::Color::Transparent);
+	physicsShape.setOutlineThickness(1);
 
-	//window.draw(physicsShape);
-	//sf::CircleShape circleCenter(1);
-	//circleCenter.setPosition(GetX() + GetRadius(),
-	//	GetY() + GetRadius());
-	//circleCenter.setRadius(1.f);
-	//circleCenter.setFillColor(sf::Color::Green);
-	//window.draw(circleCenter);
+	window.draw(physicsShape);
+	sf::CircleShape circleCenter(1);
+	circleCenter.setPosition(GetX() + GetRadius(),
+		GetY() + GetRadius());
+	circleCenter.setRadius(1.f);
+	circleCenter.setFillColor(sf::Color::Green);
+	window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
 }
 
