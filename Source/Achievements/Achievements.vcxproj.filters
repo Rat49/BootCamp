@@ -29,5 +29,8 @@
     <ClInclude Include="AchievementsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="AchievementsTypes.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

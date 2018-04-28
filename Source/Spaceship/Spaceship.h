@@ -33,6 +33,7 @@ public:
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
 	void SetDamage(unsigned int damage);
+	
 private:
 	
 	bool _isDamaged;
@@ -77,4 +78,6 @@ private:
 	void SetNormalMode();
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;
+	
+
 };

@@ -18,7 +18,7 @@ public:
 	Asteroid();
 
 	void Init(const sf::Sprite &sprite, const sf::Vector2u &size);
-	void InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &position, const AsteroidType type, const sf::Vector2u &size);
+	void InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &position, const AsteroidType type, const sf::Vector2u &size, bool isColliderVisible);
 	void Update(float time) override;
 	void Draw(sf::RenderWindow &window) override;
 	void Reset() override;

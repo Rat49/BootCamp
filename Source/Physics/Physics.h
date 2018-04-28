@@ -16,6 +16,7 @@ private:
 	sf::Vector2f _speed;
 	float _radius;
 	float _mass;
+	bool _isColliderVisible;
 
 public:
 	
@@ -41,6 +42,8 @@ public:
 	void SetSpeedX(float);
 	void SetSpeedY(float);
 	void SetMass(float);
+	void SetColliderVisible(bool param);
+	bool IsColliderVisible();
 };
 
 void RandomFill(RigidBody*, int);

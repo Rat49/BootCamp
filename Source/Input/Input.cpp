@@ -89,8 +89,43 @@ void InputManager::Update()
 			if (action.primary == sf::Keyboard::Tilde && action.state == ButtonsState::JustPressed)
 			{
 				ConsoleMode();
-				_mode = (GetMode() == InputMode::Raw) ? InputMode::Normal : InputMode::Raw;
-				
+				switch (GetMode())
+				{
+				case InputMode::Raw:
+					_mode = InputMode::Normal;
+					break;
+				case InputMode::Paused:
+					_mode = InputMode::PausedRaw;
+					break;
+				case InputMode::Normal:
+					_mode = InputMode::Raw;
+					break;
+				case InputMode::PausedRaw:
+					_mode = InputMode::Paused;
+					break;
+				}
+				//_mode = (GetMode() == InputMode::Raw) ? InputMode::Normal : InputMode::Raw;
+			}
+			else if (action.primary == sf::Keyboard::Pause && action.state == ButtonsState::JustPressed)
+			{
+				PausedMode();
+				switch (GetMode())
+				{
+				case InputMode::Raw:
+					_mode = InputMode::PausedRaw;
+					break;
+				case InputMode::Paused:
+					_mode = InputMode::Normal;
+					break;
+				case InputMode::Normal:
+					_mode = InputMode::Paused;
+					break;
+				case InputMode::PausedRaw:
+					_mode = InputMode::Raw;
+					break;
+				}
+				//_mode = (GetMode() == InputMode::Paused) ? InputMode::Normal : InputMode::Paused;
+				std::cout << "PAUSE" << std::endl;
 			}
 		}
 		else
@@ -104,7 +139,18 @@ void  InputManager::ConsoleMode()
 {
 	for (auto &action : buttonsState)
 	{
-		if (action.primary != sf::Keyboard::Tilde)
+		if (action.primary != sf::Keyboard::Pause && action.primary != sf::Keyboard::Tilde)
+		{
+			action.state = (action.state == ButtonsState::Block) ? ButtonsState::Released : ButtonsState::Block;
+		}
+	}
+}
+
+void  InputManager::PausedMode()
+{
+	for (auto &action : buttonsState)
+	{
+		if (action.primary != sf::Keyboard::Pause && action.primary != sf::Keyboard::Tilde)
 		{
 			action.state = (action.state == ButtonsState::Block) ? ButtonsState::Released : ButtonsState::Block;
 		}

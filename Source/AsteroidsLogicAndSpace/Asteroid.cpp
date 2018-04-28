@@ -14,8 +14,8 @@ void Asteroid::DefaultInit()
 	_linearVelocity = sf::Vector2f(0, 0);
 	SetSpeed(_linearVelocity);
 
-	_sprite.setPosition(sf::Vector2f(0, 0));
 	SetCoordinates(sf::Vector2f(0, 0));
+	_sprite.setPosition(GetCoordinates());
 
 	_radius = 1.0f;
 	SetRadius(_radius);
@@ -47,8 +47,8 @@ void Asteroid::RandomInit()
 	float positionX = positionBoundX > 0 ? GetSizeWindow().x + positionBoundX : positionBoundX;
 	float positionY = positionBoundY > 0 ? GetSizeWindow().y + positionBoundY : positionBoundY;
 
-	_sprite.setPosition(sf::Vector2f(positionX, positionY));
 	SetCoordinates(sf::Vector2f(positionX, positionY));
+	_sprite.setPosition(GetCoordinates());
 }
 
 void Asteroid::SetParametersFromType(AsteroidType type)
@@ -75,13 +75,13 @@ void Asteroid::SetParametersFromType(AsteroidType type)
 		_health = 100.0;
 		_damage = 20;
 		_defense = 5;
-		SetMass(0.005f);
+		SetMass(0.01f);
 		break;
 	}
 	_life = true;
 }
 
-void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &position, const AsteroidType type, const sf::Vector2u &size)
+void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &position, const AsteroidType type, const sf::Vector2u &size, bool isColliderVisible)
 {
 	_sprite = sprite;
 	_sizeSpace = size;
@@ -111,6 +111,8 @@ void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &posit
 	SetCoordinates(_sprite.getPosition());
 
 	_halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
+
+	SetColliderVisible(isColliderVisible);
 	
 	AddToDrawableManager();
 }
@@ -272,30 +274,32 @@ void Asteroid::Draw(sf::RenderWindow &window)
 {
 	window.draw(_sprite);
 	
-	sf::CircleShape physicsShape(GetRadius());
-	physicsShape.setPosition(GetCoordinates()); 
-	physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
-	
-	float color;
-
-	switch (_type)
+	if (IsColliderVisible())
 	{
-	case AsteroidType::Small:
-		color = _health / 200.0f * 255.0f;
-		break;
-	case AsteroidType::Middle:
-		color = _health / 300.0f * 255.0f;
-		break;
-	case AsteroidType::Big:
-	default:
-		color = _health / 400.0f * 255.0f;
-		break;
+		sf::CircleShape physicsShape(GetRadius());
+		physicsShape.setPosition(GetCoordinates());
+
+		float color;
+
+		switch (_type)
+		{
+		case AsteroidType::Small:
+			color = _health / 200.0f * 255.0f;
+			break;
+		case AsteroidType::Middle:
+			color = _health / 300.0f * 255.0f;
+			break;
+		case AsteroidType::Big:
+		default:
+			color = _health / 400.0f * 255.0f;
+			break;
+		}
+
+		physicsShape.setOutlineColor(sf::Color(255, static_cast<uint8_t>(color), static_cast<uint8_t>(color), 255));
+		physicsShape.setFillColor(sf::Color::Transparent);
+		physicsShape.setOutlineThickness(1);
+
+		window.draw(physicsShape);
 	}
-
-	physicsShape.setOutlineColor(sf::Color(255, static_cast<uint8_t>(color), static_cast<uint8_t>(color), 255));
-	physicsShape.setFillColor(sf::Color::Transparent);
-	physicsShape.setOutlineThickness(1);
-
-	//window.draw(physicsShape);
 }
 
