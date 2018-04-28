@@ -172,9 +172,9 @@ int main()
 	sf::Image healthHearth;
 	font.loadFromFile("Resources/font/arial.ttf");
 	healthHearth.loadFromFile("Resources/graphics/Health.png");
-	ui.CreatePicture(healthHearth,PercentXY(6,1),"health1");
-	ui.CreatePicture(healthHearth, PercentXY(8, 1), "health2");
-	ui.CreatePicture(healthHearth, PercentXY(10, 1), "health3");
+	ui.CreatePicture(healthHearth,PercentXY(6,1),"Life0");
+	ui.CreatePicture(healthHearth, PercentXY(8, 1), "Life1");
+	ui.CreatePicture(healthHearth, PercentXY(10, 1), "Life2");
 	ui.CreateLabel("100", font, PercentXY(0, 0), "HP");
 	ui.CreateLabel("0", font, PercentXY(95, 0), "score");
 	

@@ -4,6 +4,9 @@
 #include "AchievementShower.h"
 #include "Widget.h"
 #include "Picture.h"
+#include "Event.h"
+#include "Dispatcher.h"
+#include "UpdateSpaceshipStateEvent.h"
 #include <cassert>
 
 struct PercentXY
@@ -44,7 +47,8 @@ public:
 		T* specificWidget = dynamic_cast<T*>(wid);
 		return specificWidget;
 	}
-
+	Token_t _tokenUI;
+	void OnChangedSpaceshipState(const Event& event);
 	void OnResize();
 	void Render();
 	void OnAchive(const std::string & text, sf::Image * picture);
@@ -61,7 +65,7 @@ public:
 
 	~UI();
 private:	
-	//UI() = delete;
+	
 	const sf::Vector2f RelativeCordToAbs(const PercentXY relCoord) const;
 	sf::RenderWindow & _window;
 	Widget* GetWidget(const std::string &key);

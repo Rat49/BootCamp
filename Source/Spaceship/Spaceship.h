@@ -11,6 +11,7 @@
 #include "Physics.h"
 #include "Pool.h"
 #include "SpaceshipRespawnEvent.h"
+#include "UpdateSpaceshipStateEvent.h"
 
 #include <math.h>
 #include <algorithm>
@@ -65,6 +66,7 @@ private:
 	unsigned int _bulletCount = 60;
 	unsigned int _rocketCount = 7;
 
+	const unsigned int _maxLifeCount;
 	unsigned int _liveCount;
 	unsigned int _HP;
 	unsigned int _damage;

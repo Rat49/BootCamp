@@ -121,6 +121,7 @@
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Spaceship.h" />
     <ClInclude Include="SpaceshipRespawnEvent.h" />
+    <ClInclude Include="UpdateSpaceshipStateEvent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BulletManager.cpp" />

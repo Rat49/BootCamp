@@ -39,6 +39,9 @@
     <ClInclude Include="GameOverEvent.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="UpdateSpaceshipStateEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Spaceship.cpp">

@@ -22,6 +22,7 @@ Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaces
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
 	, _shotIndentValue(50.0f)
+	, _maxLifeCount(3)
 	
 {
 	spaceshipConfig;
@@ -31,7 +32,7 @@ Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaces
 	float speedY = atof(spaceshipConfig.find("SpeedY")->second.c_str());
 	RigidBody::SetCoordinates({ positionX, positionY});
 	RigidBody::SetSpeed({ speedX, speedY});
-	_liveCount = atoi(spaceshipConfig.find("LifeCount")->second.c_str());
+	_liveCount = atoi(spaceshipConfig.find("LifeCount")->second.c_str());	
 	_HP = atoi(spaceshipConfig.find("HP")->second.c_str());
 	_damage = atoi(spaceshipConfig.find("Damage")->second.c_str());
 	_zOrder = 1;
@@ -46,7 +47,7 @@ Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaces
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
 		[&](const Event& event)
-		{
+		{			
 			const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
 			SetFlickeringMode();
 			if (_HP == 0)
@@ -71,6 +72,8 @@ Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaces
 				_HP -= _damage;
 			}
 			std::cout << "lifeCount = " << _liveCount << "\t HP = " << _HP << std::endl;
+			UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount,_maxLifeCount);
+			dispatcher.Send(updateSpaceshipStateEvent, EventTypes::updateSpaceshipStateEvent);
 		});
 }
 
