@@ -14,7 +14,6 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 {
 	AddToDrawableManager();
 	
-	SetRadius(5);
 	Bullet::_damage = 400;
 	_bulletScale = sf::Vector2f(0.3f, 0.3f);
 	_bulletTexture = &bulletTexture;
@@ -25,6 +24,8 @@ void OrdinaryBullet::Init(const sf::Vector2f& position, const sf::Vector2f& bull
 	if (bulletDirection.y > 0)
 		degreeAngle += 180.0f;
 	
+	SetRadius(5);
+
 	_ordinaryBulletSprite.setRotation(degreeAngle);
 	_halfSpriteLength = GetLenght(sf::Vector2f(_bulletTexture->getSize())) / 2.0f;
 
@@ -66,7 +67,7 @@ void OrdinaryBullet::Update(const sf::Time& deltaTime)
 {
 	RigidBody::Update(deltaTime.asSeconds());
 
-	_ordinaryBulletSprite.setPosition(GetCoordinates());
+	_ordinaryBulletSprite.setPosition(GetCoordinates().x + GetRadius(), GetCoordinates().y + GetRadius());
 }
 
 void OrdinaryBullet::Reset()

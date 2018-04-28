@@ -1,7 +1,7 @@
 #include "Spaceship.h"
 
 Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
-	: RigidBody({ 0, 0 }, {0, 0}, spaceshipAnimationImseq.GetWidth() / 2.0f, 1.0f)
+	: RigidBody({ 0, 0 }, {0, 0}, spaceshipAnimationImseq.GetWidth() / 2.5f, 1.0f)
 
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
@@ -311,20 +311,19 @@ int Spaceship::GetZOrder() const
 
 void Spaceship::Draw(sf::RenderWindow& window)
 {
-	//sf::CircleShape physicsShape(GetRadius());
-	//physicsShape.setPosition(GetCoordinates());
-	////physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
-	//physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
-	//physicsShape.setFillColor(sf::Color::Transparent);
-	//physicsShape.setOutlineThickness(1);
+	sf::CircleShape physicsShape(GetRadius());
+	physicsShape.setPosition(GetCoordinates());
+	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	physicsShape.setFillColor(sf::Color::Transparent);
+	physicsShape.setOutlineThickness(1);
 
-	//window.draw(physicsShape);
-	//sf::CircleShape circleCenter(1);
-	//circleCenter.setPosition(GetX() + GetRadius(),
-	//	GetY() + GetRadius());
-	//circleCenter.setRadius(1.f);
-	//circleCenter.setFillColor(sf::Color::Green);
-	//window.draw(circleCenter);
+	window.draw(physicsShape);
+	sf::CircleShape circleCenter(1);
+	circleCenter.setPosition(GetX() + GetRadius(),
+		GetY() + GetRadius());
+	circleCenter.setRadius(1.f);
+	circleCenter.setFillColor(sf::Color::Green);
+	window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
 }
 

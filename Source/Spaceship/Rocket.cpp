@@ -19,7 +19,6 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 {
 	AddToDrawableManager();
 	
-	SetRadius(15);
 	_isAlive = true;
 	_rocketScale = sf::Vector2f(0.5f, 0.5f);
 	_direction = rocketDirection;
@@ -32,6 +31,8 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 	if (_direction.y > 0)
 		degreeAngle += 180.0f;
 	
+	SetRadius(10);
+
 	sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
 	_halfSpriteLength = GetLenght(sf::Vector2f(_rocketTexture->getSize())) / 2.0f;
 
@@ -100,7 +101,7 @@ void Rocket::Update(const sf::Time& deltaTime)
 	sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
 	_rocketSprite.setPosition(rigidCoordinates.x + _rocketSprite.getLocalBounds().width / 3,
 		rigidCoordinates.y + _rocketSprite.getLocalBounds().height / 3);
-	_rocketSprite.setPosition(GetCoordinates());
+	_rocketSprite.setPosition(GetCoordinates().x + GetRadius(), GetCoordinates().y + GetRadius());
 }
 
 void Rocket::Reset()

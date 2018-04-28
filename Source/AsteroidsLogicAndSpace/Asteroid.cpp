@@ -14,8 +14,8 @@ void Asteroid::DefaultInit()
 	_linearVelocity = sf::Vector2f(0, 0);
 	SetSpeed(_linearVelocity);
 
-	_sprite.setPosition(sf::Vector2f(0, 0));
 	SetCoordinates(sf::Vector2f(0, 0));
+	_sprite.setPosition(GetCoordinates());
 
 	_radius = 1.0f;
 	SetRadius(_radius);
@@ -47,8 +47,8 @@ void Asteroid::RandomInit()
 	float positionX = positionBoundX > 0 ? GetSizeWindow().x + positionBoundX : positionBoundX;
 	float positionY = positionBoundY > 0 ? GetSizeWindow().y + positionBoundY : positionBoundY;
 
-	_sprite.setPosition(sf::Vector2f(positionX, positionY));
 	SetCoordinates(sf::Vector2f(positionX, positionY));
+	_sprite.setPosition(GetCoordinates());
 }
 
 void Asteroid::SetParametersFromType(AsteroidType type)
@@ -274,7 +274,6 @@ void Asteroid::Draw(sf::RenderWindow &window)
 	
 	sf::CircleShape physicsShape(GetRadius());
 	physicsShape.setPosition(GetCoordinates()); 
-	physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
 	
 	float color;
 
@@ -296,6 +295,6 @@ void Asteroid::Draw(sf::RenderWindow &window)
 	physicsShape.setFillColor(sf::Color::Transparent);
 	physicsShape.setOutlineThickness(1);
 
-	//window.draw(physicsShape);
+	window.draw(physicsShape);
 }
 
