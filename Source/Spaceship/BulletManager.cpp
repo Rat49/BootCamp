@@ -93,10 +93,12 @@ void BulletManager::DeleteBullet(OrdinaryBullet* bullet)
 
 void BulletManager::DeleteRocket(Rocket* rocket)
 {
-	rockets.erase(std::remove(rockets.begin(), rockets.end(), rocket), rockets.end());
-	_rocketStorage.Put(rocket);
-	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(rocket));
-
+	/*rockets.erase(std::remove(rockets.begin(), rockets.end(), rocket), rockets.end());
+	_rocketStorage.Put(rocket);*/
+		rocket->SetRadius(0);
+		rocket->_rocketParticle->Stop();
+		rocket->_rocketParticle->SetVelocity(sf::Vector2f(0, 0));
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(rocket));
 	std::cout << "rockets storage " << _rocketStorage.Count() << std::endl;	
 }
 
@@ -123,15 +125,27 @@ void BulletManager::Update(const sf::Time& deltaTime)
 	}
 	for (auto& rocket : rockets)
 	{
-		rocket->Update(deltaTime);
-		if (rocket->GetSprite()->getPosition().x < -rocket->GetHalfSpriteLength()
+		
+		if ((rocket->GetSprite()->getPosition().x < -rocket->GetHalfSpriteLength()
 			|| rocket->GetSprite()->getPosition().x > WindowResolution::_W + rocket->GetHalfSpriteLength()
 			|| rocket->GetSprite()->getPosition().y > WindowResolution::_H + rocket->GetHalfSpriteLength()
-			|| rocket->GetSprite()->getPosition().y < -rocket->GetHalfSpriteLength())
+			|| rocket->GetSprite()->getPosition().y < -rocket->GetHalfSpriteLength()) && rocket->isAlive)
 		{
 			_rocketOutOfBoundsEvent._deletedRocket = rocket;
 			Dispatcher::getInstance().Send(RocketOutOfBoundsEvent(_rocketOutOfBoundsEvent), rocketOutOfBoundsEventID);
+			rocket->isAlive = false;
 			DeleteRocket(rocket);
+		}
+		if (!rocket->_rocketParticle->IsEnd())
+		{
+			rocket->Update(deltaTime);
+		}
+		else 
+		{
+			_particleStorage.Put(rocket->_rocketParticle);
+			_rocketStorage.Put(rocket);
+			rockets.erase(std::remove(rockets.begin(), rockets.end(), rocket), rockets.end());
+
 		}
 	}
 }

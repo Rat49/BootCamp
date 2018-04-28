@@ -10,7 +10,7 @@ ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize) :
 	_canvasSize(canvasSize),
 	_emitterVelocity(0, 0)
 {
-	_zOrder = 2;
+	_zOrder = 5;
 	InitializeParticles();
 	AddToDrawableManager();
 
@@ -26,6 +26,7 @@ void ParticleSystem::InitializeParticles()
 		p._velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
 		_vertices[i].position = _emitterPosition;
 		_particles[i]._currentLifetime = sf::milliseconds((std::rand() % _lifetime));
+		_vertices[i].color.a = static_cast<sf::Uint8>(255);
 	}
 }
 
@@ -140,7 +141,7 @@ void ParticleSystem::Update(sf::Time elapsed)
 			count++;
 		}
 		if (_vertices[i].color.a < 10) {
-			invisible++;
+			++invisible;
 		}
 	}
 

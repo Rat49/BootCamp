@@ -8,7 +8,8 @@
 class Rocket final : public Bullet
 {
 private:
-	RocketParticle * _rocketParticle;
+	
+
 	sf::Texture* _rocketTexture;
 	sf::Sprite _rocketSprite;
 	const float _speedValuePixelsPerSecond;
@@ -17,10 +18,11 @@ private:
 	const float _deltaSpeedValue;
 	sf::Time _timeAfterShot;
 	sf::Vector2f _rocketScale;
-	bool _isAlive;
 	float _halfSpriteLength;
 public:
 	Rocket();
+	RocketParticle * _rocketParticle;
+	bool isAlive = true;
 	void Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture, RocketParticle& rocketParticle);
 	const sf::Sprite* GetSprite();
 	const float GetHalfSpriteLength();

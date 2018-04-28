@@ -28,9 +28,9 @@ int main()
 	rocket.SetPosition(sf::Vector2f(600, 233));
 	rocket.SetVelocity(sf::Vector2f(-40, 15));
 
-	/*Explosion* explosion = new Explosion(1000, window.getSize());
-	explosion->SetPosition(sf::Vector2f(500, 500));
-
+	ExplosionParticle explosion(1000, window.getSize());
+	explosion.SetPosition(sf::Vector2f(500, 500));
+	/*
 	Spaceship spaceship(1000, window.getSize());
 	spaceship.SetPosition(sf::Vector2f(300, 500));*/
 	
@@ -51,24 +51,28 @@ int main()
 		timer = now;
 
 		rocket.Update(deltaTime * 1.f);
-		/*explosion->Update(deltaTime * 1.f);
-		spaceship.Update(deltaTime * 1.f);
-*/
+		explosion.Update(deltaTime * 1.f);
+		//spaceship.Update(deltaTime * 1.f);
 		window.clear(sf::Color::Black);
 		
 		dm.DrawScene(window);
 		//~~~~~~~~~~~~~~just for testing~~~~~~~~~~~~~~~~~
 		/*if (count % 269 == 0) {
-			spaceship.Stop();
+			explosion.Stop();
 			spaceship.SetVelocity(sf::Vector2f(std::rand() % 70 - 20, std::rand() % 70 - 20));
 		}
 		if (count % 41 == 0) {
 			spaceship.Play();
-		}
-		if (explosion->IsEnd()) {
-			explosion = new Explosion(1000, window.getSize());
-			explosion->SetPosition(sf::Vector2f(std::rand() % 50 + 500, std::rand() % 50 + 500));
 		}*/
+		if (count % 269 == 0) {
+			std::cout << "Play";
+			if (explosion.IsEnd())
+			{
+				std::cout << "Play";
+				explosion.Play();
+				//explosion.SetPosition(sf::Vector2f(std::rand() % 50 + 500, std::rand() % 50 + 500));
+			}
+		}
 		window.display();
 		count++;
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

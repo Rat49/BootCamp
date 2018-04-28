@@ -12,14 +12,14 @@ Rocket::Rocket()
 	, _halfSpriteLength(0.0f)
 {
 	_zOrder = 3;	
-	_isAlive = false;
+	isAlive = false;
 }
 
 void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture, RocketParticle& rocketParticle)
 {
 	AddToDrawableManager();
 	
-	_isAlive = true;
+	isAlive = true;
 	_rocketScale = sf::Vector2f(0.5f, 0.5f);
 	_direction = rocketDirection;
 	_rocketTexture = &rocketTexture;
@@ -39,6 +39,8 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 	_rocketSprite.setRotation(degreeAngle);
 
 	_rocketParticle = &rocketParticle;
+	_rocketParticle->Play();
+
 	_rocketParticle->SetPosition(sf::Vector2f(position.x + rocketDirection.x * _rocketTexture->getSize().x / 2.0f, 
 		position.y + rocketDirection.y * _rocketTexture->getSize().y / 2.0f));
 	_rocketParticle->SetVelocity(rocketDirection * _speedValuePixelsPerSecond);
@@ -79,34 +81,37 @@ void Rocket::Draw(sf::RenderWindow& window)
 
 void Rocket::Update(const sf::Time& deltaTime)
 {
-	RigidBody::Update(deltaTime.asSeconds());
 	
-	_rocketParticle->Update(deltaTime);
+		RigidBody::Update(deltaTime.asSeconds());
+		_rocketParticle->Update(deltaTime);
 
-	_timeAfterShot += deltaTime;
-	if (_timeAfterShot.asSeconds() > _speedDelayTime.asSeconds())
-	{
-		_rocketParticle->SetVelocity(_direction * (_speedValuePixelsPerSecond + _deltaSpeedValue));
-		SetSpeed(_direction * (_speedValuePixelsPerSecond + _deltaSpeedValue));
-	}
+		_timeAfterShot += deltaTime;
+		if (_timeAfterShot.asSeconds() > _speedDelayTime.asSeconds())
+		{
+			_rocketParticle->SetVelocity(_direction * (_speedValuePixelsPerSecond + _deltaSpeedValue));
+			SetSpeed(_direction * (_speedValuePixelsPerSecond + _deltaSpeedValue));
+		}
 
-	if (_rocketSprite.getPosition().x >= WindowResolution::_W || _rocketSprite.getPosition().x < 0
-		|| _rocketSprite.getPosition().y > WindowResolution::_H || _rocketSprite.getPosition().y < 0)
-	{
-		_rocketParticle->Stop();
-		if (_rocketParticle->IsEnd())
-			_isAlive = false;
-	}
+		/*if (_rocketSprite.getPosition().x >= WindowResolution::_W || _rocketSprite.getPosition().x < 0
+			|| _rocketSprite.getPosition().y > WindowResolution::_H || _rocketSprite.getPosition().y < 0)
+		{
+			_rocketParticle->Stop();
+			if (_rocketParticle->IsEnd())
+				_isAlive = false;
+		}*/
 
-	sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
-	_rocketSprite.setPosition(rigidCoordinates.x + _rocketSprite.getLocalBounds().width / 3,
-		rigidCoordinates.y + _rocketSprite.getLocalBounds().height / 3);
-	_rocketSprite.setPosition(GetCoordinates().x + GetRadius(), GetCoordinates().y + GetRadius());
+		sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
+		_rocketSprite.setPosition(rigidCoordinates.x + _rocketSprite.getLocalBounds().width / 3,
+			rigidCoordinates.y + _rocketSprite.getLocalBounds().height / 3);
+		_rocketParticle->SetPosition(sf::Vector2f( GetCoordinates().x + GetRadius(), GetCoordinates().y + GetRadius()));
+		_rocketSprite.setPosition(GetCoordinates().x + GetRadius(), GetCoordinates().y + GetRadius());
+	
+	
 }
 
 void Rocket::Reset()
 {
-	_isAlive = false;
+	isAlive = true;
 	_rocketSprite.setOrigin(0, 0);
 	_rocketSprite.setPosition(0, 0);
 	_rocketSprite.setRotation(0);
@@ -118,8 +123,9 @@ void Rocket::Reset()
 
 bool Rocket::GetLifeStatus() const
 {
-	return _isAlive;
+	return isAlive;
 }
+
 
 
 void Rocket::OnCollisionHandler(const Event& cEvent)

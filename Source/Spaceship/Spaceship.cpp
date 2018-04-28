@@ -1,6 +1,6 @@
 #include "Spaceship.h"
 
-Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
+Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
 	: RigidBody({ 0, 0 }, {0, 0}, spaceshipAnimationImseq.GetWidth() / 2.5f, 1.0f)
 
 	, _isDamaged(false)
@@ -17,7 +17,7 @@ Spaceship::Spaceship(std::multimap<const std::string, const std::string>& spaces
 	, _input(input)	
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
-	, _rechargeRocketTime(sf::seconds(3.0f))
+	, _rechargeRocketTime(sf::seconds(0.0f))
 	, _rechargeBulletTime(sf::seconds(0.2f))
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)

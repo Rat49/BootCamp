@@ -181,7 +181,7 @@ int main()
 
 
 	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50)-300;
-	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 5;
+	int _nAsteroids = 1;// (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 5;
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
@@ -315,9 +315,10 @@ int main()
 							collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
 							ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
 							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+						
 						}
 					}
+					bulletManager.DeleteRocket(bulletManager.rockets[j]);
 				}
 			}
 

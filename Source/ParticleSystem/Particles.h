@@ -48,8 +48,9 @@ public:
 	void SetParticlesLifetime(int lifetime)				{ _lifetime = lifetime; }
 	void SetRate(int rate)								{ _rate = rate;}
 	void SetNormalDistrParams(float mean, float sigma)	{ _mean = mean;_sigma = sigma;}
-	void SetUniformDistrRange(int range)				{ _range = range;}
-	
+	void SetUniformDistrRange(int range) { _range = range; }
+	void SetSpeed(int speed) { _speed = speed; }
+
 	void SortColors();
 	void AddColor(float begin, sf::Color color);
 	void SetStandartColors();

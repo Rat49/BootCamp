@@ -7,11 +7,12 @@ public:
 	ParticleSystem particles;
 
 	RocketParticle(unsigned int quantity, sf::Vector2u window) :
-		particles(700, window) {
-		particles.SetNormalDistrParams(0, 7);
+		particles(2000, window)
+	{
+		particles.SetNormalDistrParams(0, 12);
 		particles.SetStandartColors();
-		particles.SetParticlesLifetime(700);
-		particles.SetRate(100);
+		particles.SetParticlesLifetime(400);
+		particles.SetRate(10);
 	}
 
 	RocketParticle() : RocketParticle(1000, sf::Vector2u(500, 500)) {}
@@ -28,11 +29,23 @@ public:
 		particles.AddCircleForceBehind(3.5f, 20, 0.5f);
 	}
 
-	void Reset(){}
+	void Reset(){
+
+		particles.end = false;
+		particles.InitializeParticles();
+		//particles.Update(sf::seconds(0.002f));
+	}
+	void Play() {
+		particles.SetRate(10);
+		particles.fading = false;
+		//particles.Update(sf::seconds(0.002f));
+		particles.end = false;
+	}
 
 	void Stop() {
 		particles.SetRate(0);
 	}
+
 
 	void Update(sf::Time deltaTime) {
 		particles.Update(deltaTime);
@@ -50,10 +63,12 @@ public:
 
 	ExplosionParticle(unsigned int quantity, sf::Vector2u window) :
 		particles(1000, window) {
+		//в конструкторе рэйт = 0
 		particles.SetRate(150);
 		particles.SetNormalDistrParams(0, 160);
 		particles.SetParticlesLifetime(500);
 		particles.SetStandartColors();
+		particles.SetSpeed(200.f);
 
 	}
 
@@ -63,6 +78,18 @@ public:
 
 	void Stop() {
 		particles.SetRate(0);
+	}
+
+	void Reset() {
+		particles.SetRate(0);
+	}
+
+	void Play() {
+		particles.fading = false;
+		particles.SetRate(150);
+		particles.InitializeParticles();
+		reccomendedLifeTime = sf::seconds(0.2f);
+		particles.Update(sf::seconds(0.2f));
 	}
 
 	void Update(sf::Time deltaTime) {
