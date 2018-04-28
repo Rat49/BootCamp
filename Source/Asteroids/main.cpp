@@ -27,7 +27,7 @@ int main()
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 	DrawableManager& drawableManager = DrawableManager::getInstance();
-	
+
 	/*
 	ResourceManager Initialization
 	*/
@@ -42,7 +42,7 @@ int main()
 
 	for (auto i : imageSequenceCategory)
 	{
-		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first, 
+		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first,
 			cm1->GetCategory("ImageSequenceResource." + i.first).GetParams()));
 	}
 
@@ -79,14 +79,14 @@ int main()
 	ButtonsState stateChoose;
 	ButtonsState stateShoot;
 	ButtonsState statePowerfullShoot;
-	
+
 	/*
 	For Audio
 	*/
 
 	//AudioResource* shootingSound = rm->GetResource<AudioResource>("piupiu");
 	//AudioResource* explosionSound = rm->GetResource<AudioResource>("booom");
-	
+
 	/*
 	For SpaceShip
 	*/
@@ -100,7 +100,7 @@ int main()
 	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture, *rocketTexture);
-	
+
 	/*
 	For Physics
 	*/
@@ -130,7 +130,7 @@ int main()
 
 		RigidBodies[idx + 1].SetRadius(25);
 		RigidBodies[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
-		RigidBodies[idx + 1].SetSpeed({ -100, 40});
+		RigidBodies[idx + 1].SetSpeed({ -100, 40 });
 		RigidBodies[idx + 1].SetMass(0.01f);
 	}
 
@@ -139,7 +139,7 @@ int main()
 		circles[i].setRadius(RigidBodies[i].GetRadius());
 		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
 	}
-	
+
 	/*
 	Game Loop
 	*/
@@ -157,13 +157,13 @@ int main()
 	sf::Image healthHearth;
 	font.loadFromFile("Resources/font/arial.ttf");
 	healthHearth.loadFromFile("Resources/graphics/Health.png");
-	ui.CreatePicture(healthHearth,PercentXY(6,1),"Life0");
+	ui.CreatePicture(healthHearth, PercentXY(6, 1), "Life0");
 	ui.CreatePicture(healthHearth, PercentXY(8, 1), "Life1");
 	ui.CreatePicture(healthHearth, PercentXY(10, 1), "Life2");
 	ui.CreateLabel("100", font, PercentXY(0, 0), "HP");
 	ui.CreateLabel("0", font, PercentXY(95, 0), "score");
-	
-	
+
+
 	/*
 	For Space
 	*/
@@ -181,7 +181,7 @@ int main()
 	Space space(totalCountAsteroids, totalCountStar, rw.getSize());
 
 
-	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50)-300;
+	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) - 300;
 	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 5;
 
 	space.AddSomeStars(_nStars);
@@ -247,7 +247,7 @@ int main()
 
 		if (rw.pollEvent(sysEvent))
 		{
-			
+
 			if (input.GetMode() == InputMode::Raw || input.GetMode() == InputMode::PausedRaw)
 			{
 				input.HandleRawEvent(sysEvent);
@@ -256,8 +256,8 @@ int main()
 			else
 			{
 				debugConsole.setActiveConsoleStatus(false);
-			}			
-		}				
+			}
+		}
 
 		if (fixedTime > fixedUpdateTime)
 		{
@@ -382,19 +382,13 @@ int main()
 			//ResolveCollision(*space.asteroids[i], *space.ammunition);
 		}
 
-		space.Update(deltaTime.asMilliseconds() / 1e3);
+		
+		space.Update(fixedTime.asSeconds());
+		spaceship->Update(fixedTime);
+		bulletManager.Update(fixedTime);
 
-			/*space.Update(deltaTime.asMilliseconds() / 1e3);
-			spaceship->Update(deltaTime);
-			bulletManager.Update(deltaTime);*/
+		fixedTime = sf::Time::Zero;
 
-			//space.Update(fixedTime.asMilliseconds() / 1e3);
-			space.Update(fixedTime.asSeconds());
-			spaceship->Update(fixedTime);
-			bulletManager.Update(fixedTime);
-			
-			fixedTime = sf::Time::Zero;
-		}
 		rw.clear();
 		//Rendering update
 		//for (int i = 0; i < numOfObjects; ++i)
@@ -413,6 +407,7 @@ int main()
 		//rw.display();
 	}
 
+	
 	delete cm1;
 	return 0;
 }

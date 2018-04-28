@@ -10,32 +10,34 @@ UI::UI(sf::RenderWindow & window) :
 		});
 }
 
-void UI::OnChangedSpaceshipState(const Event & event)
-{
-	const UpdateSpaceshipStateEvent&  updateStateEvent = static_cast<const UpdateSpaceshipStateEvent&>(event);
-	if (_widgets["HP"] != nullptr)
+
+	void UI::OnChangedSpaceshipState(const Event & event)
 	{
-		Get<Label>("HP")->SetString(std::to_string(updateStateEvent._HP));
-	}
-	std::string life("Life");
-	for (int i = 0; i < updateStateEvent._maxCountLife; ++i)
-	{
-		life.push_back(i);
-		if (_widgets[life] != nullptr)
+
+		const UpdateSpaceshipStateEvent&  updateStateEvent = static_cast<const UpdateSpaceshipStateEvent&>(event);
+		if (_widgets["HP"] != nullptr)
 		{
+			Get<Label>("HP")->SetString(std::to_string(updateStateEvent._HP));
+		}
+		std::string life("Life");
+	//for (int i = 0; i < updateStateEvent._maxCountLife; ++i)
+	//{
+			/*life.push_back(i);
+			if (_widgets[life] != nullptr)
+			{
 			if (i < updateStateEvent._countLife)
 			{
-				Get<Picture>(life)->_isVisible = true;
+			Get<Picture>(life)->_isVisible = true;
 			}
 			else
 			{
-				Get<Picture>(life)->_isVisible = false;
+			Get<Picture>(life)->_isVisible = false;
 			}
-		}
-		life.pop_back();
+			}*/
+			//life.pop_back();
 }
 
-void UI::OnResize()
+	void UI::OnResize()
 {
 	
 	auto newSize = sf::Vector2i(_window.getSize().x, _window.getSize().y);

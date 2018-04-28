@@ -48,7 +48,7 @@ public:
 		return specificWidget;
 	}
 	Token_t _tokenUI;
-	void OnChangedSpaceshipState(const Event& event);
+	void OnChangedSpaceshipState(const Event & event);
 	void OnResize();
 	void Render();
 	void OnAchive(const std::string & name, const std::string & description,sf::Image * picture);
