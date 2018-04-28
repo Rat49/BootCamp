@@ -117,3 +117,13 @@ void RandomFill(RigidBody * RigidBodysFunc, int length)
     RigidBodysFunc[i].SetMass(10.f + std::rand() / ((RAND_MAX + 1u) / 20));
   }
 }
+
+void RigidBody::SetColliderVisible(bool param)
+{
+	_isColliderVisible = param;
+}
+
+bool RigidBody::IsColliderVisible()
+{
+	return _isColliderVisible;
+}

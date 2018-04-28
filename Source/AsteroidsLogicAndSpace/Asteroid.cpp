@@ -81,7 +81,7 @@ void Asteroid::SetParametersFromType(AsteroidType type)
 	_life = true;
 }
 
-void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &position, const AsteroidType type, const sf::Vector2u &size)
+void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &position, const AsteroidType type, const sf::Vector2u &size, bool isColliderVisible)
 {
 	_sprite = sprite;
 	_sizeSpace = size;
@@ -111,6 +111,8 @@ void Asteroid::InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &posit
 	SetCoordinates(_sprite.getPosition());
 
 	_halfLenght = GetLenght(sf::Vector2f(_sprite.getLocalBounds().width, _sprite.getLocalBounds().height)) / 2;
+
+	SetColliderVisible(isColliderVisible);
 	
 	AddToDrawableManager();
 }
@@ -272,29 +274,32 @@ void Asteroid::Draw(sf::RenderWindow &window)
 {
 	window.draw(_sprite);
 	
-	sf::CircleShape physicsShape(GetRadius());
-	physicsShape.setPosition(GetCoordinates()); 
-	
-	float color;
-
-	switch (_type)
+	if (IsColliderVisible())
 	{
-	case AsteroidType::Small:
-		color = _health / 200.0f * 255.0f;
-		break;
-	case AsteroidType::Middle:
-		color = _health / 300.0f * 255.0f;
-		break;
-	case AsteroidType::Big:
-	default:
-		color = _health / 400.0f * 255.0f;
-		break;
+		sf::CircleShape physicsShape(GetRadius());
+		physicsShape.setPosition(GetCoordinates());
+
+		float color;
+
+		switch (_type)
+		{
+		case AsteroidType::Small:
+			color = _health / 200.0f * 255.0f;
+			break;
+		case AsteroidType::Middle:
+			color = _health / 300.0f * 255.0f;
+			break;
+		case AsteroidType::Big:
+		default:
+			color = _health / 400.0f * 255.0f;
+			break;
+		}
+
+		physicsShape.setOutlineColor(sf::Color(255, static_cast<uint8_t>(color), static_cast<uint8_t>(color), 255));
+		physicsShape.setFillColor(sf::Color::Transparent);
+		physicsShape.setOutlineThickness(1);
+
+		window.draw(physicsShape);
 	}
-
-	physicsShape.setOutlineColor(sf::Color(255, static_cast<uint8_t>(color), static_cast<uint8_t>(color), 255));
-	physicsShape.setFillColor(sf::Color::Transparent);
-	physicsShape.setOutlineThickness(1);
-
-	window.draw(physicsShape);
 }
 

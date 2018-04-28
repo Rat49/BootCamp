@@ -31,8 +31,6 @@ int main()
 	ResourceManager Initialization
 	*/
 
-	
-
 	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
 	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").GetParams()));
 	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").GetParams()));
@@ -140,19 +138,6 @@ int main()
 		circles[i].setRadius(RigidBodies[i].GetRadius());
 		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
 	}
-
-	/*
-	DebugCommandManager manager
-	*/
-	DebugCommandManager manager;
-	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
-	{
-		spaceship->SetDamage(0);
-	} });
-	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
-	{
-		spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
-	} });
 	
 	/*
 	Game Loop
@@ -186,6 +171,36 @@ int main()
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
 	space.AddAmmunition(rm);
+
+	/*
+	DebugCommandManager manager
+	*/
+	DebugCommandManager manager;
+
+	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
+	{
+		spaceship->SetDamage(0);
+	} });
+
+	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
+	{
+		spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
+	} });
+
+	manager.addConsoleCommand({ "setCollidersVisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& args)
+	{
+		spaceship->SetColliderVisible(true);
+		space.SetColliderVisible(true);
+	} });
+
+	manager.addConsoleCommand({ "setCollidersInvisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& args)
+	{
+		spaceship->SetColliderVisible(false);
+		space.SetColliderVisible(false);
+	} });
+
+	spaceship->SetColliderVisible(false);
+	space.SetColliderVisible(false);
 	/*
 	For Debug Console
 	*/
