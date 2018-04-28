@@ -27,6 +27,7 @@ int main()
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 	DrawableManager& drawableManager = DrawableManager::getInstance();
+	
 	/*
 	ResourceManager Initialization
 	*/
@@ -162,7 +163,22 @@ int main()
 	sf::RenderWindow rw(sf::VideoMode(1200, 800), "Asteroids");
 	WindowResolution::SetResolution(rw);
 	sf::Event sysEvent;
+	UI ui(rw);
 
+	/*
+	For UI
+	*/
+	sf::Font font;
+	sf::Image healthHearth;
+	font.loadFromFile("Resources/font/arial.ttf");
+	healthHearth.loadFromFile("Resources/graphics/Health.png");
+	ui.CreatePicture(healthHearth,PercentXY(6,1),"health1");
+	ui.CreatePicture(healthHearth, PercentXY(8, 1), "health2");
+	ui.CreatePicture(healthHearth, PercentXY(10, 1), "health3");
+	ui.CreateLabel("100", font, PercentXY(0, 0), "HP");
+	ui.CreateLabel("0", font, PercentXY(95, 0), "score");
+	
+	
 	/*
 	For Space
 	*/
@@ -201,7 +217,7 @@ int main()
 
 	while (rw.isOpen())
 	{
-
+		
 		auto now = clock.getElapsedTime();
 		deltaTime = now - timer;
 		timer = now;
@@ -352,8 +368,9 @@ int main()
 			debugConsole.Draw(rw);
 		}
 		drawableManager.DrawScene(rw);
+		ui.Render();
 		//Display
-		rw.display();
+		//rw.display();
 	}
 
 	delete cm1;

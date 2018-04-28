@@ -3,6 +3,7 @@
 #include "ScrollBar.h"
 #include "AchievementShower.h"
 #include "Widget.h"
+#include "Picture.h"
 #include <cassert>
 
 struct PercentXY
@@ -53,12 +54,14 @@ public:
 	Widget * CreateButton(const sf::Vector2f size, const PercentXY relativePos, const std::string & name);
 	Widget * CreateLabel(const std::string & content, const sf::Font & font, const PercentXY relativePos, const std::string & name);
 	Widget * CreateScrollBar(const float length, const PercentXY relativePos, const std::string & name);
-	Widget * CreateAchivementShower(const sf::Font & font, const PercentXY relPos);
+	Widget * CreateAchivementShower(const sf::Font & font, const PercentXY relativePos);
+	Widget * CreatePicture(const sf::Image & img, const PercentXY relativePos, const std::string & name);
 
 	void RemoveWidget(const std::string & key);
 
 	~UI();
 private:	
+	//UI() = delete;
 	const sf::Vector2f RelativeCordToAbs(const PercentXY relCoord) const;
 	sf::RenderWindow & _window;
 	Widget* GetWidget(const std::string &key);

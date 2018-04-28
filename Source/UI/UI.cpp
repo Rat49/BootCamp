@@ -72,6 +72,11 @@ Widget * UI::CreateAchivementShower(const sf::Font & font, const PercentXY relPo
 	return _widgets["achivementShower"] = new AchievementShower(font, RelativeCordToAbs(relPos), "achivementShower",_window);
 }
 
+Widget * UI::CreatePicture(const sf::Image & img, const PercentXY relPos, const std::string & name)
+{
+	return _widgets[name] = new Picture(img, RelativeCordToAbs(relPos), name, _window);
+}
+
 void UI::RemoveWidget(const std::string & key)
 {
 	delete _widgets[key];
