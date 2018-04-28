@@ -38,7 +38,6 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 		rocket->Init(currentEvent._position, currentEvent._direction, _rocketTexture.Get(), *rocketParticle);
 
 		rockets.push_back(rocket);
-
 	});
 	_collisionRocketVsAsteroid = dispatcher.Connect(collisionEventBetweenAsteroidAndRocketID, [&](const Event& event)
 	{
@@ -83,19 +82,6 @@ BulletManager::~BulletManager()
 	dispatcher.Disconnect(collisionEventBetweenAsteroidAndBulletID, _collisionBulletVsAsteroid);
 }
 
-//void BulletManager::DeleteBullet(const Event& event)
-//{
-//	const DeleteBulletEvent& currentEvent = static_cast<const DeleteBulletEvent&>(event);
-//
-//	OrdinaryBullet* ptrBullet = currentEvent._deletedBullet;
-//
-//	bullets.erase(std::remove(bullets.begin(), bullets.end(), ptrBullet), bullets.end());
-//	_ordinaryBulletStorage.Put(ptrBullet);
-//	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrBullet));
-//
-//	std::cout << "bullets storage " << _ordinaryBulletStorage.Count() << std::endl;
-//}
-
 void BulletManager::DeleteBullet(OrdinaryBullet* bullet)
 {
 	bullets.erase(std::remove(bullets.begin(), bullets.end(), bullet), bullets.end());
@@ -121,19 +107,6 @@ void BulletManager::RocketOutOfBoundsHandler(const Event & event)
 
 	DeleteRocket(ptrRocket);
 }
-
-//void BulletManager::DeleteRocket(const Event & event)
-//{
-//	const DeleteRocketEvent& currentEvent = static_cast<const DeleteRocketEvent&>(event);
-//
-//	Rocket* ptrRocket = currentEvent._deletedRocket;
-//
-//	rockets.erase(std::remove(rockets.begin(), rockets.end(), ptrRocket), rockets.end());
-//	_rocketStorage.Put(ptrRocket);
-//	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ptrRocket));
-//
-//	std::cout << "rockets storage " << _rocketStorage.Count() << std::endl;	
-//}
 
 void BulletManager::Update(const sf::Time& deltaTime)
 {

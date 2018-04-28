@@ -9,6 +9,7 @@ Rocket::Rocket()
 	, _speedDelayTime(sf::seconds(1.0f))
 	, _deltaSpeedValue(600.0f)
 	, _rocketScale(1.0f, 1.0f)
+	, _halfSpriteLength(0.0f)
 {
 	_zOrder = 3;	
 	_isAlive = false;
@@ -32,6 +33,7 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 		degreeAngle += 180.0f;
 	
 	sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
+	_halfSpriteLength = GetLenght(sf::Vector2f(_rocketTexture->getSize())) / 2.0f;
 
 	_rocketSprite.setRotation(degreeAngle);
 
