@@ -45,6 +45,11 @@ bool Achievement::GetAchievedActive() const
 	return _achievedActive;
 }
 
+const std::string & Achievement::GetDateCompleteAchievements() const
+{
+	return _dateCompleteAchievements;
+}
+
 void Achievement::SetIdAchievement(int id)
 {
 	_idAchievement = id;
@@ -73,4 +78,9 @@ void Achievement::SetDisplayDescriptionName(const std::string& descriptionName)
 void Achievement::SetAchievedActive(bool active)
 {
 	_achievedActive = active;
+}
+
+void Achievement::SetDateCompleteAchievements(const std::string& dateCompleteAchievements)
+{
+	_dateCompleteAchievements = dateCompleteAchievements;
 }

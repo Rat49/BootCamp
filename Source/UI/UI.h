@@ -46,7 +46,7 @@ public:
 
 	void OnResize();
 	void Render();
-	void OnAchive(const std::string & text, sf::Image * picture);
+	void OnAchive(const std::string & name, const std::string & description,sf::Image * picture);
 	void SetPostion(const std::string& key, const PercentXY relCoord);
 	sf::Vector2f GetPosition(const std::string& key);	
 

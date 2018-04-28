@@ -334,6 +334,12 @@ int main()
 				}
 			}
 		}
+
+		if (Collided(*spaceship, *space.ammunition))
+		{
+			//ResolveCollision(*space.asteroids[i], *space.ammunition);
+		}
+
 		space.Update(deltaTime.asMilliseconds() / 1e3);
 
 		spaceship->Update(deltaTime);
