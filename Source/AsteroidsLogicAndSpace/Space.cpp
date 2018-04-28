@@ -10,6 +10,13 @@ Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::
 	
 }
 
+void Space::AddAmmunition(ResourceManager *rm)
+ {
+	ammunition = new Ammunition(rm);
+	ammunition->Init();
+}
+
+
 void Space::AddSomeStars(const int count)
 {
 	for (int i = 0; i < count; ++i)
@@ -65,6 +72,7 @@ void Space::Update(const float physicsStepTargetFrameTime)
 	{
 		star->Update(physicsStepTargetFrameTime);
 	}
+	ammunition->Update(physicsStepTargetFrameTime);
 }
 
 

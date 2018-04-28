@@ -30,7 +30,11 @@ void Ammunition::Update(float time)
 		SetCoordinates(nextPosition);
 	}
 
-	_sprite.setPosition(GetCoordinates());
+	_sprite.setOrigin(_radius * 2, _radius * 2);
+	_sprite.setScale(sf::Vector2f(0.5f, 0.5f));
+		//SetCoordinates(sf::Vector2f(200,200));
+	auto rt = GetCoordinates();
+	_sprite.setPosition(sf::Vector2f(rt.x + _radius, rt.y + _radius));
 	_sprite.setRotation(_angularVelocity);
 }
 
@@ -38,11 +42,42 @@ void Ammunition::Update(float time)
 
 void Ammunition::Draw(sf::RenderWindow &window)
 {
+	sf::CircleShape physicsShape(GetRadius());
+	physicsShape.setPosition(GetCoordinates());
+		//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
+	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+	physicsShape.setFillColor(sf::Color::Transparent);
+	physicsShape.setOutlineThickness(1);
+	
+	window.draw(physicsShape);
+	sf::CircleShape circleCenter(1);
+	circleCenter.setPosition(GetX() + GetRadius(),
+	+GetY() + GetRadius());
+	circleCenter.setRadius(1.f);
+	circleCenter.setFillColor(sf::Color::Green);
+	window.draw(circleCenter);
 	window.draw(_sprite);
 }
 
 void Ammunition::Init()
 {
+
+	uint8_t ammunitionNumber = std::rand() % 6;
+	
+	_sprite = _sprites[ammunitionNumber];
+	
+	_radius = _sprite.getLocalBounds().width / 4;
+	SetRadius(_radius);
+	_sprite.setOrigin(_radius, _radius);
+	
+	SetMass(0.015f);
+	
+	AddToDrawableManager();
+	
+	_ammunitionType = static_cast<AmmunitionType>(ammunitionNumber / 3);
+	_ammunitionSize = static_cast<AmmunitionSize>(ammunitionNumber % 3);
+
+
 	_angularVelocity = GetFloatRandomValue(-15.0, 15.0);
 	_rotationSpeed = GetFloatRandomValue(1, 80);
 	_sprite.setRotation(_angularVelocity);
@@ -59,9 +94,15 @@ void Ammunition::Init()
 	SetCoordinates(sf::Vector2f(positionX, positionY));
 }
 
-Ammunition::Ammunition(sf::Sprite sprite)
+Ammunition::Ammunition(ResourceManager *rm)
 {
-	_sprite = sprite;
+	_sprites.push_back(sf::Sprite(rm->GetResource<TextureResource>("bulletSmall")->Get()));
+	_sprites.push_back(sf::Sprite(rm->GetResource<TextureResource>("bulletMedium")->Get()));
+	_sprites.push_back(sf::Sprite(rm->GetResource<TextureResource>("bulletBig")->Get()));
+	
+	_sprites.push_back(sf::Sprite(rm->GetResource<TextureResource>("rocketSmall")->Get()));
+	_sprites.push_back(sf::Sprite(rm->GetResource<TextureResource>("rocketMedium")->Get()));
+	_sprites.push_back(sf::Sprite(rm->GetResource<TextureResource>("rocketBig")->Get()));
 }
 
 
