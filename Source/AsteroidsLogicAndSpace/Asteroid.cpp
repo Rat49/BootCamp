@@ -129,6 +129,10 @@ void Asteroid::Reset()
 	DefaultInit();
 }
 
+sf::Vector2f Asteroid::GetCoordinates() {
+ 	return RigidBody::GetCoordinates();
+}
+
 void Asteroid::OnCollisionHandler(const Event& cEvent)
 {
 	//std::cout << "|| Collision! Resolve is ";

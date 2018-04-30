@@ -25,6 +25,8 @@ public:
 	void AddToDrawableManager() override;
 	void Remove() override;
 	void OnCollisionHandler(const Event& cEvent);
+	sf::Vector2f GetCoordinates();
+
 
 	void OnRocketCollisionHandler(const Event & cEvent);
 

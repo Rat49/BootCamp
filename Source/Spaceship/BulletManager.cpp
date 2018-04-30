@@ -71,6 +71,7 @@ BulletManager::~BulletManager()
 		if (!(_rocketStorage.Count() == _rocketStorage.MaxCount()))
 		{
 			rocket->Reset();
+			_particleStorage.Put(rocket->_rocketParticle);
 			_rocketStorage.Put(rocket);
 		}
 	}
@@ -141,6 +142,7 @@ void BulletManager::Update(const sf::Time& deltaTime)
 		}
 		else 
 		{
+			DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(&(rocket->_rocketParticle->particles)));
 			_particleStorage.Put(rocket->_rocketParticle);
 			_rocketStorage.Put(rocket);
 			rockets.erase(std::remove(rockets.begin(), rockets.end(), rocket), rockets.end());

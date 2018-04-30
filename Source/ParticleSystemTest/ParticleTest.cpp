@@ -30,6 +30,7 @@ int main()
 
 	ExplosionParticle explosion(1000);
 	explosion.SetPosition(sf::Vector2f(500, 500));
+	explosion.Play();
 	/*
 	Spaceship spaceship(1000, window.getSize());
 	spaceship.SetPosition(sf::Vector2f(300, 500));*/
@@ -69,13 +70,14 @@ int main()
 			if (explosion.IsEnd())
 			{
 				std::cout << "Play";
+				explosion.Reset();
 				explosion.Play();
 				//explosion.SetPosition(sf::Vector2f(std::rand() % 50 + 500, std::rand() % 50 + 500));
 			}
 			else {
 				explosion.Stop();
+				//DrawableManager::getInstance().RemoveDrawableObject(static_cast<*Drawable>(explosion))
 				std::cout << "stop";
-
 			}
 		}
 		window.display();

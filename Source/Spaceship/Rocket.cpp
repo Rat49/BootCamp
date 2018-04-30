@@ -15,6 +15,8 @@ Rocket::Rocket()
 	isAlive = false;
 }
 
+
+
 void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture, RocketParticle& rocketParticle, bool isColliderVisible)
 {
 	AddToDrawableManager();

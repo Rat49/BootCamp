@@ -3,11 +3,36 @@
 
 
 Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize) :
-	_poolAsteroid(totalCountAsteroids), _poolStar(totalCountStar),_sizeSpace(windowSize)
+	_poolAsteroid(totalCountAsteroids), _poolStar(totalCountStar),_sizeSpace(windowSize), _poolExplosion(12)
 {
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	_collisionWithRocket = dispatcher.Connect(collisionEventBetweenAsteroidAndRocketID, [&](const Event& event)
+	{
+		AddExplosionRocket(event);
+	});
+	_collisionWithBullet = dispatcher.Connect(collisionEventBetweenAsteroidAndBulletID, [&](const Event& event)
+	{
+		AddExplosionBullet(event);
+	});
+}
 
-	
-	
+
+void Space::AddExplosionRocket(const Event& cEvent) {
+	const CollisionEventBetweenAsteroidAndRocket &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndRocket&>(cEvent);
+	ExplosionParticle* explosion = _poolExplosion.Get();
+  	auto position = collisionEvent._asteroid->GetCoordinates();
+	explosion->SetPosition(position);
+	explosion->Play();
+	_explosions.push_back(explosion);
+}
+
+void Space::AddExplosionBullet(const Event& cEvent) {
+	const CollisionEventBetweenAsteroidAndBullet &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndBullet&>(cEvent);
+	ExplosionParticle* explosion = _poolExplosion.Get();
+	auto position = collisionEvent._asteroid->GetCoordinates();
+	explosion->SetPosition(position);
+	explosion->Play();
+	_explosions.push_back(explosion);
 }
 
 void Space::AddAmmunition(ResourceManager *rm)
@@ -81,6 +106,20 @@ void Space::Update(const float physicsStepTargetFrameTime)
 		star->Update(physicsStepTargetFrameTime);
 	}
 	ammunition->Update(physicsStepTargetFrameTime);
+
+	for (auto *explosion : _explosions)
+	{
+ 		if (!explosion->IsEnd())
+		{
+			explosion->Update(sf::milliseconds(physicsStepTargetFrameTime*1000));
+		}
+		else
+		{
+			DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(&(explosion->particles)));
+			_explosions.erase(std::find(_explosions.begin(), _explosions.end(), explosion));
+			_poolExplosion.Put(explosion);
+		}
+	}
 }
 
 
@@ -103,5 +142,10 @@ Space::~Space()
 			star->Remove();
 			_poolStar.Put(star);
 		}
+	}
+
+	for (auto *explosion : _explosions)
+	{
+			_poolExplosion.Put(explosion);
 	}
 }

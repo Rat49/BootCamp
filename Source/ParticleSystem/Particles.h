@@ -70,6 +70,8 @@ public:
 	bool end = false;
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow &window) override;
+	void AddToDrawableManager() override;
+
 
 
 private:
@@ -99,7 +101,6 @@ private:
 	std::vector<std::pair<float, sf::Color>> colors;
 	
 	
-	void AddToDrawableManager() override;
 	void ResetParticle(std::size_t index);
 	void ChangeColor(const float lifeTime, sf::Vertex& vertex);
 };

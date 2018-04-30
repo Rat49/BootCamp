@@ -348,6 +348,7 @@ int main()
 					collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
 					ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
 					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space._collisionWithRocket);
 					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 					for (size_t k = 0; k < n; ++k) {
 						if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
@@ -355,6 +356,7 @@ int main()
 							collisionAsteroidVsRocket._asteroid = space.asteroids[k];
 							collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
 							ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
+							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space._collisionWithRocket);
 							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 						
 						}
@@ -371,6 +373,7 @@ int main()
 						collisionAsteroidVsBullet._bullet = bullet;
 						deleteBulletEvent._deletedBullet = bullet;
 						ResolveCollision(*space.asteroids[i], *bullet);
+						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space._collisionWithBullet);
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager._collisionBulletVsAsteroid);
 					}

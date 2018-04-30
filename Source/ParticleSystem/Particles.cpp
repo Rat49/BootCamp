@@ -10,8 +10,6 @@ ParticleSystem::ParticleSystem(unsigned int count) :
 {
 	_zOrder = 5;
 	InitializeParticles();
-	AddToDrawableManager();
-
 }
 
 void ParticleSystem::InitializeParticles()
@@ -20,7 +18,7 @@ void ParticleSystem::InitializeParticles()
 	{
 		Particle& p = _particles[i];
 		float angle = (std::rand() % 360) * 3.14f / 180.f;
-		float speed = 10;
+		float speed = 0;
 		p._velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
 		_vertices[i].position = _emitterPosition;
 		_particles[i]._currentLifetime = sf::milliseconds((std::rand() % _lifetime));
@@ -189,7 +187,7 @@ void ParticleSystem::ResetParticle(std::size_t index)
 	}
 	float speed = (std::rand() % 5) + _speed;
 
-	_particles[index]._velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
+ 	_particles[index]._velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
 	_particles[index]._currentLifetime = sf::milliseconds((std::rand() % 500) + _lifetime);
 	_particles[index]._fullLifetime = _particles[index]._currentLifetime;
 	_vertices[index].position = _emitterPosition;
