@@ -37,6 +37,14 @@ void Space::AddSomeAsteroids(const int count, const sf::Sprite& sprite)
 	}
 }
 
+void Space::SetColliderVisible(bool param)
+{
+	for (size_t i = 0; i < asteroids.size(); ++i)
+	{
+		asteroids[i]->SetColliderVisible(param);
+	}
+}
+
 void Space::Update(const float physicsStepTargetFrameTime)
 {
 	for (size_t i = 0; i < asteroids.size(); ++i)
@@ -51,7 +59,7 @@ void Space::Update(const float physicsStepTargetFrameTime)
 					if (!_poolAsteroid.Empty())
 					{
 						Asteroid* asteroidNew = _poolAsteroid.Get();
-						asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace);
+						asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace, asteroid->IsColliderVisible());
 						asteroids.push_back(asteroidNew);
 					}
 				}

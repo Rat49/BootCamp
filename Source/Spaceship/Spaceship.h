@@ -11,6 +11,7 @@
 #include "Physics.h"
 #include "Pool.h"
 #include "SpaceshipRespawnEvent.h"
+#include "UpdateSpaceshipStateEvent.h"
 
 #include <math.h>
 #include <algorithm>
@@ -32,6 +33,7 @@ public:
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
 	void SetDamage(unsigned int damage);
+	
 private:
 	
 	bool _isDamaged;
@@ -65,6 +67,7 @@ private:
 	unsigned int _bulletCount = 60;
 	unsigned int _rocketCount = 70;
 
+	const unsigned int _maxLifeCount;
 	unsigned int _liveCount;
 	unsigned int _HP;
 	unsigned int _damage;
@@ -75,4 +78,6 @@ private:
 	void SetNormalMode();
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;
+	
+
 };

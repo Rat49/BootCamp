@@ -15,11 +15,11 @@ Rocket::Rocket()
 	isAlive = false;
 }
 
-void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture, RocketParticle& rocketParticle)
+void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirection, sf::Texture& rocketTexture, RocketParticle& rocketParticle, bool isColliderVisible)
 {
 	AddToDrawableManager();
-	
-	isAlive = true;
+	SetColliderVisible(isColliderVisible);
+	_isAlive = true;
 	_rocketScale = sf::Vector2f(0.5f, 0.5f);
 	_direction = rocketDirection;
 	_rocketTexture = &rocketTexture;
@@ -63,21 +63,26 @@ const float Rocket::GetHalfSpriteLength()
 
 void Rocket::Draw(sf::RenderWindow& window)
 {
-	sf::CircleShape physicsShape(GetRadius());
-	physicsShape.setPosition(GetCoordinates());
-	//physicsShape.setOrigin(sf::Vector2f{ GetRadius(), GetRadius() });
-	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
-	physicsShape.setFillColor(sf::Color::Transparent);
-	physicsShape.setOutlineThickness(1);
-
-	window.draw(physicsShape);
-	sf::CircleShape circleCenter(1);
-	circleCenter.setPosition(GetX() + GetRadius(),
-		GetY() + GetRadius());
-	circleCenter.setRadius(1.0f);
-	circleCenter.setFillColor(sf::Color::Green);
-	window.draw(circleCenter);
 	window.draw(_rocketSprite);
+
+	if (IsColliderVisible())
+	{
+		sf::CircleShape physicsShape(GetRadius());
+		physicsShape.setPosition(GetCoordinates());
+		physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+		physicsShape.setFillColor(sf::Color::Transparent);
+		physicsShape.setOutlineThickness(1);
+
+		window.draw(physicsShape);
+
+		sf::CircleShape circleCenter(1);
+		circleCenter.setPosition(GetX() + GetRadius(),
+			GetY() + GetRadius());
+		circleCenter.setRadius(1.0f);
+		circleCenter.setFillColor(sf::Color::Green);
+
+		window.draw(circleCenter);
+	}
 }
 
 void Rocket::Update(const sf::Time& deltaTime)

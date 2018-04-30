@@ -1,22 +1,28 @@
 #include "AchievementShower.h"
 
-AchievementShower::AchievementShower(const sf::Font& font, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner) :
+AchievementShower::AchievementShower(const sf::Font& font, const sf::Vector2f position, const std::string & name, const std::string & description, sf::RenderWindow & owner) :
 	Widget(name, position, owner),
-	_text("", font),
+	_name("", font),
+	_description("",font),
 	_liveInFrame(0)
 {
+	Widget::SetPosition(sf::Vector2f( _window.getSize().x/3, _window.getSize().y - _window.getSize().y/3));
 	_picture.setPosition(GetPosition());
-	_text.setPosition(GetPosition());
+	_name.setPosition(GetPosition());
+	_description.setPosition(GetPosition());
+	_description.setCharacterSize(24);
 }
 
 
-void AchievementShower::ImplementAchivement(const std::string & text, sf::Image * picture, const int timeLive)
+void AchievementShower::ImplementAchivement(const std::string & name, const std::string & description,sf::Image * picture, const int timeLive)
 {
 	_liveInFrame = timeLive;
-	_text.setString(text);
+	_name.setString(name);
+	_description.setString(description);
 	_texture.loadFromImage(*picture);
 	_picture.setTexture(_texture,true);
-	_text.setPosition(GetPosition().x, GetPosition().y + _texture.getSize().y);
+	_name.setPosition(GetPosition().x + 110, GetPosition().y+10);
+	_description.setPosition(GetPosition().x + 110, GetPosition().y + _name.getCharacterSize() + 25);
 }
 
 AchievementShower::~AchievementShower()
@@ -25,7 +31,8 @@ AchievementShower::~AchievementShower()
 
 void AchievementShower::OnResize()
 {
-	_text.setScale(GetScale());
+	_name.setScale(GetScale());
+	_description.setScale(GetScale());
 	_picture.setScale(GetScale());
 }
 
@@ -34,7 +41,8 @@ void AchievementShower::Draw()
 	if (_liveInFrame > 0)
 	{
 		--_liveInFrame;
-		_window.draw(_text);
 		_window.draw(_picture);
+		_window.draw(_name);
+		_window.draw(_description);
 	}
 }

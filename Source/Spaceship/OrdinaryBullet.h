@@ -9,9 +9,10 @@ private:
 	const float _speedValuePixelsPerSecond;
 	sf::Vector2f _bulletScale;
 	float _halfSpriteLength;
+	//bool _isColliderVisible;
 public:
 	OrdinaryBullet();
-	void Init(const sf::Vector2f& position, const sf::Vector2f& bulletDirection, sf::Texture& bulletTexture);
+	void Init(const sf::Vector2f& position, const sf::Vector2f& bulletDirection, sf::Texture& bulletTexture, bool isColliderVisible);
 	const sf::Sprite* GetSprite();
 	const float GetHalfSpriteLength();
 	void AddToDrawableManager() override;

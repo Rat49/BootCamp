@@ -3,10 +3,41 @@
 UI::UI(sf::RenderWindow & window) :
 	_window(window)	
 {
-
+	_tokenUI = Dispatcher::getInstance().Connect(EventTypes::updateSpaceshipStateEvent,
+		[&](const Event& event)
+		{
+			OnChangedSpaceshipState(event);
+		});
 }
 
-void UI::OnResize()
+
+	void UI::OnChangedSpaceshipState(const Event & event)
+	{
+
+		const UpdateSpaceshipStateEvent&  updateStateEvent = static_cast<const UpdateSpaceshipStateEvent&>(event);
+		if (_widgets["HP"] != nullptr)
+		{
+			Get<Label>("HP")->SetString(std::to_string(updateStateEvent._HP));
+		}
+		std::string life("Life");
+	//for (int i = 0; i < updateStateEvent._maxCountLife; ++i)
+	//{
+			/*life.push_back(i);
+			if (_widgets[life] != nullptr)
+			{
+			if (i < updateStateEvent._countLife)
+			{
+			Get<Picture>(life)->_isVisible = true;
+			}
+			else
+			{
+			Get<Picture>(life)->_isVisible = false;
+			}
+			}*/
+			//life.pop_back();
+}
+
+	void UI::OnResize()
 {
 	
 	auto newSize = sf::Vector2i(_window.getSize().x, _window.getSize().y);
@@ -29,9 +60,9 @@ void UI::Render()
 	_window.display();
 }
 
-void UI::OnAchive(const std::string & text, sf::Image * picture)
+void UI::OnAchive(const std::string & name, const std::string & description,sf::Image * picture)
 {
-	Get<AchievementShower>("achivementShower")->ImplementAchivement(text,picture,100);
+	Get<AchievementShower>("achivementShower")->ImplementAchivement(name,description,picture,150);
 }
 
 void UI::SetPostion(const std::string & key, const PercentXY relCoord)
@@ -69,7 +100,12 @@ Widget * UI::CreateScrollBar(const float length, const PercentXY relPos, const s
 
 Widget * UI::CreateAchivementShower(const sf::Font & font, const PercentXY relPos)
 {
-	return _widgets["achivementShower"] = new AchievementShower(font, RelativeCordToAbs(relPos), "achivementShower",_window);
+	return _widgets["achivementShower"] = new AchievementShower(font, RelativeCordToAbs(relPos), "achivementShowerName", "achivementShowerDescription", _window);
+}
+
+Widget * UI::CreatePicture(const sf::Image & img, const PercentXY relPos, const std::string & name)
+{
+	return _widgets[name] = new Picture(img, RelativeCordToAbs(relPos), name, _window);
 }
 
 void UI::RemoveWidget(const std::string & key)

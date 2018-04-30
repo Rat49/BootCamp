@@ -1,19 +1,22 @@
-#include "AchievementShower.h"
-
+﻿#include "AchievementShower.h"
+#include "UI.h"
 
 int main()
 {
+	sf::Image img;
+	auto check1 = img.loadFromFile("img/asteroid.png");
 	sf::RenderWindow window(sf::VideoMode(800, 600), "Space");
 	UI mui(window);
 	mui.CreateButton(sf::Vector2f(100,100), PercentXY(20,30),"start");
 	mui.CreateButton(sf::Vector2f(20, 30), PercentXY(21, 15), "test");
 	mui.CreateScrollBar(100, PercentXY(46, 30), "scroll");
-	sf::Font font;
-	font.loadFromFile("font/arial.ttf");
-	mui.CreateLabel("hello",font, PercentXY(1,1),"label");
+	mui.CreatePicture(img, PercentXY(50, 50), "health");
+	//sf::Font font;
+	//auto check = font.loadFromFile("font/arial.ttf");
+	//mui.CreateLabel("asfasf",font, PercentXY(1,1),"label");
 	mui.Get<ScrollBar>("scroll")->SetFillColor(sf::Color::Green);
 	mui.Get<ScrollBar>("scroll")->SetLength(200);
-	window.setVerticalSyncEnabled(true);
+	window.setVerticalSyncEnabled(true); 
 	while (window.isOpen())
 	{
 		window.clear();

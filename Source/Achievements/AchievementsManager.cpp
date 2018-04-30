@@ -1,13 +1,28 @@
 #include "AchievementsManager.h"
 
-AchievementsManager::AchievementsManager(ConfigManager* achievementCM)
+AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture)
+	:_achievementPicture(achievementPicture)
 {
-	_achievementsList = achievementCM->GetCategory("AchievementsList").GetParams();
-	for (const auto& achiev : _achievementsList)
+	auto achievementsListCategory = achievementCM->GetCategory("TimeAchievementsList").GetParams();
+	for (const auto& achiev : achievementsListCategory)
 	{
-		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("AchievementsList." + achiev.first).GetParams();
+		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("TimeAchievementsList." + achiev.first).GetParams();
 		Achievement achievement(achievementsConfig);
-		_achievementsStorage.push_back(achievement);
+		_achievementsStorage[AchievementsTypes::TimeAchievements].push_back(achievement);
+	}
+	achievementsListCategory = achievementCM->GetCategory("DestroyAchievementsList").GetParams();
+	for (const auto& achiev : achievementsListCategory)
+	{
+		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("DestroyAchievementsList." + achiev.first).GetParams();
+		Achievement achievement(achievementsConfig);
+		_achievementsStorage[AchievementsTypes::DestroyAchievements].push_back(achievement);
+	}
+	achievementsListCategory = achievementCM->GetCategory("DestroyAndTimeAchievementsList").GetParams();
+	for (const auto& achiev : achievementsListCategory)
+	{
+		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("DestroyAndTimeAchievementsList." + achiev.first).GetParams();
+		Achievement achievement(achievementsConfig);
+		_achievementsStorage[AchievementsTypes::DestroyAndTimeAchievements].push_back(achievement);
 	}
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
@@ -16,7 +31,7 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM)
 	{
 		const CollisionEventBetweenAsteroidAndBullet& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndBullet&>(event);
 		DestroyAchievementsHandler(currentEvent._asteroid->_type);
-		//DestroyAndTimeAchievementsHandler(currentEvent._asteroid->_type);
+		//DestroyAndTimeAchievementsHandler(currentEvent._asteroid->_type); TODO
 	});
 }
 
@@ -30,39 +45,54 @@ void AchievementsManager::DestroyAchievementsHandler(const AsteroidType& type)
 {
 	if (type == AsteroidType::Big)
 	{
-		for (auto& achiev : _achievementsStorage["DestroyAchievementsList"])
+		for (auto& achiev : _achievementsStorage[AchievementsTypes::DestroyAchievements])
 		{
-			if (currentEvent._asteroid->_type == AsteroidType::Big && achiev.GetIdAchievement() == 4 && achiev.GetIdAchievement() == 5)
-			{
-				achiev.SetProgressState(achiev.GetProgressState()+1);
-			}
-			if (currentEvent._asteroid->_type == AsteroidType::Small && achiev.GetIdAchievement() == 6)
+			if (achiev.GetIdAchievement() == 4 || achiev.GetIdAchievement() == 5)
 			{
 				achiev.SetProgressState(achiev.GetProgressState() + 1);
+				CheckActiveStatus(achiev);
 			}
 		}
-	});
-}
-
-AchievementsManager::~AchievementsManager()
-{
-	//???
-}
-
-void AchievementsManager::Update(sf::Time deltaTime)
-{
-	for (auto& achiev : _achievementsStorage)
+	}
+	else if (type == AsteroidType::Middle)
 	{
-		if (achiev.GetProgressState() != achiev.GetProgressFinishState())
+		for (auto& achiev : _achievementsStorage[AchievementsTypes::DestroyAchievements])
 		{
-			return;
+			if (achiev.GetIdAchievement() == 6 || achiev.GetIdAchievement() == 7)
+			{
+				achiev.SetProgressState(achiev.GetProgressState() + 1);
+				CheckActiveStatus(achiev);
+			}
 		}
-
-		ShowAchievement(achiev);
 	}
 }
 
-void AchievementsManager::ShowAchievement(const Achievement& achiement)
+void AchievementsManager::TimeAchievementsHandler()
+{
+	//TODO
+}
+
+void AchievementsManager::DestroyAndTimeAchievementsHandler(const AsteroidType& type)
+{
+	//TODO
+}
+
+void AchievementsManager::CheckActiveStatus(Achievement& achiev)
+{
+	if (achiev.GetProgressState() == achiev.GetProgressFinishState())
+	{
+		achiev.SetAchievedActive(true);
+		
+		char dateBuffer[32];
+		tm newtime;
+		time_t now = time(0);
+		localtime_s(&newtime, &now);
+		strftime(dateBuffer, 32, "%d.%m.%Y %H:%M:%S", &newtime);
+		achiev.SetDateCompleteAchievements(dateBuffer);
+	}
+}
+
+void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
 {
 	for (auto& achiev : _achievementsStorage)
 	{
@@ -70,7 +100,7 @@ void AchievementsManager::ShowAchievement(const Achievement& achiement)
 		{
 			if (it->GetAchievedActive())
 			{
-				achievUI.OnAchive(it->GetDisplayDescriptionName(), _achievementPicture);
+				achievUI.OnAchive(it->GetDisplayName(), it->GetDisplayDescriptionName(), _achievementPicture);
 				it->SetAchievedActive(false);
 			}
 		}

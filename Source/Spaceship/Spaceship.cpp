@@ -22,6 +22,7 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
 	, _shotIndentValue(50.0f)
+	, _maxLifeCount(3)
 	
 {
 	spaceshipConfig;
@@ -31,7 +32,7 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 	float speedY = atof(spaceshipConfig.find("SpeedY")->second.c_str());
 	RigidBody::SetCoordinates({ positionX, positionY});
 	RigidBody::SetSpeed({ speedX, speedY});
-	_liveCount = atoi(spaceshipConfig.find("LifeCount")->second.c_str());
+	_liveCount = atoi(spaceshipConfig.find("LifeCount")->second.c_str());	
 	_HP = atoi(spaceshipConfig.find("HP")->second.c_str());
 	_damage = atoi(spaceshipConfig.find("Damage")->second.c_str());
 	_zOrder = 1;
@@ -46,7 +47,7 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
 		[&](const Event& event)
-		{
+		{			
 			const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
 			SetFlickeringMode();
 			if (_HP == 0)
@@ -71,6 +72,8 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 				_HP -= _damage;
 			}
 			std::cout << "lifeCount = " << _liveCount << "\t HP = " << _HP << std::endl;
+			UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount,_maxLifeCount);
+			dispatcher.Send(updateSpaceshipStateEvent, EventTypes::updateSpaceshipStateEvent);
 		});
 }
 
@@ -95,7 +98,7 @@ void Spaceship::PowerfulShoot()
 
 	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
 
-	CreateRocketEvent createRocket(_spaceshipSprite->getPosition() + indent, _spaceshipDirection);
+	CreateRocketEvent createRocket(_spaceshipSprite->getPosition() + indent, _spaceshipDirection, RigidBody::IsColliderVisible());
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createRocket, EventTypes::createRocketEventID);
 	
@@ -115,7 +118,7 @@ void Spaceship::OrdinaryShoot()
 
 	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
 
-	CreateBulletEvent createBullet(_spaceshipSprite->getPosition() + indent, _spaceshipDirection);
+	CreateBulletEvent createBullet(_spaceshipSprite->getPosition() + indent, _spaceshipDirection, RigidBody::IsColliderVisible());
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Send(createBullet, EventTypes::createBulletEventID);
 
@@ -311,20 +314,24 @@ int Spaceship::GetZOrder() const
 
 void Spaceship::Draw(sf::RenderWindow& window)
 {
-	sf::CircleShape physicsShape(GetRadius());
-	physicsShape.setPosition(GetCoordinates());
-	physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
-	physicsShape.setFillColor(sf::Color::Transparent);
-	physicsShape.setOutlineThickness(1);
-
-	window.draw(physicsShape);
-	sf::CircleShape circleCenter(1);
-	circleCenter.setPosition(GetX() + GetRadius(),
-		GetY() + GetRadius());
-	circleCenter.setRadius(1.f);
-	circleCenter.setFillColor(sf::Color::Green);
-	window.draw(circleCenter);
 	window.draw(*(_spaceshipAnimation->GetSprite()));
+	if (IsColliderVisible())
+	{
+		sf::CircleShape physicsShape(GetRadius());
+		physicsShape.setPosition(GetCoordinates());
+		physicsShape.setOutlineColor(sf::Color(255, 255, 255, 255));
+		physicsShape.setFillColor(sf::Color::Transparent);
+		physicsShape.setOutlineThickness(1);
+
+		window.draw(physicsShape);
+		sf::CircleShape circleCenter(1);
+		circleCenter.setPosition(GetX() + GetRadius(),
+			GetY() + GetRadius());
+		circleCenter.setRadius(1.f);
+		circleCenter.setFillColor(sf::Color::Green);
+		window.draw(circleCenter);
+	}
+	
 }
 
 void Spaceship::SetDamage(unsigned int damage)

@@ -3,6 +3,10 @@
 #include "ScrollBar.h"
 #include "AchievementShower.h"
 #include "Widget.h"
+#include "Picture.h"
+#include "Event.h"
+#include "Dispatcher.h"
+#include "UpdateSpaceshipStateEvent.h"
 #include <cassert>
 
 struct PercentXY
@@ -43,22 +47,25 @@ public:
 		T* specificWidget = dynamic_cast<T*>(wid);
 		return specificWidget;
 	}
-
+	Token_t _tokenUI;
+	void OnChangedSpaceshipState(const Event & event);
 	void OnResize();
 	void Render();
-	void OnAchive(const std::string & text, sf::Image * picture);
+	void OnAchive(const std::string & name, const std::string & description,sf::Image * picture);
 	void SetPostion(const std::string& key, const PercentXY relCoord);
 	sf::Vector2f GetPosition(const std::string& key);	
 
 	Widget * CreateButton(const sf::Vector2f size, const PercentXY relativePos, const std::string & name);
 	Widget * CreateLabel(const std::string & content, const sf::Font & font, const PercentXY relativePos, const std::string & name);
 	Widget * CreateScrollBar(const float length, const PercentXY relativePos, const std::string & name);
-	Widget * CreateAchivementShower(const sf::Font & font, const PercentXY relPos);
+	Widget * CreateAchivementShower(const sf::Font & font, const PercentXY relativePos);
+	Widget * CreatePicture(const sf::Image & img, const PercentXY relativePos, const std::string & name);
 
 	void RemoveWidget(const std::string & key);
 
 	~UI();
 private:	
+	
 	const sf::Vector2f RelativeCordToAbs(const PercentXY relCoord) const;
 	sf::RenderWindow & _window;
 	Widget* GetWidget(const std::string &key);

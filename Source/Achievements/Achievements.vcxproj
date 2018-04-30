@@ -74,7 +74,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Events;$(SolutionDir)Source\Physics;$(SolutionDir)Source\AsteroidsLogicAndSpace</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Resources;$(SolutionDir)Source\UI;$(SolutionDir)SFML\include;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Events;$(SolutionDir)Source\Physics;$(SolutionDir)Source\AsteroidsLogicAndSpace</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\</AdditionalLibraryDirectories>
@@ -113,7 +113,7 @@ sfml-network.lib</AdditionalDependencies>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Events;$(SolutionDir)Source\Physics;$(SolutionDir)Source\AsteroidsLogicAndSpace</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Resources;$(SolutionDir)Source\UI;$(SolutionDir)SFML\include;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Events;$(SolutionDir)Source\Physics;$(SolutionDir)Source\AsteroidsLogicAndSpace</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -134,6 +134,7 @@ sfml-network.lib</AdditionalDependencies>
   <ItemGroup>
     <ClInclude Include="Achievements.h" />
     <ClInclude Include="AchievementsManager.h" />
+    <ClInclude Include="AchievementsTypes.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

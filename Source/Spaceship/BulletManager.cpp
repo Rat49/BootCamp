@@ -16,13 +16,13 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 		const CreateBulletEvent& currentEvent = static_cast<const CreateBulletEvent&>(event);
 
 		OrdinaryBullet* bulletLeft = _ordinaryBulletStorage.Get();
-		bulletLeft->Init(currentEvent._position, RotateVector(currentEvent._direction, _bulletDeflection), _ordinaryBulletTexture.Get());
+		bulletLeft->Init(currentEvent._position, RotateVector(currentEvent._direction, _bulletDeflection), _ordinaryBulletTexture.Get(), currentEvent._isColliderVisible);
 
 		OrdinaryBullet* bulletRight = _ordinaryBulletStorage.Get();
-		bulletRight->Init(currentEvent._position, RotateVector(currentEvent._direction, -_bulletDeflection), _ordinaryBulletTexture.Get());
+		bulletRight->Init(currentEvent._position, RotateVector(currentEvent._direction, -_bulletDeflection), _ordinaryBulletTexture.Get(), currentEvent._isColliderVisible);
 
 		OrdinaryBullet* bulletCentr = _ordinaryBulletStorage.Get();
-		bulletCentr->Init(currentEvent._position, currentEvent._direction, _ordinaryBulletTexture.Get());
+		bulletCentr->Init(currentEvent._position, currentEvent._direction, _ordinaryBulletTexture.Get(), currentEvent._isColliderVisible);
 
 		bullets.push_back(bulletLeft);
 		bullets.push_back(bulletRight);
@@ -35,7 +35,7 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 		Rocket* rocket = _rocketStorage.Get();
 		RocketParticle * rocketParticle = _particleStorage.Get();
 
-		rocket->Init(currentEvent._position, currentEvent._direction, _rocketTexture.Get(), *rocketParticle);
+		rocket->Init(currentEvent._position, currentEvent._direction, _rocketTexture.Get(), *rocketParticle, currentEvent._isColliderVisible);
 
 		rockets.push_back(rocket);
 	});
