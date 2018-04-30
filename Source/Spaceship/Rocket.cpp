@@ -19,7 +19,7 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 {
 	AddToDrawableManager();
 	SetColliderVisible(isColliderVisible);
-	_isAlive = true;
+	isAlive = true;
 	_rocketScale = sf::Vector2f(0.5f, 0.5f);
 	_direction = rocketDirection;
 	_rocketTexture = &rocketTexture;
