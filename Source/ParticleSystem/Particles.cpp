@@ -1,13 +1,11 @@
 #include "Particles.h"
-#include "EventSystem.h"
 #include <SFML/System.hpp>
 
 
-ParticleSystem::ParticleSystem(unsigned int count, sf::Vector2u canvasSize) :
+ParticleSystem::ParticleSystem(unsigned int count) :
 	_particles(count),
 	_vertices(sf::Points, count),
 	_emitterPosition(0, 0),
-	_canvasSize(canvasSize),
 	_emitterVelocity(0, 0)
 {
 	_zOrder = 5;
@@ -22,11 +20,10 @@ void ParticleSystem::InitializeParticles()
 	{
 		Particle& p = _particles[i];
 		float angle = (std::rand() % 360) * 3.14f / 180.f;
-		float speed = 0;
+		float speed = 10;
 		p._velocity = sf::Vector2f(std::cos(angle) * speed, std::sin(angle) * speed);
 		_vertices[i].position = _emitterPosition;
 		_particles[i]._currentLifetime = sf::milliseconds((std::rand() % _lifetime));
-		_vertices[i].color.a = static_cast<sf::Uint8>(255);
 	}
 }
 
@@ -131,14 +128,14 @@ void ParticleSystem::Update(sf::Time elapsed)
 			}
 		}
 
-		if ((_vertices[i].position.x > _canvasSize.x
+		if ((_vertices[i].position.x > WindowResolution::_W
 			|| _vertices[i].position.x < 0
-			|| _vertices[i].position.y > _canvasSize.y
+			|| _vertices[i].position.y > WindowResolution::_H
 			|| _vertices[i].position.y < 0
 			|| _vertices[i].color.a < 10) && count < _rate)
 		{
 			ResetParticle(i);
-			count++;
+ 			count++;
 		}
 		if (_vertices[i].color.a < 10) {
 			++invisible;
@@ -150,6 +147,7 @@ void ParticleSystem::Update(sf::Time elapsed)
 		force.centreInitial += _emitterVelocity * elapsed.asSeconds();
 	}
 	
+
 	_emitterPosition += _emitterVelocity * elapsed.asSeconds();
 	
 	if (invisible == _particles.size())
@@ -195,12 +193,13 @@ void ParticleSystem::ResetParticle(std::size_t index)
 	_particles[index]._currentLifetime = sf::milliseconds((std::rand() % 500) + _lifetime);
 	_particles[index]._fullLifetime = _particles[index]._currentLifetime;
 	_vertices[index].position = _emitterPosition;
+	_vertices[index].color.a = static_cast<sf::Uint8>(255);
+
 }
 
 void ParticleSystem::Draw(sf::RenderWindow & window) 
 {
 	window.draw(_vertices);
-
 }
 
 void ParticleSystem::AddToDrawableManager()

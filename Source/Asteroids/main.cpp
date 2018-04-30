@@ -225,22 +225,22 @@ int main()
 		{
 			if (input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && previousStateMoveUp != stateMoveUp)
 			{
-				std::cout << "MoveUp state - " << GetNameForState(stateMoveUp) << std::endl;
+				//std::cout << "MoveUp state - " << GetNameForState(stateMoveUp) << std::endl;
 				previousStateMoveUp = stateMoveUp;
 			}
 			if (input.GetState(static_cast<int>(GameActions::MoveDown), stateMoveDown) && previousStateMoveDown != stateMoveDown)
 			{
-				std::cout << "MoveDown state - " << GetNameForState(stateMoveDown) << std::endl;
+				//std::cout << "MoveDown state - " << GetNameForState(stateMoveDown) << std::endl;
 				previousStateMoveDown = stateMoveDown;
 			}
 			if (input.GetState(static_cast<int>(GameActions::MoveLeft), stateMoveLeft) && previousStateMoveLeft != stateMoveLeft)
 			{
-				std::cout << "MoveLeft state - " << GetNameForState(stateMoveLeft) << std::endl;
+				//std::cout << "MoveLeft state - " << GetNameForState(stateMoveLeft) << std::endl;
 				previousStateMoveLeft = stateMoveLeft;
 			}
 			if (input.GetState(static_cast<int>(GameActions::MoveRight), stateMoveRight) && previousStateMoveRight != stateMoveRight)
 			{
-				std::cout << "MoveRight state - " << GetNameForState(stateMoveRight) << std::endl;
+				//std::cout << "MoveRight state - " << GetNameForState(stateMoveRight) << std::endl;
 				previousStateMoveRight = stateMoveRight;
 			}
 			if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && stateExit == ButtonsState::JustPressed)
@@ -250,17 +250,17 @@ int main()
 			}
 			if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && previousStateChoose != stateChoose)
 			{
-				std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
+				//std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
 				previousStateChoose = stateChoose;
 			}
 			if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
 			{
-				std::cout << "SuperShoot state - " << GetNameForState(statePowerfullShoot) << std::endl;
+				//std::cout << "SuperShoot state - " << GetNameForState(statePowerfullShoot) << std::endl;
 				previousPowerfullShoot = statePowerfullShoot;
 			}
 			if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
 			{
-				std::cout << "Shoot state - " << GetNameForState(stateShoot) << std::endl;
+				//std::cout << "Shoot state - " << GetNameForState(stateShoot) << std::endl;
 				previousStateShoot = stateShoot;
 			}
 		}

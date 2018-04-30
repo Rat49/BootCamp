@@ -17,7 +17,7 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 	, _input(input)	
 	, _inputTime(sf::milliseconds(100))
 	, _inputAccumulatedTime(sf::milliseconds(0))
-	, _rechargeRocketTime(sf::seconds(0.0f))
+	, _rechargeRocketTime(sf::seconds(0.5f))
 	, _rechargeBulletTime(sf::seconds(0.2f))
 	, _bulletRebound(5.0f)
 	, _rocketRebound(15.0f)
@@ -232,7 +232,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 			_inputAccumulatedTime = sf::Time::Zero;
 		}
 	}
-	if (_input.GetState(static_cast<int>(GameActions::SuperShoot), stateSuperShoot) && stateSuperShoot == ButtonsState::JustPressed)
+	if (_input.GetState(static_cast<int>(GameActions::SuperShoot), stateSuperShoot) && (stateSuperShoot == ButtonsState::JustPressed || stateSuperShoot == ButtonsState::Pressed))
 	{
 			PowerfulShoot();
 	

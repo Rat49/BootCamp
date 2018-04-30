@@ -44,6 +44,7 @@ void Rocket::Init(const sf::Vector2f& position, const sf::Vector2f& rocketDirect
 	_rocketParticle->SetPosition(sf::Vector2f(position.x + rocketDirection.x * _rocketTexture->getSize().x / 2.0f, 
 		position.y + rocketDirection.y * _rocketTexture->getSize().y / 2.0f));
 	_rocketParticle->SetVelocity(rocketDirection * _speedValuePixelsPerSecond);
+	_rocketParticle->AddForces();
 	
 	SetSpeed(rocketDirection * _speedValuePixelsPerSecond);
 	_timeAfterShot = sf::Time::Zero;

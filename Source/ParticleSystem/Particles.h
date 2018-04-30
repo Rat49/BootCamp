@@ -1,12 +1,16 @@
 #pragma once
-#include <memory>
-#include <algorithm>
-#include <random>
-#include <cassert>
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
 #include "Drawable.h"
 #include "DrawableManager.h"
+#include "EventSystem.h"
+#include "Pool.h"
+#include "WindowResolution.h"
+#include <SFML/Graphics.hpp>
+#include <SFML/System.hpp>
+#include <algorithm>
+#include <cassert>
+#include <memory>
+#include <random>
+
 static std::random_device rd{};
 
 struct Particle
@@ -38,15 +42,17 @@ class ParticleSystem : public Drawable, public sf::Transformable
 {
 public:
 
-	ParticleSystem(unsigned int count, sf::Vector2u canvasSize);
+	ParticleSystem(unsigned int count);
 
 	void InitializeParticles();
 
 	void SetEmitterPosition(sf::Vector2f position)		{ _emitterPosition = position;}
 	void SetSimpleForce(sf::Vector2f force)				{ _simpleForce = force;}
-	void SetEmitterVelocity(sf::Vector2f velocity) { _forces.clear(); _emitterVelocity = velocity; }
+	void SetEmitterVelocity(sf::Vector2f velocity)		{ _emitterVelocity = velocity; }
 	void SetParticlesLifetime(int lifetime)				{ _lifetime = lifetime; }
-	void SetRate(int rate)								{ _rate = rate;}
+	void SetRate(int rate)								{ 
+		_rate = rate;
+	}
 	void SetNormalDistrParams(float mean, float sigma)	{ _mean = mean;_sigma = sigma;}
 	void SetUniformDistrRange(int range) { _range = range; }
 	void SetSpeed(int speed) { _speed = speed; }
