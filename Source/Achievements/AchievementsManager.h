@@ -6,7 +6,6 @@
 #include "Asteroid.h"
 #include "UI.h"
 #include "ResourceManager.h"
-#include "AchievementsTypes.h"
 #include "SFML\Graphics.hpp"
 #include <algorithm>
 #include <vector>
@@ -16,7 +15,7 @@
 class AchievementsManager
 {
 private:
-	std::map<const AchievementsID_t, std::vector<Achievement>> _achievementsStorage;
+	std::vector<Achievement> _achievementsStorage;
 	sf::Image* _achievementPicture;
 	sf::Time _noDamageTimer;
 	sf::Time _destroyTimer;
@@ -31,7 +30,7 @@ public:
 	~AchievementsManager();
 
 	void DestroyAchievementsStatus(const AsteroidType& type);
-	void DestroyTimerCheck(const sf::Time& destroyTimer);
+	void DestroyTimerCheck(const sf::Time& destroyTimer, const AsteroidType& type);
 	void ActiveStatusCheck(Achievement& achiev);
 	void Update(const sf::Time& deltaTime,UI& achievUI);
 };

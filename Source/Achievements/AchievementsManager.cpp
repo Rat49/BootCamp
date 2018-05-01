@@ -6,26 +6,12 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image
 	_afterFirstMiddleAsteroidFrag(sf::seconds(0.0f)),
 	_afterFirstSmallAsteroidFrag(sf::seconds(0.0f))
 {
-	auto achievementsListCategory = achievementCM->GetCategory("TimeAchievementsList").GetParams();
-	for (const auto& achiev : achievementsListCategory)
+	auto achievementsList = achievementCM->GetCategory("AchievementsList").GetParams();
+	for (const auto& achiev : achievementsList)
 	{
-		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("TimeAchievementsList." + achiev.first).GetParams();
+		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("AchievementsList." + achiev.first).GetParams();
 		Achievement achievement(achievementsConfig);
-		_achievementsStorage[AchievementsTypes::TimeAchievements].push_back(achievement);
-	}
-	achievementsListCategory = achievementCM->GetCategory("DestroyAchievementsList").GetParams();
-	for (const auto& achiev : achievementsListCategory)
-	{
-		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("DestroyAchievementsList." + achiev.first).GetParams();
-		Achievement achievement(achievementsConfig);
-		_achievementsStorage[AchievementsTypes::DestroyAchievements].push_back(achievement);
-	}
-	achievementsListCategory = achievementCM->GetCategory("DestroyAndTimeAchievementsList").GetParams();
-	for (const auto& achiev : achievementsListCategory)
-	{
-		std::multimap<const std::string, const std::string> achievementsConfig = achievementCM->GetCategory("DestroyAndTimeAchievementsList." + achiev.first).GetParams();
-		Achievement achievement(achievementsConfig);
-		_achievementsStorage[AchievementsTypes::DestroyAndTimeAchievements].push_back(achievement);
+		_achievementsStorage.push_back(achievement);
 	}
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
@@ -33,7 +19,7 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image
 		[&](const Event& event)
 	{
 		const CollisionEventBetweenAsteroidAndBullet& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndBullet&>(event);
-		DestroyTimerCheck(_destroyTimer);
+		DestroyTimerCheck(_destroyTimer, currentEvent._asteroid->_type);
 		DestroyAchievementsStatus(currentEvent._asteroid->_type);
 	});
 	_tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
@@ -55,9 +41,9 @@ void AchievementsManager::DestroyAchievementsStatus(const AsteroidType& type)
 {
 	if (type == AsteroidType::Big)
 	{
-		for (auto& achiev : _achievementsStorage[AchievementsTypes::DestroyAchievements])
+		for (auto& achiev : _achievementsStorage)
 		{
-			if (achiev.GetIdAchievement() == 4 || achiev.GetIdAchievement() == 5)
+			if (achiev.GetIdAchievement() == 4 || achiev.GetIdAchievement() == 5 || achiev.GetIdAchievement() == 10)
 			{
 				achiev.SetProgressState(achiev.GetProgressState() + 1);
 				ActiveStatusCheck(achiev);
@@ -66,9 +52,9 @@ void AchievementsManager::DestroyAchievementsStatus(const AsteroidType& type)
 	}
 	else if (type == AsteroidType::Middle)
 	{
-		for (auto& achiev : _achievementsStorage[AchievementsTypes::DestroyAchievements])
+		for (auto& achiev : _achievementsStorage)
 		{
-			if (achiev.GetIdAchievement() == 6 || achiev.GetIdAchievement() == 7)
+			if (achiev.GetIdAchievement() == 6 || achiev.GetIdAchievement() == 7 || achiev.GetIdAchievement() == 9)
 			{
 				achiev.SetProgressState(achiev.GetProgressState() + 1);
 				ActiveStatusCheck(achiev);
@@ -77,7 +63,7 @@ void AchievementsManager::DestroyAchievementsStatus(const AsteroidType& type)
 	}
 	else if (type == AsteroidType::Small)
 	{
-		for (auto& achiev : _achievementsStorage[AchievementsTypes::DestroyAndTimeAchievements])
+		for (auto& achiev : _achievementsStorage)
 		{
 			if (achiev.GetIdAchievement() == 8)
 			{
@@ -88,22 +74,51 @@ void AchievementsManager::DestroyAchievementsStatus(const AsteroidType& type)
 	}
 }
 
-void AchievementsManager::DestroyTimerCheck(const sf::Time& destroyTimer)
+void AchievementsManager::DestroyTimerCheck(const sf::Time& destroyTimer, const AsteroidType& type)
 {
-	if (_afterFirstBigAsteroidFrag == sf::seconds(0.0f) && _afterFirstMiddleAsteroidFrag == sf::seconds(0.0f) && _afterFirstSmallAsteroidFrag == sf::seconds(0.0f))
+	if (_afterFirstBigAsteroidFrag == sf::seconds(0.0f) && type == AsteroidType::Big)
 	{
 		_afterFirstBigAsteroidFrag = destroyTimer;
-		_afterFirstMiddleAsteroidFrag = destroyTimer;
-		_afterFirstSmallAsteroidFrag = destroyTimer;
 	}
-	else if (std::abs((_afterFirstSmallAsteroidFrag.asSeconds() - destroyTimer.asSeconds())) >= 2.0f)
+	else if (_afterFirstMiddleAsteroidFrag == sf::seconds(0.0f) && type == AsteroidType::Middle)
 	{
-		for (auto& achiev : _achievementsStorage[AchievementsTypes::DestroyAndTimeAchievements])
+		_afterFirstMiddleAsteroidFrag = destroyTimer;
+	}
+	else if (_afterFirstSmallAsteroidFrag == sf::seconds(0.0f) && type == AsteroidType::Small)
+	{
+		_afterFirstSmallAsteroidFrag = destroyTimer;
+	}	
+	
+	if (std::abs((_afterFirstSmallAsteroidFrag.asSeconds() - destroyTimer.asSeconds())) >= 10.0f)
+	{
+		for (auto& achiev : _achievementsStorage)
 		{
 			if (achiev.GetIdAchievement() == 8)
 			{
 				achiev.SetProgressState(0);
 				_afterFirstSmallAsteroidFrag = destroyTimer;
+			}
+		}
+	}
+	else if (std::abs((_afterFirstMiddleAsteroidFrag.asSeconds() - destroyTimer.asSeconds())) >= 20.0f)
+	{
+		for (auto& achiev : _achievementsStorage)
+		{
+			if (achiev.GetIdAchievement() == 9)
+			{
+				achiev.SetProgressState(0);
+				_afterFirstMiddleAsteroidFrag = destroyTimer;
+			}
+		}
+	}
+	else if (std::abs((_afterFirstBigAsteroidFrag.asSeconds() - destroyTimer.asSeconds())) >= 30.0f)
+	{
+		for (auto& achiev : _achievementsStorage)
+		{
+			if (achiev.GetIdAchievement() == 10)
+			{
+				achiev.SetProgressState(0);
+				_afterFirstBigAsteroidFrag = destroyTimer;
 			}
 		}
 	}
@@ -131,9 +146,7 @@ void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
 	_noDamageTimer += deltaTime;
 	_destroyTimer += deltaTime;
 	
-	std::cout << _afterFirstSmallAsteroidFrag.asSeconds() << std::endl; //delete
-
-	for (auto& achiev : _achievementsStorage[AchievementsTypes::TimeAchievements])
+	for (auto& achiev : _achievementsStorage)
 	{
 		if (achiev.GetIdAchievement() == 1 || achiev.GetIdAchievement() == 2 || achiev.GetIdAchievement() == 3)
 		{
@@ -141,20 +154,17 @@ void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
 			ActiveStatusCheck(achiev);
 		}
 	}
-	
-	for (auto& achiev : _achievementsStorage)
+
+	for (auto it = _achievementsStorage.begin(); it != _achievementsStorage.end();)
 	{
-		for (auto it = achiev.second.begin(); it != achiev.second.end();)
+		if (it->GetAchievedActive())
 		{
-			if (it->GetAchievedActive())
-			{
-				achievUI.OnAchive(it->GetDisplayName(), it->GetDisplayDescriptionName(), _achievementPicture);
-				it = achiev.second.erase(it);
-			}
-			else
-			{
-				++it;
-			}
-		}	
-	}
+			achievUI.OnAchive(it->GetDisplayName(), it->GetDisplayDescriptionName(), _achievementPicture);
+			it = _achievementsStorage.erase(it);
+		}
+		else
+		{
+			++it;
+		}
+	}	
 }

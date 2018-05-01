@@ -30,7 +30,7 @@ private:
 	float _progressState;
 	float _progressFinishState;
 	std::string _displayName;
-	std::string _displayDescriptionName; //27
+	std::string _displayDescriptionName; 
 	std::string _dateCompleteAchievements;
 	bool _achievedActive;
 };

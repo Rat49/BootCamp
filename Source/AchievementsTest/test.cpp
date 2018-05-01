@@ -21,7 +21,7 @@ int main()
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	Asteroid* asteroid = new Asteroid();
-	asteroid->_type = AsteroidType::Small;
+	asteroid->_type = AsteroidType::Big;
 	CollisionEventBetweenAsteroidAndBullet eventAchiev;
 	eventAchiev._asteroid = asteroid;
 	CollisionEventBetweenAsteroidAndSpaceship eventAchievSpaceship;
