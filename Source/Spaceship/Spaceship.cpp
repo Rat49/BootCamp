@@ -50,7 +50,7 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 		{			
 			const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
 			SetFlickeringMode();
-			if (_HP == 0)
+			if (_HP <= 0)
 			{
 				--_liveCount;
 				if (_liveCount == 0)
@@ -75,6 +75,12 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 			UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount,_maxLifeCount);
 			dispatcher.Send(updateSpaceshipStateEvent, EventTypes::updateSpaceshipStateEvent);
 		});
+
+	_tokenForCollisionEventBetweenAmmunitionAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAmmunitionAndSpaceshipId,
+		[&](const Event& event)
+	{
+		OnAmmunitionCollisionHandler(event);
+	});
 }
 
 void Spaceship::Accelerate()
@@ -175,6 +181,26 @@ void Spaceship::SetNormalMode()
 }
 
 
+void Spaceship::OnAmmunitionCollisionHandler(const Event& cEvent)
+{
+	const CollisionEventBetweenAmmunitionAndSpaceship &collisionEvent = dynamic_cast<const CollisionEventBetweenAmmunitionAndSpaceship&>(cEvent);
+	Ammunition* ammunition = collisionEvent.ammunition;
+	Spaceship* spaceship = collisionEvent.spaceship;
+	switch (ammunition->_ammunitionType)
+	{
+		case AmmunitionType::Bullet:
+			_bulletCount = std::min(_maxBulletCount, static_cast<int>(_bulletCount + ammunition->capacity));
+			break;
+		case AmmunitionType::Rocket:
+			_rocketCount = std::min(_maxRocketCount, static_cast<int>(_rocketCount + ammunition->capacity));
+			break;
+		case AmmunitionType::Aid:
+			_HP = std::min(_maxHP, static_cast<int>(_HP + ammunition->capacity));
+			break;
+		default:
+			break;
+	}
+}
 
 void Spaceship::Update(const sf::Time& deltaTime)
 {
@@ -244,13 +270,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	{
 			OrdinaryShoot();
 	}
-	//==========================only for test============================================
-	if (_input.GetState(static_cast<int>(GameActions::Choose), stateShoot) && (stateShoot == ButtonsState::JustPressed || stateShoot == ButtonsState::Pressed))
-	{
-		SetFlickeringMode();
-	}
-	//===================================================================================
-
+	
 	_timeAfterPowerfulShot += deltaTime;
 	_timeAfterBulletShot += deltaTime;
 	RigidBody::Update(deltaTime.asSeconds());
@@ -294,18 +314,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 void Spaceship::AddToDrawableManager()
 {
 	DrawableManager::getInstance().AddDrawableObject(this);
-	//_tokenForCollisionEventBetweenAsteroidAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
-	//	[&](const Event& event)
-	//{
-	//	OnCollisionHandler(event);
-	//});
 }
-
-//void Spaceship::OnCollisionHandler(const Event& event)
-//{
-//	std::cout << "                     ___________________ Flick" << std::endl;
-//	SetFlickeringMode();
-//}
 
 int Spaceship::GetZOrder() const
 {
