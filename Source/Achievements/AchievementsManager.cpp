@@ -1,7 +1,10 @@
 #include "AchievementsManager.h"
 
 AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture)
-	:_achievementPicture(achievementPicture)
+	:_achievementPicture(achievementPicture),
+	_afterFirstBigAsteroidFrag(sf::seconds(0.0f)),
+	_afterFirstMiddleAsteroidFrag(sf::seconds(0.0f)),
+	_afterFirstSmallAsteroidFrag(sf::seconds(0.0f))
 {
 	auto achievementsListCategory = achievementCM->GetCategory("TimeAchievementsList").GetParams();
 	for (const auto& achiev : achievementsListCategory)
@@ -30,8 +33,14 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image
 		[&](const Event& event)
 	{
 		const CollisionEventBetweenAsteroidAndBullet& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndBullet&>(event);
-		DestroyAchievementsHandler(currentEvent._asteroid->_type);
-		//DestroyAndTimeAchievementsHandler(currentEvent._asteroid->_type); TODO
+		DestroyTimerCheck(_destroyTimer);
+		DestroyAchievementsStatus(currentEvent._asteroid->_type);
+	});
+	_tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
+		[&](const Event& event)
+	{
+		const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
+		_noDamageTimer = sf::seconds(0.0f);
 	});
 }
 
@@ -39,9 +48,10 @@ AchievementsManager::~AchievementsManager()
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndBulletID, _tokenForCollisionEventBetweenAsteroidAndBullet);
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID, _tokenForCollisionEventBetweenAsteroidAndSpaceship);
 }
 
-void AchievementsManager::DestroyAchievementsHandler(const AsteroidType& type)
+void AchievementsManager::DestroyAchievementsStatus(const AsteroidType& type)
 {
 	if (type == AsteroidType::Big)
 	{
@@ -50,7 +60,7 @@ void AchievementsManager::DestroyAchievementsHandler(const AsteroidType& type)
 			if (achiev.GetIdAchievement() == 4 || achiev.GetIdAchievement() == 5)
 			{
 				achiev.SetProgressState(achiev.GetProgressState() + 1);
-				CheckActiveStatus(achiev);
+				ActiveStatusCheck(achiev);
 			}
 		}
 	}
@@ -61,48 +71,90 @@ void AchievementsManager::DestroyAchievementsHandler(const AsteroidType& type)
 			if (achiev.GetIdAchievement() == 6 || achiev.GetIdAchievement() == 7)
 			{
 				achiev.SetProgressState(achiev.GetProgressState() + 1);
-				CheckActiveStatus(achiev);
+				ActiveStatusCheck(achiev);
+			}
+		}
+	}
+	else if (type == AsteroidType::Small)
+	{
+		for (auto& achiev : _achievementsStorage[AchievementsTypes::DestroyAndTimeAchievements])
+		{
+			if (achiev.GetIdAchievement() == 8)
+			{
+				achiev.SetProgressState(achiev.GetProgressState() + 1);
+				ActiveStatusCheck(achiev);
 			}
 		}
 	}
 }
 
-void AchievementsManager::TimeAchievementsHandler()
+void AchievementsManager::DestroyTimerCheck(const sf::Time& destroyTimer)
 {
-	//TODO
-}
-
-void AchievementsManager::DestroyAndTimeAchievementsHandler(const AsteroidType& type)
-{
-	//TODO
-}
-
-void AchievementsManager::CheckActiveStatus(Achievement& achiev)
-{
-	if (achiev.GetProgressState() == achiev.GetProgressFinishState())
+	if (_afterFirstBigAsteroidFrag == sf::seconds(0.0f) && _afterFirstMiddleAsteroidFrag == sf::seconds(0.0f) && _afterFirstSmallAsteroidFrag == sf::seconds(0.0f))
 	{
-		achiev.SetAchievedActive(true);
-		
-		char dateBuffer[32];
-		tm newtime;
-		time_t now = time(0);
-		localtime_s(&newtime, &now);
-		strftime(dateBuffer, 32, "%d.%m.%Y %H:%M:%S", &newtime);
-		achiev.SetDateCompleteAchievements(dateBuffer);
+		_afterFirstBigAsteroidFrag = destroyTimer;
+		_afterFirstMiddleAsteroidFrag = destroyTimer;
+		_afterFirstSmallAsteroidFrag = destroyTimer;
 	}
+	else if (std::abs((_afterFirstSmallAsteroidFrag.asSeconds() - destroyTimer.asSeconds())) >= 2.0f)
+	{
+		for (auto& achiev : _achievementsStorage[AchievementsTypes::DestroyAndTimeAchievements])
+		{
+			if (achiev.GetIdAchievement() == 8)
+			{
+				achiev.SetProgressState(0);
+				_afterFirstSmallAsteroidFrag = destroyTimer;
+			}
+		}
+	}
+}
+
+void AchievementsManager::ActiveStatusCheck(Achievement& achiev)
+{
+	if (!(((achiev.GetProgressState() - achiev.GetProgressFinishState())) < 1.0f && (achiev.GetProgressState() - achiev.GetProgressFinishState()) >= 0.0f))
+	{
+		return;
+	}
+	
+	achiev.SetAchievedActive(true);
+		
+	char dateBuffer[32];
+	tm newtime;
+	time_t now = time(0);
+	localtime_s(&newtime, &now);
+	strftime(dateBuffer, 32, "%d.%m.%Y %H:%M:%S", &newtime);
+	achiev.SetDateCompleteAchievements(dateBuffer);
 }
 
 void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
 {
+	_noDamageTimer += deltaTime;
+	_destroyTimer += deltaTime;
+	
+	std::cout << _afterFirstSmallAsteroidFrag.asSeconds() << std::endl; //delete
+
+	for (auto& achiev : _achievementsStorage[AchievementsTypes::TimeAchievements])
+	{
+		if (achiev.GetIdAchievement() == 1 || achiev.GetIdAchievement() == 2 || achiev.GetIdAchievement() == 3)
+		{
+			achiev.SetProgressState(_noDamageTimer.asSeconds());
+			ActiveStatusCheck(achiev);
+		}
+	}
+	
 	for (auto& achiev : _achievementsStorage)
 	{
-		for (auto it = achiev.second.begin(); it != achiev.second.end(); ++it)
+		for (auto it = achiev.second.begin(); it != achiev.second.end();)
 		{
 			if (it->GetAchievedActive())
 			{
 				achievUI.OnAchive(it->GetDisplayName(), it->GetDisplayDescriptionName(), _achievementPicture);
-				it->SetAchievedActive(false);
+				it = achiev.second.erase(it);
 			}
-		}
+			else
+			{
+				++it;
+			}
+		}	
 	}
 }

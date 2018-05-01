@@ -21,9 +21,10 @@ int main()
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	Asteroid* asteroid = new Asteroid();
-	asteroid->_type = AsteroidType::Middle;
+	asteroid->_type = AsteroidType::Small;
 	CollisionEventBetweenAsteroidAndBullet eventAchiev;
 	eventAchiev._asteroid = asteroid;
+	CollisionEventBetweenAsteroidAndSpaceship eventAchievSpaceship;
 
 	sf::Clock clock;
 	sf::Time deltaTime;
@@ -42,6 +43,11 @@ int main()
 			if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::Space)
 			{
 				dispatcher.Send(eventAchiev, EventTypes::collisionEventBetweenAsteroidAndBulletID);
+			}
+
+			if (event.type == event.KeyPressed && event.key.code == sf::Keyboard::Tab)
+			{
+				dispatcher.Send(eventAchievSpaceship, EventTypes::collisionEventBetweenAsteroidAndSpaceshipID);
 			}
 		}
 		
