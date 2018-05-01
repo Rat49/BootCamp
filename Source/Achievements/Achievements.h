@@ -7,7 +7,6 @@ class Achievement
 {
 public:
 	Achievement(std::multimap<const std::string, const std::string>& AchievementList);
-	~Achievement();
 
 	int GetIdAchievement() const;
 	float GetProgressState() const;

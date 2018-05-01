@@ -11,10 +11,6 @@ Achievement::Achievement(std::multimap<const std::string, const std::string>& Ac
 	_dateCompleteAchievements = atoi(AchievementList.find("_dateCompleteAchievements")->second.c_str());
 }
 
-Achievement::~Achievement()
-{
-}
-
 int Achievement::GetIdAchievement() const
 {
 	return _idAchievement;
