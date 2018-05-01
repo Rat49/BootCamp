@@ -50,6 +50,8 @@ namespace MainMenuTest {
 
 			mMenu->Draw();
 
+			rw.display();
+
 		}
 
 	}

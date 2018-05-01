@@ -1,5 +1,6 @@
 #pragma once
 #include "AnimationPlayer.h"
+#include "Ammunition.h"
 #include "BulletManagerEvents.h"
 #include "CollisionEvent.h"
 #include "DrawableManager.h"
@@ -30,6 +31,7 @@ public:
 	void PowerfulShoot();
 	void OrdinaryShoot();
 	void RotateSpaceship(float angle);
+	void OnAmmunitionCollisionHandler(const Event & cEvent);
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
 	void SetDamage(unsigned int damage);
@@ -41,7 +43,6 @@ private:
 	sf::Vector2f _spaceshipDirection;
 	sf::Vector2f _speedDirection;
 	sf::Sprite* _spaceshipSprite;
-	//sf::Vector2f _spaceshipScale;
 	AnimationPlayer* _spaceshipAnimation;
 	ImageSequenceResource& _spaceshipAnimationImseq;
 	AnimationPlayer* _spaceshipFlickering;
@@ -54,6 +55,7 @@ private:
 	const float _shotIndentValue;
 
 	Token_t _tokenForCollisionEventBetweenAsteroidAndSpaceship;
+	Token_t _tokenForCollisionEventBetweenAmmunitionAndSpaceship;
 	InputManager& _input;
 	const sf::Time _inputTime;
 	sf::Time _inputAccumulatedTime;
@@ -62,14 +64,18 @@ private:
 	const sf::Time _rechargeBulletTime;
 	sf::Time _timeAfterPowerfulShot;
 	sf::Time _timeAfterBulletShot;
+
 	const float _bulletRebound;
 	const float _rocketRebound;
+	const int _maxBulletCount = 60;
+	const int _maxRocketCount = 7;
+	const int _maxHP = 100;
 	unsigned int _bulletCount = 60;
 	unsigned int _rocketCount = 70;
 
 	const unsigned int _maxLifeCount;
 	unsigned int _liveCount;
-	unsigned int _HP;
+	int _HP;
 	unsigned int _damage;
 
 	void ControlSpeed(float deltaSpeed);
