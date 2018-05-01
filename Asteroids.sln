@@ -157,6 +157,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AsteroidsLogicAndSpaceTest"
 		{1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82} = {1E882AD5-D6D8-4F0E-9048-DBAD3A2AFE82}
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MainMenuTest", "Source\MainMenuTest\MainMenuTest.vcxproj", "{AA4A6E28-A04E-4943-B644-F2F771051811}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -313,6 +315,12 @@ Global
 		{A6F84BF9-8449-4761-9279-125B3C4A32E9}.Release|x64.ActiveCfg = Release|x64
 		{A6F84BF9-8449-4761-9279-125B3C4A32E9}.Test|x64.ActiveCfg = Test|x64
 		{A6F84BF9-8449-4761-9279-125B3C4A32E9}.Test|x64.Build.0 = Test|x64
+		{AA4A6E28-A04E-4943-B644-F2F771051811}.Debug|x64.ActiveCfg = Debug|x64
+		{AA4A6E28-A04E-4943-B644-F2F771051811}.Debug|x64.Build.0 = Debug|x64
+		{AA4A6E28-A04E-4943-B644-F2F771051811}.Release|x64.ActiveCfg = Release|x64
+		{AA4A6E28-A04E-4943-B644-F2F771051811}.Release|x64.Build.0 = Release|x64
+		{AA4A6E28-A04E-4943-B644-F2F771051811}.Test|x64.ActiveCfg = Release|x64
+		{AA4A6E28-A04E-4943-B644-F2F771051811}.Test|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
