@@ -14,19 +14,19 @@ bool MainMenu::IsButtonPressed(Buttons buttonID) const{
 
 	switch (buttonID) {
 		case LOGIN:
-			button = LoginButton;
+			button = loginButton;
 			break;
 		case REGISTER:
-			button = RegisterButton;
+			button = registerButton;
 			break;
 		case NEW_GAME:
-			button = NewGameButton;
+			button = newGameButton;
 			break;
 		case OPTIONS:
-			button = OptionsButton;
+			button = optionsButton;
 			break;
 		case LEADERBOARD:
-			button = LeaderboardButton;
+			button = leaderboardButton;
 	}
 
 	int x0 = button->GetPosition().x;
@@ -38,7 +38,7 @@ bool MainMenu::IsButtonPressed(Buttons buttonID) const{
 	if (sf::Mouse::isButtonPressed) {
 		
 		int mouseX = sf::Mouse::getPosition().x;
-		int mouseY = sf::Mouse::getPosition().x;
+		int mouseY = sf::Mouse::getPosition().y;
 
 		if ( (mouseX >= x0) && (mouseX <= x1) && (mouseY >= y0) && (mouseY <= y1) ) {
 			return true;
@@ -51,10 +51,25 @@ bool MainMenu::IsButtonPressed(Buttons buttonID) const{
 
 void MainMenu::OnLoginButtonPressed() {
 
+	activePanel = LOGIN_PANEL;
+
+	std::string nickname;
+
+	//enter nickname
+
+	lboard->Login(nickname);
+
 }
 
 void MainMenu::OnRegisterButtonPressed() {
 
+	activePanel = LOGIN_PANEL;
+
+	std::string nickname;
+
+	//enter nickname
+
+	lboard->Login(nickname, true);
 }
 
 void MainMenu::OnNewGameButtonPressed() {
@@ -63,44 +78,70 @@ void MainMenu::OnNewGameButtonPressed() {
 
 void MainMenu::OnOptionsButtonPressed() {
 
+	activePanel = OPTIONS_PANEL;
+
+	float volume;
+
+
+	soundVolume = volume;
 }
 
 void MainMenu::OnLeaderboardButtonPressed() {
 
+	activePanel = LEADERBOARD_PANEL;
+
+	lboard->UpdateLocalLeaderboard();
+	
 }
 
 void MainMenu::Draw() {
 
 	//first draw background if exist
 
-	LoginButton->Draw();
-	RegisterButton->Draw();
-	NewGameButton->Draw();
-	OptionsButton->Draw();
-	LeaderboardButton->Draw();
+	if (activePanel == MENU_PANEL) {
+
+		loginButton->Draw();
+		registerButton->Draw();
+		newGameButton->Draw();
+		optionsButton->Draw();
+		leaderboardButton->Draw();
+	}
 
 }
 
-
 MainMenu::~MainMenu() {
 
-	if (LoginButton != nullptr) {
-		delete LoginButton;
+	if (loginButton != nullptr) {
+		delete loginButton;
 	}
 
-	if (RegisterButton != nullptr) {
-		delete RegisterButton;
+	if (registerButton != nullptr) {
+		delete registerButton;
 	}
 
-	if (NewGameButton != nullptr) {
-		delete NewGameButton;
+	if (newGameButton != nullptr) {
+		delete newGameButton;
 	}
 
-	if (OptionsButton != nullptr) {
-		delete OptionsButton;
+	if (optionsButton != nullptr) {
+		delete optionsButton;
 	}
 
-	if (LeaderboardButton != nullptr) {
-		delete LeaderboardButton;
+	if (leaderboardButton != nullptr) {
+		delete leaderboardButton;
 	}
+
+	if (lboard != nullptr) {
+		delete lboard;
+	}
+}
+
+void MainMenu::ShowLeaderboard() {
+	lboard->UpdateLocalLeaderboard();
+
+	//std::list<PlayFab::ClientModels::PlayerLeaderboardEntry> leaderboard;
+
+	//lboard->leaderboard;  //????
+
+
 }

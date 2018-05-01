@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Leaderboard.h"
 #include "UI.h"
 #include "SfmlButton.h"
 
@@ -10,13 +11,13 @@ class MainMenu final {
 public:
 
 	enum Buttons { LOGIN, REGISTER, NEW_GAME, OPTIONS, LEADERBOARD };
+	enum Panels { MENU_PANEL, LOGIN_PANEL, OPTIONS_PANEL, LEADERBOARD_PANEL };
 
-
-	SfmlButton * LoginButton;
-	SfmlButton* RegisterButton;
-	SfmlButton* NewGameButton;
-	SfmlButton* OptionsButton;
-	SfmlButton* LeaderboardButton;
+	SfmlButton* loginButton;
+	SfmlButton* registerButton;
+	SfmlButton* newGameButton;
+	SfmlButton* optionsButton;
+	SfmlButton* leaderboardButton;
 
 
 	static MainMenu* Create();
@@ -28,12 +29,23 @@ public:
 	void OnOptionsButtonPressed();
 	void OnLeaderboardButtonPressed();
 
+	float GetSoundVolume() { return soundVolume; }
+
 	void Draw();
 
 private:
 
-	//background image???
+	Panels activePanel;
+	float soundVolume;
+	Leaderboard* lboard;
 
-	MainMenu(): LoginButton(nullptr), RegisterButton(nullptr), NewGameButton(nullptr), OptionsButton(nullptr), LeaderboardButton(nullptr) {}
+
+	MainMenu() : loginButton(nullptr), registerButton(nullptr), newGameButton(nullptr), optionsButton(nullptr), leaderboardButton(nullptr), lboard(nullptr) {
+		activePanel = MENU_PANEL;
+		lboard = Leaderboard::Create();
+	}
+
 	~MainMenu();
+
+	void ShowLeaderboard();
 };
