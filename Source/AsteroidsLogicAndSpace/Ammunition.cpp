@@ -126,6 +126,8 @@ void Ammunition::Init()
 
 Ammunition::Ammunition(ResourceManager *rm)
 {
+	_zOrder = 2;
+
 	_animations.push_back(std::make_pair(new AnimationPlayer(new sf::Sprite(), rm->GetResource<ImageSequenceResource>("bulletSmall"), true),
 		new AnimationPlayer(new sf::Sprite(), rm->GetResource<ImageSequenceResource>("bulletSmallFlickering"), true)));
 	_animations.push_back(std::make_pair(new AnimationPlayer(new sf::Sprite(), rm->GetResource<ImageSequenceResource>("bulletMedium"), true),
@@ -217,11 +219,14 @@ void Ammunition::AddToDrawableManager()
 
 int Ammunition::GetZOrder() const
 {
-	return 2;
+	return _zOrder;
 }
 
 Ammunition::~Ammunition()
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
-	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID, collisionEventBetweenAmmunitionAndBulletId);
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAmmunitionAndBulletId, _tokens[collisionEventBetweenAmmunitionAndBulletId]);
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAmmunitionAndAsteroidId, _tokens[collisionEventBetweenAmmunitionAndAsteroidId]);
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAmmunitionAndRocketId, _tokens[collisionEventBetweenAmmunitionAndRocketId]);
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAmmunitionAndSpaceshipId, _tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
 }
