@@ -2,11 +2,135 @@
 
 
 
-MainMenu* MainMenu::Create() {
+MainMenu* MainMenu::Create(sf::Vector2<float> windowSize, UI& ui) {
 
-	return new MainMenu();
+	MainMenu *mm = new MainMenu();
+
+	float width = windowSize.x;
+	float hight = windowSize.y;
+
+	int buttonWidth = width / 3;
+	int buttonHight = hight / 10;
+
+	sf::Vector2f buttonSize = {buttonWidth, buttonHight};
+
+	mm->loginButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 30), "Login"));
+	mm->registerButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 35), "Register"));
+	mm->newGameButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 40), "New Game"));
+	mm->optionsButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 45), "Options"));
+	mm->leaderboardButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 50), "Leaderboard"));
+
+	mm->logInUserButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 60), "Log In"));
+	mm->registerUserButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 60), "Register"));
+	mm->goBackButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 80), "Go Back"));
+
+	//mm->volumeLabel = dynamic_cast<Label*>(ui.CreateLabel("Set the volume of sounds", );
+	mm->volumeBar = dynamic_cast<ScrollBar*>(ui.CreateScrollBar(buttonWidth, PercentXY(50, 60), "Volume"));
+
+	return mm;
 }
 
+void MainMenu::HandleButtons() {
+
+	if (sf::Mouse::isButtonPressed) {
+		int mouseX = sf::Mouse::getPosition().x;
+		int mouseY = sf::Mouse::getPosition().y;
+
+		sf::Vector2i mousePosition = { mouseX, mouseY };
+
+		switch (activePanel) {
+
+		case MENU_PANEL:
+			if (loginButton->IsClicked(mousePosition)){
+				//cout << "Login button pressed" << endl;
+				activePanel = LOGIN_PANEL;
+			}
+			if (registerButton->IsClicked(mousePosition)) {
+				//cout << "Register button pressed" << endl;
+				activePanel = REGISTER_PANEL;
+			}
+			if (newGameButton->IsClicked(mousePosition)) {
+				//cout << "NewGame button pressed" << endl;
+				OnNewGameButtonPressed();
+			}
+			if (optionsButton->IsClicked(mousePosition)) {
+				//cout << "Options button pressed" << endl;
+				activePanel = OPTIONS_PANEL;
+			}
+			if (leaderboardButton->IsClicked(mousePosition)) {
+				//cout << "Leaderboard button pressed" << endl;
+				OnLeaderboardButtonPressed();
+			}
+			break;
+
+		case LOGIN_PANEL:
+			if (logInUserButton->IsClicked(mousePosition)) {
+				OnLogInUserButtonPressed();
+			}
+			if (goBackButton->IsClicked(mousePosition)) {
+				activePanel = MENU_PANEL;
+			}
+			break;
+
+		case REGISTER_PANEL:
+			if (registerUserButton->IsClicked(mousePosition)) {
+				OnRegisterUserButtonPressed();
+			}
+			if (goBackButton->IsClicked(mousePosition)) {
+				activePanel = MENU_PANEL;
+			}
+			break;
+
+		case OPTIONS_PANEL:
+			VolumeHandler();
+
+			if (goBackButton->IsClicked(mousePosition)) {
+				activePanel = MENU_PANEL;
+			}
+			break;
+
+		case LEADERBOARD_PANEL:
+
+			if (goBackButton->IsClicked(mousePosition)) {
+				activePanel = MENU_PANEL;
+			}
+		}
+	}
+}
+
+void MainMenu::Draw() {
+
+	//first draw background if exist
+
+	switch (activePanel) {
+	case MENU_PANEL:
+		loginButton->Draw();
+		registerButton->Draw();
+		newGameButton->Draw();
+		optionsButton->Draw();
+		leaderboardButton->Draw();
+		break;
+
+	case LOGIN_PANEL:
+		logInUserButton->Draw();
+		goBackButton->Draw();
+		break;
+
+	case REGISTER_PANEL:
+		registerUserButton->Draw();
+		goBackButton->Draw();
+		break;
+
+	case OPTIONS_PANEL:
+		volumeLabel->Draw();
+		volumeBar->Draw();
+		goBackButton->Draw();
+		break;
+
+	case LEADERBOARD_PANEL:
+		goBackButton->Draw();
+	}
+}
 
 bool MainMenu::IsButtonPressed(Buttons buttonID) const{
 
@@ -48,42 +172,8 @@ bool MainMenu::IsButtonPressed(Buttons buttonID) const{
 	return false;
 }
 
-
-void MainMenu::OnLoginButtonPressed() {
-
-	activePanel = LOGIN_PANEL;
-
-	std::string nickname;
-
-	//enter nickname
-
-	lboard->Login(nickname);
-
-}
-
-void MainMenu::OnRegisterButtonPressed() {
-
-	activePanel = LOGIN_PANEL;
-
-	std::string nickname;
-
-	//enter nickname
-
-	lboard->Login(nickname, true);
-}
-
 void MainMenu::OnNewGameButtonPressed() {
 
-}
-
-void MainMenu::OnOptionsButtonPressed() {
-
-	activePanel = OPTIONS_PANEL;
-
-	float volume;
-
-
-	soundVolume = volume;
 }
 
 void MainMenu::OnLeaderboardButtonPressed() {
@@ -91,22 +181,32 @@ void MainMenu::OnLeaderboardButtonPressed() {
 	activePanel = LEADERBOARD_PANEL;
 
 	lboard->UpdateLocalLeaderboard();
-	
+
 }
 
-void MainMenu::Draw() {
+void MainMenu::OnLogInUserButtonPressed() {
 
-	//first draw background if exist
+	std::string nickname;
 
-	if (activePanel == MENU_PANEL) {
+	//enter nickname
 
-		loginButton->Draw();
-		registerButton->Draw();
-		newGameButton->Draw();
-		optionsButton->Draw();
-		leaderboardButton->Draw();
-	}
+	if (!nickname.empty())
+		lboard->Login(nickname);
+}
 
+void MainMenu::OnRegisterUserButtonPressed() {
+
+	std::string nickname;
+
+	//enter nickname
+
+	if (!nickname.empty())
+		lboard->Login(nickname, true);
+}
+
+void MainMenu::VolumeHandler() {
+
+	volumeValue = volumeBar->GetSliderPosition();
 }
 
 MainMenu::~MainMenu() {
@@ -129,6 +229,14 @@ MainMenu::~MainMenu() {
 
 	if (leaderboardButton != nullptr) {
 		delete leaderboardButton;
+	}
+
+	if (volumeLabel != nullptr) {
+		delete volumeLabel;
+	}
+
+	if (volumeBar != nullptr) {
+		delete volumeBar;
 	}
 
 	if (lboard != nullptr) {
