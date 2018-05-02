@@ -1,7 +1,7 @@
 #include "Asteroids.h"
 
-const int WINDOW_WIDTH = 1200;
-const int WINDOW_HEIGHT = 800;
+//const int WINDOW_WIDTH = 1200;
+//const int WINDOW_HEIGHT = 800;
 
 std::string GetNameForState(ButtonsState bState) {
 
@@ -188,12 +188,12 @@ int main()
 	std::srand(std::time(nullptr));
 
 	const int totalCountAsteroids = 100;
-	const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
+	const int totalCountStar = (WindowResolution::_W / 50) * (WindowResolution::_H / 50) + 10;
 	Space space(totalCountAsteroids, totalCountStar, rw.getSize());
 
 
-	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) - 300;
-	int _nAsteroids = 1;// (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 5;
+	int _nStars = (WindowResolution::_W / 50) * (WindowResolution::_H / 50) - 300;
+	int _nAsteroids = (WindowResolution::_W / 200) + (WindowResolution::_H / 200) + 5;
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
