@@ -100,7 +100,9 @@ void Spaceship::PowerfulShoot()
 		return;
 	}
 	--_rocketCount;
-	std::cout << _rocketCount << std::endl;
+
+	UpdateSpaceshipWeaponStorageEvent updateSpaceshipStorageEvent(_bulletCount, _rocketCount);
+	Dispatcher::getInstance().Send(updateSpaceshipStorageEvent, EventTypes::updateSpaceshipWeaponStorageEvent);
 
 	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
 
@@ -120,7 +122,9 @@ void Spaceship::OrdinaryShoot()
 		return;
 	}	
 	_bulletCount -= 3;;
-	std::cout << _bulletCount << std::endl;
+
+	UpdateSpaceshipWeaponStorageEvent updateSpaceshipStorageEvent(_bulletCount, _rocketCount);
+	Dispatcher::getInstance().Send(updateSpaceshipStorageEvent, EventTypes::updateSpaceshipWeaponStorageEvent);
 
 	sf::Vector2f indent = _spaceshipDirection * (GetRadius() + _shotIndentValue);
 
@@ -196,10 +200,14 @@ void Spaceship::OnAmmunitionCollisionHandler(const Event& cEvent)
 			break;
 		case AmmunitionType::Aid:
 			_HP = std::min(_maxHP, static_cast<int>(_HP + ammunition->capacity));
+			UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount, _maxLifeCount);
+			Dispatcher::getInstance().Send(updateSpaceshipStateEvent, EventTypes::updateSpaceshipStateEvent);
 			break;
-		default:
-			break;
+		
 	}
+
+	UpdateSpaceshipWeaponStorageEvent updateSpaceshipStorageEvent(_bulletCount, _rocketCount);
+	Dispatcher::getInstance().Send(updateSpaceshipStorageEvent, EventTypes::updateSpaceshipWeaponStorageEvent);
 }
 
 void Spaceship::Update(const sf::Time& deltaTime)

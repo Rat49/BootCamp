@@ -8,8 +8,26 @@ UI::UI(sf::RenderWindow & window) :
 		{
 			OnChangedSpaceshipState(event);
 		});
+	_tokenWeaponUI = Dispatcher::getInstance().Connect(EventTypes::updateSpaceshipWeaponStorageEvent,
+		[&](const Event& event)
+	{
+		OnChangedSpaceshipStorage(event);
+	});
 }
 
+void UI::OnChangedSpaceshipStorage(const Event & event)
+{
+
+	const UpdateSpaceshipWeaponStorageEvent&  updateStateEvent = static_cast<const UpdateSpaceshipWeaponStorageEvent&>(event);
+	if (_widgets["bulletCount"] != nullptr)
+	{
+		Get<Label>("bulletCount")->SetString(std::to_string(updateStateEvent._bulletCount));
+	}
+	if (_widgets["rocketCount"] != nullptr)
+	{
+		Get<Label>("rocketCount")->SetString(std::to_string(updateStateEvent._rocketCount));
+	}
+}
 
 	void UI::OnChangedSpaceshipState(const Event & event)
 	{

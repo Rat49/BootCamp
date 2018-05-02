@@ -1,6 +1,7 @@
 
 #pragma once
 #include "Event.h"
+#include <SFML\Graphics.hpp>
 
 class Spaceship;
 class Asteroid;
@@ -63,4 +64,10 @@ class CollisionEventBetweenAmmunitionAndRocket : public Event
 public:
 	Rocket * rocket;
 	Ammunition* ammunition;
+};
+
+class CreateExplosionEvent : public Event
+{
+public:
+	sf::Vector2f position;
 };

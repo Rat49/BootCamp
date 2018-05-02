@@ -10,9 +10,7 @@ class Space
 public:
 	Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize);
 
-	void AddExplosionRocket(const Event& cEvent);
-
-	void AddExplosionBullet(const Event & cEvent);
+	void AddExplosion(const Event & cEvent);
 
 	void AddAmmunition(ResourceManager * rm);
 	
@@ -20,8 +18,7 @@ public:
 	void AddSomeAsteroids(const int count, const sf::Sprite& sprite);
 	void Update(const float physicsStepTargetFrameTime);
 	void SetColliderVisible(bool param);
-	Token_t _collisionWithRocket;
-	Token_t _collisionWithBullet;
+	Token_t _createExplosion;
 	std::vector<Asteroid *> asteroids;
 	Ammunition* ammunition;
 

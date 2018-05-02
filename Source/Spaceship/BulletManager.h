@@ -28,8 +28,8 @@ private:
 	RocketOutOfBoundsEvent _rocketOutOfBoundsEvent;
 
 public:
-	Token_t _collisionRocketVsAsteroid;
-	Token_t _collisionBulletVsAsteroid;
+	Token_t deleteRocket;
+	Token_t deleteBullet;
 
 	BulletManager(TextureResource& ordinaryBulletTexture, TextureResource& rocketTexture);
 	~BulletManager();

@@ -67,11 +67,11 @@ private:
 
 	const float _bulletRebound;
 	const float _rocketRebound;
-	const int _maxBulletCount = 60;
-	const int _maxRocketCount = 7;
+	const int _maxBulletCount = 90;
+	const int _maxRocketCount = 10;
 	const int _maxHP = 100;
-	unsigned int _bulletCount = 60;
-	unsigned int _rocketCount = 70;
+	unsigned int _bulletCount = 90;
+	unsigned int _rocketCount = 10;
 
 	const unsigned int _maxLifeCount;
 	unsigned int _liveCount;

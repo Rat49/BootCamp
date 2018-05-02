@@ -39,17 +39,17 @@ BulletManager::BulletManager(TextureResource& ordinaryBulletTexture, TextureReso
 
 		rockets.push_back(rocket);
 	});
-	_collisionRocketVsAsteroid = dispatcher.Connect(collisionEventBetweenAsteroidAndRocketID, [&](const Event& event)
+	deleteRocket = dispatcher.Connect(deleteRocketEventID, [&](const Event& event)
 	{
-		const CollisionEventBetweenAsteroidAndRocket& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndRocket&>(event);
-		Rocket* ptrRocket = currentEvent._rocket;
+		const DeleteRocketEvent& currentEvent = static_cast<const DeleteRocketEvent&>(event);
+		Rocket* ptrRocket = currentEvent.deletedRocket;
 
 		DeleteRocket(ptrRocket);
 	});
-	_collisionBulletVsAsteroid = dispatcher.Connect(collisionEventBetweenAsteroidAndBulletID, [&](const Event& event)
+	deleteBullet = dispatcher.Connect(deleteBulletEventID, [&](const Event& event)
 	{
-		const CollisionEventBetweenAsteroidAndBullet& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndBullet&>(event);
-		OrdinaryBullet* ptrBullet = currentEvent._bullet;
+		const DeleteBulletEvent& currentEvent = static_cast<const DeleteBulletEvent&>(event);
+		OrdinaryBullet* ptrBullet = currentEvent._deletedBullet;
 
 		DeleteBullet(ptrBullet);
 	});
@@ -79,8 +79,8 @@ BulletManager::~BulletManager()
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Disconnect(createBulletEventID, _bulletCreation);
 	dispatcher.Disconnect(createRocketEventID, _rocketCreation);
-	dispatcher.Disconnect(collisionEventBetweenAsteroidAndRocketID, _collisionRocketVsAsteroid);
-	dispatcher.Disconnect(collisionEventBetweenAsteroidAndBulletID, _collisionBulletVsAsteroid);
+	dispatcher.Disconnect(collisionEventBetweenAsteroidAndRocketID, deleteRocket);
+	dispatcher.Disconnect(collisionEventBetweenAsteroidAndBulletID, deleteBullet);
 }
 
 void BulletManager::DeleteBullet(OrdinaryBullet* bullet)

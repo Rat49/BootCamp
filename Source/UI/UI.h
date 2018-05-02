@@ -40,6 +40,7 @@ class UI final
 {
 public:
 	UI(sf::RenderWindow & window);
+	void OnChangedSpaceshipStorage(const Event & event);
 	template<typename T>
 	T* Get(const std::string& key) 
 	{
@@ -48,6 +49,7 @@ public:
 		return specificWidget;
 	}
 	Token_t _tokenUI;
+	Token_t _tokenWeaponUI;
 	void OnChangedSpaceshipState(const Event & event);
 	void OnResize();
 	void Render();

@@ -21,6 +21,12 @@ public:
 	OrdinaryBullet* _deletedBullet;
 };
 
+class DeleteRocketEvent : public Event
+{
+public:
+	Rocket * deletedRocket;
+};
+
 class CreateRocketEvent : public Event
 {
 public:

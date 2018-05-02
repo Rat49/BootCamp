@@ -15,3 +15,15 @@ public:
 	const unsigned int _maxCountLife;
 	const unsigned int _countLife;
 };
+
+class UpdateSpaceshipWeaponStorageEvent : public  Event
+{
+public:
+	UpdateSpaceshipWeaponStorageEvent(const unsigned int bulletCount, const unsigned int rocketCount) :
+		 _bulletCount(bulletCount)
+		, _rocketCount(rocketCount)
+	{}
+
+	const unsigned int _bulletCount;
+	const unsigned int _rocketCount;
+};

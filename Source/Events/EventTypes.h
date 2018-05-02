@@ -17,11 +17,15 @@ enum EventTypes : EventID_t
 	rocketOutOfBoundsEventID,
 	createBulletEventID,
 	createRocketEventID,
+	deleteBulletEventID,
+	deleteRocketEventID,
 	collisionEventBetweenAmmunitionAndAsteroidId,
 	collisionEventBetweenAmmunitionAndSpaceshipId,
 	collisionEventBetweenAmmunitionAndBulletId,
 	collisionEventBetweenAmmunitionAndRocketId,
 	spaceshipRespawnEventID,
 	gameOverEventID,
-	updateSpaceshipStateEvent
+	updateSpaceshipStateEvent,
+	updateSpaceshipWeaponStorageEvent,
+	createExplosionEvent
 };

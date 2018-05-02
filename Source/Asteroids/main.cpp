@@ -109,6 +109,7 @@ int main()
 	CollisionEventBetweenAsteroidAndRocket collisionAsteroidVsRocket;
 	CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
 	DeleteBulletEvent deleteBulletEvent;
+	CreateExplosionEvent createExplosion;
 
 	CollisionEventBetweenAmmunitionAndBullet collisionAmmunitionVsBullet;
 	CollisionEventBetweenAmmunitionAndRocket collisionAmmunitionVsRocket;
@@ -156,8 +157,18 @@ int main()
 	*/
 	sf::Font font;
 	sf::Image healthHearth;
+	sf::Image bullets;
+	sf::Image rockets;
 	font.loadFromFile("Resources/font/arial.ttf");
 	healthHearth.loadFromFile("Resources/graphics/Health.png");
+	bullets.loadFromFile("Resources/graphics/bullets.png");
+	rockets.loadFromFile("Resources/graphics/rockets.png");
+
+	ui.CreateLabel("90", font, PercentXY(17, 0), "bulletCount");
+	ui.CreatePicture(bullets, PercentXY(20, 1), "bullets");
+	ui.CreateLabel("10", font, PercentXY(25, 0), "rocketCount");
+	ui.CreatePicture(rockets, PercentXY(28, 1), "rockets");
+
 	ui.CreatePicture(healthHearth, PercentXY(6, 1), "Life0");
 	ui.CreatePicture(healthHearth, PercentXY(8, 1), "Life1");
 	ui.CreatePicture(healthHearth, PercentXY(10, 1), "Life2");
@@ -341,9 +352,10 @@ int main()
 				{
 					collisionAsteroidVsRocket._asteroid = space.asteroids[i];
 					collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
+					createExplosion.position = space.asteroids[i]->GetCoordinates();
 					ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
 					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space._collisionWithRocket);
+					dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 					for (size_t k = 0; k < n; ++k) {
 						if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
@@ -351,7 +363,8 @@ int main()
 							collisionAsteroidVsRocket._asteroid = space.asteroids[k];
 							collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
 							ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
-							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space._collisionWithRocket);
+							createExplosion.position = space.asteroids[k]->GetCoordinates();
+							dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 						
 						}
@@ -368,9 +381,10 @@ int main()
 						collisionAsteroidVsBullet._bullet = bullet;
 						deleteBulletEvent._deletedBullet = bullet;
 						ResolveCollision(*space.asteroids[i], *bullet);
-						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space._collisionWithBullet);
+						createExplosion.position = space.asteroids[i]->GetCoordinates();
+						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
-						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager._collisionBulletVsAsteroid);
+						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet);
 					}
 				}
 			}
@@ -402,10 +416,13 @@ int main()
 						collisionAmmunitionVsRocket.rocket = rocket;
 						collisionAmmunitionVsRocket.ammunition = space.ammunition;
 						ResolveCollision(*rocket, *space.ammunition);
+						createExplosion.position = space.ammunition->GetCoordinates();
+						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 						dispatcher.Send(collisionAmmunitionVsRocket, collisionEventBetweenAmmunitionAndRocketId, rocket->_tokens[collisionEventBetweenAmmunitionAndRocketId]);
 						dispatcher.Send(collisionAmmunitionVsRocket, collisionEventBetweenAmmunitionAndRocketId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndRocketId]);
-
+						bulletManager.DeleteRocket(rocket);
 					}
+					
 				}
 				for (auto bullet : bulletManager.bullets)
 				{
@@ -414,7 +431,10 @@ int main()
 						collisionAmmunitionVsBullet.bullet = bullet;
 						collisionAmmunitionVsBullet.ammunition = space.ammunition;
 						ResolveCollision(*bullet, *space.ammunition);
-						dispatcher.Send(collisionAmmunitionVsBullet, collisionEventBetweenAmmunitionAndBulletId, bullet->_tokens[collisionEventBetweenAmmunitionAndBulletId]);
+						createExplosion.position = space.ammunition->GetCoordinates();
+						deleteBulletEvent._deletedBullet = bullet;
+						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
+						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet); 
 						dispatcher.Send(collisionAmmunitionVsBullet, collisionEventBetweenAmmunitionAndBulletId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndBulletId]);
 					}
 				}

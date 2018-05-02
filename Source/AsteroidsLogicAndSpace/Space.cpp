@@ -6,30 +6,17 @@ Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::
 	_poolAsteroid(totalCountAsteroids), _poolStar(totalCountStar),_sizeSpace(windowSize), _poolExplosion(12)
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
-	_collisionWithRocket = dispatcher.Connect(collisionEventBetweenAsteroidAndRocketID, [&](const Event& event)
+	_createExplosion = dispatcher.Connect(createExplosionEvent, [&](const Event& event)
 	{
-		AddExplosionRocket(event);
+		AddExplosion(event);
 	});
-	_collisionWithBullet = dispatcher.Connect(collisionEventBetweenAsteroidAndBulletID, [&](const Event& event)
-	{
-		AddExplosionBullet(event);
-	});
+	
 }
 
-
-void Space::AddExplosionRocket(const Event& cEvent) {
-	const CollisionEventBetweenAsteroidAndRocket &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndRocket&>(cEvent);
+void Space::AddExplosion(const Event& cEvent) {
+	const CreateExplosionEvent &collisionEvent = dynamic_cast<const CreateExplosionEvent&>(cEvent);
 	ExplosionParticle* explosion = _poolExplosion.Get();
-  	auto position = collisionEvent._asteroid->GetCoordinates();
-	explosion->SetPosition(position);
-	explosion->Play();
-	_explosions.push_back(explosion);
-}
-
-void Space::AddExplosionBullet(const Event& cEvent) {
-	const CollisionEventBetweenAsteroidAndBullet &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndBullet&>(cEvent);
-	ExplosionParticle* explosion = _poolExplosion.Get();
-	auto position = collisionEvent._asteroid->GetCoordinates();
+	auto position = collisionEvent.position;
 	explosion->SetPosition(position);
 	explosion->Play();
 	_explosions.push_back(explosion);
