@@ -1,3 +1,4 @@
+#pragma once
 #include "SfmlButton.h"
 #include "Label.h"
 #include "ScrollBar.h"

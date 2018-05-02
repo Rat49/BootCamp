@@ -19,3 +19,4 @@
 #include "AudioResource.h"
 #include "BulletManagerEvents.h"
 #include "UI.h"
+#include "AchievementsManager.h"
