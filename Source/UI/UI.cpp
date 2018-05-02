@@ -38,21 +38,23 @@ void UI::OnChangedSpaceshipStorage(const Event & event)
 			Get<Label>("HP")->SetString(std::to_string(updateStateEvent._HP));
 		}
 		std::string life("Life");
-	//for (int i = 0; i < updateStateEvent._maxCountLife; ++i)
-	//{
-			/*life.push_back(i);
-			if (_widgets[life] != nullptr)
+		for (int i = 0; i < updateStateEvent._maxCountLife; ++i)
+		{
+			char symbol = i + '0';
+			life.push_back(symbol);
+			if (_widgets.find(life) != _widgets.cend())
 			{
-			if (i < updateStateEvent._countLife)
-			{
-			Get<Picture>(life)->_isVisible = true;
+				if (i < updateStateEvent._countLife)
+				{
+					Get<Picture>(life)->_isVisible = true;
+				}
+				else
+				{
+					Get<Picture>(life)->_isVisible = false;
+				}
 			}
-			else
-			{
-			Get<Picture>(life)->_isVisible = false;
-			}
-			}*/
-			//life.pop_back();
+			life.pop_back();
+		}
 }
 
 	void UI::OnResize()
