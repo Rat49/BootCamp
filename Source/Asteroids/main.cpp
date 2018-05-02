@@ -346,6 +346,7 @@ int main()
 					ResolveCollision(*space.asteroids[i], *spaceship);
 					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
 					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndSpaceship);
 				}
 
 			for (size_t j = 0; j < rocketSize; ++j)
@@ -357,6 +358,7 @@ int main()
 					createExplosion.position = space.asteroids[i]->GetCoordinates();
 					ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
 					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndRocket);
 					dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 					for (size_t k = 0; k < n; ++k) {
@@ -386,6 +388,7 @@ int main()
 						createExplosion.position = space.asteroids[i]->GetCoordinates();
 						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
+						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndBullet);
 						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet);
 					}
 				}

@@ -24,6 +24,7 @@ public:
 
 	~Space();
 private:
+	int _totalCountExplosion;
 	Pool<Asteroid> _poolAsteroid;
 	std::vector<Star *> _stars;
 	Pool<Star> _poolStar;

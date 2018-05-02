@@ -15,14 +15,21 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image
 	}
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
-	_tokenForCollisionEventBetweenAsteroidAndBullet = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndBulletID,
+	tokenForCollisionEventBetweenAsteroidAndBullet = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndBulletID,
 		[&](const Event& event)
 	{
 		const CollisionEventBetweenAsteroidAndBullet& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndBullet&>(event);
 		DestroyTimerCheck(_destroyTimer, currentEvent._asteroid->_type);
 		DestroyAchievementsStatus(currentEvent._asteroid->_type);
 	});
-	_tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
+	tokenForCollisionEventBetweenAsteroidAndRocket = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndRocketID,
+		[&](const Event& event)
+	{
+		const CollisionEventBetweenAsteroidAndRocket& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndRocket&>(event);
+		DestroyTimerCheck(_destroyTimer, currentEvent._asteroid->_type);
+		DestroyAchievementsStatus(currentEvent._asteroid->_type);
+	});
+	tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
 		[&](const Event& event)
 	{
 		const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
@@ -33,8 +40,9 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image
 AchievementsManager::~AchievementsManager()
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
-	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndBulletID, _tokenForCollisionEventBetweenAsteroidAndBullet);
-	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID, _tokenForCollisionEventBetweenAsteroidAndSpaceship);
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndBulletID, tokenForCollisionEventBetweenAsteroidAndBullet);
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndRocketID, tokenForCollisionEventBetweenAsteroidAndRocket);
+	dispatcher.Disconnect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID, tokenForCollisionEventBetweenAsteroidAndSpaceship);
 }
 
 void AchievementsManager::DestroyAchievementsStatus(const AsteroidType& type)
@@ -145,7 +153,7 @@ void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
 {
 	_noDamageTimer += deltaTime;
 	_destroyTimer += deltaTime;
-	
+
 	for (auto& achiev : _achievementsStorage)
 	{
 		if (achiev.GetIdAchievement() == 1 || achiev.GetIdAchievement() == 2 || achiev.GetIdAchievement() == 3)

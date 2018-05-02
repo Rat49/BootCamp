@@ -22,10 +22,11 @@ private:
 	sf::Time _afterFirstBigAsteroidFrag;
 	sf::Time _afterFirstMiddleAsteroidFrag;
 	sf::Time _afterFirstSmallAsteroidFrag;
-
-	Token_t _tokenForCollisionEventBetweenAsteroidAndBullet;
-	Token_t _tokenForCollisionEventBetweenAsteroidAndSpaceship;
 public:
+	Token_t tokenForCollisionEventBetweenAsteroidAndBullet;
+	Token_t tokenForCollisionEventBetweenAsteroidAndRocket;
+	Token_t tokenForCollisionEventBetweenAsteroidAndSpaceship;
+	
 	AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture);
 	~AchievementsManager();
 
