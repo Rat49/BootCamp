@@ -466,9 +466,6 @@ int main()
 		}
 		drawableManager.DrawScene(rw);
 		ui.Render();
-		//Display
-		ui.Render();
-		rw.display();
 	}
 
 	
