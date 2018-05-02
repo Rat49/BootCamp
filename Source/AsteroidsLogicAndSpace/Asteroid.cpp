@@ -239,6 +239,7 @@ void Asteroid::Remove()
 
 	Dispatcher::getInstance().Disconnect(EventTypes::collisionEventBetweenAsteroidsID, _tokens[collisionEventBetweenAsteroidsID]);
 	Dispatcher::getInstance().Disconnect(EventTypes::collisionEventBetweenAsteroidAndBulletID, _tokens[collisionEventBetweenAsteroidAndBulletID]);
+	Dispatcher::getInstance().Disconnect(EventTypes::collisionEventBetweenAsteroidAndRocketID, _tokens[collisionEventBetweenAsteroidAndRocketID]);
 }
 
 void Asteroid::Update(float time)

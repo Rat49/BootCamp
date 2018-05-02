@@ -148,6 +148,9 @@ Widget* UI::GetWidget(const std::string &key)
 
 UI::~UI()
 {
+	Dispatcher::getInstance().Disconnect(EventTypes::updateSpaceshipStateEvent, _tokenUI);
+	Dispatcher::getInstance().Disconnect(EventTypes::updateSpaceshipWeaponStorageEvent, _tokenWeaponUI);
+
 	for (auto it : _widgets)
 	{
 		delete it.second;

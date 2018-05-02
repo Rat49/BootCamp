@@ -79,8 +79,8 @@ BulletManager::~BulletManager()
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	dispatcher.Disconnect(createBulletEventID, _bulletCreation);
 	dispatcher.Disconnect(createRocketEventID, _rocketCreation);
-	dispatcher.Disconnect(collisionEventBetweenAsteroidAndRocketID, deleteRocket);
-	dispatcher.Disconnect(collisionEventBetweenAsteroidAndBulletID, deleteBullet);
+	dispatcher.Disconnect(deleteRocketEventID, deleteRocket);
+	dispatcher.Disconnect(deleteBulletEventID, deleteBullet);
 }
 
 void BulletManager::DeleteBullet(OrdinaryBullet* bullet)

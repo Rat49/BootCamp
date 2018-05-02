@@ -1,7 +1,5 @@
 #include "Space.h"
 
-
-
 Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize) :
 	_poolAsteroid(totalCountAsteroids), _poolStar(totalCountStar),_sizeSpace(windowSize), _poolExplosion(12)
 {
@@ -10,7 +8,6 @@ Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::
 	{
 		AddExplosion(event);
 	});
-	
 }
 
 void Space::AddExplosion(const Event& cEvent) {
@@ -112,6 +109,7 @@ void Space::Update(const float physicsStepTargetFrameTime)
 
 Space::~Space()
 {
+	Dispatcher::getInstance().Disconnect(createExplosionEvent,_createExplosion);
 
 	for (auto &asteroid : asteroids)
 	{
