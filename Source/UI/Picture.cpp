@@ -18,8 +18,10 @@ void Picture::OnResize()
 
 void Picture::Draw()
 {
-	_sprite.setPosition(GetPosition());
-	_window.draw(_sprite);
+	if (_isVisible) {
+		_sprite.setPosition(GetPosition());
+		_window.draw(_sprite);
+	}
 }
 
 Picture::~Picture()
