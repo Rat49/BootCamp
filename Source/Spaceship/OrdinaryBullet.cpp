@@ -80,6 +80,7 @@ void OrdinaryBullet::Reset()
 	_ordinaryBulletSprite.setOrigin(0, 0);
 	_ordinaryBulletSprite.setPosition(0, 0);
 	_ordinaryBulletSprite.setRotation(0);
+	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(this));
 	SetSpeed(sf::Vector2f(0, 0));
 }
 

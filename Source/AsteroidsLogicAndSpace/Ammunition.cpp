@@ -112,7 +112,7 @@ void Ammunition::Init()
 	_rotationSpeed = GetFloatRandomValue(1, 80);
 	_sprite->setRotation(_angularVelocity);
 
-	_linearVelocity = sf::Vector2f(GetFloatRandomValue(-3, 3), GetFloatRandomValue(-3, 3));
+	_linearVelocity = sf::Vector2f(GetFloatRandomValue(-100, 100), GetFloatRandomValue(-100, 100));
 	SetSpeed(_linearVelocity);
 
 	float positionBoundX = GetFloatRandomValue(-_spawnBoundWidth, _spawnBoundWidth);
@@ -170,7 +170,6 @@ void Ammunition::OnRocketCollisionHandler(const Event& cEvent)
 {
 	const CollisionEventBetweenAmmunitionAndRocket &collisionEvent = dynamic_cast<const CollisionEventBetweenAmmunitionAndRocket&>(cEvent);
 	Ammunition* ammunition = collisionEvent.ammunition;
-	
 	ammunition->SetRadius(0);
 	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(ammunition));
 	_cRespawnTime = 0;

@@ -85,10 +85,11 @@ BulletManager::~BulletManager()
 
 void BulletManager::DeleteBullet(OrdinaryBullet* bullet)
 {
-	bullets.erase(std::remove(bullets.begin(), bullets.end(), bullet), bullets.end());
-	_ordinaryBulletStorage.Put(bullet);
-	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(bullet));
-
+	if (std::find(bullets.cbegin(), bullets.cend(), bullet) != bullets.cend()) {
+		bullets.erase(std::remove(bullets.begin(), bullets.end(), bullet), bullets.end());
+		_ordinaryBulletStorage.Put(bullet);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(bullet));
+	}
 	std::cout << "bullets storage " << _ordinaryBulletStorage.Count() << std::endl;
 }
 

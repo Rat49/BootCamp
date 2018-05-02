@@ -8,6 +8,7 @@
 #include "ParticleAssets.h"
 #include "Mathematics.h"
 #include "SFML\Graphics.hpp"
+#include <algorithm>
 
 class BulletManager final 
 {

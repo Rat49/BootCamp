@@ -193,7 +193,7 @@ int main()
 
 
 	int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) - 300;
-	int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 5;
+	int _nAsteroids = 1;// (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 5;
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
@@ -317,7 +317,7 @@ int main()
 			//Audio update
 			//Logic update
 
-			size_t n = space.asteroids.size() - 1;
+			size_t n = space.asteroids.size();
 			size_t m = space.asteroids.size();
 			size_t bulletsSize = bulletManager.bullets.size();
 			size_t rocketSize = bulletManager.rockets.size();
@@ -406,6 +406,7 @@ int main()
 					collisionAmmunitionVsSpaceship.ammunition = space.ammunition;
 					ResolveCollision(*spaceship, *space.ammunition);
 					dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, spaceship->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
+					space.ammunition->capacity = 0;
 					dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
 
 				}
