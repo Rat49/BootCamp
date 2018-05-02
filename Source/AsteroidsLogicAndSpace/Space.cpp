@@ -1,7 +1,7 @@
 #include "Space.h"
 
 Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize) :
-	_poolAsteroid(totalCountAsteroids), _poolStar(totalCountStar),_sizeSpace(windowSize), _poolExplosion(12)
+	_totalCountExplosion(30), _poolAsteroid(totalCountAsteroids), _poolStar(totalCountStar),_sizeSpace(windowSize), _poolExplosion(_totalCountExplosion)
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_createExplosion = dispatcher.Connect(createExplosionEvent, [&](const Event& event)
