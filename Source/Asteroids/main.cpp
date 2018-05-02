@@ -1,8 +1,5 @@
 #include "Asteroids.h"
 
-//const int WINDOW_WIDTH = 1200;
-//const int WINDOW_HEIGHT = 800;
-
 std::string GetNameForState(ButtonsState bState) {
 
 	switch (bState)
@@ -25,6 +22,7 @@ std::string GetNameForState(ButtonsState bState) {
 int main()
 {
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
+	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 	DrawableManager& drawableManager = DrawableManager::getInstance();
 
@@ -159,10 +157,12 @@ int main()
 	sf::Image healthHearth;
 	sf::Image bullets;
 	sf::Image rockets;
+	sf::Image achievements;
 	font.loadFromFile("Resources/font/arial.ttf");
 	healthHearth.loadFromFile("Resources/graphics/Health.png");
 	bullets.loadFromFile("Resources/graphics/bullets.png");
 	rockets.loadFromFile("Resources/graphics/rockets.png");
+	achievements.loadFromFile("Resources/graphics/achivka.png");
 
 	ui.CreateLabel("90", font, PercentXY(17, 0), "bulletCount");
 	ui.CreatePicture(bullets, PercentXY(20, 1), "bullets");
@@ -175,7 +175,9 @@ int main()
 	ui.CreateLabel("100", font, PercentXY(0, 0), "HP");
 	ui.CreateLabel("0", font, PercentXY(95, 0), "score");
 
-
+	ui.CreateAchivementShower(font, PercentXY(1, 1));
+	sf::Image* ptrAchievements = &achievements;
+	AchievementsManager achievementsManager(achievementCM, ptrAchievements);
 	/*
 	For Space
 	*/
@@ -449,7 +451,7 @@ int main()
 			space.Update(fixedTime.asSeconds());
 			spaceship->Update(fixedTime);
 			bulletManager.Update(fixedTime);
-
+			achievementsManager.Update(fixedTime, ui);
 			fixedTime = sf::Time::Zero;
 		}
 		rw.clear();
@@ -470,5 +472,6 @@ int main()
 
 	
 	delete cm1;
+	delete achievementCM;
 	return 0;
 }
