@@ -1,5 +1,6 @@
 .vs
 Bin
+!PlayFab/bin
 Temp
 **/*.user
 *.db
