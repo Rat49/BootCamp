@@ -58,11 +58,11 @@ public:
 	void SetPostion(const std::string& key, const PercentXY relCoord);
 	sf::Vector2f GetPosition(const std::string& key);	
 
-	Widget * CreateButton(const sf::Vector2f size, const PercentXY relativePos, const std::string & name);
-	Widget * CreateLabel(const std::string & content, const sf::Font & font, const PercentXY relativePos, const std::string & name);
-	Widget * CreateScrollBar(const float length, const PercentXY relativePos, const std::string & name);
-	Widget * CreateAchivementShower(const sf::Font & font, const PercentXY relativePos);
-	Widget * CreatePicture(const sf::Image & img, const PercentXY relativePos, const std::string & name);
+	Widget * CreateButton(			const sf::Vector2f size,		const PercentXY relativePos,	const std::string & name);
+	Widget * CreateLabel(			const std::string & content,	const sf::Font & font,			const PercentXY relativePos, const std::string & name);
+	Widget * CreateScrollBar(		const float length,				const PercentXY relativePos,	const std::string & name);
+	Widget * CreateAchivementShower(const sf::Font & font,			const PercentXY relativePos);
+	Widget * CreatePicture(			const sf::Image & img,			const PercentXY relativePos,	const std::string & name);
 
 	void RemoveWidget(const std::string & key);
 
