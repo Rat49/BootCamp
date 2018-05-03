@@ -69,7 +69,6 @@ int main()
 
 			if (explosion.IsEnd())
 			{
-				std::cout << "Play";
 				explosion.Reset();
 				explosion.Play();
 				//explosion.SetPosition(sf::Vector2f(std::rand() % 50 + 500, std::rand() % 50 + 500));
@@ -77,7 +76,6 @@ int main()
 			else {
 				explosion.Stop();
 				//DrawableManager::getInstance().RemoveDrawableObject(static_cast<*Drawable>(explosion))
-				std::cout << "stop";
 			}
 		}
 		window.display();

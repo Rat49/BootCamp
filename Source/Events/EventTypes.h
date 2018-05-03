@@ -25,6 +25,7 @@ enum EventTypes : EventID_t
 	collisionEventBetweenAmmunitionAndRocketId,
 	spaceshipRespawnEventID,
 	gameOverEventID,
+	resetGameEventID,
 	updateSpaceshipStateEvent,
 	updateSpaceshipWeaponStorageEvent,
 	createExplosionEvent

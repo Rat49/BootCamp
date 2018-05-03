@@ -18,6 +18,55 @@ std::string GetNameForState(ButtonsState bState) {
 	}
 }
 
+class GameOverManager : public Drawable
+{
+public:
+	AnimationPlayer* gameOverFlickering;
+	ImageSequenceResource* gameOverImseq;
+	sf::Sprite gameOverSprite;
+	Token_t gameOver;
+	Token_t gameReset;
+
+	GameOverManager(ResourceManager *rm){
+		gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");
+		gameOverFlickering = new AnimationPlayer(&gameOverSprite, gameOverImseq, true);
+		gameOverFlickering->Start();
+		_zOrder = 1; 
+
+		gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
+		{
+			AddToDrawableManager();
+		});
+
+		gameReset = Dispatcher::getInstance().Connect(resetGameEventID, [&](const Event& event)
+		{
+			RemoveFromDrawableManager();
+		});
+
+	}
+
+	void Update(sf::Time fixedTime) {
+		gameOverFlickering->Update(fixedTime);
+		gameOverSprite.setPosition({ (WindowResolution::_W - gameOverSprite.getTextureRect().width) / 2.f, 100 });
+	}
+
+	void AddToDrawableManager() {
+		DrawableManager::getInstance().AddDrawableObject(this);
+	}
+	void RemoveFromDrawableManager() {
+		DrawableManager::getInstance().RemoveDrawableObject(this);
+	}
+
+	void Draw(sf::RenderWindow& window)
+	{
+		window.draw(gameOverSprite);
+	}
+	int GetZOrder() const
+	{
+		return _zOrder;
+	}
+};
+
 
 int main()
 {
@@ -47,6 +96,7 @@ int main()
 	}
 
 	ResourceManager *rm = new ResourceManager(resourceConfig);
+	GameOverManager gameOverManager(rm);
 
 
 	/*
@@ -116,6 +166,18 @@ int main()
 	*/
 	sf::RenderWindow rw(sf::VideoMode(1200, 800), "Asteroids");
 	WindowResolution::SetResolution(rw);
+
+	TextureResource* resetButton = rm->GetResource<TextureResource>("resetButton");
+
+	AnimationPlayer* gameOverFlickering;
+	ImageSequenceResource* gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");;
+	sf::Sprite gameOverSprite;
+	gameOverFlickering = new AnimationPlayer(&gameOverSprite, gameOverImseq, true);
+	gameOverFlickering->Start();
+	
+
+
+
 	sf::Event sysEvent;
 	
 
@@ -146,6 +208,11 @@ int main()
 	ui.CreateLabel("0", font, PercentXY(95, 0), "score");
 
 	ui.CreateAchivementShower(font, PercentXY(1, 1));
+
+	ui.CreatePictureButton(resetButton->Get(), PercentXY(35, 50), "resetButton");
+	ui.Get<PictureButton>("resetButton")->isVisible = false;
+
+
 	sf::Image* ptrAchievements = &achievements;
 	AchievementsManager achievementsManager(achievementCM, ptrAchievements, *achievementSound);
 
@@ -214,7 +281,7 @@ int main()
 	*/
 	Logger& log = Logger::GetInstance();
 
-	Token_t gameOver = dispatcher.Connect(gameOverEventID, [&](const Event& event)
+	Token_t gameOver = dispatcher.Connect(resetGameEventID, [&](const Event& event)
 	{
 		space.Reset(_nAsteroids, spriteAsteroid);
 		spaceship->Reset(spaceshipConfig);
@@ -230,17 +297,27 @@ int main()
 
 	while (rw.isOpen())
 	{
+		rw.clear();
 		deltaTime = clock.restart();
 		fixedTime += deltaTime;
 
 		input.Update();
+		if (input.GetMode() == InputMode::GameOver) {
+			gameOverManager.Update(fixedTime);
+		}
 		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
 		{
-			fixedTime = sf::Time::Zero;
+			fixedTime = sf::Time::Zero;	
 		}
+
 
 		if (rw.pollEvent(sysEvent))
 		{
+			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<SfmlButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
+			{
+				ResetGameEvent resetGameEvent;
+				dispatcher.Send(resetGameEvent, EventTypes::resetGameEventID);
+			}
 
 			if (input.GetMode() == InputMode::Raw || input.GetMode() == InputMode::PausedRaw)
 			{
@@ -410,9 +487,7 @@ int main()
 			achievementsManager.Update(fixedTime, ui);
 			fixedTime = sf::Time::Zero;
 		}
-
-		rw.clear();
-
+	
 		//Rendering update
 		//DebugConsole 
 		if (debugConsole.getActiveConsoleStatus())
