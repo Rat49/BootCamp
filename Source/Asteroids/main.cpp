@@ -18,32 +18,66 @@ std::string GetNameForState(ButtonsState bState) {
 	}
 }
 
+class GameOverManager : public Drawable
+{
+public:
+	AnimationPlayer* gameOverFlickering;
+	ImageSequenceResource* gameOverImseq;
+	sf::Sprite gameOverSprite;
+	Token_t gameOver;
+	Token_t gameReset;
+
+	GameOverManager(ResourceManager *rm){
+		gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");
+		gameOverFlickering = new AnimationPlayer(&gameOverSprite, gameOverImseq, true);
+		gameOverFlickering->Start();
+		_zOrder = 1; 
+
+		gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
+		{
+			AddToDrawableManager();
+		});
+
+		gameReset = Dispatcher::getInstance().Connect(resetGameEventID, [&](const Event& event)
+		{
+			RemoveFromDrawableManager();
+		});
+
+	}
+
+	void Update(sf::Time fixedTime) {
+		gameOverFlickering->Update(fixedTime);
+		gameOverSprite.setPosition({ (WindowResolution::_W - gameOverSprite.getTextureRect().width) / 2.f, 100 });
+	}
+
+	void AddToDrawableManager() {
+		DrawableManager::getInstance().AddDrawableObject(this);
+	}
+	void RemoveFromDrawableManager() {
+		DrawableManager::getInstance().RemoveDrawableObject(this);
+	}
+
+	void Draw(sf::RenderWindow& window)
+	{
+		window.draw(gameOverSprite);
+	}
+	int GetZOrder() const
+	{
+		return _zOrder;
+	}
+};
+
 
 int main()
 {
 	/*
-	ConfigManagers, DrawableManager, Leaderboard and Dispatcher Initialization
+	ConfigManagers, DrawableManager and Dispatcher Initialization
 	*/
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 	DrawableManager& drawableManager = DrawableManager::getInstance();
 	bool isReset = false;
-	Leaderboard *leaderboard = Leaderboard::Create();
-	bool createAccount = true;
-	leaderboard->Login("ok");
-	leaderboard->UpdateUserTitleDisplayName("ok1");
-	leaderboard->UpdatePlayerStatistic(1000);
-
-	leaderboard->UpdateLocalLeaderboard();
-	leaderboard->leaderboard;
-
-
-	if (leaderboard != NULL) {
-		delete leaderboard;
-	}
-
-
 	/*
 	ResourceManager Initialization
 	*/
@@ -62,6 +96,7 @@ int main()
 	}
 
 	ResourceManager *rm = new ResourceManager(resourceConfig);
+	GameOverManager gameOverManager(rm);
 
 
 	/*
@@ -80,7 +115,14 @@ int main()
 
 	InputManager input(actions);
 
+	ButtonsState stateMoveUp;
+	ButtonsState stateMoveDown;
+	ButtonsState stateMoveLeft;
+	ButtonsState stateMoveRight;
 	ButtonsState stateExit;
+	ButtonsState stateChoose;
+	ButtonsState stateShoot;
+	ButtonsState statePowerfullShoot;
 
 
 	/*
@@ -124,6 +166,18 @@ int main()
 	*/
 	sf::RenderWindow rw(sf::VideoMode(1200, 800), "Asteroids");
 	WindowResolution::SetResolution(rw);
+
+	TextureResource* resetButton = rm->GetResource<TextureResource>("resetButton");
+
+	AnimationPlayer* gameOverFlickering;
+	ImageSequenceResource* gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");;
+	sf::Sprite gameOverSprite;
+	gameOverFlickering = new AnimationPlayer(&gameOverSprite, gameOverImseq, true);
+	gameOverFlickering->Start();
+	
+
+
+
 	sf::Event sysEvent;
 	
 
@@ -154,6 +208,11 @@ int main()
 	ui.CreateLabel("0", font, PercentXY(95, 0), "score");
 
 	ui.CreateAchivementShower(font, PercentXY(1, 1));
+
+	ui.CreatePictureButton(resetButton->Get(), PercentXY(35, 50), "resetButton");
+	ui.Get<PictureButton>("resetButton")->isVisible = false;
+
+
 	sf::Image* ptrAchievements = &achievements;
 	AchievementsManager achievementsManager(achievementCM, ptrAchievements, *achievementSound);
 
@@ -185,23 +244,23 @@ int main()
 	*/
 	DebugCommandManager manager;
 
-	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& /*args*/)
+	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
 	{
 		spaceship->SetDamage(0);
 	} });
 
-	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& /*args*/)
+	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
 	{
 		spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
 	} });
 
-	manager.addConsoleCommand({ "setCollidersVisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& /*args*/)
+	manager.addConsoleCommand({ "setCollidersVisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& args)
 	{
 		spaceship->SetColliderVisible(true);
 		space.SetColliderVisible(true);
 	} });
 
-	manager.addConsoleCommand({ "setCollidersInvisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& /*args*/)
+	manager.addConsoleCommand({ "setCollidersInvisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& args)
 	{
 		spaceship->SetColliderVisible(false);
 		space.SetColliderVisible(false);
@@ -222,7 +281,7 @@ int main()
 	*/
 	Logger& log = Logger::GetInstance();
 
-	Token_t gameOver = dispatcher.Connect(gameOverEventID, [&](const Event& /*event*/)
+	Token_t gameOver = dispatcher.Connect(resetGameEventID, [&](const Event& event)
 	{
 		space.Reset(_nAsteroids, spriteAsteroid);
 		spaceship->Reset(spaceshipConfig);
@@ -238,17 +297,27 @@ int main()
 
 	while (rw.isOpen())
 	{
+		rw.clear();
 		deltaTime = clock.restart();
 		fixedTime += deltaTime;
 
 		input.Update();
+		if (input.GetMode() == InputMode::GameOver) {
+			gameOverManager.Update(fixedTime);
+		}
 		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
 		{
-			fixedTime = sf::Time::Zero;
+			fixedTime = sf::Time::Zero;	
 		}
+
 
 		if (rw.pollEvent(sysEvent))
 		{
+			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<PictureButton>("resetButton")->isVisible && ui.Get<PictureButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
+			{
+				ResetGameEvent resetGameEvent;
+				dispatcher.Send(resetGameEvent, EventTypes::resetGameEventID);
+			}
 
 			if (input.GetMode() == InputMode::Raw || input.GetMode() == InputMode::PausedRaw)
 			{
@@ -264,6 +333,8 @@ int main()
 		if (fixedTime > fixedUpdateTime)
 		{
 
+			size_t bulletsSize = bulletManager.bullets.size();
+			size_t rocketSize = bulletManager.rockets.size();
 			//Input update
 			{
 				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && (stateExit == ButtonsState::JustPressed || stateExit == ButtonsState::Pressed))
@@ -276,7 +347,6 @@ int main()
 
 			size_t n = space.asteroids.size();
 			size_t m = space.asteroids.size();
-			size_t rocketSize = bulletManager.rockets.size();
 
 			for (size_t i = 0; i < n; ++i)
 			{
@@ -417,9 +487,7 @@ int main()
 			achievementsManager.Update(fixedTime, ui);
 			fixedTime = sf::Time::Zero;
 		}
-
-		rw.clear();
-
+	
 		//Rendering update
 		//DebugConsole 
 		if (debugConsole.getActiveConsoleStatus())

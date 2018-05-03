@@ -9,13 +9,13 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 	, _spaceshipDirection(_initialDirection)
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 	, _spaceshipFlickeringImseq(spaceshipFlickeringImseq)
-	, _rotationAngle(10.0f)
+	, _rotationAngle(5.0f)
 	, _acceleration(25.0f)
 	, _maxSquareSpeed(50000.0f)
 	, _flickeringTime(sf::seconds(1.0f))
 	, _timeAfterDamage(sf::seconds(0.0f))
 	, _input(input)	
-	, _inputTime(sf::milliseconds(25))
+	, _inputTime(sf::milliseconds(10))
 	, _inputAccumulatedTime(sf::milliseconds(0))
 	, _rechargeRocketTime(sf::seconds(0.5f))
 	, _rechargeBulletTime(sf::seconds(0.2f))
@@ -72,7 +72,11 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 			}
 			else
 			{
-				_HP -= _damage;
+				if (!_isDamaged)
+				{
+					_HP -= _damage;
+					_isDamaged = true;
+				}
 			}
 			_collisionSound->Get().play();
 			UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount,_maxLifeCount);
@@ -178,7 +182,7 @@ void Spaceship::SetFlickeringMode()
 	_spaceshipFlickering->Start();
 
 	_timeAfterDamage = sf::Time::Zero;
-	_isDamaged = true;
+	//_isDamaged = true;
 }
 
 void Spaceship::SetNormalMode()
@@ -378,6 +382,15 @@ void Spaceship::Reset(const std::multimap<const std::string, const std::string>&
 	_spaceshipSprite->setPosition({ positionX, positionY });
 	_spaceshipSprite->setRotation(0.0f);
 	_spaceshipAnimation->Reset();
+	_rocketCount = 10;
+	_bulletCount = 90;
+
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount, _maxLifeCount);
+	dispatcher.Send(updateSpaceshipStateEvent, EventTypes::updateSpaceshipStateEvent);
+
+	UpdateSpaceshipWeaponStorageEvent updateSpaceshipWeaponStorageEvent(_bulletCount, _rocketCount);
+	dispatcher.Send(updateSpaceshipWeaponStorageEvent, EventTypes::updateSpaceshipWeaponStorageEvent);
 }
 
 Spaceship::~Spaceship()

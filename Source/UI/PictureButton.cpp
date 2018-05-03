@@ -16,8 +16,10 @@ void PictureButton::OnResize()
 
 void PictureButton::Draw()
 {
-	_picture.setPosition(GetPosition());
-	_window.draw(_picture);
+	if (isVisible) {
+		_picture.setPosition(GetPosition());
+		_window.draw(_picture);
+	}
 }
 
 PictureButton::~PictureButton()

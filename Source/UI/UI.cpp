@@ -13,6 +13,28 @@ UI::UI(sf::RenderWindow & window) :
 	{
 		OnChangedSpaceshipStorage(event);
 	});
+
+
+	if (_widgets.find("resetButton") != _widgets.cend())
+	{
+		Get<PictureButton>("resetButton")->isVisible = true;
+	}
+
+	gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
+	{
+		if (_widgets.find("resetButton") != _widgets.cend())
+		{
+			Get<PictureButton>("resetButton")->isVisible = true;
+		}
+	});
+
+	gameReset = Dispatcher::getInstance().Connect(resetGameEventID, [&](const Event& event)
+	{
+		if (_widgets.find("resetButton") != _widgets.cend())
+		{
+			Get<PictureButton>("resetButton")->isVisible = false;
+		}
+	});
 }
 
 void UI::OnChangedSpaceshipStorage(const Event & event)

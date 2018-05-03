@@ -70,7 +70,7 @@ void Space::Update(const float physicsStepTargetFrameTime)
 			{
 				for (int j = 0; j < 2; ++j)
 				{
-					if (!_poolAsteroid.Empty() && rand()%2 == 0 )
+					if (!_poolAsteroid.Empty() && rand()% 3 < 2 )
 					{
 						Asteroid* asteroidNew = _poolAsteroid.Get();
 						asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace, asteroid->IsColliderVisible());
