@@ -258,6 +258,8 @@ int main()
 		if (fixedTime > fixedUpdateTime)
 		{
 
+			size_t bulletsSize = bulletManager.bullets.size();
+			size_t rocketSize = bulletManager.rockets.size();
 			//Input update
 			{
 				if (input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && previousStateMoveUp != stateMoveUp)
@@ -288,12 +290,14 @@ int main()
 				if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
 				{
 					previousPowerfullShoot = statePowerfullShoot;
-					rocketSound->Get().play();
+					if (rocketSize != 0)
+						rocketSound->Get().play();
 				}
 				if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
 				{
 					previousStateShoot = stateShoot;
-					bulletSound->Get().play();
+					if (bulletsSize != 0)
+						bulletSound->Get().play();
 				}
 			}
 
@@ -301,9 +305,7 @@ int main()
 			//Logic update
 			size_t n = space.asteroids.size();
 			size_t m = space.asteroids.size();
-			size_t bulletsSize = bulletManager.bullets.size();
-			size_t rocketSize = bulletManager.rockets.size();
-
+			
 			for (size_t i = 0; i < n; ++i)
 			{
 				for (size_t j = i + 1; j < m; ++j)
@@ -315,7 +317,6 @@ int main()
 						ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
 						dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
 						dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
-						collisionSound->Get().play();
 					}
 				}
 
@@ -342,7 +343,6 @@ int main()
 					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndRocket);
 					dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-					collisionSound->Get().play();
 
 					for (size_t k = 0; k < n; ++k) 
 					{
@@ -355,7 +355,6 @@ int main()
 							dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 							explosionSound->Get().play();
-						
 						}
 					}
 					bulletManager.DeleteRocket(bulletManager.rockets[j]);
@@ -388,7 +387,7 @@ int main()
 					ResolveCollision(*asteroid, *space.ammunition);
 					dispatcher.Send(collisionAmmunitionVsAsteroid, collisionEventID, asteroid->_tokens[collisionEventID]);
 					dispatcher.Send(collisionAmmunitionVsAsteroid, collisionEventBetweenAmmunitionAndAsteroidId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndAsteroidId]);
-					explosionSound->Get().play();
+					collisionSound->Get().play();
 				}
 			}
 
@@ -400,8 +399,7 @@ int main()
 				dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, spaceship->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
 				space.ammunition->capacity = 0;
 				dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
-				explosionSound->Get().play();
-
+				collisionSound->Get().play();
 			}
 
 			for (auto rocket : bulletManager.rockets)
@@ -441,17 +439,14 @@ int main()
 		space.Update(fixedTime.asSeconds());
 		spaceship->Update(fixedTime);
 		bulletManager.Update(fixedTime);
-		achievementsManager.Update(fixedTime, ui);
+		achievementsManager.Update(fixedTime, ui, *achievementSound);
 		fixedTime = sf::Time::Zero;
 	}
 
 	rw.clear();
+
+
 	//Rendering update
-	//for (int i = 0; i < numOfObjects; ++i)
-	//{
-	//	rw.draw(circles[i]);
-	//}
-	//
 	//DebugConsole 
 	if (debugConsole.getActiveConsoleStatus())
 	{

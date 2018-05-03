@@ -33,5 +33,5 @@ public:
 	void DestroyAchievementsStatus(const AsteroidType& type);
 	void DestroyTimerCheck(const sf::Time& destroyTimer, const AsteroidType& type);
 	void ActiveStatusCheck(Achievement& achiev);
-	void Update(const sf::Time& deltaTime,UI& achievUI);
+	void Update(const sf::Time& deltaTime,UI& achievUI,AudioResource &audio);
 };
