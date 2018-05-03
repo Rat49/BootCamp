@@ -114,32 +114,6 @@ int main()
 	CollisionEventBetweenAmmunitionAndSpaceship collisionAmmunitionVsSpaceship;
 	CollisionEventBetweenAmmunitionAndAsteroid collisionAmmunitionVsAsteroid;
 
-	constexpr size_t numOfObjects = 10;
-	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
-	float           accumulatedFrameTime = 0.f;
-	sf::CircleShape circles[numOfObjects];
-	RigidBody * RigidBodies = new RigidBody[numOfObjects];
-	/*Init rigid bodies and implementation for them*/
-	for (int i = 0; i < numOfObjects / 2; i++)
-	{
-		const int idx = i * 2;
-		RigidBodies[idx].SetRadius(10);
-		RigidBodies[idx].SetCoordinates({ 500, 200.f + 60 * i });
-		RigidBodies[idx].SetSpeed({ 60, 15 });
-		RigidBodies[idx].SetMass(0.005f);
-
-		RigidBodies[idx + 1].SetRadius(25);
-		RigidBodies[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
-		RigidBodies[idx + 1].SetSpeed({ -100, 40 });
-		RigidBodies[idx + 1].SetMass(0.01f);
-	}
-
-	for (int i = 0; i < numOfObjects; ++i)
-	{
-		circles[i].setRadius(RigidBodies[i].GetRadius());
-		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
-	}
-
 	/*
 	Game Loop
 	*/
@@ -248,8 +222,6 @@ int main()
 		deltaTime = clock.restart();
 		fixedTime += deltaTime;
 
-		//std::cout << "deltaTime = " << deltaTime.asMicroseconds() << "\n";
-
 		input.Update();
 		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
 		{
@@ -295,15 +267,18 @@ int main()
 					std::cout << "MoveRight state - " << GetNameForState(stateMoveRight) << std::endl;
 					previousStateMoveRight = stateMoveRight;
 				}
-				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && stateExit == ButtonsState::JustPressed)
+				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && (stateExit == ButtonsState::JustPressed || stateExit == ButtonsState::Pressed))
 				{
 					rw.close();
-					//previousStateExit = stateExit;
 				}
-				if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && previousStateChoose != stateChoose)
+				if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && /*previousStateChoose != stateChoose*/ stateChoose == ButtonsState::JustPressed )
 				{
-					std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
-					previousStateChoose = stateChoose;
+					//std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
+					//previousStateChoose = stateChoose;
+					space.Reset(_nAsteroids, spriteAsteroid);
+					spaceship->Reset(spaceshipConfig);
+					bulletManager.Reset();
+
 				}
 				if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
 				{
@@ -446,11 +421,6 @@ int main()
 				}
 			}
 
-			/*space.Update(deltaTime.asMilliseconds() / 1e3);
-			spaceship->Update(deltaTime);
-			bulletManager.Update(deltaTime);*/
-
-			//space.Update(fixedTime.asMilliseconds() / 1e3);
 			space.Update(fixedTime.asSeconds());
 			spaceship->Update(fixedTime);
 			bulletManager.Update(fixedTime);

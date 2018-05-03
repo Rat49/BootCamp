@@ -42,5 +42,6 @@ public:
 	void DeleteRocket(Rocket* rocket);
 
 	void Update(const sf::Time& deltaTime);
+	void Reset();
 };
 
