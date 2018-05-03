@@ -71,13 +71,28 @@ public:
 int main()
 {
 	/*
-	ConfigManagers, DrawableManager and Dispatcher Initialization
+	ConfigManagers, Leaderboard, DrawableManager and Dispatcher Initialization
 	*/
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 	DrawableManager& drawableManager = DrawableManager::getInstance();
 	bool isReset = false;
+	Leaderboard *leaderboard = Leaderboard::Create();
+	bool createAccount = true;
+	leaderboard->Login("ok");
+	leaderboard->UpdateUserTitleDisplayName("ok1");
+	leaderboard->UpdatePlayerStatistic(1000);
+
+	leaderboard->UpdateLocalLeaderboard();
+	leaderboard->leaderboard;
+
+
+	if (leaderboard != NULL) {
+		delete leaderboard;
+	}
+
+
 	/*
 	ResourceManager Initialization
 	*/
