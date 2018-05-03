@@ -71,7 +71,7 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 				_HP -= _damage;
 			}
 			std::cout << "lifeCount = " << _liveCount << "\t HP = " << _HP << std::endl;
-			UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount,_maxLifeCount);
+			UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount, _maxLifeCount);
 			dispatcher.Send(updateSpaceshipStateEvent, EventTypes::updateSpaceshipStateEvent);
 		});
 
@@ -372,6 +372,7 @@ void Spaceship::Reset(const std::multimap<const std::string, const std::string>&
 	_spaceshipSprite->setPosition({ positionX, positionY });
 	_spaceshipSprite->setRotation(0.0f);
 	_spaceshipAnimation->Reset();
+	std::cout << "Spaceship is reset" << std::endl;
 }
 
 Spaceship::~Spaceship()

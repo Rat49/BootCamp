@@ -134,6 +134,7 @@ void Space::Reset(const int asteroidCount, const sf::Sprite& asteroidSprite)
 		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(asteroid));
 	}
 	asteroids.clear();
+	std::cout << "Asteroids count: " << asteroids.size() << std::endl;
 
 	for (auto *explosion : _explosions)
 	{
@@ -142,10 +143,11 @@ void Space::Reset(const int asteroidCount, const sf::Sprite& asteroidSprite)
 		
 	}
 	_explosions.clear();
-
+	std::cout << "_explosions count: " << _explosions.size() << std::endl;
 	std::cout << "Asteroid particle storage: " << _poolExplosion.Count() << std::endl;
 
 	AddSomeAsteroids(asteroidCount, asteroidSprite);
+	std::cout << "Asteroids count: " << asteroids.size() << std::endl;
 }
 
 
