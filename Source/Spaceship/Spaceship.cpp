@@ -390,7 +390,7 @@ void Spaceship::Reset(const std::multimap<const std::string, const std::string>&
 	dispatcher.Send(updateSpaceshipStateEvent, EventTypes::updateSpaceshipStateEvent);
 
 	UpdateSpaceshipWeaponStorageEvent updateSpaceshipWeaponStorageEvent(_bulletCount, _rocketCount);
-	dispatcher.Send(updateSpaceshipWeaponStorageEvent, EventTypes:::updateSpaceshipWeaponStorageEvent);
+	dispatcher.Send(updateSpaceshipWeaponStorageEvent, EventTypes::updateSpaceshipWeaponStorageEvent);
 }
 
 Spaceship::~Spaceship()

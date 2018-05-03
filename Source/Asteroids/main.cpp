@@ -313,7 +313,7 @@ int main()
 
 		if (rw.pollEvent(sysEvent))
 		{
-			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<SfmlButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
+			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<PictureButton>("resetButton")->isVisible && ui.Get<PictureButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
 			{
 				ResetGameEvent resetGameEvent;
 				dispatcher.Send(resetGameEvent, EventTypes::resetGameEventID);
