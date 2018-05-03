@@ -6,7 +6,6 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 	, _isDamaged(false)
 	, _initialDirection(sf::Vector2f(0.0f, -1.0f))
 	, _spaceshipDirection(_initialDirection)
-	//, _spaceshipScale(0.7f, 0.7f)
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 	, _spaceshipFlickeringImseq(spaceshipFlickeringImseq)
 	, _rotationAngle(17.0f)
@@ -354,6 +353,25 @@ void Spaceship::Draw(sf::RenderWindow& window)
 void Spaceship::SetDamage(unsigned int damage)
 {
 	_damage = damage;
+}
+
+void Spaceship::Reset(const std::multimap<const std::string, const std::string>& spaceshipConfig)
+{
+
+	float positionX = atof(spaceshipConfig.find("PositionX")->second.c_str());
+	float positionY = atof(spaceshipConfig.find("PositionY")->second.c_str());
+	float speedX = atof(spaceshipConfig.find("SpeedX")->second.c_str());
+	float speedY = atof(spaceshipConfig.find("SpeedY")->second.c_str());
+	RigidBody::SetCoordinates({ positionX, positionY });
+	RigidBody::SetSpeed({ speedX, speedY });
+	_liveCount = atoi(spaceshipConfig.find("LifeCount")->second.c_str());
+	_HP = atoi(spaceshipConfig.find("HP")->second.c_str());
+	_damage = atoi(spaceshipConfig.find("Damage")->second.c_str());
+	_spaceshipDirection = _initialDirection;
+	_speedDirection = GetNormalizedVelocity(GetSpeed());
+	_spaceshipSprite->setPosition({ positionX, positionY });
+	_spaceshipSprite->setRotation(0.0f);
+	_spaceshipAnimation->Reset();
 }
 
 Spaceship::~Spaceship()

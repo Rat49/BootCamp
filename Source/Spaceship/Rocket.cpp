@@ -100,14 +100,6 @@ void Rocket::Update(const sf::Time& deltaTime)
 			SetSpeed(_direction * (_speedValuePixelsPerSecond + _deltaSpeedValue));
 		}
 
-		/*if (_rocketSprite.getPosition().x >= WindowResolution::_W || _rocketSprite.getPosition().x < 0
-			|| _rocketSprite.getPosition().y > WindowResolution::_H || _rocketSprite.getPosition().y < 0)
-		{
-			_rocketParticle->Stop();
-			if (_rocketParticle->IsEnd())
-				_isAlive = false;
-		}*/
-
 		sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
 		_rocketSprite.setPosition(rigidCoordinates.x + _rocketSprite.getLocalBounds().width / 3,
 			rigidCoordinates.y + _rocketSprite.getLocalBounds().height / 3);

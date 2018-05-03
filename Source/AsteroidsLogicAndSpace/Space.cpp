@@ -126,6 +126,28 @@ void Space::Update(const float physicsStepTargetFrameTime)
 	}
 }
 
+void Space::Reset(const int asteroidCount, const sf::Sprite& asteroidSprite)
+{
+	for (auto &asteroid : asteroids)
+	{
+		_poolAsteroid.Put(asteroid);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(asteroid));
+	}
+	asteroids.clear();
+
+	for (auto *explosion : _explosions)
+	{
+		_poolExplosion.Put(explosion);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(&(explosion->particles)));
+		
+	}
+	_explosions.clear();
+
+	std::cout << "Asteroid particle storage: " << _poolExplosion.Count() << std::endl;
+
+	AddSomeAsteroids(asteroidCount, asteroidSprite);
+}
+
 
 Space::~Space()
 {
