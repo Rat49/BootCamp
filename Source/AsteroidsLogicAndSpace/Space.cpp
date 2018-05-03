@@ -1,7 +1,12 @@
 #include "Space.h"
 
-Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize) :
-	_totalCountExplosion(30), _poolAsteroid(totalCountAsteroids), _poolStar(totalCountStar),_sizeSpace(windowSize), _poolExplosion(_totalCountExplosion)
+Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize, ResourceManager &rm) 
+	: _totalCountExplosion(30)
+	, _poolAsteroid(totalCountAsteroids)
+	, _poolStar(totalCountStar)
+	,_sizeSpace(windowSize)
+	, _poolExplosion(_totalCountExplosion)
+	, _crashSound(rm.GetResource<AudioResource>("crashSound"))
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_createExplosion = dispatcher.Connect(createExplosionEvent, [&](const Event& event)
@@ -91,8 +96,9 @@ void Space::Update(const float physicsStepTargetFrameTime)
 				_poolAsteroid.Put(asteroid);
 				asteroids.erase(std::find(asteroids.begin(), asteroids.end(), asteroid));
 				--i;
-				++_countSmallDeadAsteroids;
+				_crashSound->Get().play();
 			}
+
 			if (_countSmallDeadAsteroids >= 16)
 			{
 				Asteroid* asteroidNew = _poolAsteroid.Get();
@@ -134,7 +140,6 @@ void Space::Reset(const int asteroidCount, const sf::Sprite& asteroidSprite)
 		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(asteroid));
 	}
 	asteroids.clear();
-	std::cout << "Asteroids count: " << asteroids.size() << std::endl;
 
 	for (auto *explosion : _explosions)
 	{
@@ -143,11 +148,8 @@ void Space::Reset(const int asteroidCount, const sf::Sprite& asteroidSprite)
 		
 	}
 	_explosions.clear();
-	std::cout << "_explosions count: " << _explosions.size() << std::endl;
-	std::cout << "Asteroid particle storage: " << _poolExplosion.Count() << std::endl;
 
 	AddSomeAsteroids(asteroidCount, asteroidSprite);
-	std::cout << "Asteroids count: " << asteroids.size() << std::endl;
 }
 
 

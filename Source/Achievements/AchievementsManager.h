@@ -22,12 +22,13 @@ private:
 	sf::Time _afterFirstBigAsteroidFrag;
 	sf::Time _afterFirstMiddleAsteroidFrag;
 	sf::Time _afterFirstSmallAsteroidFrag;
+	AudioResource _audio;
 public:
 	Token_t tokenForCollisionEventBetweenAsteroidAndBullet;
 	Token_t tokenForCollisionEventBetweenAsteroidAndRocket;
 	Token_t tokenForCollisionEventBetweenAsteroidAndSpaceship;
 	
-	AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture);
+	AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture, AudioResource &audio);
 	~AchievementsManager();
 
 	void DestroyAchievementsStatus(const AsteroidType& type);

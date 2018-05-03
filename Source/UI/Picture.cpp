@@ -2,11 +2,11 @@
 
 
 
-Picture::Picture(const sf::Image & img, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner):
+Picture::Picture(const sf::Texture & img, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner):
 	Widget(name, position, owner),
-	_isVisible(true)
+	_isVisible(true),
+	_texture(img)
 {
-	_texture.loadFromImage(img);
 	_sprite.setTexture(_texture);
 }
 

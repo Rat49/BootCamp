@@ -133,6 +133,7 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
     <ClCompile Include="AchievementShower.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="Picture.cpp" />
+    <ClCompile Include="PictureButton.cpp" />
     <ClCompile Include="ScrollBar.cpp" />
     <ClCompile Include="SfmlButton.cpp" />
     <ClCompile Include="UI.cpp" />
@@ -142,6 +143,7 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
     <ClInclude Include="AchievementShower.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="Picture.h" />
+    <ClInclude Include="PictureButton.h" />
     <ClInclude Include="ScrollBar.h" />
     <ClInclude Include="SfmlButton.h" />
     <ClInclude Include="UI.h" />

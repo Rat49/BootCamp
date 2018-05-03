@@ -1,12 +1,24 @@
 #include "SfmlButton.h"
 
 
-SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner) :	
-	Widget(name,position,owner)
+SfmlButton::SfmlButton(const sf::Font& font, const sf::Vector2f size, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner) :
+	Widget(name,position,owner),
+	_text(name,font)
 {	
 	_body = sf::RectangleShape(size);
 	_body.setPosition(position);
 	_body.setOrigin(_body.getLocalBounds().width /2 , _body.getLocalBounds().height /2);
+	_text.setOrigin(_text.getLocalBounds().width / 2, _text.getLocalBounds().height / 2);
+	_text.setPosition(_body.getPosition());
+}
+
+SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner):
+	Widget(name, position, owner),
+	_text()
+{
+	_body = sf::RectangleShape(size);
+	_body.setPosition(position);
+	_body.setOrigin(_body.getLocalBounds().width / 2, _body.getLocalBounds().height / 2);
 }
 
 bool SfmlButton::IsClicked(const sf::Vector2i cursor_pos) const
@@ -36,6 +48,22 @@ void SfmlButton::SetSize(const sf::Vector2f size)
 	_body.setSize(size);
 }
 
+void SfmlButton::SetText(const std::string& text)
+{
+	_text.setString(text);
+}
+
+void SfmlButton::SetColorText(const sf::Color& color)
+{
+	_text.setFillColor(color);
+	_text.setOutlineColor(color);
+}
+
+void SfmlButton::SetCharSize(const unsigned int size)
+{
+	_text.setCharacterSize(size);
+}
+
 sf::Vector2f SfmlButton::GetSize() const
 {
 	return _body.getSize();
@@ -54,12 +82,15 @@ sf::Color SfmlButton::GetOutlineColor() const
 void SfmlButton::OnResize()
 {
 	_body.setScale(GetScale());
+	_text.setScale(GetScale());
 }
 
 void SfmlButton::Draw()
 {	
 	_body.setPosition(GetPosition());
+	_text.setPosition(_body.getPosition());
 	_window.draw(_body);	
+	_window.draw(_text);
 }
 
 SfmlButton::~SfmlButton()

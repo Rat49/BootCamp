@@ -1,6 +1,7 @@
 #include "Spaceship.h"
 
-Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq)
+Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq,
+	ImageSequenceResource& spaceshipFlickeringImseq, ResourceManager &rm)
 	: RigidBody({ 0, 0 }, {0, 0}, spaceshipAnimationImseq.GetWidth() / 2.5f, 1.0f)
 
 	, _isDamaged(false)
@@ -22,6 +23,9 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 	, _rocketRebound(15.0f)
 	, _shotIndentValue(50.0f)
 	, _maxLifeCount(3)
+	, _bulletSound(rm.GetResource<AudioResource>("shootSound"))
+	, _rocketSound(rm.GetResource<AudioResource>("rocketSound"))
+	, _collisionSound(rm.GetResource<AudioResource>("collisionSound"))
 	
 {
 	spaceshipConfig;
@@ -70,8 +74,8 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 			{
 				_HP -= _damage;
 			}
-			std::cout << "lifeCount = " << _liveCount << "\t HP = " << _HP << std::endl;
-			UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount, _maxLifeCount);
+			_collisionSound->Get().play();
+			UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount,_maxLifeCount);
 			dispatcher.Send(updateSpaceshipStateEvent, EventTypes::updateSpaceshipStateEvent);
 		});
 
@@ -99,6 +103,7 @@ void Spaceship::PowerfulShoot()
 		return;
 	}
 	--_rocketCount;
+	_rocketSound->Get().play();
 
 	UpdateSpaceshipWeaponStorageEvent updateSpaceshipStorageEvent(_bulletCount, _rocketCount);
 	Dispatcher::getInstance().Send(updateSpaceshipStorageEvent, EventTypes::updateSpaceshipWeaponStorageEvent);
@@ -120,7 +125,8 @@ void Spaceship::OrdinaryShoot()
 	{
 		return;
 	}	
-	_bulletCount -= 3;;
+	_bulletCount -= 3;
+	_bulletSound->Get().play();
 
 	UpdateSpaceshipWeaponStorageEvent updateSpaceshipStorageEvent(_bulletCount, _rocketCount);
 	Dispatcher::getInstance().Send(updateSpaceshipStorageEvent, EventTypes::updateSpaceshipWeaponStorageEvent);
@@ -372,7 +378,6 @@ void Spaceship::Reset(const std::multimap<const std::string, const std::string>&
 	_spaceshipSprite->setPosition({ positionX, positionY });
 	_spaceshipSprite->setRotation(0.0f);
 	_spaceshipAnimation->Reset();
-	std::cout << "Spaceship is reset" << std::endl;
 }
 
 Spaceship::~Spaceship()

@@ -76,16 +76,16 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\UI;$(SolutionDir)SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\UI;$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Spaceship;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>UI_d.lib;
-sfml-window.lib
-;sfml-system.lib
-;sfml-graphics.lib;
-sfml-audio.lib;
-sfml-network.lib</AdditionalDependencies>
+sfml-window-d.lib
+;sfml-system-d.lib
+;sfml-graphics-d.lib;
+sfml-audio-d.lib;
+sfml-network-d.lib;Events_d.lib;Spaceship_d.lib</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
@@ -94,12 +94,12 @@ sfml-network.lib</AdditionalDependencies>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\UI;$(SolutionDir)SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\UI;$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Spaceship;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>UI_d.lib;UI.lib;
-sfml-window.lib
+;Events_d.lib;Events.lib;Spaceship_d.lib;Spaceship.libsfml-window.lib
 ;sfml-system.lib
 ;sfml-graphics.lib;
 sfml-audio.lib;
@@ -114,13 +114,12 @@ sfml-network.lib</AdditionalDependencies>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\UI;$(SolutionDir)SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\UI;$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Spaceship;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>UI_d.lib;UI.lib;
-sfml-window.lib
+      <AdditionalDependencies>UI.lib;Events.lib;Spaceship.lib;sfml-window.lib
 ;sfml-system.lib
 ;sfml-graphics.lib;
 sfml-audio.lib;
