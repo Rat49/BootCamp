@@ -57,7 +57,7 @@ void Leaderboard::UpdateLocalLeaderboard() {
 	GetLeaderboardRequest request;
 	request.StatisticName = "Top Scores";
 
-	PlayFabClientAPI::GetLeaderboard(request, [this](const GetLeaderboardResult& result, void* customData) { 
+	PlayFabClientAPI::GetLeaderboard(request, [this](const GetLeaderboardResult& result, void* /*customData*/) { 
 
 		leaderboard = result.Leaderboard;
 		std::cout << "Operation success" << std::endl;
@@ -69,18 +69,18 @@ void Leaderboard::UpdateLocalLeaderboard() {
 }
 
 
-void OnLoginSuccess(const LoginResult& result, void* customData) {
+void OnLoginSuccess(const LoginResult& /*result*/, void* /*customData*/) {
 	std::cout << "Logged in" << std::endl;
 }
 
-void OnPlayerStatisticsUpdateSuccess(const UpdatePlayerStatisticsResult& result, void* customData) {
+void OnPlayerStatisticsUpdateSuccess(const UpdatePlayerStatisticsResult& /*result*/, void* /*customData*/) {
 	std::cout << "Player statistic was updated" << std::endl;
 }
 
-void OnNameUpdateSuccess(const UpdateUserTitleDisplayNameResult& result, void* customData) {
+void OnNameUpdateSuccess(const UpdateUserTitleDisplayNameResult& /*result*/, void* /*customData*/) {
 	std::cout << "User title was updated" << std::endl;
 }
 
-void OnFail(const PlayFabError& error, void* customData) {
+void OnFail(const PlayFabError& error, void* /*customData*/) {
 	std::cerr << "Error occured: " << error.GenerateReport() << std::endl;
 }

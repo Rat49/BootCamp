@@ -33,7 +33,7 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image
 	tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
 		[&](const Event& event)
 	{
-		const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
+		//const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
 		_noDamageTimer = sf::seconds(0.0f);
 	});
 }

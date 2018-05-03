@@ -87,7 +87,7 @@ void Ammunition::RandomInit() {
 
 void Ammunition::Init()
 {
-	unsigned int randomAmmunition = std::rand() % 18;
+	//unsigned int randomAmmunition = std::rand() % 18;
 
 	RandomInit();
 	
@@ -153,7 +153,7 @@ Ammunition::Ammunition(ResourceManager *rm)
 
 void Ammunition::OnAsteroidCollisionHandler(const Event& cEvent)
 {
-	const CollisionEventBetweenAmmunitionAndAsteroid &collisionEvent = dynamic_cast<const CollisionEventBetweenAmmunitionAndAsteroid&>(cEvent);
+	//const CollisionEventBetweenAmmunitionAndAsteroid &collisionEvent = dynamic_cast<const CollisionEventBetweenAmmunitionAndAsteroid&>(cEvent);
 	_hp -= 10;
 }
 

@@ -44,7 +44,7 @@ void UI::OnChangedSpaceshipStorage(const Event & event)
 			life.push_back(symbol);
 			if (_widgets.find(life) != _widgets.cend())
 			{
-				if (i < updateStateEvent._countLife)
+				if (i < (updateStateEvent._countLife))
 				{
 					Get<Picture>(life)->_isVisible = true;
 				}

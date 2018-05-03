@@ -22,13 +22,28 @@ std::string GetNameForState(ButtonsState bState) {
 int main()
 {
 	/*
-	ConfigManagers, DrawableManager and Dispatcher Initialization
+	ConfigManagers, DrawableManager, Leaderboard and Dispatcher Initialization
 	*/
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 	DrawableManager& drawableManager = DrawableManager::getInstance();
 	bool isReset = false;
+	Leaderboard *leaderboard = Leaderboard::Create();
+	bool createAccount = true;
+	leaderboard->Login("ok");
+	leaderboard->UpdateUserTitleDisplayName("ok1");
+	leaderboard->UpdatePlayerStatistic(1000);
+
+	leaderboard->UpdateLocalLeaderboard();
+	leaderboard->leaderboard;
+
+
+	if (leaderboard != NULL) {
+		delete leaderboard;
+	}
+
+
 	/*
 	ResourceManager Initialization
 	*/
@@ -65,14 +80,7 @@ int main()
 
 	InputManager input(actions);
 
-	ButtonsState stateMoveUp;
-	ButtonsState stateMoveDown;
-	ButtonsState stateMoveLeft;
-	ButtonsState stateMoveRight;
 	ButtonsState stateExit;
-	ButtonsState stateChoose;
-	ButtonsState stateShoot;
-	ButtonsState statePowerfullShoot;
 
 
 	/*
@@ -177,23 +185,23 @@ int main()
 	*/
 	DebugCommandManager manager;
 
-	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
+	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& /*args*/)
 	{
 		spaceship->SetDamage(0);
 	} });
 
-	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
+	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& /*args*/)
 	{
 		spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
 	} });
 
-	manager.addConsoleCommand({ "setCollidersVisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& args)
+	manager.addConsoleCommand({ "setCollidersVisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& /*args*/)
 	{
 		spaceship->SetColliderVisible(true);
 		space.SetColliderVisible(true);
 	} });
 
-	manager.addConsoleCommand({ "setCollidersInvisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& args)
+	manager.addConsoleCommand({ "setCollidersInvisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& /*args*/)
 	{
 		spaceship->SetColliderVisible(false);
 		space.SetColliderVisible(false);
@@ -214,7 +222,7 @@ int main()
 	*/
 	Logger& log = Logger::GetInstance();
 
-	Token_t gameOver = dispatcher.Connect(gameOverEventID, [&](const Event& event)
+	Token_t gameOver = dispatcher.Connect(gameOverEventID, [&](const Event& /*event*/)
 	{
 		space.Reset(_nAsteroids, spriteAsteroid);
 		spaceship->Reset(spaceshipConfig);
@@ -256,8 +264,6 @@ int main()
 		if (fixedTime > fixedUpdateTime)
 		{
 
-			size_t bulletsSize = bulletManager.bullets.size();
-			size_t rocketSize = bulletManager.rockets.size();
 			//Input update
 			{
 				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && (stateExit == ButtonsState::JustPressed || stateExit == ButtonsState::Pressed))
@@ -270,6 +276,7 @@ int main()
 
 			size_t n = space.asteroids.size();
 			size_t m = space.asteroids.size();
+			size_t rocketSize = bulletManager.rockets.size();
 
 			for (size_t i = 0; i < n; ++i)
 			{

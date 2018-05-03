@@ -5,7 +5,7 @@ Temp
 *.db
 *.opendb
 *.log
-+!PlayFab/bin
+!PlayFab/bin
 /project
 /Asteroids.sln.orig
 /Source/Resources/Resources.vcxproj.orig

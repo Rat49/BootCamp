@@ -1,6 +1,6 @@
 #include "AchievementShower.h"
 
-AchievementShower::AchievementShower(const sf::Font& font, const sf::Vector2f position, const std::string & name, const std::string & description, sf::RenderWindow & owner) :
+AchievementShower::AchievementShower(const sf::Font& font, const sf::Vector2f position, const std::string & name, const std::string & /*description*/, sf::RenderWindow & owner) :
 	Widget(name, position, owner),
 	_name("", font),
 	_description("", font),

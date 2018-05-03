@@ -118,7 +118,7 @@ class SpaceshipParticle {
 public:
 	ParticleSystem particles;
 
-	SpaceshipParticle(unsigned int quantity) :
+	SpaceshipParticle(unsigned int /*quantity*/) :
 		particles(500) {
 		particles.SetParticlesLifetime(50);
 	}

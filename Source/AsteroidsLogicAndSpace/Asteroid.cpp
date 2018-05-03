@@ -166,7 +166,7 @@ void Asteroid::OnCollisionHandler(const Event& cEvent)
 
 void Asteroid::OnRocketCollisionHandler(const Event& cEvent)
 {
-	const CollisionEventBetweenAsteroidAndRocket &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndRocket&>(cEvent);
+	//const CollisionEventBetweenAsteroidAndRocket &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndRocket&>(cEvent);
 	
 	this->_health -= 1000;
 
@@ -179,7 +179,7 @@ void Asteroid::OnRocketCollisionHandler(const Event& cEvent)
 
 void Asteroid::OnBulletCollisionHandler(const Event& cEvent)
 {
-	const CollisionEventBetweenAsteroidAndBullet &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndBullet&>(cEvent);
+	//const CollisionEventBetweenAsteroidAndBullet &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndBullet&>(cEvent);
 
 	this->_health -= 1000;
 	

@@ -1,6 +1,6 @@
 #pragma once
 
-#include"playfab\PlayFabClientAPI.h"
+#include"playfab/PlayFabClientAPI.h"
 #include"playfab/PlayFabClientDataModels.h"
 #include"playfab/PlayFabSettings.h"
 
