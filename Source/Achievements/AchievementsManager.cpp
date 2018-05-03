@@ -149,7 +149,7 @@ void AchievementsManager::ActiveStatusCheck(Achievement& achiev)
 	achiev.SetDateCompleteAchievements(dateBuffer);
 }
 
-void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
+void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI,AudioResource &audio)
 {
 	_noDamageTimer += deltaTime;
 	_destroyTimer += deltaTime;
@@ -168,6 +168,7 @@ void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
 		if (it->GetAchievedActive())
 		{
 			achievUI.OnAchive(it->GetDisplayName(), it->GetDisplayDescriptionName(), _achievementPicture);
+			audio.Get().play();
 			it = _achievementsStorage.erase(it);
 		}
 		else
