@@ -34,7 +34,8 @@ enum class InputMode
 	Normal,
 	Raw,
 	Paused,
-	PausedRaw
+	PausedRaw,
+	GameOver
 };
 
 class InputManager final

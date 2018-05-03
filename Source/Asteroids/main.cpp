@@ -147,6 +147,20 @@ int main()
 	//sf::RenderWindow rw(sf::VideoMode::getDesktopMode(), "Asteroids");
 	sf::RenderWindow rw(sf::VideoMode(1200, 800), "Asteroids");
 	WindowResolution::SetResolution(rw);
+
+	TextureResource* resetButton = rm->GetResource<TextureResource>("resetButton");
+	sf::Sprite resetButtonSprite;
+	resetButtonSprite.setTexture(resetButton->Get());
+	resetButtonSprite.setPosition({ (WindowResolution::_W - resetButtonSprite.getLocalBounds().width) / 2.f, (WindowResolution::_H - resetButtonSprite.getLocalBounds().height) / 2.f });
+	AnimationPlayer* gameOverFlickering;
+	ImageSequenceResource* gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");;
+	sf::Sprite gameOverSprite;
+	gameOverFlickering = new AnimationPlayer(&gameOverSprite, gameOverImseq, true);
+	gameOverFlickering->Start();
+	
+
+
+
 	sf::Event sysEvent;
 	UI ui(rw);
 
@@ -176,6 +190,10 @@ int main()
 	ui.CreateLabel("0", font, PercentXY(95, 0), "score");
 
 	ui.CreateAchivementShower(font, PercentXY(1, 1));
+
+	
+
+
 	sf::Image* ptrAchievements = &achievements;
 	AchievementsManager achievementsManager(achievementCM, ptrAchievements);
 	/*
@@ -245,16 +263,30 @@ int main()
 
 	while (rw.isOpen())
 	{
+		rw.clear();
 		deltaTime = clock.restart();
 		fixedTime += deltaTime;
 
-		//std::cout << "deltaTime = " << deltaTime.asMicroseconds() << "\n";
-
 		input.Update();
+		if (input.GetMode() == InputMode::GameOver) {
+			gameOverFlickering->Update(fixedTime);
+			rw.draw(resetButtonSprite);
+			rw.draw(gameOverSprite);
+			fixedTime = sf::Time::Zero;
+
+		}
+
 		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
 		{
+			gameOverFlickering->Update(fixedTime);
+			gameOverSprite.setPosition({ (WindowResolution::_W - gameOverSprite.getTextureRect().width) / 2.f, 100 });
+			rw.draw(resetButtonSprite);
+			rw.draw(gameOverSprite);
 			fixedTime = sf::Time::Zero;
+			std::cout << (WindowResolution::_W - gameOverSprite.getTextureRect().width) / 2.f << std::endl;
+			
 		}
+
 
 		if (rw.pollEvent(sysEvent))
 		{
@@ -277,22 +309,18 @@ int main()
 			{
 				if (input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && previousStateMoveUp != stateMoveUp)
 				{
-					std::cout << "MoveUp state - " << GetNameForState(stateMoveUp) << std::endl;
 					previousStateMoveUp = stateMoveUp;
 				}
 				if (input.GetState(static_cast<int>(GameActions::MoveDown), stateMoveDown) && previousStateMoveDown != stateMoveDown)
 				{
-					std::cout << "MoveDown state - " << GetNameForState(stateMoveDown) << std::endl;
 					previousStateMoveDown = stateMoveDown;
 				}
 				if (input.GetState(static_cast<int>(GameActions::MoveLeft), stateMoveLeft) && previousStateMoveLeft != stateMoveLeft)
 				{
-					std::cout << "MoveLeft state - " << GetNameForState(stateMoveLeft) << std::endl;
 					previousStateMoveLeft = stateMoveLeft;
 				}
 				if (input.GetState(static_cast<int>(GameActions::MoveRight), stateMoveRight) && previousStateMoveRight != stateMoveRight)
 				{
-					std::cout << "MoveRight state - " << GetNameForState(stateMoveRight) << std::endl;
 					previousStateMoveRight = stateMoveRight;
 				}
 				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && stateExit == ButtonsState::JustPressed)
@@ -302,17 +330,14 @@ int main()
 				}
 				if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && previousStateChoose != stateChoose)
 				{
-					std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
 					previousStateChoose = stateChoose;
 				}
 				if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
 				{
-					std::cout << "SuperShoot state - " << GetNameForState(statePowerfullShoot) << std::endl;
 					previousPowerfullShoot = statePowerfullShoot;
 				}
 				if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
 				{
-					std::cout << "Shoot state - " << GetNameForState(stateShoot) << std::endl;
 					previousStateShoot = stateShoot;
 				}
 			}
@@ -457,7 +482,7 @@ int main()
 			achievementsManager.Update(fixedTime, ui);
 			fixedTime = sf::Time::Zero;
 		}
-		rw.clear();
+	
 		//Rendering update
 		//for (int i = 0; i < numOfObjects; ++i)
 		//{

@@ -82,7 +82,7 @@ void UI::Render()
 
 void UI::OnAchive(const std::string & name, const std::string & description,sf::Image * picture)
 {
-	Get<AchievementShower>("achivementShower")->ImplementAchivement(name,description,picture,2500);
+	Get<AchievementShower>("achivementShower")->ImplementAchivement(name,description,picture,5000);
 }
 
 void UI::SetPostion(const std::string & key, const PercentXY relCoord)
