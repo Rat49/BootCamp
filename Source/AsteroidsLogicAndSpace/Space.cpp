@@ -175,8 +175,8 @@ Space::~Space()
 		}
 	}
 
-	for (auto *explosion : _explosions)
+	for (auto &explosion : _explosions)
 	{
-			_poolExplosion.Put(explosion);
+		_poolExplosion.Put(explosion);
 	}
 }
