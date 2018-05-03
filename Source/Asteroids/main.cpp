@@ -70,6 +70,9 @@ public:
 
 int main()
 {
+	/*
+	ConfigManagers, DrawableManager and Dispatcher Initialization
+	*/
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
@@ -78,7 +81,6 @@ int main()
 	/*
 	ResourceManager Initialization
 	*/
-
 	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
 	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").GetParams()));
 	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").GetParams()));
@@ -96,28 +98,22 @@ int main()
 	ResourceManager *rm = new ResourceManager(resourceConfig);
 	GameOverManager gameOverManager(rm);
 
+
 	/*
 	InputManager Initialization
 	*/
-
 	std::multimap<int, ButtonKey_t> actions;
 	LogCategory category = cm1->GetCategory("Input");
 	std::multimap<const std::string, const std::string> inputCategory = category.GetParams();
+
 	for (auto i : inputCategory)
 	{
 		int a = atoi(i.first.c_str());
 		int b = atoi(i.second.c_str());
 		actions.insert(std::pair<int, int>(a, b));
 	}
+
 	InputManager input(actions);
-	ButtonsState previousStateMoveUp = ButtonsState::Released;
-	ButtonsState previousStateMoveDown = ButtonsState::Released;
-	ButtonsState previousStateMoveLeft = ButtonsState::Released;
-	ButtonsState previousStateMoveRight = ButtonsState::Released;
-	ButtonsState previousStateExit = ButtonsState::Released;
-	ButtonsState previousStateChoose = ButtonsState::Released;
-	ButtonsState previousStateShoot = ButtonsState::Released;
-	ButtonsState previousPowerfullShoot = ButtonsState::Released;
 
 	ButtonsState stateMoveUp;
 	ButtonsState stateMoveDown;
@@ -128,26 +124,26 @@ int main()
 	ButtonsState stateShoot;
 	ButtonsState statePowerfullShoot;
 
+
 	/*
 	For Audio
 	*/
+	AudioResource * achievementSound = rm->GetResource<AudioResource>("achievementSound");
 
-	//AudioResource* shootingSound = rm->GetResource<AudioResource>("piupiu");
-	//AudioResource* explosionSound = rm->GetResource<AudioResource>("booom");
 
 	/*
 	For SpaceShip
 	*/
-
 	ImageSequenceResource* spaceshipImgseq = rm->GetResource<ImageSequenceResource>("spaceship");
 	ImageSequenceResource* flickeringImgseq = rm->GetResource<ImageSequenceResource>("spaceshipFlickering");
 	TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
 
 	std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
-	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq);
+	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq, *rm);
 	spaceship->AddToDrawableManager();
 	BulletManager bulletManager(*bulletTexture, *rocketTexture);
+
 
 	/*
 	For Physics
@@ -164,19 +160,15 @@ int main()
 	CollisionEventBetweenAmmunitionAndSpaceship collisionAmmunitionVsSpaceship;
 	CollisionEventBetweenAmmunitionAndAsteroid collisionAmmunitionVsAsteroid;
 
+
 	/*
 	Game Loop
 	*/
-
-	//sf::RenderWindow rw(sf::VideoMode::getDesktopMode(), "Asteroids");
 	sf::RenderWindow rw(sf::VideoMode(1200, 800), "Asteroids");
 	WindowResolution::SetResolution(rw);
 
 	TextureResource* resetButton = rm->GetResource<TextureResource>("resetButton");
-	/*sf::Sprite resetButtonSprite;
-	resetButtonSprite.setTexture(resetButton->Get());
-	resetButtonSprite.setPosition({ (WindowResolution::_W - resetButtonSprite.getLocalBounds().width) / 2.f, (WindowResolution::_H - resetButtonSprite.getLocalBounds().height) / 2.f });
-	*/
+
 	AnimationPlayer* gameOverFlickering;
 	ImageSequenceResource* gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");;
 	sf::Sprite gameOverSprite;
@@ -187,15 +179,16 @@ int main()
 
 
 	sf::Event sysEvent;
-	UI ui(rw);
+	
 
 	/*
 	For UI
 	*/
+	UI ui(rw);
 	sf::Font font;
-	sf::Image healthHearth;
-	sf::Image bullets;
-	sf::Image rockets;
+	sf::Texture healthHearth;
+	sf::Texture bullets;
+	sf::Texture rockets;
 	sf::Image achievements;
 	font.loadFromFile("Resources/font/arial.ttf");
 	healthHearth.loadFromFile("Resources/graphics/Health.png");
@@ -221,11 +214,12 @@ int main()
 
 
 	sf::Image* ptrAchievements = &achievements;
-	AchievementsManager achievementsManager(achievementCM, ptrAchievements);
+	AchievementsManager achievementsManager(achievementCM, ptrAchievements, *achievementSound);
+
+
 	/*
 	For Space
 	*/
-
 	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroidTexture");
 
 	sf::Texture asteroidTexture = asteroid->Get();
@@ -235,15 +229,16 @@ int main()
 
 	const int totalCountAsteroids = 100;
 	const int totalCountStar = (WindowResolution::_W / 50) * (WindowResolution::_H / 50) + 10;
-	Space space(totalCountAsteroids, totalCountStar, rw.getSize());
-
+	Space space(totalCountAsteroids, totalCountStar, rw.getSize(), *rm);
 
 	int _nStars = (WindowResolution::_W / 50) * (WindowResolution::_H / 50) - 300;
-	int _nAsteroids = (WindowResolution::_W / 200) + (WindowResolution::_H / 200) +10;
+	int _nAsteroids = (WindowResolution::_W / 200) + (WindowResolution::_H / 200) - 5;
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
 	space.AddAmmunition(rm);
+
+
 	/*
 	DebugCommandManager manager
 	*/
@@ -273,10 +268,13 @@ int main()
 
 	spaceship->SetColliderVisible(false);
 	space.SetColliderVisible(false);
+
+
 	/*
 	For Debug Console
 	*/
 	DebugConsole debugConsole(rw);
+
 
 	/*
 	For Log
@@ -309,10 +307,7 @@ int main()
 		}
 		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
 		{
-			gameOverManager.Update(fixedTime);
-			fixedTime = sf::Time::Zero;
-			ui.Get<PictureButton>("resetButton")->isVisible = true;
-			
+			fixedTime = sf::Time::Zero;	
 		}
 
 
@@ -321,10 +316,7 @@ int main()
 			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<SfmlButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
 			{
 				ResetGameEvent resetGameEvent;
-				//ui.SetPostion("start", PercentXY((rand() % 1000) / 10.0f, (rand() % 1000) / 10.0f));
 				dispatcher.Send(resetGameEvent, EventTypes::resetGameEventID);
-				std::cout << "Click" << std::endl;
-				//ui.Get<SfmlButton>("resetButton")->SetFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256, rand() % 256));
 			}
 
 			if (input.GetMode() == InputMode::Raw || input.GetMode() == InputMode::PausedRaw)
@@ -341,39 +333,13 @@ int main()
 		if (fixedTime > fixedUpdateTime)
 		{
 
+			size_t bulletsSize = bulletManager.bullets.size();
+			size_t rocketSize = bulletManager.rockets.size();
 			//Input update
 			{
-				if (input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && previousStateMoveUp != stateMoveUp)
-				{
-					previousStateMoveUp = stateMoveUp;
-				}
-				if (input.GetState(static_cast<int>(GameActions::MoveDown), stateMoveDown) && previousStateMoveDown != stateMoveDown)
-				{
-					previousStateMoveDown = stateMoveDown;
-				}
-				if (input.GetState(static_cast<int>(GameActions::MoveLeft), stateMoveLeft) && previousStateMoveLeft != stateMoveLeft)
-				{
-					previousStateMoveLeft = stateMoveLeft;
-				}
-				if (input.GetState(static_cast<int>(GameActions::MoveRight), stateMoveRight) && previousStateMoveRight != stateMoveRight)
-				{
-					previousStateMoveRight = stateMoveRight;
-				}
 				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && (stateExit == ButtonsState::JustPressed || stateExit == ButtonsState::Pressed))
 				{
 					rw.close();
-				}
-				if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && /*previousStateChoose != stateChoose*/ stateChoose == ButtonsState::JustPressed )
-				{
-					previousStateChoose = stateChoose;
-				}
-				if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
-				{
-					previousPowerfullShoot = statePowerfullShoot;
-				}
-				if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
-				{
-					previousStateShoot = stateShoot;
 				}
 			}
 			//Audio update
@@ -381,8 +347,6 @@ int main()
 
 			size_t n = space.asteroids.size();
 			size_t m = space.asteroids.size();
-			size_t bulletsSize = bulletManager.bullets.size();
-			size_t rocketSize = bulletManager.rockets.size();
 
 			for (size_t i = 0; i < n; ++i)
 			{
@@ -409,6 +373,12 @@ int main()
 					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndSpaceship);
 				}
 
+				if (isReset)
+				{
+					isReset = false;
+					continue;
+				}
+
 				for (size_t j = 0; j < rocketSize; ++j)
 				{
 					if (Collided(*space.asteroids[i], *bulletManager.rockets[j]))
@@ -421,7 +391,9 @@ int main()
 						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndRocket);
 						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-						for (size_t k = 0; k < n; ++k) {
+
+						for (size_t k = 0; k < n; ++k) 
+						{
 							if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
 							{
 								collisionAsteroidVsRocket._asteroid = space.asteroids[k];
@@ -452,12 +424,6 @@ int main()
 						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet);
 					}
 				}
-
-				if (isReset)
-				{
-					isReset = false;
-					continue;
-				}
 			}
 			{
 				for (auto asteroid : space.asteroids)
@@ -471,6 +437,7 @@ int main()
 						dispatcher.Send(collisionAmmunitionVsAsteroid, collisionEventBetweenAmmunitionAndAsteroidId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndAsteroidId]);
 					}
 				}
+
 				if (Collided(*spaceship, *space.ammunition))
 				{
 					collisionAmmunitionVsSpaceship.spaceship = spaceship;
@@ -481,6 +448,7 @@ int main()
 					dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
 
 				}
+
 				for (auto rocket : bulletManager.rockets)
 				{
 					if (Collided(*rocket, *space.ammunition))
@@ -496,6 +464,7 @@ int main()
 					}
 					
 				}
+
 				for (auto bullet : bulletManager.bullets)
 				{
 					if (Collided(*bullet, *space.ammunition))
@@ -509,7 +478,7 @@ int main()
 						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet); 
 						dispatcher.Send(collisionAmmunitionVsBullet, collisionEventBetweenAmmunitionAndBulletId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndBulletId]);
 					}
-				}				
+				}
 			}
 
 			space.Update(fixedTime.asSeconds());
@@ -520,11 +489,6 @@ int main()
 		}
 	
 		//Rendering update
-		//for (int i = 0; i < numOfObjects; ++i)
-		//{
-		//	rw.draw(circles[i]);
-		//}
-		//
 		//DebugConsole 
 		if (debugConsole.getActiveConsoleStatus())
 		{

@@ -3,11 +3,11 @@
 
 
 Rocket::Rocket()
-	: _speedValuePixelsPerSecond(200.0f)
+	: _speedValuePixelsPerSecond(300.0f)
 	, _rocketSprite()
 	, _rocketTexture()
 	, _speedDelayTime(sf::seconds(1.0f))
-	, _deltaSpeedValue(600.0f)
+	, _deltaSpeedValue(700.0f)
 	, _rocketScale(1.0f, 1.0f)
 	, _halfSpriteLength(0.0f)
 {

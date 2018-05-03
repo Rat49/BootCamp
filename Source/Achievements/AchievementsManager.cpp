@@ -1,10 +1,11 @@
 #include "AchievementsManager.h"
 
-AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture)
+AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture, AudioResource &audio)
 	:_achievementPicture(achievementPicture),
 	_afterFirstBigAsteroidFrag(sf::seconds(0.0f)),
 	_afterFirstMiddleAsteroidFrag(sf::seconds(0.0f)),
-	_afterFirstSmallAsteroidFrag(sf::seconds(0.0f))
+	_afterFirstSmallAsteroidFrag(sf::seconds(0.0f)),
+	_audio(audio)
 {
 	auto achievementsList = achievementCM->GetCategory("AchievementsList").GetParams();
 	for (const auto& achiev : achievementsList)
@@ -149,7 +150,7 @@ void AchievementsManager::ActiveStatusCheck(Achievement& achiev)
 	achiev.SetDateCompleteAchievements(dateBuffer);
 }
 
-void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI,AudioResource &audio)
+void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
 {
 	_noDamageTimer += deltaTime;
 	_destroyTimer += deltaTime;
@@ -168,7 +169,7 @@ void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI,AudioRes
 		if (it->GetAchievedActive())
 		{
 			achievUI.OnAchive(it->GetDisplayName(), it->GetDisplayDescriptionName(), _achievementPicture);
-			audio.Get().play();
+			_audio.Get().play();
 			it = _achievementsStorage.erase(it);
 		}
 		else

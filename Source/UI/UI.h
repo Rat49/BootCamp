@@ -53,6 +53,8 @@ public:
 	}
 	Token_t _tokenUI;
 	Token_t _tokenWeaponUI;
+	Token_t gameOver;
+	Token_t gameReset;
 	void OnChangedSpaceshipState(const Event & event);
 	void OnResize();
 	void Render();

@@ -8,7 +8,7 @@
 class Space
 {
 public:
-	Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize);
+	Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize, ResourceManager &rm);
 
 	void AddExplosion(const Event & cEvent);
 
@@ -33,5 +33,6 @@ private:
 	std::vector<ExplosionParticle *> _explosions;
 	sf::Vector2u _sizeSpace;
 	size_t _countSmallDeadAsteroids;
+	AudioResource * _crashSound;
 
 };
