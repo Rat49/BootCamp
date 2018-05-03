@@ -12,7 +12,7 @@ public:
 	virtual void SetOutlineColor(const sf::Color & color);
 	virtual void SetSize(const sf::Vector2f size);
 
-	void SetText(const std::string& text);
+	void SetText(const std::string& text, const sf::Font& font);
 	void SetColorText(const sf::Color& color);
 	void SetCharSize(const unsigned int size);
 	

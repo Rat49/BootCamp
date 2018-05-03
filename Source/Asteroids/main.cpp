@@ -125,9 +125,9 @@ int main()
 	*/
 	UI ui(rw);
 	sf::Font font;
-	sf::Image healthHearth;
-	sf::Image bullets;
-	sf::Image rockets;
+	sf::Texture healthHearth;
+	sf::Texture bullets;
+	sf::Texture rockets;
 	sf::Image achievements;
 	font.loadFromFile("Resources/font/arial.ttf");
 	healthHearth.loadFromFile("Resources/graphics/Health.png");
