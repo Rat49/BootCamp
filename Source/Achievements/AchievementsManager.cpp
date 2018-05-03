@@ -176,3 +176,16 @@ void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
 		}
 	}	
 }
+
+void AchievementsManager::Reset()
+{
+	for (auto& achiev : _achievementsStorage)
+	{
+		if (achiev.GetAchievedActive())
+		{
+			continue;
+		}
+
+		achiev.SetProgressState(0.0f);
+	}
+}
