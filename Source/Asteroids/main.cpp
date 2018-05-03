@@ -213,6 +213,14 @@ int main()
 	*/
 	Logger& log = Logger::GetInstance();
 
+	Token_t gameOver = dispatcher.Connect(gameOverEventID, [&](const Event& event)
+	{
+		space.Reset(_nAsteroids, spriteAsteroid);
+		spaceship->Reset(spaceshipConfig);
+		bulletManager.Reset();
+		achievementsManager.Reset();
+	});
+
 	sf::Clock clock;
 	sf::Time fixedTime;
 	sf::Time deltaTime;
@@ -274,14 +282,8 @@ int main()
 				}
 				if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && /*previousStateChoose != stateChoose*/ stateChoose == ButtonsState::JustPressed )
 				{
-					//std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
-					//previousStateChoose = stateChoose;
-
-					space.Reset(_nAsteroids, spriteAsteroid);
-					spaceship->Reset(spaceshipConfig);
-					bulletManager.Reset();
-					achievementsManager.Reset();
-
+					std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
+					previousStateChoose = stateChoose;
 				}
 				if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
 				{
@@ -446,7 +448,7 @@ int main()
 		ui.Render();
 	}
 
-	
+	dispatcher.Disconnect(gameOverEventID, gameOver);
 	delete cm1;
 	delete achievementCM;
 	return 0;

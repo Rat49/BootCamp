@@ -130,17 +130,16 @@ void Space::Reset(const int asteroidCount, const sf::Sprite& asteroidSprite)
 {
 	for (auto &asteroid : asteroids)
 	{
-		if (!(_poolAsteroid.Count() == _poolAsteroid.MaxCount()))
-		{
-			asteroid->Remove();
-			_poolAsteroid.Put(asteroid);
-		}
+		_poolAsteroid.Put(asteroid);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(asteroid));
 	}
 	asteroids.clear();
 
 	for (auto *explosion : _explosions)
 	{
 		_poolExplosion.Put(explosion);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(&(explosion->particles)));
+		
 	}
 	_explosions.clear();
 
