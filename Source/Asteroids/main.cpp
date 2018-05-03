@@ -318,7 +318,7 @@ int main()
 						dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
 						dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
 					}
-				}
+				}				
 
 				if (Collided(*space.asteroids[i], *spaceship))
 				{
@@ -328,6 +328,12 @@ int main()
 					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
 					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
 					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndSpaceship);
+				}
+
+				if (isReset)
+				{
+					isReset = false;
+					continue;
 				}
 
 				for (size_t j = 0; j < rocketSize; ++j)
@@ -372,13 +378,7 @@ int main()
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndBullet);
 						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet);
 					}
-				}
-
-				if (isReset)
-				{
-					isReset = false;
-					continue;
-				}
+				}				
 			}
 			{
 				for (auto asteroid : space.asteroids)
