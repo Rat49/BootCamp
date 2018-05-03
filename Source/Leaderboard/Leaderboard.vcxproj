@@ -92,7 +92,7 @@
       <Command>expand "$(SolutionDir)PlayFab\lib\PlayFabSdk2015_d.cab" "$(SolutionDir)TEMP\PlayFabSdk2015_d.lib" </Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)PlayFab\bin\cpprest140_2_9.dll" "$(OutDir)\*.*" /F /R /Y /I</Command>
+      <Command>xcopy "$(SolutionDir)PlayFab\bin\cpprest140d_2_9.dll" "$(OutDir)\*.*" /F /R /Y /I</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>expand "$(SolutionDir)PlayFab\lib\PlayFabSdk2015_d.cab" "$(SolutionDir)TEMP\PlayFabSdk2015_d.lib" </Command>
