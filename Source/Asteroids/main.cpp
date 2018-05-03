@@ -22,12 +22,13 @@ std::string GetNameForState(ButtonsState bState) {
 int main()
 {
 	/*
-	ConfigManager, DrawableManager and Dispatcher Initialization
+	ConfigManagers, DrawableManager and Dispatcher Initialization
 	*/
 	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 	DrawableManager& drawableManager = DrawableManager::getInstance();
+	bool isReset = false;
 
 
 	/*
@@ -221,6 +222,7 @@ int main()
 		spaceship->Reset(spaceshipConfig);
 		bulletManager.Reset();
 		achievementsManager.Reset();
+		isReset = true;
 	});
 
 	sf::Clock clock;
@@ -340,6 +342,11 @@ int main()
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndBullet);
 						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet);
 					}
+				}
+				if (isReset)
+				{
+					isReset = false;
+					continue;
 				}
 			}
 			{
