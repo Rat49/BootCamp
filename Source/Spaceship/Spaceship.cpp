@@ -72,7 +72,11 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 			}
 			else
 			{
-				_HP -= _damage;
+				if (!_isDamaged)
+				{
+					_HP -= _damage;
+					_isDamaged = true;
+				}
 			}
 			_collisionSound->Get().play();
 			UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount,_maxLifeCount);
@@ -178,7 +182,7 @@ void Spaceship::SetFlickeringMode()
 	_spaceshipFlickering->Start();
 
 	_timeAfterDamage = sf::Time::Zero;
-	_isDamaged = true;
+	//_isDamaged = true;
 }
 
 void Spaceship::SetNormalMode()
@@ -378,6 +382,10 @@ void Spaceship::Reset(const std::multimap<const std::string, const std::string>&
 	_spaceshipSprite->setPosition({ positionX, positionY });
 	_spaceshipSprite->setRotation(0.0f);
 	_spaceshipAnimation->Reset();
+
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount, _maxLifeCount);
+	dispatcher.Send(updateSpaceshipStateEvent, EventTypes::updateSpaceshipStateEvent);
 }
 
 Spaceship::~Spaceship()

@@ -159,7 +159,6 @@ void BulletManager::Reset()
 		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(bullet));
 	}
 	bullets.clear();
-	std::cout << "Bullets count: " << bullets.size() << std::endl;
 	for (auto& rocket : rockets)
 	{
 		_particleStorage.Put(rocket->_rocketParticle);
@@ -167,6 +166,4 @@ void BulletManager::Reset()
 		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(rocket));
 	}
 	rockets.clear();
-	std::cout << "Rockets count: " << bullets.size() << std::endl;
-	std::cout << "Rocket particle storage: " << _particleStorage.Count() << std::endl;
 }
