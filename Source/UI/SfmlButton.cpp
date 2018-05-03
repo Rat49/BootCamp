@@ -48,8 +48,12 @@ void SfmlButton::SetSize(const sf::Vector2f size)
 	_body.setSize(size);
 }
 
-void SfmlButton::SetText(const std::string& text)
+void SfmlButton::SetText(const std::string& text,const sf::Font& font = sf::Font::Font())
 {
+	if (&font != &sf::Font::Font())
+	{
+		_text.setFont(font);
+	}
 	_text.setString(text);
 }
 
