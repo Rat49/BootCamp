@@ -1,7 +1,7 @@
 #include "OrdinaryBullet.h"
 
 OrdinaryBullet::OrdinaryBullet()
-	: _speedValuePixelsPerSecond(200.0f)
+	: _speedValuePixelsPerSecond(600.0f)
 	, _ordinaryBulletSprite()
 	, _bulletTexture()
 	, _bulletScale(1.0f, 1.0f)
