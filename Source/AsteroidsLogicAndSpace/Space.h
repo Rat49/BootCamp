@@ -17,6 +17,7 @@ public:
 	void AddSomeStars(const int count);
 	void AddSomeAsteroids(const int count, const sf::Sprite& sprite);
 	void Update(const float physicsStepTargetFrameTime);
+	void Reset(const int asteroidCount, const sf::Sprite& asteroidSprite);
 	void SetColliderVisible(bool param);
 	Token_t _createExplosion;
 	std::vector<Asteroid *> asteroids;

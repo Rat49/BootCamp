@@ -13,6 +13,28 @@ UI::UI(sf::RenderWindow & window) :
 	{
 		OnChangedSpaceshipStorage(event);
 	});
+
+
+	if (_widgets.find("resetButton") != _widgets.cend())
+	{
+		Get<PictureButton>("resetButton")->isVisible = true;
+	}
+
+	gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
+	{
+		if (_widgets.find("resetButton") != _widgets.cend())
+		{
+			Get<PictureButton>("resetButton")->isVisible = true;
+		}
+	});
+
+	gameReset = Dispatcher::getInstance().Connect(resetGameEventID, [&](const Event& event)
+	{
+		if (_widgets.find("resetButton") != _widgets.cend())
+		{
+			Get<PictureButton>("resetButton")->isVisible = false;
+		}
+	});
 }
 
 void UI::OnChangedSpaceshipStorage(const Event & event)
@@ -73,6 +95,7 @@ void UI::OnChangedSpaceshipStorage(const Event & event)
 
 void UI::Render()
 {
+
 	for (auto it : _widgets)
 	{
 		it.second->Draw();
@@ -82,7 +105,7 @@ void UI::Render()
 
 void UI::OnAchive(const std::string & name, const std::string & description,sf::Image * picture)
 {
-	Get<AchievementShower>("achivementShower")->ImplementAchivement(name,description,picture,5000);
+	Get<AchievementShower>("achivementShower")->ImplementAchivement(name,description,picture,sf::Time(sf::seconds(2)));
 }
 
 void UI::SetPostion(const std::string & key, const PercentXY relCoord)
@@ -102,30 +125,35 @@ sf::Vector2f UI::GetPosition(const std::string & key)
 	return _widgets[key]->GetPosition();
 }
 
-Widget * UI::CreateButton(const sf::Vector2f size, const PercentXY relPos, const std::string & name)
+Widget * UI::CreateButton(const sf::Font & font, const sf::Vector2f size, const PercentXY relativePos, const std::string & name)
 {	
 
-	return _widgets[name] = new SfmlButton(size, RelativeCordToAbs(relPos), name, _window);
+	return _widgets[name] = new SfmlButton(font,size, RelativeCordToAbs(relativePos), name, _window);
 }
 
-Widget * UI::CreateLabel(const std::string & content, const sf::Font & font, const PercentXY relPos, const std::string & name)
+Widget * UI::CreatePictureButton(const sf::Texture & picture, const PercentXY relativePos, const std::string & name)
 {
-	return _widgets[name] = new Label(content, font, RelativeCordToAbs(relPos), name, _window);
+	return _widgets[name] = new PictureButton(picture, RelativeCordToAbs(relativePos), name, _window);
 }
 
-Widget * UI::CreateScrollBar(const float length, const PercentXY relPos, const std::string & name)
+Widget * UI::CreateLabel(const std::string & content, const sf::Font & font, const PercentXY relativePos, const std::string & name)
 {
-	return _widgets[name] = new ScrollBar(length, RelativeCordToAbs(relPos), name, _window);
+	return _widgets[name] = new Label(content, font, RelativeCordToAbs(relativePos), name, _window);
 }
 
-Widget * UI::CreateAchivementShower(const sf::Font & font, const PercentXY relPos)
+Widget * UI::CreateScrollBar(const float length, const PercentXY relativePos, const std::string & name)
 {
-	return _widgets["achivementShower"] = new AchievementShower(font, RelativeCordToAbs(relPos), "achivementShowerName", "achivementShowerDescription", _window);
+	return _widgets[name] = new ScrollBar(length, RelativeCordToAbs(relativePos), name, _window);
 }
 
-Widget * UI::CreatePicture(const sf::Image & img, const PercentXY relPos, const std::string & name)
+Widget * UI::CreateAchivementShower(const sf::Font & font, const PercentXY relativePos)
 {
-	return _widgets[name] = new Picture(img, RelativeCordToAbs(relPos), name, _window);
+	return _widgets["achivementShower"] = new AchievementShower(font, RelativeCordToAbs(relativePos), "achivementShowerName", "achivementShowerDescription", _window);
+}
+
+Widget * UI::CreatePicture(const sf::Texture & img, const PercentXY relativePos, const std::string & name)
+{
+	return _widgets[name] = new Picture(img, RelativeCordToAbs(relativePos), name, _window);
 }
 
 void UI::RemoveWidget(const std::string & key)

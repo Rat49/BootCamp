@@ -35,6 +35,7 @@ public:
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
 	void SetDamage(unsigned int damage);
+	void Reset(const std::multimap<const std::string, const std::string>& spaceshipConfig);
 	
 private:
 	

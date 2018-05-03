@@ -18,6 +18,55 @@ std::string GetNameForState(ButtonsState bState) {
 	}
 }
 
+class GameOverManager : public Drawable
+{
+public:
+	AnimationPlayer* gameOverFlickering;
+	ImageSequenceResource* gameOverImseq;
+	sf::Sprite gameOverSprite;
+	Token_t gameOver;
+	Token_t gameReset;
+
+	GameOverManager(ResourceManager *rm){
+		gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");
+		gameOverFlickering = new AnimationPlayer(&gameOverSprite, gameOverImseq, true);
+		gameOverFlickering->Start();
+		_zOrder = 1; 
+
+		gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
+		{
+			AddToDrawableManager();
+		});
+
+		gameReset = Dispatcher::getInstance().Connect(resetGameEventID, [&](const Event& event)
+		{
+			RemoveFromDrawableManager();
+		});
+
+	}
+
+	void Update(sf::Time fixedTime) {
+		gameOverFlickering->Update(fixedTime);
+		gameOverSprite.setPosition({ (WindowResolution::_W - gameOverSprite.getTextureRect().width) / 2.f, 100 });
+	}
+
+	void AddToDrawableManager() {
+		DrawableManager::getInstance().AddDrawableObject(this);
+	}
+	void RemoveFromDrawableManager() {
+		DrawableManager::getInstance().RemoveDrawableObject(this);
+	}
+
+	void Draw(sf::RenderWindow& window)
+	{
+		window.draw(gameOverSprite);
+	}
+	int GetZOrder() const
+	{
+		return _zOrder;
+	}
+};
+
 
 int main()
 {
@@ -25,7 +74,7 @@ int main()
 	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
 	Dispatcher &   dispatcher = Dispatcher::getInstance();
 	DrawableManager& drawableManager = DrawableManager::getInstance();
-
+	bool isReset = false;
 	/*
 	ResourceManager Initialization
 	*/
@@ -45,6 +94,7 @@ int main()
 	}
 
 	ResourceManager *rm = new ResourceManager(resourceConfig);
+	GameOverManager gameOverManager(rm);
 
 	/*
 	InputManager Initialization
@@ -114,32 +164,6 @@ int main()
 	CollisionEventBetweenAmmunitionAndSpaceship collisionAmmunitionVsSpaceship;
 	CollisionEventBetweenAmmunitionAndAsteroid collisionAmmunitionVsAsteroid;
 
-	constexpr size_t numOfObjects = 10;
-	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
-	float           accumulatedFrameTime = 0.f;
-	sf::CircleShape circles[numOfObjects];
-	RigidBody * RigidBodies = new RigidBody[numOfObjects];
-	/*Init rigid bodies and implementation for them*/
-	for (int i = 0; i < numOfObjects / 2; i++)
-	{
-		const int idx = i * 2;
-		RigidBodies[idx].SetRadius(10);
-		RigidBodies[idx].SetCoordinates({ 500, 200.f + 60 * i });
-		RigidBodies[idx].SetSpeed({ 60, 15 });
-		RigidBodies[idx].SetMass(0.005f);
-
-		RigidBodies[idx + 1].SetRadius(25);
-		RigidBodies[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
-		RigidBodies[idx + 1].SetSpeed({ -100, 40 });
-		RigidBodies[idx + 1].SetMass(0.01f);
-	}
-
-	for (int i = 0; i < numOfObjects; ++i)
-	{
-		circles[i].setRadius(RigidBodies[i].GetRadius());
-		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
-	}
-
 	/*
 	Game Loop
 	*/
@@ -149,9 +173,10 @@ int main()
 	WindowResolution::SetResolution(rw);
 
 	TextureResource* resetButton = rm->GetResource<TextureResource>("resetButton");
-	sf::Sprite resetButtonSprite;
+	/*sf::Sprite resetButtonSprite;
 	resetButtonSprite.setTexture(resetButton->Get());
 	resetButtonSprite.setPosition({ (WindowResolution::_W - resetButtonSprite.getLocalBounds().width) / 2.f, (WindowResolution::_H - resetButtonSprite.getLocalBounds().height) / 2.f });
+	*/
 	AnimationPlayer* gameOverFlickering;
 	ImageSequenceResource* gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");;
 	sf::Sprite gameOverSprite;
@@ -191,7 +216,8 @@ int main()
 
 	ui.CreateAchivementShower(font, PercentXY(1, 1));
 
-	
+	ui.CreatePictureButton(resetButton->Get(), PercentXY(35, 50), "resetButton");
+	ui.Get<PictureButton>("resetButton")->isVisible = false;
 
 
 	sf::Image* ptrAchievements = &achievements;
@@ -213,7 +239,7 @@ int main()
 
 
 	int _nStars = (WindowResolution::_W / 50) * (WindowResolution::_H / 50) - 300;
-	int _nAsteroids = (WindowResolution::_W / 200) + (WindowResolution::_H / 200) - 5;
+	int _nAsteroids = (WindowResolution::_W / 200) + (WindowResolution::_H / 200) +10;
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
@@ -256,6 +282,16 @@ int main()
 	For Log
 	*/
 	Logger& log = Logger::GetInstance();
+
+	Token_t gameOver = dispatcher.Connect(resetGameEventID, [&](const Event& event)
+	{
+		space.Reset(_nAsteroids, spriteAsteroid);
+		spaceship->Reset(spaceshipConfig);
+		bulletManager.Reset();
+		achievementsManager.Reset();
+		isReset = true;
+	});
+
 	sf::Clock clock;
 	sf::Time fixedTime;
 	sf::Time deltaTime;
@@ -269,27 +305,27 @@ int main()
 
 		input.Update();
 		if (input.GetMode() == InputMode::GameOver) {
-			gameOverFlickering->Update(fixedTime);
-			rw.draw(resetButtonSprite);
-			rw.draw(gameOverSprite);
-			fixedTime = sf::Time::Zero;
-
+			gameOverManager.Update(fixedTime);
 		}
-
 		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
 		{
-			gameOverFlickering->Update(fixedTime);
-			gameOverSprite.setPosition({ (WindowResolution::_W - gameOverSprite.getTextureRect().width) / 2.f, 100 });
-			rw.draw(resetButtonSprite);
-			rw.draw(gameOverSprite);
+			gameOverManager.Update(fixedTime);
 			fixedTime = sf::Time::Zero;
-			std::cout << (WindowResolution::_W - gameOverSprite.getTextureRect().width) / 2.f << std::endl;
+			ui.Get<PictureButton>("resetButton")->isVisible = true;
 			
 		}
 
 
 		if (rw.pollEvent(sysEvent))
 		{
+			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<SfmlButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
+			{
+				ResetGameEvent resetGameEvent;
+				//ui.SetPostion("start", PercentXY((rand() % 1000) / 10.0f, (rand() % 1000) / 10.0f));
+				dispatcher.Send(resetGameEvent, EventTypes::resetGameEventID);
+				std::cout << "Click" << std::endl;
+				//ui.Get<SfmlButton>("resetButton")->SetFillColor(sf::Color(rand() % 256, rand() % 256, rand() % 256, rand() % 256));
+			}
 
 			if (input.GetMode() == InputMode::Raw || input.GetMode() == InputMode::PausedRaw)
 			{
@@ -323,12 +359,11 @@ int main()
 				{
 					previousStateMoveRight = stateMoveRight;
 				}
-				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && stateExit == ButtonsState::JustPressed)
+				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && (stateExit == ButtonsState::JustPressed || stateExit == ButtonsState::Pressed))
 				{
 					rw.close();
-					//previousStateExit = stateExit;
 				}
-				if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && previousStateChoose != stateChoose)
+				if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && /*previousStateChoose != stateChoose*/ stateChoose == ButtonsState::JustPressed )
 				{
 					previousStateChoose = stateChoose;
 				}
@@ -374,33 +409,33 @@ int main()
 					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndSpaceship);
 				}
 
-			for (size_t j = 0; j < rocketSize; ++j)
-			{
-				if (Collided(*space.asteroids[i], *bulletManager.rockets[j]))
+				for (size_t j = 0; j < rocketSize; ++j)
 				{
-					collisionAsteroidVsRocket._asteroid = space.asteroids[i];
-					collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
-					createExplosion.position = space.asteroids[i]->GetCoordinates();
-					ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
-					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndRocket);
-					dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
-					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-					for (size_t k = 0; k < n; ++k) {
-						if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
-						{
-							collisionAsteroidVsRocket._asteroid = space.asteroids[k];
-							collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
-							ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
-							createExplosion.position = space.asteroids[k]->GetCoordinates();
-							dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
-							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+					if (Collided(*space.asteroids[i], *bulletManager.rockets[j]))
+					{
+						collisionAsteroidVsRocket._asteroid = space.asteroids[i];
+						collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
+						createExplosion.position = space.asteroids[i]->GetCoordinates();
+						ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
+						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndRocket);
+						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
+						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+						for (size_t k = 0; k < n; ++k) {
+							if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
+							{
+								collisionAsteroidVsRocket._asteroid = space.asteroids[k];
+								collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
+								ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
+								createExplosion.position = space.asteroids[k]->GetCoordinates();
+								dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
+								dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 						
+							}
 						}
+						bulletManager.DeleteRocket(bulletManager.rockets[j]);
 					}
-					bulletManager.DeleteRocket(bulletManager.rockets[j]);
 				}
-			}
 
 				for (auto bullet : bulletManager.bullets)
 				{
@@ -416,6 +451,12 @@ int main()
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndBullet);
 						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet);
 					}
+				}
+
+				if (isReset)
+				{
+					isReset = false;
+					continue;
 				}
 			}
 			{
@@ -468,14 +509,9 @@ int main()
 						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet); 
 						dispatcher.Send(collisionAmmunitionVsBullet, collisionEventBetweenAmmunitionAndBulletId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndBulletId]);
 					}
-				}
+				}				
 			}
 
-			/*space.Update(deltaTime.asMilliseconds() / 1e3);
-			spaceship->Update(deltaTime);
-			bulletManager.Update(deltaTime);*/
-
-			//space.Update(fixedTime.asMilliseconds() / 1e3);
 			space.Update(fixedTime.asSeconds());
 			spaceship->Update(fixedTime);
 			bulletManager.Update(fixedTime);
@@ -498,7 +534,7 @@ int main()
 		ui.Render();
 	}
 
-	
+	dispatcher.Disconnect(gameOverEventID, gameOver);
 	delete cm1;
 	delete achievementCM;
 	return 0;
