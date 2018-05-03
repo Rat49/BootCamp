@@ -81,9 +81,10 @@ int main()
 	/*
 	For Audio
 	*/
-
-	//AudioResource* shootingSound = rm->GetResource<AudioResource>("piupiu");
-	//AudioResource* explosionSound = rm->GetResource<AudioResource>("booom");
+	AudioResource* bulletSound = rm->GetResource<AudioResource>("shoot");
+	AudioResource* rocketSound = rm->GetResource<AudioResource>("rocket");
+	AudioResource* explosionSound = rm->GetResource<AudioResource>("crash");
+	AudioResource * collisionSound = rm->GetResource<AudioResource>("collision");
 
 	/*
 	For SpaceShip
@@ -93,7 +94,7 @@ int main()
 	ImageSequenceResource* flickeringImgseq = rm->GetResource<ImageSequenceResource>("spaceshipFlickering");
 	TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
 	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
-
+	
 	std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
 	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq);
 	spaceship->AddToDrawableManager();
@@ -114,37 +115,10 @@ int main()
 	CollisionEventBetweenAmmunitionAndSpaceship collisionAmmunitionVsSpaceship;
 	CollisionEventBetweenAmmunitionAndAsteroid collisionAmmunitionVsAsteroid;
 
-	constexpr size_t numOfObjects = 10;
-	constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
-	float           accumulatedFrameTime = 0.f;
-	sf::CircleShape circles[numOfObjects];
-	RigidBody * RigidBodies = new RigidBody[numOfObjects];
-	/*Init rigid bodies and implementation for them*/
-	for (int i = 0; i < numOfObjects / 2; i++)
-	{
-		const int idx = i * 2;
-		RigidBodies[idx].SetRadius(10);
-		RigidBodies[idx].SetCoordinates({ 500, 200.f + 60 * i });
-		RigidBodies[idx].SetSpeed({ 60, 15 });
-		RigidBodies[idx].SetMass(0.005f);
-
-		RigidBodies[idx + 1].SetRadius(25);
-		RigidBodies[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
-		RigidBodies[idx + 1].SetSpeed({ -100, 40 });
-		RigidBodies[idx + 1].SetMass(0.01f);
-	}
-
-	for (int i = 0; i < numOfObjects; ++i)
-	{
-		circles[i].setRadius(RigidBodies[i].GetRadius());
-		circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
-	}
-
 	/*
 	Game Loop
 	*/
 
-	//sf::RenderWindow rw(sf::VideoMode::getDesktopMode(), "Asteroids");
 	sf::RenderWindow rw(sf::VideoMode(1200, 800), "Asteroids");
 	WindowResolution::SetResolution(rw);
 	sf::Event sysEvent;
@@ -248,8 +222,6 @@ int main()
 		deltaTime = clock.restart();
 		fixedTime += deltaTime;
 
-		//std::cout << "deltaTime = " << deltaTime.asMicroseconds() << "\n";
-
 		input.Update();
 		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
 		{
@@ -277,22 +249,18 @@ int main()
 			{
 				if (input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && previousStateMoveUp != stateMoveUp)
 				{
-					std::cout << "MoveUp state - " << GetNameForState(stateMoveUp) << std::endl;
 					previousStateMoveUp = stateMoveUp;
 				}
 				if (input.GetState(static_cast<int>(GameActions::MoveDown), stateMoveDown) && previousStateMoveDown != stateMoveDown)
 				{
-					std::cout << "MoveDown state - " << GetNameForState(stateMoveDown) << std::endl;
 					previousStateMoveDown = stateMoveDown;
 				}
 				if (input.GetState(static_cast<int>(GameActions::MoveLeft), stateMoveLeft) && previousStateMoveLeft != stateMoveLeft)
 				{
-					std::cout << "MoveLeft state - " << GetNameForState(stateMoveLeft) << std::endl;
 					previousStateMoveLeft = stateMoveLeft;
 				}
 				if (input.GetState(static_cast<int>(GameActions::MoveRight), stateMoveRight) && previousStateMoveRight != stateMoveRight)
 				{
-					std::cout << "MoveRight state - " << GetNameForState(stateMoveRight) << std::endl;
 					previousStateMoveRight = stateMoveRight;
 				}
 				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && stateExit == ButtonsState::JustPressed)
@@ -302,18 +270,17 @@ int main()
 				}
 				if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && previousStateChoose != stateChoose)
 				{
-					std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
 					previousStateChoose = stateChoose;
 				}
 				if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
 				{
-					std::cout << "SuperShoot state - " << GetNameForState(statePowerfullShoot) << std::endl;
 					previousPowerfullShoot = statePowerfullShoot;
+					rocketSound->Get().play();
 				}
 				if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
 				{
-					std::cout << "Shoot state - " << GetNameForState(stateShoot) << std::endl;
 					previousStateShoot = stateShoot;
+					bulletSound->Get().play();
 				}
 			}
 			//Audio update
@@ -336,6 +303,7 @@ int main()
 						ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
 						dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
 						dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
+						collisionSound->Get().play();
 					}
 				}
 
@@ -347,6 +315,7 @@ int main()
 					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
 					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
 					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndSpaceship);
+					collisionSound->Get().play();
 				}
 
 			for (size_t j = 0; j < rocketSize; ++j)
@@ -361,6 +330,7 @@ int main()
 					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndRocket);
 					dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 					dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+					collisionSound->Get().play();
 					for (size_t k = 0; k < n; ++k) {
 						if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
 						{
@@ -370,6 +340,7 @@ int main()
 							createExplosion.position = space.asteroids[k]->GetCoordinates();
 							dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 							dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+							explosionSound->Get().play();
 						
 						}
 					}
@@ -390,6 +361,7 @@ int main()
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndBullet);
 						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet);
+						explosionSound->Get().play();
 					}
 				}
 			}
@@ -403,6 +375,7 @@ int main()
 						ResolveCollision(*asteroid, *space.ammunition);
 						dispatcher.Send(collisionAmmunitionVsAsteroid, collisionEventID, asteroid->_tokens[collisionEventID]);
 						dispatcher.Send(collisionAmmunitionVsAsteroid, collisionEventBetweenAmmunitionAndAsteroidId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndAsteroidId]);
+						explosionSound->Get().play();
 					}
 				}
 				if (Collided(*spaceship, *space.ammunition))
@@ -413,6 +386,7 @@ int main()
 					dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, spaceship->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
 					space.ammunition->capacity = 0;
 					dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
+					explosionSound->Get().play();
 
 				}
 				for (auto rocket : bulletManager.rockets)
@@ -426,6 +400,7 @@ int main()
 						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 						dispatcher.Send(collisionAmmunitionVsRocket, collisionEventBetweenAmmunitionAndRocketId, rocket->_tokens[collisionEventBetweenAmmunitionAndRocketId]);
 						dispatcher.Send(collisionAmmunitionVsRocket, collisionEventBetweenAmmunitionAndRocketId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndRocketId]);
+						explosionSound->Get().play();
 						bulletManager.DeleteRocket(rocket);
 					}
 					
@@ -442,15 +417,11 @@ int main()
 						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet); 
 						dispatcher.Send(collisionAmmunitionVsBullet, collisionEventBetweenAmmunitionAndBulletId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndBulletId]);
+						explosionSound->Get().play();
 					}
 				}
 			}
 
-			/*space.Update(deltaTime.asMilliseconds() / 1e3);
-			spaceship->Update(deltaTime);
-			bulletManager.Update(deltaTime);*/
-
-			//space.Update(fixedTime.asMilliseconds() / 1e3);
 			space.Update(fixedTime.asSeconds());
 			spaceship->Update(fixedTime);
 			bulletManager.Update(fixedTime);

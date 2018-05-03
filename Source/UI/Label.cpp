@@ -39,7 +39,7 @@ void Label::SetStyle(sf::Text::Style style)
 
 void Label::SetString(const std::string content)
 {
-	_content.setString(content);
+  	_content.setString(content);
 }
 
 //
