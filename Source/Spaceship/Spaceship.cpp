@@ -367,6 +367,7 @@ void Spaceship::Reset(const std::multimap<const std::string, const std::string>&
 	_liveCount = atoi(spaceshipConfig.find("LifeCount")->second.c_str());
 	_HP = atoi(spaceshipConfig.find("HP")->second.c_str());
 	_damage = atoi(spaceshipConfig.find("Damage")->second.c_str());
+	_spaceshipDirection = _initialDirection;
 	_speedDirection = GetNormalizedVelocity(GetSpeed());
 	_spaceshipSprite->setPosition({ positionX, positionY });
 	_spaceshipSprite->setRotation(0.0f);

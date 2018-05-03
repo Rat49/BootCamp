@@ -212,6 +212,7 @@ int main()
 	For Log
 	*/
 	Logger& log = Logger::GetInstance();
+
 	sf::Clock clock;
 	sf::Time fixedTime;
 	sf::Time deltaTime;
@@ -275,9 +276,11 @@ int main()
 				{
 					//std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
 					//previousStateChoose = stateChoose;
+
 					space.Reset(_nAsteroids, spriteAsteroid);
 					spaceship->Reset(spaceshipConfig);
 					bulletManager.Reset();
+					achievementsManager.Reset();
 
 				}
 				if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
