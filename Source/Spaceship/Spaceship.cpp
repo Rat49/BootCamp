@@ -382,8 +382,8 @@ void Spaceship::Reset(const std::multimap<const std::string, const std::string>&
 	_spaceshipSprite->setPosition({ positionX, positionY });
 	_spaceshipSprite->setRotation(0.0f);
 	_spaceshipAnimation->Reset();
-	_rocketCount = 90;
-	_bulletCount = 10;
+	_rocketCount = 10;
+	_bulletCount = 90;
 
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	UpdateSpaceshipStateEvent updateSpaceshipStateEvent(_HP, _liveCount, _maxLifeCount);
