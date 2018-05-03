@@ -10,13 +10,13 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 	, _spaceshipAnimationImseq(spaceshipAnimationImseq)
 	, _spaceshipFlickeringImseq(spaceshipFlickeringImseq)
 	, _rotationAngle(5.0f)
-	, _acceleration(25.0f)
+	, _acceleration(15.0f)
 	, _maxSquareSpeed(50000.0f)
 	, _flickeringTime(sf::seconds(1.0f))
-	, _timeAfterDamage(sf::seconds(0.0f))
+	, _timeAfterDamage(sf::Time::Zero)
 	, _input(input)	
 	, _inputTime(sf::milliseconds(10))
-	, _inputAccumulatedTime(sf::milliseconds(0))
+	, _inputAccumulatedTime(sf::Time::Zero)
 	, _rechargeRocketTime(sf::seconds(0.5f))
 	, _rechargeBulletTime(sf::seconds(0.2f))
 	, _bulletRebound(5.0f)
@@ -41,6 +41,7 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 	_zOrder = 1;
 	_spaceshipSprite = new sf::Sprite();
 	_speedDirection = GetNormalizedVelocity(GetSpeed());
+	_spaceshipSpeed = GetSpeed();
 	_spaceshipAnimation = new AnimationPlayer(_spaceshipSprite, &spaceshipAnimationImseq, true);
 	_spaceshipFlickering = new AnimationPlayer(_spaceshipSprite, &spaceshipFlickeringImseq, true);
 	_spaceshipSprite->setPosition({positionX, positionY});
@@ -153,20 +154,22 @@ void Spaceship::RotateSpaceship(float degreeAngle)
 
 void Spaceship::ControlSpeed(float deltaSpeed)
 {
-	float speedValue = std::sqrt(GetSquaredLength(GetSpeed()));
+	float speedValue = std::sqrt(GetSquaredLength(_spaceshipSpeed));
 
 	if (!((_speedDirection == _spaceshipDirection) || (_speedDirection == -_spaceshipDirection)))
 	{
 		_speedDirection = deltaSpeed > 0 ? _spaceshipDirection : -_spaceshipDirection;
 
 		SetSpeed(_speedDirection * speedValue);
+		_spaceshipSpeed = GetSpeed();
 	}
 
-	sf::Vector2f newSpeed = GetSpeed() + deltaSpeed * _spaceshipDirection;
+	sf::Vector2f newSpeed = _spaceshipSpeed + deltaSpeed * _spaceshipDirection;
 
 	if (GetSquaredLength(newSpeed) < _maxSquareSpeed)
 	{
 		SetSpeed(newSpeed);
+		_spaceshipSpeed = GetSpeed();
 	}
 }
 
@@ -182,7 +185,6 @@ void Spaceship::SetFlickeringMode()
 	_spaceshipFlickering->Start();
 
 	_timeAfterDamage = sf::Time::Zero;
-	//_isDamaged = true;
 }
 
 void Spaceship::SetNormalMode()
@@ -229,7 +231,7 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	ButtonsState stateShoot;
 	ButtonsState stateSuperShoot;
 
-	_input.Update();
+	//_input.Update();
 	if (_input.GetState(static_cast<int>(GameActions::MoveLeft), stateMoveLeft) && (stateMoveLeft == ButtonsState::JustPressed || stateMoveLeft == ButtonsState::Pressed))
 	{
 		if (_inputAccumulatedTime < _inputTime)
@@ -290,7 +292,10 @@ void Spaceship::Update(const sf::Time& deltaTime)
 	
 	_timeAfterPowerfulShot += deltaTime;
 	_timeAfterBulletShot += deltaTime;
-	RigidBody::Update(deltaTime.asSeconds());
+
+	//RigidBody::Update(deltaTime.asSeconds());
+	SetSpeed(_spaceshipSpeed);
+	SetCoordinates(GetCoordinates() + _spaceshipSpeed * deltaTime.asSeconds());
 
 	if(GetX() > WindowResolution::_W)
 	{

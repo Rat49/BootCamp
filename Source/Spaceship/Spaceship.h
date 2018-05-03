@@ -43,6 +43,7 @@ private:
 	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;
 	sf::Vector2f _speedDirection;
+	sf::Vector2f _spaceshipSpeed;
 	sf::Sprite* _spaceshipSprite;
 	AnimationPlayer* _spaceshipAnimation;
 	ImageSequenceResource& _spaceshipAnimationImseq;
