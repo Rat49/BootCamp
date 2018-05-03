@@ -104,7 +104,6 @@ void InputManager::Update()
 					_mode = InputMode::Paused;
 					break;
 				}
-				//_mode = (GetMode() == InputMode::Raw) ? InputMode::Normal : InputMode::Raw;
 			}
 			else if (action.primary == sf::Keyboard::Pause && action.state == ButtonsState::JustPressed)
 			{
@@ -124,7 +123,6 @@ void InputManager::Update()
 					_mode = InputMode::Raw;
 					break;
 				}
-				//_mode = (GetMode() == InputMode::Paused) ? InputMode::Normal : InputMode::Paused;
 				std::cout << "PAUSE" << std::endl;
 			}
 		}
