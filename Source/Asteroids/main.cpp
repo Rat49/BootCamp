@@ -183,7 +183,7 @@ int main()
 
 	ui.CreateAchivementShower(font, PercentXY(1, 1));
 
-	ui.CreatePictureButton(resetButton->Get(), PercentXY(35, 50), "resetButton");
+	ui.CreatePictureButton(resetButton->Get(), PercentXY(50, 50), "resetButton");
 	ui.Get<PictureButton>("resetButton")->isVisible = false;
 
 	TextureResource* pause = rm->GetResource<TextureResource>("pause");
