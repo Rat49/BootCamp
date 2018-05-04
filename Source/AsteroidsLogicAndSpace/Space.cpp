@@ -87,7 +87,7 @@ void Space::Update(const float physicsStepTargetFrameTime)
 					asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace, asteroid->IsColliderVisible());
 					asteroids.push_back(asteroidNew);
 					_countSmallDeadAsteroids = 0;
-					std::cout << asteroidNew->GetCoordinates().x << ", " << asteroidNew->GetCoordinates().y << std::endl;
+					
 				}
 			}
 
