@@ -98,7 +98,7 @@ void MainMenu::HandleButtons() {
 			break;
 
 		case LEADERBOARD_PANEL:
-
+			ShowLeaderboard();
 			if (goBackButton->IsClicked(mousePosition)) {
 				activePanel = MENU_PANEL;
 			}
