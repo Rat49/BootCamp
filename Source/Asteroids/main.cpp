@@ -173,16 +173,16 @@ int main()
 	TextureResource* rockets = rm->GetResource<TextureResource>("rockets");
 	PictureResource* achievements = rm->GetResource<PictureResource>("achievements");;
 
-	ui.CreateLabel("90", font, PercentXY(17, 0), "bulletCount");
-	ui.CreatePicture(bullets->Get(), PercentXY(20, 1), "bullets");
-	ui.CreateLabel("10", font, PercentXY(25, 0), "rocketCount");
-	ui.CreatePicture(rockets->Get(), PercentXY(28, 1), "rockets");
+	ui.CreateLabel("90", font, PercentXY(17, 1), "bulletCount");
+	ui.CreatePicture(bullets->Get(), PercentXY(14, 2), "bullets");
+	ui.CreateLabel("10", font, PercentXY(25, 1), "rocketCount");
+	ui.CreatePicture(rockets->Get(), PercentXY(22, 2), "rockets");
 
-	ui.CreatePicture(healthHearth->Get(), PercentXY(6, 1), "Life0");
-	ui.CreatePicture(healthHearth->Get(), PercentXY(8, 1), "Life1");
-	ui.CreatePicture(healthHearth->Get(), PercentXY(10, 1), "Life2");
-	ui.CreateLabel("100", font, PercentXY(0, 0), "HP");
-	ui.CreateLabel("0", font, PercentXY(95, 0), "score");
+	ui.CreatePicture(healthHearth->Get(), PercentXY(5, 2), "Life0");
+	ui.CreatePicture(healthHearth->Get(), PercentXY(7, 2), "Life1");
+	ui.CreatePicture(healthHearth->Get(), PercentXY(9, 2), "Life2");
+	ui.CreateLabel("100", font, PercentXY(2, 1), "HP");
+	ui.CreateLabel("0", font, PercentXY(93, 1), "score");
 
 	ui.CreateAchivementShower(font, PercentXY(1, 1));
 

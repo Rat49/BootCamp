@@ -7,7 +7,7 @@ Label::Label(const std::string & content,const sf::Font & font, const sf::Vector
 	Widget(name,position,owner),
 	_content(content,font,32)
 {
-	
+	_content.setOrigin(_content.getLocalBounds().width / 2, _content.getLocalBounds().height / 2);
 }
 //
 //Setter
