@@ -230,8 +230,12 @@ int main()
 
 	sf::Image* ptrAchievements = &achievements;
 	AchievementsManager achievementsManager(achievementCM, ptrAchievements, *achievementSound);
-
-
+	/*
+	For Menu
+	*/
+	UI menu(rw);
+	menu.CreateButton(font, sf::Vector2f(100, 50), PercentXY(50, 50), "play");
+	menu.Get<SfmlButton>("play")->SetColorText(sf::Color::Black);
 	/*
 	For Space
 	*/
@@ -310,8 +314,21 @@ int main()
 	sf::Time deltaTime;
 	const sf::Time fixedUpdateTime = sf::milliseconds(3);
 
+	bool isGame = false;
 	while (rw.isOpen())
 	{
+		while (!isGame)
+		{
+			if (rw.pollEvent(sysEvent))
+			{
+				if (sysEvent.type == sf::Event::MouseButtonPressed && menu.Get<SfmlButton>("play")->IsClicked(sf::Mouse::getPosition(rw)))
+				{
+					isGame = true;
+				}
+				rw.clear();
+				menu.Render();
+			}
+		}
 		rw.clear();
 		deltaTime = clock.restart();
 		fixedTime += deltaTime;
