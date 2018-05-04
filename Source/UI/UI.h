@@ -57,6 +57,7 @@ public:
 	Token_t gameReset;
 	void OnChangedSpaceshipState(const Event & event);
 	void OnResize();
+	void OnChangeScore(int score);
 	void Render();
 	void OnAchive(const std::string & name, const std::string & description,sf::Image * picture);
 	void SetPostion(const std::string& key, const PercentXY relCoord);

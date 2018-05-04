@@ -51,35 +51,35 @@ void UI::OnChangedSpaceshipStorage(const Event & event)
 	}
 }
 
-	void UI::OnChangedSpaceshipState(const Event & event)
-	{
+void UI::OnChangedSpaceshipState(const Event & event)
+{
 
-		const UpdateSpaceshipStateEvent&  updateStateEvent = static_cast<const UpdateSpaceshipStateEvent&>(event);
-		if (_widgets["HP"] != nullptr)
+	const UpdateSpaceshipStateEvent&  updateStateEvent = static_cast<const UpdateSpaceshipStateEvent&>(event);
+	if (_widgets["HP"] != nullptr)
+	{
+		Get<Label>("HP")->SetString(std::to_string(updateStateEvent._HP));
+	}
+	std::string life("Life");
+	for (int i = 0; i < updateStateEvent._maxCountLife; ++i)
+	{
+		char symbol = i + '0';
+		life.push_back(symbol);
+		if (_widgets.find(life) != _widgets.cend())
 		{
-			Get<Label>("HP")->SetString(std::to_string(updateStateEvent._HP));
-		}
-		std::string life("Life");
-		for (int i = 0; i < updateStateEvent._maxCountLife; ++i)
-		{
-			char symbol = i + '0';
-			life.push_back(symbol);
-			if (_widgets.find(life) != _widgets.cend())
+			if (i < (updateStateEvent._countLife))
 			{
-				if (i < (updateStateEvent._countLife))
-				{
-					Get<Picture>(life)->_isVisible = true;
-				}
-				else
-				{
-					Get<Picture>(life)->_isVisible = false;
-				}
+				Get<Picture>(life)->_isVisible = true;
 			}
-			life.pop_back();
+			else
+			{
+				Get<Picture>(life)->_isVisible = false;
+			}
 		}
+		life.pop_back();
+	}
 }
 
-	void UI::OnResize()
+void UI::OnResize()
 {
 	
 	auto newSize = sf::Vector2i(_window.getSize().x, _window.getSize().y);
@@ -91,6 +91,14 @@ void UI::OnChangedSpaceshipStorage(const Event & event)
 	}
 	_window.setView(sf::View(sf::FloatRect(0, 0, newSize.x, newSize.y)));
 	Render();
+}
+
+void UI::OnChangeScore(int score)
+{
+	if (_widgets["score"] != nullptr)
+	{
+		Get<Label>("score")->SetString(std::to_string(score));
+	}
 }
 
 void UI::Render()
@@ -162,7 +170,6 @@ void UI::RemoveWidget(const std::string & key)
 	_widgets.erase(key);
 }
 
-
 Widget* UI::GetWidget(const std::string &key)
 {
 	auto iter = _widgets.find(key);
@@ -173,8 +180,6 @@ Widget* UI::GetWidget(const std::string &key)
 
 	return wid;
 }
-
-
 
 UI::~UI()
 {
