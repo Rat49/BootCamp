@@ -28,6 +28,12 @@ MainMenu* MainMenu::Create(sf::Vector2<float> windowSize, sf::Font& font, UI& ui
 	mm->volumeLabel = dynamic_cast<Label*>(ui.CreateLabel("Set the volume of sounds", font, PercentXY(50, 40), "VolumeLabel"));
 	mm->volumeBar = dynamic_cast<ScrollBar*>(ui.CreateScrollBar(buttonWidth, PercentXY(50, 60), "VolumeBar"));
 
+	for (unsigned i = 0; i < 10; ++i) {
+		for (unsigned j = 0; j < 3; ++j) {
+			mm->topScores[i][j] = dynamic_cast<Label*>(ui.CreateLabel("", font, PercentXY(j*33, i*10), "ScoreLabel"));
+		}
+	}
+
 	return mm;
 }
 
@@ -132,6 +138,7 @@ void MainMenu::Draw() {
 		break;
 
 	case LEADERBOARD_PANEL:
+		DrawLeaderboard();
 		goBackButton->Draw();
 	}
 }
@@ -262,9 +269,29 @@ MainMenu::~MainMenu() {
 void MainMenu::ShowLeaderboard() {
 	lboard->UpdateLocalLeaderboard();
 
-	//std::list<PlayFab::ClientModels::PlayerLeaderboardEntry> leaderboard;
+	int i = 0;
+	for (auto l : lboard->leaderboard)
+	{
+		std::ostringstream position, display, value;
 
-	//lboard->leaderboard;  //????
+		position << l.Position;
+		display << l.DisplayName;
+		value << l.StatValue;
 
+		topScores[i][1]->SetString(position.str());
+		topScores[i][1]->SetString(display.str());
+		topScores[i][2]->SetString(value.str());
 
+		++i;
+	}
+
+}
+
+void MainMenu::DrawLeaderboard() {
+
+	for (unsigned i = 0; i < topScores.size(); ++i) {
+		for (unsigned j = 0; j < topScores.size(); ++j) {
+			topScores[i][j]->Draw();
+		}
+	}
 }

@@ -40,6 +40,8 @@ private:
 	Label* volumeLabel;
 	ScrollBar* volumeBar;
 
+	std::vector<std::vector<Label*>> topScores;
+
 	Panels activePanel;
 	Status currentStatus;
 	float volumeValue;
@@ -67,4 +69,5 @@ private:
 	void EnterUserNameHandler();
 
 	void ShowLeaderboard();
+	void DrawLeaderboard();
 };
