@@ -12,10 +12,12 @@ public:
 
 	static MainMenu* Create(sf::Vector2<float> windowSize, sf::Font& font, UI& ui);
 	float GetVolume() { return volumeValue; }
-	Status GetCurrentStatus() {  };
+	Status GetCurrentStatus() { return currentStatus; };
 
 	void HandleButtons();
 	void Draw();
+
+	~MainMenu();
 
 private:
 
@@ -52,8 +54,6 @@ private:
 		currentStatus = MAIN_MENU;
 		lboard = Leaderboard::Create();
 	}
-
-	~MainMenu();
 
 	bool IsButtonPressed(Buttons buttonID) const;
 

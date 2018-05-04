@@ -12,7 +12,7 @@ MainMenu* MainMenu::Create(sf::Vector2<float> windowSize, sf::Font& font, UI& ui
 	int buttonWidth = width / 3;
 	int buttonHight = hight / 10;
 
-	sf::Vector2f buttonSize = {buttonWidth, buttonHight};
+	sf::Vector2f buttonSize = {(float)buttonWidth, (float)buttonHight};
 
 	mm->loginButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 30), "Login"));
 	mm->registerButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 35), "Register"));
@@ -155,6 +155,8 @@ bool MainMenu::IsButtonPressed(Buttons buttonID) const{
 			break;
 		case LEADERBOARD:
 			button = leaderboardButton;
+		default:
+			button = loginButton;
 	}
 
 	int x0 = button->GetPosition().x;

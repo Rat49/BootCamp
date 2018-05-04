@@ -33,6 +33,9 @@ namespace MainMenuTest {
 			rw.display();
 		}
 
+		if (mMenu != nullptr) {
+			delete mMenu;
+		}
 	}
 
 }
