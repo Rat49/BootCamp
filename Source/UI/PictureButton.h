@@ -7,7 +7,7 @@ class PictureButton :
 public:
 	friend UI;
 
-	bool isVisible;
+	bool _isVisible;
 	void OnResize() override;
 	void Draw() override;
 	~PictureButton();

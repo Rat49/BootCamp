@@ -68,9 +68,9 @@ void Space::Update(const float physicsStepTargetFrameTime)
 		{
 			if (asteroid->_type != AsteroidType::Small)
 			{
-				for (int j = 0; j < 2; ++j)
+				for (int j = 0; j < 4; ++j)
 				{
-					if (!_poolAsteroid.Empty() && rand()% 3 < 2 )
+					if (!_poolAsteroid.Empty() && rand()%2 + 1 < 3)
 					{
 						Asteroid* asteroidNew = _poolAsteroid.Get();
 						asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace, asteroid->IsColliderVisible());
@@ -81,12 +81,13 @@ void Space::Update(const float physicsStepTargetFrameTime)
 			else 
 			{
 				++_countSmallDeadAsteroids;
-				if (_countSmallDeadAsteroids >= 2)
+				if (_countSmallDeadAsteroids >= 16)
 				{
 					Asteroid* asteroidNew = _poolAsteroid.Get();
 					asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace, asteroid->IsColliderVisible());
 					asteroids.push_back(asteroidNew);
 					_countSmallDeadAsteroids = 0;
+					std::cout << asteroidNew->GetCoordinates().x << ", " << asteroidNew->GetCoordinates().y << std::endl;
 				}
 			}
 
@@ -98,15 +99,6 @@ void Space::Update(const float physicsStepTargetFrameTime)
 				--i;
 				_crashSound->Get().play();
 			}
-
-			if (_countSmallDeadAsteroids >= 16)
-			{
-				Asteroid* asteroidNew = _poolAsteroid.Get();
-				asteroidNew->Init(asteroid->_sprite, _sizeSpace);
-				asteroids.push_back(asteroidNew);
-				_countSmallDeadAsteroids = 0;
-			}
-			
 		}
 		asteroid->Update(physicsStepTargetFrameTime);
 	}

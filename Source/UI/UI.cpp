@@ -18,14 +18,14 @@ UI::UI(sf::RenderWindow & window) :
 
 	if (_widgets.find("resetButton") != _widgets.cend())
 	{
-		Get<PictureButton>("resetButton")->isVisible = true;
+		Get<PictureButton>("resetButton")->_isVisible = true;
 	}
 
 	gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
 	{
 		if (_widgets.find("resetButton") != _widgets.cend())
 		{
-			Get<PictureButton>("resetButton")->isVisible = true;
+			Get<PictureButton>("resetButton")->_isVisible = true;
 		}
 	});
 
@@ -33,7 +33,7 @@ UI::UI(sf::RenderWindow & window) :
 	{
 		if (_widgets.find("resetButton") != _widgets.cend())
 		{
-			Get<PictureButton>("resetButton")->isVisible = false;
+			Get<PictureButton>("resetButton")->_isVisible = false;
 		}
 	});
 }

@@ -52,13 +52,17 @@ void Leaderboard::UpdateUserTitleDisplayName(const std::string& name) {
 		Sleep(1);
 }
 
-std::list<PlayFab::ClientModels::PlayerLeaderboardEntry> Leaderboard::GetLeaderboard()
+std::string Leaderboard::GetLeaderboard()
 {
+	UpdateLocalLeaderboard();
+	std::string topScores;
 	for (auto i : leaderboard)
 	{
+		topScores.append(i.DisplayName + "\t");
+		topScores.append(std::to_string(i.StatValue) + "\n");
 		std::cout << i.DisplayName << "\t\t" << i.StatValue << std::endl;
 	}
-	return leaderboard;
+	return topScores;
 }
 void Leaderboard::UpdateLocalLeaderboard() {
 

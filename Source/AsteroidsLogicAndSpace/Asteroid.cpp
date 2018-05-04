@@ -194,7 +194,7 @@ void Asteroid::Init(const sf::Sprite &sprite, const sf::Vector2u &size)
 	_sprite = sprite;
 	_sizeSpace = size;
 
-	_type = static_cast<AsteroidType>(std::rand() % static_cast<uint8_t>(AsteroidType::Count));
+	_type = static_cast<AsteroidType>(std::rand() % (static_cast<uint8_t>(AsteroidType::Count)-1));
 	
 	SetParametersFromType(_type);
 	

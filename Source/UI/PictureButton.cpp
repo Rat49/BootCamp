@@ -2,7 +2,8 @@
 
 PictureButton::PictureButton(const sf::Texture& picture, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner):
 	SfmlButton(sf::Vector2f(0,0),position,name,owner),
-	_texture(picture)
+	_texture(picture),
+	_isVisible(true)
 {
 	_body.setSize(static_cast<sf::Vector2f>(picture.getSize()));
 	_picture.setOrigin(_body.getLocalBounds().width / 2, _body.getLocalBounds().height / 2);
@@ -18,7 +19,7 @@ void PictureButton::OnResize()
 
 void PictureButton::Draw()
 {
-	if (isVisible) {
+	if (_isVisible) {
 		_picture.setPosition(GetPosition());
 		_window.draw(_picture);
 	}

@@ -93,6 +93,9 @@ xcopy "$(SolutionDir)SFML\bin\sfml-system-2.dll" "$(OutDir)\*.*" /F /R /Y /I
 xcopy "$(SolutionDir)SFML\bin\sfml-window-2.dll" "$(OutDir)\*.*" /F /R /Y /I
 </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>expand "$(SolutionDir)PlayFab\lib\PlayFabSdk2015.cab" "$(SolutionDir)TEMP\PlayFabSdk2015.lib"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -115,6 +118,9 @@ xcopy "$(SolutionDir)SFML\bin\sfml-system-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
 xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
 </Command>
     </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>expand "$(SolutionDir)PlayFab\lib\PlayFabSdk2015_d.cab" "$(SolutionDir)TEMP\PlayFabSdk2015_d.lib"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
     <ClCompile>

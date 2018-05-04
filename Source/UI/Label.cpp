@@ -2,10 +2,11 @@
 
 
 
-Label::Label(const std::string & content,const sf::Font & font, const sf::Vector2f position, const std::string & name, 
-					sf::RenderWindow & owner):
-	Widget(name,position,owner),
-	_content(content,font,32)
+Label::Label(const std::string & content, const sf::Font & font, const sf::Vector2f position, const std::string & name,
+	sf::RenderWindow & owner) :
+	Widget(name, position, owner),
+	_content(content, font, 32),
+	_isVisible(true)
 {
 	_content.setOrigin(_content.getLocalBounds().width / 2, _content.getLocalBounds().height / 2);
 }
@@ -85,8 +86,11 @@ void Label::OnResize()
 
 void Label::Draw()
 {
-	_content.setPosition(GetPosition());
-	_window.draw(_content);	
+	if (_isVisible)
+	{
+		_content.setPosition(GetPosition());
+		_window.draw(_content);
+	}
 }
 
 

@@ -184,7 +184,7 @@ int main()
 	ui.CreateAchivementShower(font, PercentXY(1, 1));
 
 	ui.CreatePictureButton(resetButton->Get(), PercentXY(50, 90), "resetButton");
-	ui.Get<PictureButton>("resetButton")->isVisible = false;
+	ui.Get<PictureButton>("resetButton")->_isVisible = false;
 
 	TextureResource* pause = rm->GetResource<TextureResource>("pause");
 	ui.CreatePicture(pause->Get(),PercentXY(50,50),"pause");
@@ -198,9 +198,12 @@ int main()
 	TextureResource* background = rm->GetResource<TextureResource>("rocket");
 	TextureResource* play = rm->GetResource<TextureResource>("startButton");
 	TextureResource* exit = rm->GetResource<TextureResource>("exitButton");
+	TextureResource* leaders = rm->GetResource<TextureResource>("scoreButton");
 	UI menu(rw);
-	menu.CreatePictureButton(play->Get(), PercentXY(50, 50), "startButton");
+	menu.CreatePictureButton(play->Get(), PercentXY(50, 35), "startButton");
+	menu.CreatePictureButton(leaders->Get(), PercentXY(50, 50), "scoreButton");
 	menu.CreatePictureButton(exit->Get(), PercentXY(50, 65), "exitButton");
+	
 	menu.SetBackground(background->Get());
 	/*
 	For Space
@@ -217,7 +220,7 @@ int main()
 	Space space(totalCountAsteroids, totalCountStar, rw.getSize(), *rm);
 
 	int _nStars = (WindowResolution::_W / 50) * (WindowResolution::_H / 50) - 300;
-	int _nAsteroids = (WindowResolution::_W / 200) + (WindowResolution::_H / 200) - 5;
+	int _nAsteroids = (WindowResolution::_W / 200) + (WindowResolution::_H / 200);
 
 	space.AddSomeStars(_nStars);
 	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
@@ -273,16 +276,14 @@ int main()
 		achievementsManager.Reset();
 		leaderboard->UpdatePlayerStatistic(score);
 		leaderboard->UpdateLocalLeaderboard();
-		leaderboard->GetLeaderboard();
-
-		if (leaderboard != nullptr) {
-			delete leaderboard;
-		}
+		leaderboard->GetLeaderboard();	
 		score = 0;
 		ui.OnChangeScore(score);
 		isReset = true;
 	});
-
+	std::string topScore = leaderboard->GetLeaderboard();
+	menu.CreateLabel(topScore, font, PercentXY(10, 50), "leaderboard");
+	menu.Get<Label>("leaderboard")->_isVisible = false;
 	sf::Clock clock;
 	sf::Time fixedTime;
 	sf::Time deltaTime;
@@ -293,11 +294,10 @@ int main()
 	{
 		while (!isGame)
 		{
+			rw.clear();
+			menu.Render();
 			if (rw.pollEvent(sysEvent))
 			{
-
-				rw.clear();
-				menu.Render();
 				switch (sysEvent.type)
 				{
 				case sf::Event::MouseButtonPressed:
@@ -310,6 +310,12 @@ int main()
 					{
 						isGame = true;
 						rw.close();
+					}
+					if (menu.Get<SfmlButton>("scoreButton")->IsClicked(sf::Mouse::getPosition(rw)))
+					{
+						menu.Get<Label>("leaderboard")->_isVisible == true ?
+							menu.Get<Label>("leaderboard")->_isVisible = false :
+							menu.Get<Label>("leaderboard")->_isVisible = true;						
 					}
 					break;
 					
@@ -337,7 +343,7 @@ int main()
 
 		if (rw.pollEvent(sysEvent))
 		{
-			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<PictureButton>("resetButton")->isVisible && 
+			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<PictureButton>("resetButton")->_isVisible && 
 					ui.Get<PictureButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
 			{
 				ResetGameEvent resetGameEvent;
@@ -528,6 +534,10 @@ int main()
 		ui.Render();
 	}
 	
+	if (leaderboard != nullptr) {
+		delete leaderboard;
+	}
+
 	dispatcher.Disconnect(gameOverEventID, gameOver);
 	delete cm1;
 	delete achievementCM;
