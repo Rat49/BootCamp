@@ -32,7 +32,7 @@ private:
 	SfmlButton* registerUserButton;
 	SfmlButton* goBackButton;
 
-	//Label* playerNameLabel;
+	Label* userNameLabel;
 	//Label* playerPasswordLabel;
 
 	Label* volumeLabel;
@@ -46,7 +46,7 @@ private:
 
 
 	MainMenu() : loginButton(nullptr), registerButton(nullptr), newGameButton(nullptr), optionsButton(nullptr), leaderboardButton(nullptr),
-			logInUserButton(nullptr), registerUserButton(nullptr), goBackButton(nullptr), volumeLabel(nullptr), volumeBar(nullptr), lboard(nullptr), font(font)
+			logInUserButton(nullptr), registerUserButton(nullptr), goBackButton(nullptr), userNameLabel(nullptr), volumeLabel(nullptr), volumeBar(nullptr), lboard(nullptr), font(font)
 	{
 		activePanel = MENU_PANEL;
 		currentStatus = MAIN_MENU;
@@ -64,6 +64,7 @@ private:
 	void OnRegisterUserButtonPressed();
 	
 	void VolumeHandler();
+	void EnterUserNameHandler();
 
 	void ShowLeaderboard();
 };
