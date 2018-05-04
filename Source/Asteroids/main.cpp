@@ -101,7 +101,6 @@ int main()
 	ButtonsState stateMoveLeft;
 	ButtonsState stateMoveRight;
 	ButtonsState stateExit;
-	ButtonsState stateChoose;
 	ButtonsState stateShoot;
 	ButtonsState statePowerfullShoot;
 
@@ -167,24 +166,21 @@ int main()
 	*/
 	UI ui(rw);
 	sf::Font font;
-	sf::Texture healthHearth;
-	sf::Texture bullets;
-	sf::Texture rockets;
-	sf::Image achievements;
 	font.loadFromFile("Resources/font/arial.ttf");
-	healthHearth.loadFromFile("Resources/graphics/Health.png");
-	bullets.loadFromFile("Resources/graphics/bullets.png");
-	rockets.loadFromFile("Resources/graphics/rockets.png");
-	achievements.loadFromFile("Resources/graphics/achivka.png");
+
+	TextureResource* healthHearth = rm->GetResource<TextureResource>("health");
+	TextureResource* bullets = rm->GetResource<TextureResource>("bullets");
+	TextureResource* rockets = rm->GetResource<TextureResource>("rockets");
+	PictureResource* achievements = rm->GetResource<PictureResource>("achievements");;
 
 	ui.CreateLabel("90", font, PercentXY(17, 0), "bulletCount");
-	ui.CreatePicture(bullets, PercentXY(20, 1), "bullets");
+	ui.CreatePicture(bullets->Get(), PercentXY(20, 1), "bullets");
 	ui.CreateLabel("10", font, PercentXY(25, 0), "rocketCount");
-	ui.CreatePicture(rockets, PercentXY(28, 1), "rockets");
+	ui.CreatePicture(rockets->Get(), PercentXY(28, 1), "rockets");
 
-	ui.CreatePicture(healthHearth, PercentXY(6, 1), "Life0");
-	ui.CreatePicture(healthHearth, PercentXY(8, 1), "Life1");
-	ui.CreatePicture(healthHearth, PercentXY(10, 1), "Life2");
+	ui.CreatePicture(healthHearth->Get(), PercentXY(6, 1), "Life0");
+	ui.CreatePicture(healthHearth->Get(), PercentXY(8, 1), "Life1");
+	ui.CreatePicture(healthHearth->Get(), PercentXY(10, 1), "Life2");
 	ui.CreateLabel("100", font, PercentXY(0, 0), "HP");
 	ui.CreateLabel("0", font, PercentXY(95, 0), "score");
 
@@ -194,7 +190,7 @@ int main()
 	ui.Get<PictureButton>("resetButton")->isVisible = false;
 
 
-	sf::Image* ptrAchievements = &achievements;
+	sf::Image* ptrAchievements = achievements->Get();
 	AchievementsManager achievementsManager(achievementCM, ptrAchievements, *achievementSound);
 
 
