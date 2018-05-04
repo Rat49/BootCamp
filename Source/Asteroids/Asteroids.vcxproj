@@ -81,7 +81,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>sfml-window.lib;sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;Events.lib;Achievements.lib;DebugCommandManager.lib;DebugConsole.lib;Animation.lib;Resources.lib;Input.lib;Physics.lib;Spaceship.lib;Utility.lib;AsteroidsLogicAndSpace.lib;Particle.lib;UI.lib;Leaderboard.lib;cpprest140_2_9.lib;PlayFabSdk2015.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>PlayFabSdk2015.lib;cpprest140_2_9.lib;sfml-window.lib;sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;Events.lib;Achievements.lib;DebugCommandManager.lib;DebugConsole.lib;Animation.lib;Resources.lib;Input.lib;Physics.lib;Spaceship.lib;Utility.lib;AsteroidsLogicAndSpace.lib;Particle.lib;UI.lib;Leaderboard.lib;cpprest140_2_9.lib;PlayFabSdk2015.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin;$(SolutionDir)TEMP;$(SolutionDir)PlayFab\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>

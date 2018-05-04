@@ -18,55 +18,6 @@ std::string GetNameForState(ButtonsState bState) {
 	}
 }
 
-class GameOverManager : public Drawable
-{
-public:
-	AnimationPlayer* gameOverFlickering;
-	ImageSequenceResource* gameOverImseq;
-	sf::Sprite gameOverSprite;
-	Token_t gameOver;
-	Token_t gameReset;
-
-	GameOverManager(ResourceManager *rm){
-		gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");
-		gameOverFlickering = new AnimationPlayer(&gameOverSprite, gameOverImseq, true);
-		gameOverFlickering->Start();
-		_zOrder = 1; 
-
-		gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
-		{
-			AddToDrawableManager();
-		});
-
-		gameReset = Dispatcher::getInstance().Connect(resetGameEventID, [&](const Event& event)
-		{
-			RemoveFromDrawableManager();
-		});
-
-	}
-
-	void Update(sf::Time fixedTime) {
-		gameOverFlickering->Update(fixedTime);
-		gameOverSprite.setPosition({ (WindowResolution::_W - gameOverSprite.getTextureRect().width) / 2.f, 100 });
-	}
-
-	void AddToDrawableManager() {
-		DrawableManager::getInstance().AddDrawableObject(this);
-	}
-	void RemoveFromDrawableManager() {
-		DrawableManager::getInstance().RemoveDrawableObject(this);
-	}
-
-	void Draw(sf::RenderWindow& window)
-	{
-		window.draw(gameOverSprite);
-	}
-	int GetZOrder() const
-	{
-		return _zOrder;
-	}
-};
-
 static int score = 0;
 
 void Scoring(AsteroidType type)
@@ -126,7 +77,7 @@ int main()
 	}
 
 	ResourceManager *rm = new ResourceManager(resourceConfig);
-	GameOverManager gameOverManager(rm);
+	GameOverScreen gameOverManager(rm);
 
 
 	/*
@@ -150,7 +101,6 @@ int main()
 	ButtonsState stateMoveLeft;
 	ButtonsState stateMoveRight;
 	ButtonsState stateExit;
-	ButtonsState stateChoose;
 	ButtonsState stateShoot;
 	ButtonsState statePowerfullShoot;
 
@@ -213,37 +163,45 @@ int main()
 	*/
 	UI ui(rw);
 	sf::Font font;
-	sf::Texture healthHearth;
-	sf::Texture bullets;
-	sf::Texture rockets;
-	sf::Image achievements;
 	font.loadFromFile("Resources/font/arial.ttf");
-	healthHearth.loadFromFile("Resources/graphics/Health.png");
-	bullets.loadFromFile("Resources/graphics/bullets.png");
-	rockets.loadFromFile("Resources/graphics/rockets.png");
-	achievements.loadFromFile("Resources/graphics/achivka.png");
 
-	ui.CreateLabel("90", font, PercentXY(17, 0), "bulletCount");
-	ui.CreatePicture(bullets, PercentXY(20, 1), "bullets");
-	ui.CreateLabel("10", font, PercentXY(25, 0), "rocketCount");
-	ui.CreatePicture(rockets, PercentXY(28, 1), "rockets");
+	TextureResource* healthHearth = rm->GetResource<TextureResource>("health");
+	TextureResource* bullets = rm->GetResource<TextureResource>("bullets");
+	TextureResource* rockets = rm->GetResource<TextureResource>("rockets");
+	PictureResource* achievements = rm->GetResource<PictureResource>("achievements");;
 
-	ui.CreatePicture(healthHearth, PercentXY(6, 1), "Life0");
-	ui.CreatePicture(healthHearth, PercentXY(8, 1), "Life1");
-	ui.CreatePicture(healthHearth, PercentXY(10, 1), "Life2");
-	ui.CreateLabel("100", font, PercentXY(0, 0), "HP");
-	ui.CreateLabel("0", font, PercentXY(95, 0), "score");
+	ui.CreateLabel("90", font, PercentXY(17, 1), "bulletCount");
+	ui.CreatePicture(bullets->Get(), PercentXY(14, 2), "bullets");
+	ui.CreateLabel("10", font, PercentXY(25, 1), "rocketCount");
+	ui.CreatePicture(rockets->Get(), PercentXY(22, 2), "rockets");
+
+	ui.CreatePicture(healthHearth->Get(), PercentXY(5, 2), "Life0");
+	ui.CreatePicture(healthHearth->Get(), PercentXY(7, 2), "Life1");
+	ui.CreatePicture(healthHearth->Get(), PercentXY(9, 2), "Life2");
+	ui.CreateLabel("100", font, PercentXY(2, 1), "HP");
+	ui.CreateLabel("0", font, PercentXY(93, 1), "score");
 
 	ui.CreateAchivementShower(font, PercentXY(1, 1));
 
 	ui.CreatePictureButton(resetButton->Get(), PercentXY(35, 50), "resetButton");
 	ui.Get<PictureButton>("resetButton")->isVisible = false;
 
+	TextureResource* pause = rm->GetResource<TextureResource>("pause");
+	ui.CreatePicture(pause->Get(),PercentXY(50,50),"pause");
+	ui.Get<Picture>("pause")->_isVisible = false;
 
-	sf::Image* ptrAchievements = &achievements;
+	sf::Image* ptrAchievements = achievements->Get();
 	AchievementsManager achievementsManager(achievementCM, ptrAchievements, *achievementSound);
-
-
+	/*
+	For Menu
+	*/
+	TextureResource* background = rm->GetResource<TextureResource>("rocket");
+	TextureResource* play = rm->GetResource<TextureResource>("startButton");
+	TextureResource* exit = rm->GetResource<TextureResource>("exitButton");
+	UI menu(rw);
+	menu.CreatePictureButton(play->Get(), PercentXY(50, 50), "startButton");
+	menu.CreatePictureButton(exit->Get(), PercentXY(50, 65), "exitButton");
+	menu.SetBackground(background->Get());
 	/*
 	For Space
 	*/
@@ -270,7 +228,6 @@ int main()
 	DebugCommandManager manager
 	*/
 	DebugCommandManager manager;
-
 	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
 	{
 		spaceship->SetDamage(0);
@@ -331,25 +288,57 @@ int main()
 	sf::Time deltaTime;
 	const sf::Time fixedUpdateTime = sf::milliseconds(3);
 
+	bool isGame = false;
 	while (rw.isOpen())
 	{
+		while (!isGame)
+		{
+			if (rw.pollEvent(sysEvent))
+			{
+
+				rw.clear();
+				menu.Render();
+				switch (sysEvent.type)
+				{
+				case sf::Event::MouseButtonPressed:
+					if(menu.Get<SfmlButton>("startButton")->IsClicked(sf::Mouse::getPosition(rw)))
+					{
+						isGame = true;
+						clock.restart();
+					}
+					if (menu.Get<SfmlButton>("exitButton")->IsClicked(sf::Mouse::getPosition(rw)))
+					{
+						isGame = true;
+						rw.close();
+					}
+					break;
+					
+				default:
+					break;
+				}
+				
+			}
+		}
 		rw.clear();
 		deltaTime = clock.restart();
 		fixedTime += deltaTime;
 
 		input.Update();
+		ui.Get<Picture>("pause")->_isVisible = false;
 		if (input.GetMode() == InputMode::GameOver) {
 			gameOverManager.Update(fixedTime);
 		}
 		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
 		{
+			ui.Get<Picture>("pause")->_isVisible = true;
 			fixedTime = sf::Time::Zero;	
 		}
 
 
 		if (rw.pollEvent(sysEvent))
 		{
-			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<PictureButton>("resetButton")->isVisible && ui.Get<PictureButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
+			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<PictureButton>("resetButton")->isVisible && 
+					ui.Get<PictureButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
 			{
 				ResetGameEvent resetGameEvent;
 				dispatcher.Send(resetGameEvent, EventTypes::resetGameEventID);

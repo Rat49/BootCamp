@@ -59,7 +59,6 @@ Spaceship::Spaceship(const std::multimap<const std::string, const std::string>& 
 				--_liveCount;
 				if (_liveCount == 0)
 				{
-					std::cout << "Game Over" << std::endl;
 					GameOverEvent gameOverEvent;
 					dispatcher.Send(gameOverEvent, EventTypes::gameOverEventID);
 					return;

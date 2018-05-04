@@ -23,6 +23,7 @@ private:
 	sf::Vector2f _position;
 	sf::Vector2f _scale;
 protected:
+
 	void operator=(const Widget&) = delete;
 	Widget(const Widget&) = delete;
 	Widget(const std::string & name, const sf::Vector2f position, sf::RenderWindow & owner);
