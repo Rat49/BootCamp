@@ -123,7 +123,7 @@ void InputManager::Update()
 					break;
 				}
 			}
-			else if (action.primary == sf::Keyboard::Pause && action.state == ButtonsState::JustPressed)
+			else if (action.primary == sf::Keyboard::P && action.state == ButtonsState::JustPressed)
 			{
 				PausedMode();
 				switch (GetMode())
