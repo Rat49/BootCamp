@@ -17,14 +17,16 @@ namespace MainMenuTest {
 
 		MainMenu *mMenu = MainMenu::Create(sf::Vector2f(1200, 800), font, ui);
 		Status gameStatus = MAIN_MENU;
+		float volumeValue;
+		mMenu->Draw();
 
 		while (rw.isOpen() && (gameStatus != EXIT)){
 
 			if (gameStatus == MAIN_MENU) {
 				
-				mMenu->Draw();
 				mMenu->HandleButtons();
-
+				mMenu->Draw();
+				volumeValue = mMenu->GetVolume();
 				gameStatus = mMenu->GetCurrentStatus();
 			}
 

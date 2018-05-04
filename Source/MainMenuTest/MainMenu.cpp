@@ -20,6 +20,7 @@ MainMenu* MainMenu::Create(sf::Vector2<float> windowSize, sf::Font& font, UI& ui
 	mm->optionsButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 45), "Options"));
 	mm->leaderboardButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 50), "Leaderboard"));
 
+	mm->userNameLabel = dynamic_cast<Label*>(ui.CreateLabel("Enter your username", font, PercentXY(50, 40), "UserNameLabel"));
 	mm->logInUserButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 60), "LogIn"));
 	mm->registerUserButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 60), "Register"));
 	mm->goBackButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 80), "GoBack"));
@@ -64,6 +65,7 @@ void MainMenu::HandleButtons() {
 			break;
 
 		case LOGIN_PANEL:
+			EnterUserNameHandler();
 			if (logInUserButton->IsClicked(mousePosition)) {
 				OnLogInUserButtonPressed();
 			}
@@ -112,11 +114,13 @@ void MainMenu::Draw() {
 		break;
 
 	case LOGIN_PANEL:
+		userNameLabel->Draw();
 		logInUserButton->Draw();
 		goBackButton->Draw();
 		break;
 
 	case REGISTER_PANEL:
+		userNameLabel->Draw();
 		registerUserButton->Draw();
 		goBackButton->Draw();
 		break;
@@ -186,27 +190,31 @@ void MainMenu::OnLeaderboardButtonPressed() {
 
 void MainMenu::OnLogInUserButtonPressed() {
 
-	std::string nickname;
+	std::string username = userNameLabel->GetContent();
 
-	//enter nickname
-
-	if (!nickname.empty())
-		lboard->Login(nickname);
+	if (!username.empty() || username == "Enter your username")
+		lboard->Login(username);
 }
 
 void MainMenu::OnRegisterUserButtonPressed() {
 
-	std::string nickname;
+	std::string username = userNameLabel->GetContent();
 
-	//enter nickname
-
-	if (!nickname.empty())
-		lboard->Login(nickname, true);
+	if (!username.empty() || username == "Enter your username")
+		lboard->Login(username, true);
 }
 
 void MainMenu::VolumeHandler() {
 
 	volumeValue = volumeBar->GetSliderPosition();
+}
+
+void MainMenu::EnterUserNameHandler() {
+	std::string username;
+
+	std::cin >> username;
+
+	userNameLabel->SetString(username);
 }
 
 MainMenu::~MainMenu() {
@@ -234,6 +242,9 @@ MainMenu::~MainMenu() {
 	}
 	if (goBackButton != nullptr) {
 		delete goBackButton;
+	}
+	if (userNameLabel != nullptr) {
+		delete userNameLabel;
 	}
 	if (volumeLabel != nullptr) {
 		delete volumeLabel;
