@@ -21,22 +21,22 @@ std::string GetNameForState(ButtonsState bState) {
 static int score = 0;
 
 void Scoring(AsteroidType type)
-	switch (type)
 {
+	switch (type)
 	{
 	case AsteroidType::Middle:
-
-	}
-};
+		score += 15;
 		break;
-		score += 10;
+	case AsteroidType::Small:
+		score += 20;
+		break;
 	case AsteroidType::Big:
 	default:
+		score += 10;
 		break;
-		score += 20;
-	case AsteroidType::Small:
-		break;
-		score += 15;
+	}
+};
+
 int main()
 {
 	/*
