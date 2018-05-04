@@ -3,7 +3,54 @@
 using namespace PlayFab;
 using namespace ClientModels;
 
+void Leaderboard::Scoring(AsteroidType type)
+{
+	switch (type)
+	{
+	case AsteroidType::Middle:
+		score += 15;
+		break;
+	case AsteroidType::Small:
+		score += 20;
+		break;
+	case AsteroidType::Big:
+	default:
+		score += 10;
+		break;
+	}
+};
 
+Leaderboard::Leaderboard() {
+	score = 0;
+
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+
+	_tokenForCollisionEventBetweenAsteroidAndBullet = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndBulletID,
+		[&](const Event& event)
+	{
+		OnBulletCollisionHandler(event);
+	});
+
+	_tokenForCollisionEventBetweenAsteroidAndRocket = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndBulletID,
+		[&](const Event& event)
+	{
+		OnRocketCollisionHandler(event);
+	});
+
+	_tokenForCollisionEventBetweenAmmunitionAndSpaceship = Dispatcher::getInstance().Connect(EventTypes::collisionEventBetweenAmmunitionAndSpaceshipId,
+		[&](const Event& event)
+	{
+		OnAmmunitionCollisionHandler(event);
+	});
+}
+
+int Leaderboard::GetScore() {
+	return score;
+}
+
+void Leaderboard::SetScore(int arg) {
+	score = arg;
+}
 
 Leaderboard* Leaderboard::Create() {
 	
@@ -83,4 +130,21 @@ void OnNameUpdateSuccess(const UpdateUserTitleDisplayNameResult& /*result*/, voi
 
 void OnFail(const PlayFabError& error, void* /*customData*/) {
 	std::cerr << "Error occured: " << error.GenerateReport() << std::endl;
+}
+
+void Leaderboard::OnAmmunitionCollisionHandler(const Event& cEvent)
+{
+	//Scoring(space.asteroids[i]->_type);
+}
+
+void Leaderboard::OnBulletCollisionHandler(const Event& cEvent)
+{
+	const CollisionEventBetweenAsteroidAndBullet &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndBullet&>(cEvent);
+	Scoring(collisionEvent._asteroid->_type);
+}
+
+void Leaderboard::OnRocketCollisionHandler(const Event& cEvent)
+{
+	const CollisionEventBetweenAsteroidAndRocket &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroidAndRocket&>(cEvent);
+	Scoring(collisionEvent._asteroid->_type);
 }

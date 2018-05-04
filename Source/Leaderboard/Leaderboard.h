@@ -4,6 +4,11 @@
 #include"playfab/PlayFabClientDataModels.h"
 #include"playfab/PlayFabSettings.h"
 
+#include "EventSystem.h"
+#include "Asteroid.h"
+#include "Rocket.h"
+#include "CollisionEvent.h"
+
 #include<iostream>
 #include<windows.h>
 
@@ -12,12 +17,16 @@ class Leaderboard final {
 
 private:
 	
-	Leaderboard(){}
-	
+	Leaderboard();
+	int score;
 
 public:
 
 	std::list<PlayFab::ClientModels::PlayerLeaderboardEntry> leaderboard;
+
+	Token_t _tokenForCollisionEventBetweenAmmunitionAndSpaceship;
+	Token_t _tokenForCollisionEventBetweenAsteroidAndBullet;
+	Token_t _tokenForCollisionEventBetweenAsteroidAndRocket;
 
 
 	static Leaderboard* Create();
@@ -27,6 +36,12 @@ public:
 	void UpdateUserTitleDisplayName(const std::string& name);
 	void UpdateLocalLeaderboard();
 
+	void OnAmmunitionCollisionHandler(const Event & cEvent);
+	void OnBulletCollisionHandler(const Event & cEvent);
+	void OnRocketCollisionHandler(const Event & cEvent);
+	void Scoring(AsteroidType type);
+	int GetScore();
+	void SetScore(int arg);
 };
 
 void OnLoginSuccess(const PlayFab::ClientModels::LoginResult& result, void* customData);

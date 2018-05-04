@@ -85,7 +85,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)PlayFab\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)PlayFab\include;$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Events;$(SolutionDir)Source\Utility;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\Physics</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -95,7 +95,7 @@
       <Command>expand "$(SolutionDir)PlayFab\lib\PlayFabSdk2015_d.cab" "$(SolutionDir)TEMP\PlayFabSdk2015_d.lib" </Command>
     </PreLinkEvent>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)PlayFab\bin\cpprest140_2_9.dll" "$(OutDir)\*.*" /F /R /Y /I</Command>
+      <Command>xcopy "$(SolutionDir)PlayFab\bin\cpprest140d_2_9.dll" "$(OutDir)\*.*" /F /R /Y /I</Command>
     </PostBuildEvent>
     <PreBuildEvent>
       <Command>expand "$(SolutionDir)PlayFab\lib\PlayFabSdk2015_d.cab" "$(SolutionDir)TEMP\PlayFabSdk2015_d.lib" </Command>
