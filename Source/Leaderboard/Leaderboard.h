@@ -26,6 +26,7 @@ public:
 	void UpdatePlayerStatistic(const int statisticValue);
 	void UpdateUserTitleDisplayName(const std::string& name);
 	void UpdateLocalLeaderboard();
+	std::list<PlayFab::ClientModels::PlayerLeaderboardEntry> GetLeaderboard();
 
 };
 

@@ -104,7 +104,7 @@ int main()
 	std::cin >> name;
 	leaderboard->Login(name, createAccount);
 	leaderboard->Login(name);
-	//leaderboard->UpdateUserTitleDisplayName("ok1");
+	leaderboard->UpdateUserTitleDisplayName(name);
 	leaderboard->UpdatePlayerStatistic(score);
 
 
@@ -205,9 +205,6 @@ int main()
 	gameOverFlickering = new AnimationPlayer(&gameOverSprite, gameOverImseq, true);
 	gameOverFlickering->Start();
 	
-
-
-
 	sf::Event sysEvent;
 	
 
@@ -319,7 +316,7 @@ int main()
 		achievementsManager.Reset();
 		leaderboard->UpdatePlayerStatistic(score);
 		leaderboard->UpdateLocalLeaderboard();
-		leaderboard->leaderboard;
+		leaderboard->GetLeaderboard();
 
 		if (leaderboard != nullptr) {
 			delete leaderboard;

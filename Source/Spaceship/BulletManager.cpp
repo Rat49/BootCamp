@@ -90,7 +90,6 @@ void BulletManager::DeleteBullet(OrdinaryBullet* bullet)
 		_ordinaryBulletStorage.Put(bullet);
 		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(bullet));
 	}
-	std::cout << "bullets storage " << _ordinaryBulletStorage.Count() << std::endl;
 }
 
 void BulletManager::DeleteRocket(Rocket* rocket)
@@ -99,7 +98,6 @@ void BulletManager::DeleteRocket(Rocket* rocket)
 	rocket->_rocketParticle->Stop();
 	rocket->_rocketParticle->SetVelocity(sf::Vector2f(0, 0));
 	DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(rocket));
-	std::cout << "rockets storage " << _rocketStorage.Count() << std::endl;	
 }
 
 void BulletManager::RocketOutOfBoundsHandler(const Event & event)

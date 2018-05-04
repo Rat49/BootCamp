@@ -138,7 +138,6 @@ sf::Vector2f Asteroid::GetCoordinates() {
 
 void Asteroid::OnCollisionHandler(const Event& cEvent)
 {
-	//std::cout << "|| Collision! Resolve is ";
 	const CollisionEventBetweenAsteroids &collisionEvent = dynamic_cast<const CollisionEventBetweenAsteroids&>(cEvent);
 	
 	Asteroid *obj1 = collisionEvent._asteroid1;

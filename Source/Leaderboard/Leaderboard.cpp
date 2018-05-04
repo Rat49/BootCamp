@@ -52,6 +52,14 @@ void Leaderboard::UpdateUserTitleDisplayName(const std::string& name) {
 		Sleep(1);
 }
 
+std::list<PlayFab::ClientModels::PlayerLeaderboardEntry> Leaderboard::GetLeaderboard()
+{
+	for (auto i : leaderboard)
+	{
+		std::cout << i.DisplayName << "\t\t" << i.StatValue << std::endl;
+	}
+	return leaderboard;
+}
 void Leaderboard::UpdateLocalLeaderboard() {
 
 	GetLeaderboardRequest request;
@@ -60,25 +68,20 @@ void Leaderboard::UpdateLocalLeaderboard() {
 	PlayFabClientAPI::GetLeaderboard(request, [this](const GetLeaderboardResult& result, void* /*customData*/) { 
 
 		leaderboard = result.Leaderboard;
-		std::cout << "Operation success" << std::endl;
 
 	}, OnFail);
-
+	
 	while (PlayFabClientAPI::Update() != 0)
 		Sleep(1);
 }
 
-
 void OnLoginSuccess(const LoginResult& /*result*/, void* /*customData*/) {
-	std::cout << "Logged in" << std::endl;
 }
 
 void OnPlayerStatisticsUpdateSuccess(const UpdatePlayerStatisticsResult& /*result*/, void* /*customData*/) {
-	std::cout << "Player statistic was updated" << std::endl;
 }
 
 void OnNameUpdateSuccess(const UpdateUserTitleDisplayNameResult& /*result*/, void* /*customData*/) {
-	std::cout << "User title was updated" << std::endl;
 }
 
 void OnFail(const PlayFabError& error, void* /*customData*/) {
