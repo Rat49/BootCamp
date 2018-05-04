@@ -144,7 +144,7 @@ int main()
 	/*
 	Game Loop
 	*/
-	sf::RenderWindow rw(sf::VideoMode(1200, 800), "Asteroids");
+	sf::RenderWindow rw(sf::VideoMode::getDesktopMode(), "Asteroids");
 	WindowResolution::SetResolution(rw);
 
 	TextureResource* resetButton = rm->GetResource<TextureResource>("resetButton");
