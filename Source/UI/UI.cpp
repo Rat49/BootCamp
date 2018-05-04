@@ -1,7 +1,8 @@
 #include "UI.h"
 
 UI::UI(sf::RenderWindow & window) :
-	_window(window)	
+	_window(window),
+	_background(nullptr)
 {
 	_tokenUI = Dispatcher::getInstance().Connect(EventTypes::updateSpaceshipStateEvent,
 		[&](const Event& event)
@@ -35,6 +36,14 @@ UI::UI(sf::RenderWindow & window) :
 			Get<PictureButton>("resetButton")->isVisible = false;
 		}
 	});
+}
+
+void UI::SetBackground(const sf::Texture & texture)
+{
+	const sf::Vector2f scale(_window.getSize().x / texture.getSize().x, _window.getSize().y / texture.getSize().y);
+	_background = new Picture(texture, sf::Vector2f(0, 0), "background", _window);
+	_background->SetScale(scale);
+	_background->OnResize();
 }
 
 void UI::OnChangedSpaceshipStorage(const Event & event)
@@ -103,7 +112,10 @@ void UI::OnChangeScore(int score)
 
 void UI::Render()
 {
-
+	if (_background != nullptr)
+	{
+		_background->Draw();
+	}
 	for (auto it : _widgets)
 	{
 		it.second->Draw();

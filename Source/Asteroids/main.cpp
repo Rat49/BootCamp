@@ -248,9 +248,11 @@ int main()
 	/*
 	For Menu
 	*/
+	TextureResource* background = rm->GetResource<TextureResource>("rocket");
 	UI menu(rw);
 	menu.CreateButton(font, sf::Vector2f(100, 50), PercentXY(50, 50), "play");
-	menu.Get<SfmlButton>("play")->SetColorText(sf::Color::Black);
+	menu.CreateButton(font, sf::Vector2f(100, 50), PercentXY(50, 60), "quit");
+	menu.SetBackground(background->Get());
 	/*
 	For Space
 	*/
@@ -277,7 +279,6 @@ int main()
 	DebugCommandManager manager
 	*/
 	DebugCommandManager manager;
-
 	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
 	{
 		spaceship->SetDamage(0);
@@ -345,12 +346,28 @@ int main()
 		{
 			if (rw.pollEvent(sysEvent))
 			{
-				if (sysEvent.type == sf::Event::MouseButtonPressed && menu.Get<SfmlButton>("play")->IsClicked(sf::Mouse::getPosition(rw)))
-				{
-					isGame = true;
-				}
+
 				rw.clear();
 				menu.Render();
+				switch (sysEvent.type)
+				{
+				case sf::Event::MouseButtonPressed:
+					if(menu.Get<SfmlButton>("play")->IsClicked(sf::Mouse::getPosition(rw)))
+					{
+						isGame = true;
+						clock.restart();
+					}
+					if (menu.Get<SfmlButton>("quit")->IsClicked(sf::Mouse::getPosition(rw)))
+					{
+						isGame = true;
+						rw.close();
+					}
+					break;
+					
+				default:
+					break;
+				}
+				
 			}
 		}
 		rw.clear();

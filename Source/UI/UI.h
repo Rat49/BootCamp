@@ -43,7 +43,6 @@ class UI final
 {
 public:
 	UI(sf::RenderWindow & window);
-	void OnChangedSpaceshipStorage(const Event & event);
 	template<typename T>
 	T* Get(const std::string& key) 
 	{
@@ -55,6 +54,10 @@ public:
 	Token_t _tokenWeaponUI;
 	Token_t gameOver;
 	Token_t gameReset;
+
+	void SetBackground(const sf::Texture &texture);
+
+	void OnChangedSpaceshipStorage(const Event & event);
 	void OnChangedSpaceshipState(const Event & event);
 	void OnResize();
 	void OnChangeScore(int score);
@@ -73,8 +76,8 @@ public:
 	void RemoveWidget(const std::string & key);
 
 	~UI();
-private:	
-	
+private:		
+	Picture * _background;
 	const sf::Vector2f RelativeCordToAbs(const PercentXY relCoord) const;
 	sf::RenderWindow & _window;
 	Widget* GetWidget(const std::string &key);

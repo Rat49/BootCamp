@@ -10,6 +10,7 @@ SfmlButton::SfmlButton(const sf::Font& font, const sf::Vector2f size, const sf::
 	_body.setOrigin(_body.getLocalBounds().width /2 , _body.getLocalBounds().height /2);
 	_text.setOrigin(_text.getLocalBounds().width / 2, _text.getLocalBounds().height / 2);
 	_text.setPosition(_body.getPosition());
+	_text.setFillColor(sf::Color::Black);
 }
 
 SfmlButton::SfmlButton(const sf::Vector2f size, const sf::Vector2f position, const std::string & name, sf::RenderWindow & owner):
