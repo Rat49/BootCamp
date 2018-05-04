@@ -162,6 +162,7 @@ bool MainMenu::IsButtonPressed(Buttons buttonID) const{
 			break;
 		case LEADERBOARD:
 			button = leaderboardButton;
+			break;
 		default:
 			button = loginButton;
 	}
