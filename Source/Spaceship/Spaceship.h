@@ -22,8 +22,8 @@ static float coefficientOfAnimation = 2.5f;
 class Spaceship : public RigidBody, public Drawable
 {
 public:
-	Spaceship(const std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq, 
-		ImageSequenceResource& spaceshipFlickeringImseq);
+	Spaceship(const std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq,
+		ImageSequenceResource& spaceshipFlickeringImseq, ResourceManager &rm);
 	~Spaceship();
 
 	void Accelerate();
@@ -35,6 +35,7 @@ public:
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
 	void SetDamage(unsigned int damage);
+	void Reset(const std::multimap<const std::string, const std::string>& spaceshipConfig);
 	
 private:
 	
@@ -42,6 +43,7 @@ private:
 	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;
 	sf::Vector2f _speedDirection;
+	sf::Vector2f _spaceshipSpeed;
 	sf::Sprite* _spaceshipSprite;
 	AnimationPlayer* _spaceshipAnimation;
 	ImageSequenceResource& _spaceshipAnimationImseq;
@@ -77,6 +79,10 @@ private:
 	unsigned int _liveCount;
 	int _HP;
 	unsigned int _damage;
+
+	AudioResource* _bulletSound;
+	AudioResource * _rocketSound;
+	AudioResource * _collisionSound;
 
 	void ControlSpeed(float deltaSpeed);
 	void GainRebound(float reboundValue);

@@ -13,7 +13,7 @@ public:
 	float GetSliderPosition() const;
 	
 	void SetFillColor(const sf::Color & color) override;
-	void SetOutlineColor(const sf::Color & color) override {};
+	void SetOutlineColor(const sf::Color & /*color*/) override {};
 	void SetLength(const float size);
 
 	float GetLength() const;

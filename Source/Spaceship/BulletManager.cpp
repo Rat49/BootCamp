@@ -150,3 +150,20 @@ void BulletManager::Update(const sf::Time& deltaTime)
 		}
 	}
 }
+
+void BulletManager::Reset()
+{
+	for (auto& bullet : bullets)
+	{
+		_ordinaryBulletStorage.Put(bullet);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(bullet));
+	}
+	bullets.clear();
+	for (auto& rocket : rockets)
+	{
+		_particleStorage.Put(rocket->_rocketParticle);
+		_rocketStorage.Put(rocket);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(rocket));
+	}
+	rockets.clear();
+}

@@ -3,11 +3,11 @@
 
 
 Rocket::Rocket()
-	: _speedValuePixelsPerSecond(200.0f)
+	: _speedValuePixelsPerSecond(300.0f)
 	, _rocketSprite()
 	, _rocketTexture()
 	, _speedDelayTime(sf::seconds(1.0f))
-	, _deltaSpeedValue(600.0f)
+	, _deltaSpeedValue(700.0f)
 	, _rocketScale(1.0f, 1.0f)
 	, _halfSpriteLength(0.0f)
 {
@@ -99,14 +99,6 @@ void Rocket::Update(const sf::Time& deltaTime)
 			_rocketParticle->SetVelocity(_direction * (_speedValuePixelsPerSecond + _deltaSpeedValue));
 			SetSpeed(_direction * (_speedValuePixelsPerSecond + _deltaSpeedValue));
 		}
-
-		/*if (_rocketSprite.getPosition().x >= WindowResolution::_W || _rocketSprite.getPosition().x < 0
-			|| _rocketSprite.getPosition().y > WindowResolution::_H || _rocketSprite.getPosition().y < 0)
-		{
-			_rocketParticle->Stop();
-			if (_rocketParticle->IsEnd())
-				_isAlive = false;
-		}*/
 
 		sf::Vector2f rigidCoordinates = RigidBody::GetCoordinates();
 		_rocketSprite.setPosition(rigidCoordinates.x + _rocketSprite.getLocalBounds().width / 3,

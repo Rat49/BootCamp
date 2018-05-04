@@ -13,6 +13,28 @@ UI::UI(sf::RenderWindow & window) :
 	{
 		OnChangedSpaceshipStorage(event);
 	});
+
+
+	if (_widgets.find("resetButton") != _widgets.cend())
+	{
+		Get<PictureButton>("resetButton")->isVisible = true;
+	}
+
+	gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
+	{
+		if (_widgets.find("resetButton") != _widgets.cend())
+		{
+			Get<PictureButton>("resetButton")->isVisible = true;
+		}
+	});
+
+	gameReset = Dispatcher::getInstance().Connect(resetGameEventID, [&](const Event& event)
+	{
+		if (_widgets.find("resetButton") != _widgets.cend())
+		{
+			Get<PictureButton>("resetButton")->isVisible = false;
+		}
+	});
 }
 
 void UI::OnChangedSpaceshipStorage(const Event & event)
@@ -29,35 +51,35 @@ void UI::OnChangedSpaceshipStorage(const Event & event)
 	}
 }
 
-	void UI::OnChangedSpaceshipState(const Event & event)
-	{
+void UI::OnChangedSpaceshipState(const Event & event)
+{
 
-		const UpdateSpaceshipStateEvent&  updateStateEvent = static_cast<const UpdateSpaceshipStateEvent&>(event);
-		if (_widgets["HP"] != nullptr)
+	const UpdateSpaceshipStateEvent&  updateStateEvent = static_cast<const UpdateSpaceshipStateEvent&>(event);
+	if (_widgets["HP"] != nullptr)
+	{
+		Get<Label>("HP")->SetString(std::to_string(updateStateEvent._HP));
+	}
+	std::string life("Life");
+	for (int i = 0; i < updateStateEvent._maxCountLife; ++i)
+	{
+		char symbol = i + '0';
+		life.push_back(symbol);
+		if (_widgets.find(life) != _widgets.cend())
 		{
-			Get<Label>("HP")->SetString(std::to_string(updateStateEvent._HP));
-		}
-		std::string life("Life");
-		for (int i = 0; i < updateStateEvent._maxCountLife; ++i)
-		{
-			char symbol = i + '0';
-			life.push_back(symbol);
-			if (_widgets.find(life) != _widgets.cend())
+			if (i < (updateStateEvent._countLife))
 			{
-				if (i < updateStateEvent._countLife)
-				{
-					Get<Picture>(life)->_isVisible = true;
-				}
-				else
-				{
-					Get<Picture>(life)->_isVisible = false;
-				}
+				Get<Picture>(life)->_isVisible = true;
 			}
-			life.pop_back();
+			else
+			{
+				Get<Picture>(life)->_isVisible = false;
+			}
 		}
+		life.pop_back();
+	}
 }
 
-	void UI::OnResize()
+void UI::OnResize()
 {
 	
 	auto newSize = sf::Vector2i(_window.getSize().x, _window.getSize().y);
@@ -71,8 +93,17 @@ void UI::OnChangedSpaceshipStorage(const Event & event)
 	Render();
 }
 
+void UI::OnChangeScore(int score)
+{
+	if (_widgets["score"] != nullptr)
+	{
+		Get<Label>("score")->SetString(std::to_string(score));
+	}
+}
+
 void UI::Render()
 {
+
 	for (auto it : _widgets)
 	{
 		it.second->Draw();
@@ -82,7 +113,7 @@ void UI::Render()
 
 void UI::OnAchive(const std::string & name, const std::string & description,sf::Image * picture)
 {
-	Get<AchievementShower>("achivementShower")->ImplementAchivement(name,description,picture,2500);
+	Get<AchievementShower>("achivementShower")->ImplementAchivement(name,description,picture,sf::Time(sf::seconds(2)));
 }
 
 void UI::SetPostion(const std::string & key, const PercentXY relCoord)
@@ -102,30 +133,35 @@ sf::Vector2f UI::GetPosition(const std::string & key)
 	return _widgets[key]->GetPosition();
 }
 
-Widget * UI::CreateButton(const sf::Vector2f size, const PercentXY relPos, const std::string & name)
+Widget * UI::CreateButton(const sf::Font & font, const sf::Vector2f size, const PercentXY relativePos, const std::string & name)
 {	
 
-	return _widgets[name] = new SfmlButton(size, RelativeCordToAbs(relPos), name, _window);
+	return _widgets[name] = new SfmlButton(font,size, RelativeCordToAbs(relativePos), name, _window);
 }
 
-Widget * UI::CreateLabel(const std::string & content, const sf::Font & font, const PercentXY relPos, const std::string & name)
+Widget * UI::CreatePictureButton(const sf::Texture & picture, const PercentXY relativePos, const std::string & name)
 {
-	return _widgets[name] = new Label(content, font, RelativeCordToAbs(relPos), name, _window);
+	return _widgets[name] = new PictureButton(picture, RelativeCordToAbs(relativePos), name, _window);
 }
 
-Widget * UI::CreateScrollBar(const float length, const PercentXY relPos, const std::string & name)
+Widget * UI::CreateLabel(const std::string & content, const sf::Font & font, const PercentXY relativePos, const std::string & name)
 {
-	return _widgets[name] = new ScrollBar(length, RelativeCordToAbs(relPos), name, _window);
+	return _widgets[name] = new Label(content, font, RelativeCordToAbs(relativePos), name, _window);
 }
 
-Widget * UI::CreateAchivementShower(const sf::Font & font, const PercentXY relPos)
+Widget * UI::CreateScrollBar(const float length, const PercentXY relativePos, const std::string & name)
 {
-	return _widgets["achivementShower"] = new AchievementShower(font, RelativeCordToAbs(relPos), "achivementShowerName", "achivementShowerDescription", _window);
+	return _widgets[name] = new ScrollBar(length, RelativeCordToAbs(relativePos), name, _window);
 }
 
-Widget * UI::CreatePicture(const sf::Image & img, const PercentXY relPos, const std::string & name)
+Widget * UI::CreateAchivementShower(const sf::Font & font, const PercentXY relativePos)
 {
-	return _widgets[name] = new Picture(img, RelativeCordToAbs(relPos), name, _window);
+	return _widgets["achivementShower"] = new AchievementShower(font, RelativeCordToAbs(relativePos), "achivementShowerName", "achivementShowerDescription", _window);
+}
+
+Widget * UI::CreatePicture(const sf::Texture & img, const PercentXY relativePos, const std::string & name)
+{
+	return _widgets[name] = new Picture(img, RelativeCordToAbs(relativePos), name, _window);
 }
 
 void UI::RemoveWidget(const std::string & key)
@@ -133,7 +169,6 @@ void UI::RemoveWidget(const std::string & key)
 	delete _widgets[key];
 	_widgets.erase(key);
 }
-
 
 Widget* UI::GetWidget(const std::string &key)
 {
@@ -145,8 +180,6 @@ Widget* UI::GetWidget(const std::string &key)
 
 	return wid;
 }
-
-
 
 UI::~UI()
 {

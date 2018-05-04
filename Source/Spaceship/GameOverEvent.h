@@ -4,3 +4,8 @@
 class GameOverEvent : public Event
 {
 };
+
+
+class ResetGameEvent : public Event
+{
+};

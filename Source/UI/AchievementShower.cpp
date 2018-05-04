@@ -1,10 +1,11 @@
 #include "AchievementShower.h"
 
-AchievementShower::AchievementShower(const sf::Font& font, const sf::Vector2f position, const std::string & name, const std::string & description, sf::RenderWindow & owner) :
+AchievementShower::AchievementShower(const sf::Font& font, const sf::Vector2f position, const std::string & name, const std::string & /*description*/, sf::RenderWindow & owner) :
 	Widget(name, position, owner),
 	_name("", font),
-	_description("",font),
-	_liveInFrame(0)
+	_description("", font),
+	_liveTime(sf::Time::Zero),
+	_timer()
 {
 	Widget::SetPosition(sf::Vector2f( _window.getSize().x/3, _window.getSize().y - _window.getSize().y/3));
 	_picture.setPosition(GetPosition());
@@ -14,9 +15,10 @@ AchievementShower::AchievementShower(const sf::Font& font, const sf::Vector2f po
 }
 
 
-void AchievementShower::ImplementAchivement(const std::string & name, const std::string & description,sf::Image * picture, const int timeLive)
+void AchievementShower::ImplementAchivement(const std::string & name, const std::string & description,sf::Image * picture, const sf::Time liveTime)
 {
-	_liveInFrame = timeLive;
+	_timer.restart();
+	_liveTime = liveTime;
 	_name.setString(name);
 	_description.setString(description);
 	_texture.loadFromImage(*picture);
@@ -38,9 +40,8 @@ void AchievementShower::OnResize()
 
 void AchievementShower::Draw()
 {
-	if (_liveInFrame > 0)
-	{
-		--_liveInFrame;
+	if (_timer.getElapsedTime() < _liveTime)
+	{		
 		_window.draw(_picture);
 		_window.draw(_name);
 		_window.draw(_description);

@@ -1,7 +1,12 @@
 #include "Space.h"
 
-Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize) :
-	_totalCountExplosion(30), _poolAsteroid(totalCountAsteroids), _poolStar(totalCountStar),_sizeSpace(windowSize), _poolExplosion(_totalCountExplosion)
+Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize, ResourceManager &rm) 
+	: _totalCountExplosion(30)
+	, _poolAsteroid(totalCountAsteroids)
+	, _poolStar(totalCountStar)
+	,_sizeSpace(windowSize)
+	, _poolExplosion(_totalCountExplosion)
+	, _crashSound(rm.GetResource<AudioResource>("crashSound"))
 {
 	Dispatcher& dispatcher = Dispatcher::getInstance();
 	_createExplosion = dispatcher.Connect(createExplosionEvent, [&](const Event& event)
@@ -65,7 +70,7 @@ void Space::Update(const float physicsStepTargetFrameTime)
 			{
 				for (int j = 0; j < 2; ++j)
 				{
-					if (!_poolAsteroid.Empty() && rand()%2 == 0 )
+					if (!_poolAsteroid.Empty() && rand()% 3 < 2 )
 					{
 						Asteroid* asteroidNew = _poolAsteroid.Get();
 						asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace, asteroid->IsColliderVisible());
@@ -91,8 +96,9 @@ void Space::Update(const float physicsStepTargetFrameTime)
 				_poolAsteroid.Put(asteroid);
 				asteroids.erase(std::find(asteroids.begin(), asteroids.end(), asteroid));
 				--i;
-				++_countSmallDeadAsteroids;
+				_crashSound->Get().play();
 			}
+
 			if (_countSmallDeadAsteroids >= 16)
 			{
 				Asteroid* asteroidNew = _poolAsteroid.Get();
@@ -126,6 +132,26 @@ void Space::Update(const float physicsStepTargetFrameTime)
 	}
 }
 
+void Space::Reset(const int asteroidCount, const sf::Sprite& asteroidSprite)
+{
+	for (auto &asteroid : asteroids)
+	{
+		_poolAsteroid.Put(asteroid);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(asteroid));
+	}
+	asteroids.clear();
+
+	for (auto *explosion : _explosions)
+	{
+		_poolExplosion.Put(explosion);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(&(explosion->particles)));
+		
+	}
+	_explosions.clear();
+
+	AddSomeAsteroids(asteroidCount, asteroidSprite);
+}
+
 
 Space::~Space()
 {
@@ -149,8 +175,8 @@ Space::~Space()
 		}
 	}
 
-	for (auto *explosion : _explosions)
+	for (auto &explosion : _explosions)
 	{
-			_poolExplosion.Put(explosion);
+		_poolExplosion.Put(explosion);
 	}
 }

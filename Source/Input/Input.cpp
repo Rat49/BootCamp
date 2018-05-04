@@ -24,6 +24,20 @@ InputManager::InputManager(const std::multimap<Action_t, ButtonKey_t>& buttonsKe
 			buttonsState.insert(buttonsState.begin(), config);
 		}
 	}
+
+	gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
+	{
+		_mode = InputMode::GameOver;
+	});
+
+	gameReset = Dispatcher::getInstance().Connect(resetGameEventID, [&](const Event& event)
+	{
+		_mode = InputMode::Normal;
+		for (auto &action : buttonsState)
+		{
+			action.state = ButtonsState::Released;
+		}
+	});
 }
 
 bool InputManager::GetState(const Action_t searchAction, ButtonsState & result) const 
@@ -86,6 +100,10 @@ void InputManager::Update()
 			sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(action.alternatively)))
 		{
 			action.state = ChangeStateWhenPressed(action.state);
+			if (_mode == InputMode::GameOver) {
+				GameOverMode();
+			 }
+
 			if (action.primary == sf::Keyboard::Tilde && action.state == ButtonsState::JustPressed)
 			{
 				ConsoleMode();
@@ -104,7 +122,6 @@ void InputManager::Update()
 					_mode = InputMode::Paused;
 					break;
 				}
-				//_mode = (GetMode() == InputMode::Raw) ? InputMode::Normal : InputMode::Raw;
 			}
 			else if (action.primary == sf::Keyboard::Pause && action.state == ButtonsState::JustPressed)
 			{
@@ -124,7 +141,6 @@ void InputManager::Update()
 					_mode = InputMode::Raw;
 					break;
 				}
-				//_mode = (GetMode() == InputMode::Paused) ? InputMode::Normal : InputMode::Paused;
 				std::cout << "PAUSE" << std::endl;
 			}
 		}
@@ -134,6 +150,18 @@ void InputManager::Update()
 		}
 	}
 }
+
+void  InputManager::GameOverMode()
+{
+	for (auto &action : buttonsState)
+	{
+		if (action.primary != sf::Keyboard::Return && action.primary != sf::Keyboard::Escape)
+		{
+			action.state = (action.state == ButtonsState::Block) ? ButtonsState::Released : ButtonsState::Block;
+		}
+	}
+}
+
 
 void  InputManager::ConsoleMode() 
 {

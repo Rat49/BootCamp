@@ -76,13 +76,13 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Achievements;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Input;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Resources;$(SolutionDir)Source\DebugConsole;$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)Source\ResourceManager;$(SolutionDir)Source\Physics;$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Utility;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)PlayFab\include;$(SolutionDir)SFML\include;$(SolutionDir)Source\Achievements;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Events;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Input;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Resources;$(SolutionDir)Source\DebugConsole;$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)Source\ResourceManager;$(SolutionDir)Source\Physics;$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Utility;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\Leaderboard;$(SolutionDir)Source\UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>sfml-window.lib;sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;Events.lib;Achievements.lib;DebugCommandManager.lib;DebugConsole.lib;Animation.lib;Resources.lib;Input.lib;Physics.lib;Spaceship.lib;Utility.lib;AsteroidsLogicAndSpace.lib;Particle.lib;UI.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-window.lib;sfml-system.lib;sfml-graphics.lib;sfml-audio.lib;sfml-network.lib;Events.lib;Achievements.lib;DebugCommandManager.lib;DebugConsole.lib;Animation.lib;Resources.lib;Input.lib;Physics.lib;Spaceship.lib;Utility.lib;AsteroidsLogicAndSpace.lib;Particle.lib;UI.lib;Leaderboard.lib;cpprest140_2_9.lib;PlayFabSdk2015.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin;$(SolutionDir)TEMP;$(SolutionDir)PlayFab\lib</AdditionalLibraryDirectories>
     </Link>
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)SFML\bin\openal32.dll" "$(OutDir)\*.*" /F /R /Y /I
@@ -99,11 +99,11 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-2.dll" "$(OutDir)\*.*" /F /R /Y /I
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Achievements;$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\DebugConsole;$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)Source\ResourceManager;$(SolutionDir)Source\Physics;$(SolutionDir)Source\Utility;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>;$(SolutionDir)PlayFab\bin;$(SolutionDir)PlayFab\include;$(SolutionDir)Source\Leaderboard;$(SolutionDir)Source\Achievements;$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Input;$(SolutionDir)Source\Resources;$(SolutionDir)Source\DebugConsole;$(SolutionDir)Source\DebugCommandManager;$(SolutionDir)Source\ResourceManager;$(SolutionDir)Source\Physics;$(SolutionDir)Source\Utility;$(SolutionDir)Source\ParticleSystem;$(SolutionDir)Source\UI;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;Animation_d.lib;Achievements_d.lib;DebugCommandManager_d.lib;DebugConsole_d.lib;Events_d.lib;Input_d.lib;Resources_d.lib;Physics_d.lib;Utility_d.lib;Spaceship_d.lib;AsteroidsLogicAndSpace_d.lib;Particle_d.lib;UI_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-window-d.lib;sfml-system-d.lib;sfml-graphics-d.lib;sfml-audio-d.lib;sfml-network-d.lib;Animation_d.lib;Achievements_d.lib;DebugCommandManager_d.lib;DebugConsole_d.lib;Events_d.lib;Input_d.lib;Resources_d.lib;Physics_d.lib;Utility_d.lib;Spaceship_d.lib;AsteroidsLogicAndSpace_d.lib;Particle_d.lib;UI_d.lib;Leaderboard_d.lib;cpprest140d_2_9.lib;PlayFabSdk2015_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin;$(SolutionDir)TEMP;$(SolutionDir)PlayFab\lib;$(SolutionDir)PlayFab\bin</AdditionalLibraryDirectories>
       <SubSystem>Console</SubSystem>
     </Link>
     <PostBuildEvent>

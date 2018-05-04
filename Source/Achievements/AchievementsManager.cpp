@@ -1,10 +1,11 @@
 #include "AchievementsManager.h"
 
-AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture)
+AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture, AudioResource &audio)
 	:_achievementPicture(achievementPicture),
 	_afterFirstBigAsteroidFrag(sf::seconds(0.0f)),
 	_afterFirstMiddleAsteroidFrag(sf::seconds(0.0f)),
-	_afterFirstSmallAsteroidFrag(sf::seconds(0.0f))
+	_afterFirstSmallAsteroidFrag(sf::seconds(0.0f)),
+	_audio(audio)
 {
 	auto achievementsList = achievementCM->GetCategory("AchievementsList").GetParams();
 	for (const auto& achiev : achievementsList)
@@ -32,7 +33,7 @@ AchievementsManager::AchievementsManager(ConfigManager* achievementCM, sf::Image
 	tokenForCollisionEventBetweenAsteroidAndSpaceship = dispatcher.Connect(EventTypes::collisionEventBetweenAsteroidAndSpaceshipID,
 		[&](const Event& event)
 	{
-		const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
+		//const CollisionEventBetweenAsteroidAndSpaceship& currentEvent = static_cast<const CollisionEventBetweenAsteroidAndSpaceship&>(event);
 		_noDamageTimer = sf::seconds(0.0f);
 	});
 }
@@ -168,6 +169,7 @@ void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
 		if (it->GetAchievedActive())
 		{
 			achievUI.OnAchive(it->GetDisplayName(), it->GetDisplayDescriptionName(), _achievementPicture);
+			_audio.Get().play();
 			it = _achievementsStorage.erase(it);
 		}
 		else
@@ -175,4 +177,17 @@ void AchievementsManager::Update(const sf::Time& deltaTime,UI& achievUI)
 			++it;
 		}
 	}	
+}
+
+void AchievementsManager::Reset()
+{
+	for (auto& achiev : _achievementsStorage)
+	{
+		if (achiev.GetAchievedActive())
+		{
+			continue;
+		}
+
+		achiev.SetProgressState(0.0f);
+	}
 }
