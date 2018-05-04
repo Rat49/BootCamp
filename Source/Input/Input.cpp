@@ -141,7 +141,6 @@ void InputManager::Update()
 					_mode = InputMode::Raw;
 					break;
 				}
-				std::cout << "PAUSE" << std::endl;
 			}
 		}
 		else
