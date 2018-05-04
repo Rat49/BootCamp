@@ -18,55 +18,6 @@ std::string GetNameForState(ButtonsState bState) {
 	}
 }
 
-class GameOverManager : public Drawable
-{
-public:
-	AnimationPlayer* gameOverFlickering;
-	ImageSequenceResource* gameOverImseq;
-	sf::Sprite gameOverSprite;
-	Token_t gameOver;
-	Token_t gameReset;
-
-	GameOverManager(ResourceManager *rm){
-		gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");
-		gameOverFlickering = new AnimationPlayer(&gameOverSprite, gameOverImseq, true);
-		gameOverFlickering->Start();
-		_zOrder = 1; 
-
-		gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
-		{
-			AddToDrawableManager();
-		});
-
-		gameReset = Dispatcher::getInstance().Connect(resetGameEventID, [&](const Event& event)
-		{
-			RemoveFromDrawableManager();
-		});
-
-	}
-
-	void Update(sf::Time fixedTime) {
-		gameOverFlickering->Update(fixedTime);
-		gameOverSprite.setPosition({ (WindowResolution::_W - gameOverSprite.getTextureRect().width) / 2.f, 100 });
-	}
-
-	void AddToDrawableManager() {
-		DrawableManager::getInstance().AddDrawableObject(this);
-	}
-	void RemoveFromDrawableManager() {
-		DrawableManager::getInstance().RemoveDrawableObject(this);
-	}
-
-	void Draw(sf::RenderWindow& window)
-	{
-		window.draw(gameOverSprite);
-	}
-	int GetZOrder() const
-	{
-		return _zOrder;
-	}
-};
-
 static int score = 0;
 
 void Scoring(AsteroidType type)
@@ -126,7 +77,7 @@ int main()
 	}
 
 	ResourceManager *rm = new ResourceManager(resourceConfig);
-	GameOverManager gameOverManager(rm);
+	GameOverScreen gameOverManager(rm);
 
 
 	/*
@@ -386,7 +337,9 @@ int main()
 
 		if (rw.pollEvent(sysEvent))
 		{
-			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<PictureButton>("resetButton")->isVisible && ui.Get<PictureButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
+			if ((sysEvent.type == sysEvent.KeyPressed && sysEvent.key.code == sf::Keyboard::Return) || 
+				(sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<PictureButton>("resetButton")->isVisible && 
+					ui.Get<PictureButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y))))
 			{
 				ResetGameEvent resetGameEvent;
 				dispatcher.Send(resetGameEvent, EventTypes::resetGameEventID);

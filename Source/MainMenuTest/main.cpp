@@ -12,16 +12,25 @@ namespace MainMenuTest {
 		//WindowResolution::SetResolution(rw);
 		
 		UI ui(rw);
+		sf::Font font;
+		font.loadFromFile("");
 
-		MainMenu *mMenu = MainMenu::Create(sf::Vector2f(1200, 800), ui);
+		MainMenu *mMenu = MainMenu::Create(sf::Vector2f(1200, 800), font, ui);
+		Status gameStatus = MAIN_MENU;
+		float volumeValue;
+		mMenu->Draw();
 
+		while (rw.isOpen() && (gameStatus != EXIT)){
 
-		while (rw.isOpen()) {
+			if (gameStatus == MAIN_MENU) {
+				
+				mMenu->HandleButtons();
+				mMenu->Draw();
+				volumeValue = mMenu->GetVolume();
+				gameStatus = mMenu->GetCurrentStatus();
+			}
 
-			mMenu->HandleButtons();
-			mMenu->Draw();
 			rw.display();
-
 		}
 
 	}

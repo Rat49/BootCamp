@@ -123,7 +123,7 @@ void InputManager::Update()
 					break;
 				}
 			}
-			else if (action.primary == sf::Keyboard::Pause && action.state == ButtonsState::JustPressed)
+			else if (action.primary == sf::Keyboard::P && action.state == ButtonsState::JustPressed)
 			{
 				PausedMode();
 				switch (GetMode())
@@ -141,7 +141,6 @@ void InputManager::Update()
 					_mode = InputMode::Raw;
 					break;
 				}
-				std::cout << "PAUSE" << std::endl;
 			}
 		}
 		else
@@ -167,7 +166,7 @@ void  InputManager::ConsoleMode()
 {
 	for (auto &action : buttonsState)
 	{
-		if (action.primary != sf::Keyboard::Pause && action.primary != sf::Keyboard::Tilde)
+		if (action.primary != sf::Keyboard::P && action.primary != sf::Keyboard::Tilde)
 		{
 			action.state = (action.state == ButtonsState::Block) ? ButtonsState::Released : ButtonsState::Block;
 		}
@@ -178,7 +177,7 @@ void  InputManager::PausedMode()
 {
 	for (auto &action : buttonsState)
 	{
-		if (action.primary != sf::Keyboard::Pause && action.primary != sf::Keyboard::Tilde)
+		if (action.primary != sf::Keyboard::P && action.primary != sf::Keyboard::Tilde)
 		{
 			action.state = (action.state == ButtonsState::Block) ? ButtonsState::Released : ButtonsState::Block;
 		}

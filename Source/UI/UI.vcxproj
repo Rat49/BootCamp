@@ -116,7 +116,7 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\Events;$(SolutionDir)SFML\include;$(SolutionDir)Source\Events;$(SolutionDir)Source\Spaceship;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)SFML\include;$(SolutionDir)Source\Physics;$(SolutionDir)Source\Resources;$(SolutionDir)Source\Animation;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Events;$(SolutionDir)Source\Spaceship;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -131,6 +131,7 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AchievementShower.cpp" />
+    <ClCompile Include="GameOverScreen.cpp" />
     <ClCompile Include="Label.cpp" />
     <ClCompile Include="Picture.cpp" />
     <ClCompile Include="PictureButton.cpp" />
@@ -141,6 +142,7 @@ xcopy "$(SolutionDir)SFML\bin\sfml-window-d-2.dll" "$(OutDir)\*.*" /F /R /Y /I
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AchievementShower.h" />
+    <ClInclude Include="GameOverScreen.h" />
     <ClInclude Include="Label.h" />
     <ClInclude Include="Picture.h" />
     <ClInclude Include="PictureButton.h" />
