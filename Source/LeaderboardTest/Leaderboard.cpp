@@ -56,16 +56,22 @@ void Leaderboard::UpdateLocalLeaderboard() {
 
 	GetLeaderboardRequest request;
 	request.StatisticName = "Top Scores";
-
 	PlayFabClientAPI::GetLeaderboard(request, [this](const GetLeaderboardResult& result, void* customData) { 
 
 		leaderboard = result.Leaderboard;
+		
 		std::cout << "Operation success" << std::endl;
 
 	}, OnFail);
 
 	while (PlayFabClientAPI::Update() != 0)
 		Sleep(1);
+
+	for (auto i : leaderboard)
+	{
+		std::cout << i.DisplayName.length() << "\t\t" << i.StatValue << std::endl;
+	}
+
 }
 
 
@@ -75,6 +81,7 @@ void OnLoginSuccess(const LoginResult& result, void* customData) {
 
 void OnPlayerStatisticsUpdateSuccess(const UpdatePlayerStatisticsResult& result, void* customData) {
 	std::cout << "Player statistic was updated" << std::endl;
+	
 }
 
 void OnNameUpdateSuccess(const UpdateUserTitleDisplayNameResult& result, void* customData) {

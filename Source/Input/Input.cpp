@@ -24,6 +24,20 @@ InputManager::InputManager(const std::multimap<Action_t, ButtonKey_t>& buttonsKe
 			buttonsState.insert(buttonsState.begin(), config);
 		}
 	}
+
+	gameOver = Dispatcher::getInstance().Connect(gameOverEventID, [&](const Event& event)
+	{
+		_mode = InputMode::GameOver;
+	});
+
+	gameReset = Dispatcher::getInstance().Connect(resetGameEventID, [&](const Event& event)
+	{
+		_mode = InputMode::Normal;
+		for (auto &action : buttonsState)
+		{
+			action.state = ButtonsState::Released;
+		}
+	});
 }
 
 bool InputManager::GetState(const Action_t searchAction, ButtonsState & result) const 
@@ -86,11 +100,47 @@ void InputManager::Update()
 			sf::Keyboard::isKeyPressed(static_cast<sf::Keyboard::Key>(action.alternatively)))
 		{
 			action.state = ChangeStateWhenPressed(action.state);
+			if (_mode == InputMode::GameOver) {
+				GameOverMode();
+			 }
+
 			if (action.primary == sf::Keyboard::Tilde && action.state == ButtonsState::JustPressed)
 			{
 				ConsoleMode();
-				_mode = (GetMode() == InputMode::Raw) ? InputMode::Normal : InputMode::Raw;
-				
+				switch (GetMode())
+				{
+				case InputMode::Raw:
+					_mode = InputMode::Normal;
+					break;
+				case InputMode::Paused:
+					_mode = InputMode::PausedRaw;
+					break;
+				case InputMode::Normal:
+					_mode = InputMode::Raw;
+					break;
+				case InputMode::PausedRaw:
+					_mode = InputMode::Paused;
+					break;
+				}
+			}
+			else if (action.primary == sf::Keyboard::P && action.state == ButtonsState::JustPressed)
+			{
+				PausedMode();
+				switch (GetMode())
+				{
+				case InputMode::Raw:
+					_mode = InputMode::PausedRaw;
+					break;
+				case InputMode::Paused:
+					_mode = InputMode::Normal;
+					break;
+				case InputMode::Normal:
+					_mode = InputMode::Paused;
+					break;
+				case InputMode::PausedRaw:
+					_mode = InputMode::Raw;
+					break;
+				}
 			}
 		}
 		else
@@ -100,11 +150,34 @@ void InputManager::Update()
 	}
 }
 
+void  InputManager::GameOverMode()
+{
+	for (auto &action : buttonsState)
+	{
+		if (action.primary != sf::Keyboard::Return && action.primary != sf::Keyboard::Escape)
+		{
+			action.state = (action.state == ButtonsState::Block) ? ButtonsState::Released : ButtonsState::Block;
+		}
+	}
+}
+
+
 void  InputManager::ConsoleMode() 
 {
 	for (auto &action : buttonsState)
 	{
-		if (action.primary != sf::Keyboard::Tilde)
+		if (action.primary != sf::Keyboard::P && action.primary != sf::Keyboard::Tilde)
+		{
+			action.state = (action.state == ButtonsState::Block) ? ButtonsState::Released : ButtonsState::Block;
+		}
+	}
+}
+
+void  InputManager::PausedMode()
+{
+	for (auto &action : buttonsState)
+	{
+		if (action.primary != sf::Keyboard::P && action.primary != sf::Keyboard::Tilde)
 		{
 			action.state = (action.state == ButtonsState::Block) ? ButtonsState::Released : ButtonsState::Block;
 		}

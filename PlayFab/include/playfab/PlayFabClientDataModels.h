@@ -2155,13 +2155,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            AddGenericIDResult(const AddGenericIDResult& src) :
+            AddGenericIDResult(const AddGenericIDResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~AddGenericIDResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -2208,13 +2208,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            AddOrUpdateContactEmailResult(const AddOrUpdateContactEmailResult& src) :
+            AddOrUpdateContactEmailResult(const AddOrUpdateContactEmailResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~AddOrUpdateContactEmailResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -2266,13 +2266,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            AddSharedGroupMembersResult(const AddSharedGroupMembersResult& src) :
+            AddSharedGroupMembersResult(const AddSharedGroupMembersResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~AddSharedGroupMembersResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -2431,13 +2431,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            AndroidDevicePushNotificationRegistrationResult(const AndroidDevicePushNotificationRegistrationResult& src) :
+            AndroidDevicePushNotificationRegistrationResult(const AndroidDevicePushNotificationRegistrationResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~AndroidDevicePushNotificationRegistrationResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -2489,13 +2489,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            AttributeInstallResult(const AttributeInstallResult& src) :
+            AttributeInstallResult(const AttributeInstallResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~AttributeInstallResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -3619,13 +3619,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            EmptyResult(const EmptyResult& src) :
+            EmptyResult(const EmptyResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~EmptyResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -6975,13 +6975,13 @@ namespace PlayFab
                 PlayFabRequestCommon()
             {}
 
-            GetPlayerSegmentsRequest(const GetPlayerSegmentsRequest& src) :
+            GetPlayerSegmentsRequest(const GetPlayerSegmentsRequest& /*src*/) :
                 PlayFabRequestCommon()
             {}
 
             ~GetPlayerSegmentsRequest() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -8373,13 +8373,13 @@ namespace PlayFab
                 PlayFabRequestCommon()
             {}
 
-            GetTimeRequest(const GetTimeRequest& src) :
+            GetTimeRequest(const GetTimeRequest& /*src*/) :
                 PlayFabRequestCommon()
             {}
 
             ~GetTimeRequest() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -8785,13 +8785,13 @@ namespace PlayFab
                 PlayFabRequestCommon()
             {}
 
-            GetUserInventoryRequest(const GetUserInventoryRequest& src) :
+            GetUserInventoryRequest(const GetUserInventoryRequest& /*src*/) :
                 PlayFabRequestCommon()
             {}
 
             ~GetUserInventoryRequest() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -9077,13 +9077,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            LinkAndroidDeviceIDResult(const LinkAndroidDeviceIDResult& src) :
+            LinkAndroidDeviceIDResult(const LinkAndroidDeviceIDResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~LinkAndroidDeviceIDResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -9135,13 +9135,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            LinkCustomIDResult(const LinkCustomIDResult& src) :
+            LinkCustomIDResult(const LinkCustomIDResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~LinkCustomIDResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -9193,13 +9193,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            LinkFacebookAccountResult(const LinkFacebookAccountResult& src) :
+            LinkFacebookAccountResult(const LinkFacebookAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~LinkFacebookAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -9251,13 +9251,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            LinkGameCenterAccountResult(const LinkGameCenterAccountResult& src) :
+            LinkGameCenterAccountResult(const LinkGameCenterAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~LinkGameCenterAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -9309,13 +9309,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            LinkGoogleAccountResult(const LinkGoogleAccountResult& src) :
+            LinkGoogleAccountResult(const LinkGoogleAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~LinkGoogleAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -9377,13 +9377,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            LinkIOSDeviceIDResult(const LinkIOSDeviceIDResult& src) :
+            LinkIOSDeviceIDResult(const LinkIOSDeviceIDResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~LinkIOSDeviceIDResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -9440,13 +9440,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            LinkKongregateAccountResult(const LinkKongregateAccountResult& src) :
+            LinkKongregateAccountResult(const LinkKongregateAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~LinkKongregateAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -9498,13 +9498,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            LinkSteamAccountResult(const LinkSteamAccountResult& src) :
+            LinkSteamAccountResult(const LinkSteamAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~LinkSteamAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -9556,13 +9556,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            LinkTwitchAccountResult(const LinkTwitchAccountResult& src) :
+            LinkTwitchAccountResult(const LinkTwitchAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~LinkTwitchAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -9624,13 +9624,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            LinkWindowsHelloAccountResponse(const LinkWindowsHelloAccountResponse& src) :
+            LinkWindowsHelloAccountResponse(const LinkWindowsHelloAccountResponse& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~LinkWindowsHelloAccountResponse() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -11128,13 +11128,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            RegisterForIOSPushNotificationResult(const RegisterForIOSPushNotificationResult& src) :
+            RegisterForIOSPushNotificationResult(const RegisterForIOSPushNotificationResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~RegisterForIOSPushNotificationResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -11334,13 +11334,13 @@ namespace PlayFab
                 PlayFabRequestCommon()
             {}
 
-            RemoveContactEmailRequest(const RemoveContactEmailRequest& src) :
+            RemoveContactEmailRequest(const RemoveContactEmailRequest& /*src*/) :
                 PlayFabRequestCommon()
             {}
 
             ~RemoveContactEmailRequest() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -11358,13 +11358,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            RemoveContactEmailResult(const RemoveContactEmailResult& src) :
+            RemoveContactEmailResult(const RemoveContactEmailResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~RemoveContactEmailResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -11411,13 +11411,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            RemoveFriendResult(const RemoveFriendResult& src) :
+            RemoveFriendResult(const RemoveFriendResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~RemoveFriendResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -11464,13 +11464,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            RemoveGenericIDResult(const RemoveGenericIDResult& src) :
+            RemoveGenericIDResult(const RemoveGenericIDResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~RemoveGenericIDResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -11522,13 +11522,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            RemoveSharedGroupMembersResult(const RemoveSharedGroupMembersResult& src) :
+            RemoveSharedGroupMembersResult(const RemoveSharedGroupMembersResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~RemoveSharedGroupMembersResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -11638,13 +11638,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            RestoreIOSPurchasesResult(const RestoreIOSPurchasesResult& src) :
+            RestoreIOSPurchasesResult(const RestoreIOSPurchasesResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~RestoreIOSPurchasesResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -11701,13 +11701,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            SendAccountRecoveryEmailResult(const SendAccountRecoveryEmailResult& src) :
+            SendAccountRecoveryEmailResult(const SendAccountRecoveryEmailResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~SendAccountRecoveryEmailResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -11759,13 +11759,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            SetFriendTagsResult(const SetFriendTagsResult& src) :
+            SetFriendTagsResult(const SetFriendTagsResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~SetFriendTagsResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -11817,13 +11817,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            SetPlayerSecretResult(const SetPlayerSecretResult& src) :
+            SetPlayerSecretResult(const SetPlayerSecretResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~SetPlayerSecretResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12139,13 +12139,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UnlinkAndroidDeviceIDResult(const UnlinkAndroidDeviceIDResult& src) :
+            UnlinkAndroidDeviceIDResult(const UnlinkAndroidDeviceIDResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UnlinkAndroidDeviceIDResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12192,13 +12192,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UnlinkCustomIDResult(const UnlinkCustomIDResult& src) :
+            UnlinkCustomIDResult(const UnlinkCustomIDResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UnlinkCustomIDResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12216,13 +12216,13 @@ namespace PlayFab
                 PlayFabRequestCommon()
             {}
 
-            UnlinkFacebookAccountRequest(const UnlinkFacebookAccountRequest& src) :
+            UnlinkFacebookAccountRequest(const UnlinkFacebookAccountRequest& /*src*/) :
                 PlayFabRequestCommon()
             {}
 
             ~UnlinkFacebookAccountRequest() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12240,13 +12240,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UnlinkFacebookAccountResult(const UnlinkFacebookAccountResult& src) :
+            UnlinkFacebookAccountResult(const UnlinkFacebookAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UnlinkFacebookAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12264,13 +12264,13 @@ namespace PlayFab
                 PlayFabRequestCommon()
             {}
 
-            UnlinkGameCenterAccountRequest(const UnlinkGameCenterAccountRequest& src) :
+            UnlinkGameCenterAccountRequest(const UnlinkGameCenterAccountRequest& /*src*/) :
                 PlayFabRequestCommon()
             {}
 
             ~UnlinkGameCenterAccountRequest() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12288,13 +12288,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UnlinkGameCenterAccountResult(const UnlinkGameCenterAccountResult& src) :
+            UnlinkGameCenterAccountResult(const UnlinkGameCenterAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UnlinkGameCenterAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12312,13 +12312,13 @@ namespace PlayFab
                 PlayFabRequestCommon()
             {}
 
-            UnlinkGoogleAccountRequest(const UnlinkGoogleAccountRequest& src) :
+            UnlinkGoogleAccountRequest(const UnlinkGoogleAccountRequest& /*src*/) :
                 PlayFabRequestCommon()
             {}
 
             ~UnlinkGoogleAccountRequest() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12336,13 +12336,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UnlinkGoogleAccountResult(const UnlinkGoogleAccountResult& src) :
+            UnlinkGoogleAccountResult(const UnlinkGoogleAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UnlinkGoogleAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12389,13 +12389,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UnlinkIOSDeviceIDResult(const UnlinkIOSDeviceIDResult& src) :
+            UnlinkIOSDeviceIDResult(const UnlinkIOSDeviceIDResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UnlinkIOSDeviceIDResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12413,13 +12413,13 @@ namespace PlayFab
                 PlayFabRequestCommon()
             {}
 
-            UnlinkKongregateAccountRequest(const UnlinkKongregateAccountRequest& src) :
+            UnlinkKongregateAccountRequest(const UnlinkKongregateAccountRequest& /*src*/) :
                 PlayFabRequestCommon()
             {}
 
             ~UnlinkKongregateAccountRequest() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12437,13 +12437,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UnlinkKongregateAccountResult(const UnlinkKongregateAccountResult& src) :
+            UnlinkKongregateAccountResult(const UnlinkKongregateAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UnlinkKongregateAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12461,13 +12461,13 @@ namespace PlayFab
                 PlayFabRequestCommon()
             {}
 
-            UnlinkSteamAccountRequest(const UnlinkSteamAccountRequest& src) :
+            UnlinkSteamAccountRequest(const UnlinkSteamAccountRequest& /*src*/) :
                 PlayFabRequestCommon()
             {}
 
             ~UnlinkSteamAccountRequest() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12485,13 +12485,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UnlinkSteamAccountResult(const UnlinkSteamAccountResult& src) :
+            UnlinkSteamAccountResult(const UnlinkSteamAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UnlinkSteamAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12509,13 +12509,13 @@ namespace PlayFab
                 PlayFabRequestCommon()
             {}
 
-            UnlinkTwitchAccountRequest(const UnlinkTwitchAccountRequest& src) :
+            UnlinkTwitchAccountRequest(const UnlinkTwitchAccountRequest& /*src*/) :
                 PlayFabRequestCommon()
             {}
 
             ~UnlinkTwitchAccountRequest() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12533,13 +12533,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UnlinkTwitchAccountResult(const UnlinkTwitchAccountResult& src) :
+            UnlinkTwitchAccountResult(const UnlinkTwitchAccountResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UnlinkTwitchAccountResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12586,13 +12586,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UnlinkWindowsHelloAccountResponse(const UnlinkWindowsHelloAccountResponse& src) :
+            UnlinkWindowsHelloAccountResponse(const UnlinkWindowsHelloAccountResponse& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UnlinkWindowsHelloAccountResponse() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12873,13 +12873,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UpdateCharacterStatisticsResult(const UpdateCharacterStatisticsResult& src) :
+            UpdateCharacterStatisticsResult(const UpdateCharacterStatisticsResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UpdateCharacterStatisticsResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12926,13 +12926,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UpdatePlayerStatisticsResult(const UpdatePlayerStatisticsResult& src) :
+            UpdatePlayerStatisticsResult(const UpdatePlayerStatisticsResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UpdatePlayerStatisticsResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -12994,13 +12994,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            UpdateSharedGroupDataResult(const UpdateSharedGroupDataResult& src) :
+            UpdateSharedGroupDataResult(const UpdateSharedGroupDataResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~UpdateSharedGroupDataResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -13193,13 +13193,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            ValidateAmazonReceiptResult(const ValidateAmazonReceiptResult& src) :
+            ValidateAmazonReceiptResult(const ValidateAmazonReceiptResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~ValidateAmazonReceiptResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -13261,13 +13261,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            ValidateGooglePlayPurchaseResult(const ValidateGooglePlayPurchaseResult& src) :
+            ValidateGooglePlayPurchaseResult(const ValidateGooglePlayPurchaseResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~ValidateGooglePlayPurchaseResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -13324,13 +13324,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            ValidateIOSReceiptResult(const ValidateIOSReceiptResult& src) :
+            ValidateIOSReceiptResult(const ValidateIOSReceiptResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~ValidateIOSReceiptResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 
@@ -13392,13 +13392,13 @@ namespace PlayFab
                 PlayFabResultCommon()
             {}
 
-            ValidateWindowsReceiptResult(const ValidateWindowsReceiptResult& src) :
+            ValidateWindowsReceiptResult(const ValidateWindowsReceiptResult& /*src*/) :
                 PlayFabResultCommon()
             {}
 
             ~ValidateWindowsReceiptResult() { }
 
-            void FromJson(web::json::value& input) override
+            void FromJson(web::json::value& /*input*/) override
             {
             }
 

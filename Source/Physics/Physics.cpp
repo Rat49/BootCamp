@@ -16,24 +16,7 @@ void RigidBody::Update(float t)
 {
   _coords.x += _speed.x * t;
   _coords.y += _speed.y * t;
- // std::cout << _coords.x << " " << _coords.y << std::endl;
-  /*if(_coords.x > WindowResolution::_W)
-  {
-    _coords.x = 0;
-  }
-  if(_coords.x < 0)
-  {
-    _coords.x = WindowResolution::_W;
-  }
-  if(_coords.y > WindowResolution::_H)
-  {
-    _coords.y = 0;
-  }
-  if(_coords.y < 0)
-  {
-    _coords.y = WindowResolution::_H;
-  }
-*/}
+}
 
 void RigidBody::SetRadius(float r) { _radius = r; }
 
@@ -105,10 +88,10 @@ void ResolveCollision(RigidBody & go1, RigidBody & go2)
     (dpNorm2 * (go2.GetMass() - go1.GetMass()) + 2.0f * go1.GetMass() * dpNorm1) / (go1.GetMass() + go2.GetMass());
 
   // Update ball velocities
-  go1.SetSpeedX((tx * dpTan1 + nx * m1));
-  go1.SetSpeedY((ty * dpTan1 + ny * m1));
-  go2.SetSpeedX((tx * dpTan2 + nx * m2));
-  go2.SetSpeedY((ty * dpTan2 + ny * m2));
+  go1.SetSpeedX((tx * dpTan1 + nx * m1) * 0.9);
+  go1.SetSpeedY((ty * dpTan1 + ny * m1) * 0.9);
+  go2.SetSpeedX((tx * dpTan2 + nx * m2) * 0.9);
+  go2.SetSpeedY((ty * dpTan2 + ny * m2) * 0.9);
 
 }
 
@@ -133,4 +116,14 @@ void RandomFill(RigidBody * RigidBodysFunc, int length)
                                 static_cast<float>(0 + std::rand() / ((RAND_MAX + 1u) / 15))});
     RigidBodysFunc[i].SetMass(10.f + std::rand() / ((RAND_MAX + 1u) / 20));
   }
+}
+
+void RigidBody::SetColliderVisible(bool param)
+{
+	_isColliderVisible = param;
+}
+
+bool RigidBody::IsColliderVisible()
+{
+	return _isColliderVisible;
 }

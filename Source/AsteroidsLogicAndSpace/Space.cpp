@@ -1,14 +1,35 @@
 #include "Space.h"
 
-
-
-Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize) :
-	_poolAsteroid(totalCountAsteroids), _poolStar(totalCountStar),_sizeSpace(windowSize)
+Space::Space(const int totalCountAsteroids, const int totalCountStar, const sf::Vector2u windowSize, ResourceManager &rm) 
+	: _totalCountExplosion(30)
+	, _poolAsteroid(totalCountAsteroids)
+	, _poolStar(totalCountStar)
+	,_sizeSpace(windowSize)
+	, _poolExplosion(_totalCountExplosion)
+	, _crashSound(rm.GetResource<AudioResource>("crashSound"))
 {
-
-	
-	
+	Dispatcher& dispatcher = Dispatcher::getInstance();
+	_createExplosion = dispatcher.Connect(createExplosionEvent, [&](const Event& event)
+	{
+		AddExplosion(event);
+	});
 }
+
+void Space::AddExplosion(const Event& cEvent) {
+	const CreateExplosionEvent &collisionEvent = dynamic_cast<const CreateExplosionEvent&>(cEvent);
+	ExplosionParticle* explosion = _poolExplosion.Get();
+	auto position = collisionEvent.position;
+	explosion->SetPosition(position);
+	explosion->Play();
+	_explosions.push_back(explosion);
+}
+
+void Space::AddAmmunition(ResourceManager *rm)
+ {
+	ammunition = new Ammunition(rm);
+	ammunition->Init();
+}
+
 
 void Space::AddSomeStars(const int count)
 {
@@ -30,7 +51,15 @@ void Space::AddSomeAsteroids(const int count, const sf::Sprite& sprite)
 	}
 }
 
-void Space::Update(const sf::Time& deltaTime)
+void Space::SetColliderVisible(bool param)
+{
+	for (size_t i = 0; i < asteroids.size(); ++i)
+	{
+		asteroids[i]->SetColliderVisible(param);
+	}
+}
+
+void Space::Update(const float physicsStepTargetFrameTime)
 {
 	for (size_t i = 0; i < asteroids.size(); ++i)
 	{ 
@@ -41,12 +70,24 @@ void Space::Update(const sf::Time& deltaTime)
 			{
 				for (int j = 0; j < 4; ++j)
 				{
-					if (!_poolAsteroid.Empty())
-		     			{
+					if (!_poolAsteroid.Empty() && rand()%2 + 1 < 3)
+					{
 						Asteroid* asteroidNew = _poolAsteroid.Get();
-						asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace);
+						asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace, asteroid->IsColliderVisible());
 						asteroids.push_back(asteroidNew);
 					}
+				}
+			}
+			else 
+			{
+				++_countSmallDeadAsteroids;
+				if (_countSmallDeadAsteroids >= 16)
+				{
+					Asteroid* asteroidNew = _poolAsteroid.Get();
+					asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace, asteroid->IsColliderVisible());
+					asteroids.push_back(asteroidNew);
+					_countSmallDeadAsteroids = 0;
+					
 				}
 			}
 
@@ -56,28 +97,57 @@ void Space::Update(const sf::Time& deltaTime)
 				_poolAsteroid.Put(asteroid);
 				asteroids.erase(std::find(asteroids.begin(), asteroids.end(), asteroid));
 				--i;
-				++_countSmallDeadAsteroids;
+				_crashSound->Get().play();
 			}
-			if (_countSmallDeadAsteroids >= 16)
-			{
-				Asteroid* asteroidNew = _poolAsteroid.Get();
-				asteroidNew->InitFromCrash(asteroid->_sprite, asteroid->GetCoordinates(), asteroid->_type, _sizeSpace);
-				asteroids.push_back(asteroidNew);
-				_countSmallDeadAsteroids = 0;
-      			} 
 		}
-		asteroid->Update(deltaTime.asSeconds());
+		asteroid->Update(physicsStepTargetFrameTime);
 	}
 
 	for (auto *star : _stars)
 	{
-		star->Update(deltaTime.asSeconds());
+		star->Update(physicsStepTargetFrameTime);
 	}
+	ammunition->Update(physicsStepTargetFrameTime);
+
+	for (auto *explosion : _explosions)
+	{
+ 		if (!explosion->IsEnd())
+		{
+			explosion->Update(sf::milliseconds(physicsStepTargetFrameTime*1000));
+		}
+		else
+		{
+			DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(&(explosion->particles)));
+			_explosions.erase(std::find(_explosions.begin(), _explosions.end(), explosion));
+			_poolExplosion.Put(explosion);
+		}
+	}
+}
+
+void Space::Reset(const int asteroidCount, const sf::Sprite& asteroidSprite)
+{
+	for (auto &asteroid : asteroids)
+	{
+		_poolAsteroid.Put(asteroid);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(asteroid));
+	}
+	asteroids.clear();
+
+	for (auto *explosion : _explosions)
+	{
+		_poolExplosion.Put(explosion);
+		DrawableManager::getInstance().RemoveDrawableObject(static_cast<Drawable*>(&(explosion->particles)));
+		
+	}
+	_explosions.clear();
+
+	AddSomeAsteroids(asteroidCount, asteroidSprite);
 }
 
 
 Space::~Space()
 {
+	Dispatcher::getInstance().Disconnect(createExplosionEvent,_createExplosion);
 
 	for (auto &asteroid : asteroids)
 	{
@@ -95,5 +165,10 @@ Space::~Space()
 			star->Remove();
 			_poolStar.Put(star);
 		}
+	}
+
+	for (auto &explosion : _explosions)
+	{
+		_poolExplosion.Put(explosion);
 	}
 }

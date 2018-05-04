@@ -1,6 +1,6 @@
 #pragma once
 
-#include"playfab\PlayFabClientAPI.h"
+#include"playfab/PlayFabClientAPI.h"
 #include"playfab/PlayFabClientDataModels.h"
 #include"playfab/PlayFabSettings.h"
 
@@ -26,6 +26,7 @@ public:
 	void UpdatePlayerStatistic(const int statisticValue);
 	void UpdateUserTitleDisplayName(const std::string& name);
 	void UpdateLocalLeaderboard();
+	std::string GetLeaderboard();
 
 };
 

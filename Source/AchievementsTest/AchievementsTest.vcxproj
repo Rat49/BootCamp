@@ -73,11 +73,11 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Achievements;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Events;$(SolutionDir)Source\UI;$(SolutionDir)SFML\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Resources;$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Achievements;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Events;$(SolutionDir)Source\UI;$(SolutionDir)SFML\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin</AdditionalLibraryDirectories>
-      <AdditionalDependencies>AsteroidsLogicAndSpace_d.lib;Events_d.lib;Achievements_d.lib;Physics_d.lib;UI_d.lib;Utility_d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Spaceship_d.lib;Resources_d.lib;AsteroidsLogicAndSpace_d.lib;Events_d.lib;Achievements_d.lib;Physics_d.lib;UI_d.lib;Utility_d.lib;sfml-system-d.lib;sfml-window-d.lib;sfml-network-d.lib;sfml-audio-d.lib;sfml-graphics-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
@@ -97,12 +97,12 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Achievements;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Events;$(SolutionDir)Source\UI;$(SolutionDir)SFML\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Source\Spaceship;$(SolutionDir)Source\Resources;$(SolutionDir)Source\AsteroidsLogicAndSpace;$(SolutionDir)Source\Utility;$(SolutionDir)Source\Achievements;$(SolutionDir)Source\Physics;$(SolutionDir)Source\ConfigManager;$(SolutionDir)Source\Events;$(SolutionDir)Source\UI;$(SolutionDir)SFML\include</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>AsteroidsLogicAndSpace.lib;Events.lib;Achievements.lib;Physics.lib;UI.lib;Utility.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Spaceship.lib;Resources.lib;AsteroidsLogicAndSpace.lib;Events.lib;Achievements.lib;Physics.lib;UI.lib;Utility.lib;sfml-system.lib;sfml-window.lib;sfml-graphics.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>$(SolutionDir)SFML\lib;$(SolutionDir)Bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>

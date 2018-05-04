@@ -1,383 +1,545 @@
 #include "Asteroids.h"
 
-const int WINDOW_WIDTH = 1200;
-const int WINDOW_HEIGHT = 800;
+std::string GetNameForState(ButtonsState bState) {
 
-std::string GetNameForState(ButtonsState bState)
-{
-
-    switch (bState)
-    {
-    case ButtonsState::JustPressed:
-        return "JustPressed";
-    case ButtonsState::Pressed:
-        return "Pressed";
-    case ButtonsState::JustReleased:
-        return "JustReleased";
-    case ButtonsState::Released:
-        return "Released";
-    default:
-        return "Undefined";
-        break;
-    }
+	switch (bState)
+	{
+	case ButtonsState::JustPressed:
+		return "JustPressed";
+	case ButtonsState::Pressed:
+		return "Pressed";
+	case ButtonsState::JustReleased:
+		return "JustReleased";
+	case ButtonsState::Released:
+		return "Released";
+	default:
+		return "Undefined";
+		break;
+	}
 }
 
-void UpdateCollisions()
-{
-}
+static int score = 0;
 
+void Scoring(AsteroidType type)
+{
+	switch (type)
+	{
+	case AsteroidType::Middle:
+		score += 15;
+		break;
+	case AsteroidType::Small:
+		score += 20;
+		break;
+	case AsteroidType::Big:
+	default:
+		score += 10;
+		break;
+	}
+};
 
 int main()
 {
-    ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
-    Dispatcher &   dispatcher = Dispatcher::getInstance();
-    DrawableManager& drawableManager = DrawableManager::getInstance();
-    /*
-    ResourceManager Initialization
-    */
+	/*
+	ConfigManagers, Leaderboard, DrawableManager and Dispatcher Initialization
+	*/
+	ConfigManager* cm1 = ConfigManager::Create("GameConfig.INI");
+	ConfigManager* achievementCM = ConfigManager::Create("AchievementsConfig.INI");
+	Dispatcher &   dispatcher = Dispatcher::getInstance();
+	DrawableManager& drawableManager = DrawableManager::getInstance();
+	bool isReset = false;
+	Leaderboard *leaderboard = Leaderboard::Create();
+	bool createAccount = true;
+	std::string name;
+	
+	std::cout << "Enter your name:" << std::endl;
+	std::cin >> name;
+	leaderboard->Login(name, createAccount);
+	leaderboard->Login(name);
+	leaderboard->UpdateUserTitleDisplayName(name);
+	leaderboard->UpdatePlayerStatistic(score);
 
 
+	/*
+	ResourceManager Initialization
+	*/
+	std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
+	resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").GetParams()));
+	resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").GetParams()));
+	resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").GetParams()));
+	std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").GetParams();
+	resourceConfig.insert(std::make_pair("ImageSequenceResource", imageSequenceCategory));
+	std::vector<std::multimap<const std::string, const std::string>> imageSequenceSettings(imageSequenceCategory.size());
 
-    std::map<std::string, std::multimap<const std::string, const std::string>> resourceConfig;
-    resourceConfig.insert(std::make_pair("AudioResource", cm1->GetCategory("AudioResource").GetParams()));
-    resourceConfig.insert(std::make_pair("PictureResource", cm1->GetCategory("PictureResource").GetParams()));
-    resourceConfig.insert(std::make_pair("TextureResource", cm1->GetCategory("TextureResource").GetParams()));
-    std::multimap<const std::string, const std::string> imageSequenceCategory = cm1->GetCategory("ImageSequenceResource").GetParams();
-    resourceConfig.insert(std::make_pair("ImageSequenceResource", imageSequenceCategory));
-    std::vector<std::multimap<const std::string, const std::string>> imageSequenceSettings(imageSequenceCategory.size());
+	for (auto i : imageSequenceCategory)
+	{
+		resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first,
+			cm1->GetCategory("ImageSequenceResource." + i.first).GetParams()));
+	}
 
-    for (auto i : imageSequenceCategory)
-    {
-        resourceConfig.insert(std::make_pair("ImageSequenceResource." + i.first,
-                              cm1->GetCategory("ImageSequenceResource." + i.first).GetParams()));
-    }
+	ResourceManager *rm = new ResourceManager(resourceConfig);
+	GameOverScreen gameOverManager(rm);
 
-    ResourceManager *rm = new ResourceManager(resourceConfig);
 
-    /*
-    InputManager Initialization
-    */
+	/*
+	InputManager Initialization
+	*/
+	std::multimap<int, ButtonKey_t> actions;
+	LogCategory category = cm1->GetCategory("Input");
+	std::multimap<const std::string, const std::string> inputCategory = category.GetParams();
 
-    std::multimap<int, ButtonKey_t> actions;
-    LogCategory category = cm1->GetCategory("Input");
-    std::multimap<const std::string, const std::string> inputCategory = category.GetParams();
-    for (auto i : inputCategory)
-    {
-        int a = atoi(i.first.c_str());
-        int b = atoi(i.second.c_str());
-        actions.insert(std::pair<int, int>(a, b));
-    }
-    InputManager input(actions);
-    ButtonsState previousStateMoveUp = ButtonsState::Released;
-    ButtonsState previousStateMoveDown = ButtonsState::Released;
-    ButtonsState previousStateMoveLeft = ButtonsState::Released;
-    ButtonsState previousStateMoveRight = ButtonsState::Released;
-    ButtonsState previousStateExit = ButtonsState::Released;
-    ButtonsState previousStateChoose = ButtonsState::Released;
-    ButtonsState previousStateShoot = ButtonsState::Released;
-    ButtonsState previousPowerfullShoot = ButtonsState::Released;
+	for (auto i : inputCategory)
+	{
+		int a = atoi(i.first.c_str());
+		int b = atoi(i.second.c_str());
+		actions.insert(std::pair<int, int>(a, b));
+	}
 
-    ButtonsState stateMoveUp;
-    ButtonsState stateMoveDown;
-    ButtonsState stateMoveLeft;
-    ButtonsState stateMoveRight;
-    ButtonsState stateExit;
-    ButtonsState stateChoose;
-    ButtonsState stateShoot;
-    ButtonsState statePowerfullShoot;
+	InputManager input(actions);
+
+	ButtonsState stateMoveUp;
+	ButtonsState stateMoveDown;
+	ButtonsState stateMoveLeft;
+	ButtonsState stateMoveRight;
+	ButtonsState stateExit;
+	ButtonsState stateShoot;
+	ButtonsState statePowerfullShoot;
+
 
 	/*
 	For Audio
 	*/
+	AudioResource * achievementSound = rm->GetResource<AudioResource>("achievementSound");
 
-	AudioResource* bulletSound = rm->GetResource<AudioResource>("shoot");
-	AudioResource* rocketSound = rm->GetResource<AudioResource>("rocket");
-	AudioResource* explosionSound = rm->GetResource<AudioResource>("crash");
-	AudioResource* collisionSound = rm->GetResource<AudioResource>("collision");
+
+	/*
+	For SpaceShip
+	*/
+	ImageSequenceResource* spaceshipImgseq = rm->GetResource<ImageSequenceResource>("spaceship");
+	ImageSequenceResource* flickeringImgseq = rm->GetResource<ImageSequenceResource>("spaceshipFlickering");
+	TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
+	TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
+
+	std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
+	Spaceship* spaceship = new Spaceship(spaceshipConfig, input, *spaceshipImgseq, *flickeringImgseq, *rm);
+	spaceship->AddToDrawableManager();
+	BulletManager bulletManager(*bulletTexture, *rocketTexture);
+
+
+	/*
+	For Physics
+	*/
+	CollisionEventBetweenAsteroids collisionAsteroidVsAsteroid;
+	CollisionEventBetweenAsteroidAndSpaceship collisionAsteroidVsSpaceship;
+	CollisionEventBetweenAsteroidAndRocket collisionAsteroidVsRocket;
+	CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
+	DeleteBulletEvent deleteBulletEvent;
+	CreateExplosionEvent createExplosion;
+
+	CollisionEventBetweenAmmunitionAndBullet collisionAmmunitionVsBullet;
+	CollisionEventBetweenAmmunitionAndRocket collisionAmmunitionVsRocket;
+	CollisionEventBetweenAmmunitionAndSpaceship collisionAmmunitionVsSpaceship;
+	CollisionEventBetweenAmmunitionAndAsteroid collisionAmmunitionVsAsteroid;
+
+
+	/*
+	Game Loop
+	*/
+	sf::RenderWindow rw(sf::VideoMode(1200, 800), "Asteroids");
+	WindowResolution::SetResolution(rw);
+
+	TextureResource* resetButton = rm->GetResource<TextureResource>("resetButton");
+
+	AnimationPlayer* gameOverFlickering;
+	ImageSequenceResource* gameOverImseq = rm->GetResource<ImageSequenceResource>("gameOver");;
+	sf::Sprite gameOverSprite;
+	gameOverFlickering = new AnimationPlayer(&gameOverSprite, gameOverImseq, true);
+	gameOverFlickering->Start();
+	
+	sf::Event sysEvent;
 	
 
-    /*
-    For SpaceShip
-    */
+	/*
+	For UI
+	*/
+	UI ui(rw);
+	sf::Font font;
+	font.loadFromFile("Resources/font/arial.ttf");
 
-    ImageSequenceResource* spaceshipImgseq = rm->GetResource<ImageSequenceResource>("spaceship");
-    ImageSequenceResource* flickeringImgseq = rm->GetResource<ImageSequenceResource>("spaceshipFlickering");
-    TextureResource* bulletTexture = rm->GetResource<TextureResource>("bullet");
-    TextureResource* rocketTexture = rm->GetResource<TextureResource>("rocket");
+	TextureResource* healthHearth = rm->GetResource<TextureResource>("health");
+	TextureResource* bullets = rm->GetResource<TextureResource>("bullets");
+	TextureResource* rockets = rm->GetResource<TextureResource>("rockets");
+	PictureResource* achievements = rm->GetResource<PictureResource>("achievements");;
 
-    std::multimap<const std::string, const std::string> spaceshipConfig = cm1->GetCategory("SpaceshipConfig").GetParams();
-    sf::Vector2f spaceshipPosition = sf::Vector2f(atof(spaceshipConfig.find("PositionX")->second.c_str()), atof(spaceshipConfig.find("PositionY")->second.c_str()));
-    sf::Vector2f spaceshipSpeed = sf::Vector2f(atof(spaceshipConfig.find("SpeedX")->second.c_str()), atof(spaceshipConfig.find("SpeedY")->second.c_str()));
+	ui.CreateLabel("90", font, PercentXY(17, 1), "bulletCount");
+	ui.CreatePicture(bullets->Get(), PercentXY(14, 2), "bullets");
+	ui.CreateLabel("10", font, PercentXY(25, 1), "rocketCount");
+	ui.CreatePicture(rockets->Get(), PercentXY(22, 2), "rockets");
 
-    Spaceship* spaceship = new Spaceship(spaceshipPosition, spaceshipSpeed, input, *spaceshipImgseq, *flickeringImgseq);
-    spaceship->AddToDrawableManager();
-    BulletManager bulletManager(*bulletTexture, *rocketTexture);
+	ui.CreatePicture(healthHearth->Get(), PercentXY(5, 2), "Life0");
+	ui.CreatePicture(healthHearth->Get(), PercentXY(7, 2), "Life1");
+	ui.CreatePicture(healthHearth->Get(), PercentXY(9, 2), "Life2");
+	ui.CreateLabel("100", font, PercentXY(2, 1), "HP");
+	ui.CreateLabel("0", font, PercentXY(93, 1), "score");
 
-    /*
-    For Physics
-    */
-    CollisionEventBetweenAsteroids collisionAsteroidVsAsteroid;
-    CollisionEventBetweenAsteroidAndSpaceship collisionAsteroidVsSpaceship;
-    CollisionEventBetweenAsteroidAndRocket collisionAsteroidVsRocket;
-    CollisionEventBetweenAsteroidAndBullet collisionAsteroidVsBullet;
-    constexpr size_t numOfObjects = 10;
-    constexpr float physicsStepTargetFrameTime = 1e3 / 60.f;
-    float           accumulatedFrameTime = 0.f;
-    sf::CircleShape circles[numOfObjects];
-    RigidBody * RigidBodies = new RigidBody[numOfObjects];
-    /*Init rigid bodies and implementation for them*/
-    for (int i = 0; i < numOfObjects / 2; i++)
-    {
-        const int idx = i * 2;
-        RigidBodies[idx].SetRadius(10);
-        RigidBodies[idx].SetCoordinates({ 500, 200.f + 60 * i });
-        RigidBodies[idx].SetSpeed({ 60, 15 });
-        RigidBodies[idx].SetMass(0.005f);
+	ui.CreateAchivementShower(font, PercentXY(1, 1));
 
-        RigidBodies[idx + 1].SetRadius(25);
-        RigidBodies[idx + 1].SetCoordinates({ 750, 250.f + 60 * i });
-        RigidBodies[idx + 1].SetSpeed({ -100, 40 });
-        RigidBodies[idx + 1].SetMass(0.01f);
-    }
+	ui.CreatePictureButton(resetButton->Get(), PercentXY(50, 90), "resetButton");
+	ui.Get<PictureButton>("resetButton")->_isVisible = false;
 
-    for (int i = 0; i < numOfObjects; ++i)
-    {
-        circles[i].setRadius(RigidBodies[i].GetRadius());
-        circles[i].setPosition(RigidBodies[i].GetX(), RigidBodies[i].GetY());
-    }
+	TextureResource* pause = rm->GetResource<TextureResource>("pause");
+	ui.CreatePicture(pause->Get(),PercentXY(50,50),"pause");
+	ui.Get<Picture>("pause")->_isVisible = false;
 
-    /*
-    DebugCommandManager manager
-    */
-    //DebugCommandManager manager;
-    //manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
-    //{
-    //	spaceship->SetDamage(0);
-    //} });
-    //manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
-    //{
-    //	spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
-    //} });
+	sf::Image* ptrAchievements = achievements->Get();
+	AchievementsManager achievementsManager(achievementCM, ptrAchievements, *achievementSound);
+	/*
+	For Menu
+	*/
+	TextureResource* background = rm->GetResource<TextureResource>("rocket");
+	TextureResource* play = rm->GetResource<TextureResource>("startButton");
+	TextureResource* exit = rm->GetResource<TextureResource>("exitButton");
+	TextureResource* leaders = rm->GetResource<TextureResource>("scoreButton");
+	UI menu(rw);
+	menu.CreatePictureButton(play->Get(), PercentXY(50, 35), "startButton");
+	menu.CreatePictureButton(leaders->Get(), PercentXY(50, 50), "scoreButton");
+	menu.CreatePictureButton(exit->Get(), PercentXY(50, 65), "exitButton");
+	
+	menu.SetBackground(background->Get());
+	/*
+	For Space
+	*/
+	TextureResource* asteroid = rm->GetResource<TextureResource>("asteroidTexture");
 
-    /*
-    Game Loop
-    */
+	sf::Texture asteroidTexture = asteroid->Get();
+	sf::Sprite spriteAsteroid(asteroidTexture);
 
-    //sf::RenderWindow rw(sf::VideoMode::getDesktopMode(), "Asteroids");
-    sf::RenderWindow rw(sf::VideoMode(1200, 800), "Asteroids");
-    WindowResolution::SetResolution(rw);
-    sf::Event sysEvent;
+	std::srand(std::time(nullptr));
 
-    /*
-    For Space
-    */
+	const int totalCountAsteroids = 100;
+	const int totalCountStar = (WindowResolution::_W / 50) * (WindowResolution::_H / 50) + 10;
+	Space space(totalCountAsteroids, totalCountStar, rw.getSize(), *rm);
 
-    TextureResource* asteroid = rm->GetResource<TextureResource>("asteroidTexture");
-    TextureResource* bulletBig = rm->GetResource<TextureResource>("bulletBig");
+	int _nStars = (WindowResolution::_W / 50) * (WindowResolution::_H / 50) - 300;
+	int _nAsteroids = (WindowResolution::_W / 200) + (WindowResolution::_H / 200);
 
-    sf::Texture asteroidTexture = asteroid->Get();
-    sf::Sprite spriteAsteroid(asteroidTexture);
-
-    std::srand(std::time(nullptr));
-
-    const int totalCountAsteroids = 100;
-    const int totalCountStar = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) + 10;
-    Space space(totalCountAsteroids, totalCountStar, rw.getSize());
+	space.AddSomeStars(_nStars);
+	space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
+	space.AddAmmunition(rm);
 
 
-    int _nStars = (WINDOW_WIDTH / 50) * (WINDOW_HEIGHT / 50) - 300;
-    int _nAsteroids = (WINDOW_WIDTH / 200) + (WINDOW_HEIGHT / 200) + 5;
+	/*
+	DebugCommandManager manager
+	*/
+	DebugCommandManager manager;
+	manager.addConsoleCommand({ "setInvincibility", [&spaceship](const std::vector<std::string>& args)
+	{
+		spaceship->SetDamage(0);
+	} });
 
-    space.AddSomeStars(_nStars);
-    space.AddSomeAsteroids(_nAsteroids, spriteAsteroid);
-    /*
-    For Debug Console
-    */
-    DebugConsole debugConsole(rw);
+	manager.addConsoleCommand({ "unsetInvincibility", [&spaceship, &spaceshipConfig](const std::vector<std::string>& args)
+	{
+		spaceship->SetDamage(atoi(spaceshipConfig.find("Damage")->second.c_str()));
+	} });
 
-    /*
-    For Log
-    */
-    Logger& log = Logger::GetInstance();
-    sf::Clock clock;
-    sf::Time deltaTime;
-    sf::Time fixedTime;
-    const sf::Time fixedUpdateTime = sf::milliseconds(2);
+	manager.addConsoleCommand({ "setCollidersVisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& args)
+	{
+		spaceship->SetColliderVisible(true);
+		space.SetColliderVisible(true);
+	} });
 
-    while (rw.isOpen())
-    {
-        deltaTime = clock.restart();
-        fixedTime += deltaTime;
+	manager.addConsoleCommand({ "setCollidersInvisible", [&spaceship, &space, &bulletManager](const std::vector<std::string>& args)
+	{
+		spaceship->SetColliderVisible(false);
+		space.SetColliderVisible(false);
+	} });
 
-        if (rw.pollEvent(sysEvent))
-        {
-            if (sysEvent.type == sf::Event::EventType::Closed)
-            {
-                break;
-            }
+	spaceship->SetColliderVisible(false);
+	space.SetColliderVisible(false);
 
-            if (input.GetMode() == InputMode::Raw)
-            {
-                input.HandleRawEvent(sysEvent);
-                debugConsole.setActiveConsoleStatus(true);
-            }
-            else
-            {
-                debugConsole.setActiveConsoleStatus(false);
-            }
-        }
 
-        input.Update();
+	/*
+	For Debug Console
+	*/
+	DebugConsole debugConsole(rw);
 
-        if (fixedTime > fixedUpdateTime)
-        {
-            //physics
-            size_t n = space.asteroids.size() - 1;
-            size_t m = space.asteroids.size();
-            size_t bulletsSize = bulletManager.bullets.size();
-            size_t rocketSize = bulletManager.rockets.size();
 
-            for (size_t i = 0; i < n; ++i)
-            {
-                for (size_t j = i + 1; j < m; ++j)
-                {
-                    if (Collided(*space.asteroids[i], *space.asteroids[j]))
-                    {
-                        collisionAsteroidVsAsteroid._asteroid1 = space.asteroids[i];
-                        collisionAsteroidVsAsteroid._asteroid2 = space.asteroids[j];
-                        ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
-                        dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
-                        dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
+	/*
+	For Log
+	*/
+	Logger& log = Logger::GetInstance();
 
-						collisionSound->Get().play();
-                    }
-                }
+	Token_t gameOver = dispatcher.Connect(resetGameEventID, [&](const Event& event)
+	{
+		space.Reset(_nAsteroids, spriteAsteroid);
+		spaceship->Reset(spaceshipConfig);
+		bulletManager.Reset();
+		achievementsManager.Reset();
+		leaderboard->UpdatePlayerStatistic(score);
+		leaderboard->UpdateLocalLeaderboard();
+		leaderboard->GetLeaderboard();	
+		score = 0;
+		ui.OnChangeScore(score);
+		isReset = true;
+	});
+	std::string topScore = leaderboard->GetLeaderboard();
+	menu.CreateLabel(topScore, font, PercentXY(10, 50), "leaderboard");
+	menu.Get<Label>("leaderboard")->_isVisible = false;
+	sf::Clock clock;
+	sf::Time fixedTime;
+	sf::Time deltaTime;
+	const sf::Time fixedUpdateTime = sf::milliseconds(3);
 
-                if (Collided(*space.asteroids[i], *spaceship))
-                {
-                    collisionAsteroidVsSpaceship._asteroid = space.asteroids[i];
-                    collisionAsteroidVsSpaceship._spaceship = spaceship;
-                    ResolveCollision(*space.asteroids[i], *spaceship);
-                    dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
-                    dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+	bool isGame = false;
+	while (rw.isOpen())
+	{
+		while (!isGame)
+		{
+			rw.clear();
+			menu.Render();
+			if (rw.pollEvent(sysEvent))
+			{
+				switch (sysEvent.type)
+				{
+				case sf::Event::MouseButtonPressed:
+					if(menu.Get<SfmlButton>("startButton")->IsClicked(sf::Mouse::getPosition(rw)))
+					{
+						isGame = true;
+						clock.restart();
+					}
+					if (menu.Get<SfmlButton>("exitButton")->IsClicked(sf::Mouse::getPosition(rw)))
+					{
+						isGame = true;
+						rw.close();
+					}
+					if (menu.Get<SfmlButton>("scoreButton")->IsClicked(sf::Mouse::getPosition(rw)))
+					{
+						menu.Get<Label>("leaderboard")->_isVisible == true ?
+							menu.Get<Label>("leaderboard")->_isVisible = false :
+							menu.Get<Label>("leaderboard")->_isVisible = true;						
+					}
+					break;
+					
+				default:
+					break;
+				}
+				
+			}
+		}
+		rw.clear();
+		deltaTime = clock.restart();
+		fixedTime += deltaTime;
 
-					collisionSound->Get().play();
-                }
+		input.Update();
+		ui.Get<Picture>("pause")->_isVisible = false;
+		if (input.GetMode() == InputMode::GameOver) {
+			gameOverManager.Update(fixedTime);
+		}
+		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
+		{
+			ui.Get<Picture>("pause")->_isVisible = true;
+			fixedTime = sf::Time::Zero;	
+		}
 
-                for (size_t j = 0; j < rocketSize; ++j)
-                {
-                    if (Collided(*space.asteroids[i], *bulletManager.rockets[j]))
-                    {
-                        collisionAsteroidVsRocket._asteroid = space.asteroids[i];
-                        collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
-                        ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
-                        dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-                        dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
 
-						explosionSound->Get().play();
+		if (rw.pollEvent(sysEvent))
+		{
+			if (sysEvent.type == sf::Event::MouseButtonPressed && ui.Get<PictureButton>("resetButton")->_isVisible && 
+					ui.Get<PictureButton>("resetButton")->IsClicked(sf::Vector2i(sysEvent.mouseButton.x, sysEvent.mouseButton.y)))
+			{
+				ResetGameEvent resetGameEvent;
+				dispatcher.Send(resetGameEvent, EventTypes::resetGameEventID);
+			}
 
-                        for (size_t k = 0; k < n; ++k)
-                        {
-                            if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
-                            {
-                                collisionAsteroidVsRocket._asteroid = space.asteroids[k];
-                                collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
-                                ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
-                                dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-                                dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+			if (input.GetMode() == InputMode::Raw || input.GetMode() == InputMode::PausedRaw)
+			{
+				input.HandleRawEvent(sysEvent);
+				debugConsole.setActiveConsoleStatus(true);
+			}
+			else
+			{
+				debugConsole.setActiveConsoleStatus(false);
+			}
+		}
 
-								explosionSound->Get().play();
-                            }
-                        }
-                    }
-                }
+		if (fixedTime > fixedUpdateTime)
+		{
 
-                for (size_t j = 0; j < bulletsSize; ++j)
-                {
-                    if (Collided(*space.asteroids[i], *bulletManager.bullets[j]))
-                    {
-                        collisionAsteroidVsBullet._asteroid = space.asteroids[i];
-                        collisionAsteroidVsBullet._bullet = bulletManager.bullets[j];
-                        ResolveCollision(*space.asteroids[i], *bulletManager.bullets[j]);
-                        dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
-                        dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, bulletManager.bullets[j]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
+			size_t bulletsSize = bulletManager.bullets.size();
+			size_t rocketSize = bulletManager.rockets.size();
+			//Input update
+			{
+				if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && (stateExit == ButtonsState::JustPressed || stateExit == ButtonsState::Pressed))
+				{
+					rw.close();
+				}
+			}
+			//Audio update
+			//Logic update
 
-						explosionSound->Get().play();
-                    }
-                }
-            }
+			size_t n = space.asteroids.size();
+			size_t m = space.asteroids.size();
 
-            //parse input
-            if (input.GetState(static_cast<int>(GameActions::MoveUp), stateMoveUp) && previousStateMoveUp != stateMoveUp)
-            {
-                std::cout << "MoveUp state - " << GetNameForState(stateMoveUp) << std::endl;
-                previousStateMoveUp = stateMoveUp;
-            }
-            if (input.GetState(static_cast<int>(GameActions::MoveDown), stateMoveDown) && previousStateMoveDown != stateMoveDown)
-            {
-                std::cout << "MoveDown state - " << GetNameForState(stateMoveDown) << std::endl;
-                previousStateMoveDown = stateMoveDown;
-            }
-            if (input.GetState(static_cast<int>(GameActions::MoveLeft), stateMoveLeft) && previousStateMoveLeft != stateMoveLeft)
-            {
-                std::cout << "MoveLeft state - " << GetNameForState(stateMoveLeft) << std::endl;
-                previousStateMoveLeft = stateMoveLeft;
-            }
-            if (input.GetState(static_cast<int>(GameActions::MoveRight), stateMoveRight) && previousStateMoveRight != stateMoveRight)
-            {
-                std::cout << "MoveRight state - " << GetNameForState(stateMoveRight) << std::endl;
-                previousStateMoveRight = stateMoveRight;
-            }
-            if (input.GetState(static_cast<int>(GameActions::Exit), stateExit) && stateExit == ButtonsState::JustPressed)
-            {
-                rw.close();
-                //previousStateExit = stateExit;
-            }
-            if (input.GetState(static_cast<int>(GameActions::Choose), stateChoose) && previousStateChoose != stateChoose)
-            {
-                std::cout << "Choose state - " << GetNameForState(stateChoose) << std::endl;
-                previousStateChoose = stateChoose;
-            }
-            if (input.GetState(static_cast<int>(GameActions::SuperShoot), statePowerfullShoot) && previousPowerfullShoot != statePowerfullShoot)
-            {
-                std::cout << "Choose state - " << GetNameForState(statePowerfullShoot) << std::endl;
-                previousPowerfullShoot = statePowerfullShoot;
+			for (size_t i = 0; i < n; ++i)
+			{
+				for (size_t j = i + 1; j < m; ++j)
+				{
+					
+					if (Collided(*space.asteroids[i], *space.asteroids[j]))
+					{
+						collisionAsteroidVsAsteroid._asteroid1 = space.asteroids[i];
+						collisionAsteroidVsAsteroid._asteroid2 = space.asteroids[j];
+						ResolveCollision(*space.asteroids[i], *space.asteroids[j]);
+						dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[i]->_tokens[collisionEventID]);
+						dispatcher.Send(collisionAsteroidVsAsteroid, collisionEventID, space.asteroids[j]->_tokens[collisionEventID]);
+					}
+				}
 
-				rocketSound->Get().play();
-            }
-            if (input.GetState(static_cast<int>(GameActions::Shoot), stateShoot) && previousStateShoot != stateShoot)
-            {
-                std::cout << "Shoot state - " << GetNameForState(stateShoot) << std::endl;
-                previousStateShoot = stateShoot;
+				if (Collided(*space.asteroids[i], *spaceship))
+				{
+					collisionAsteroidVsSpaceship._asteroid = space.asteroids[i];
+					collisionAsteroidVsSpaceship._spaceship = spaceship;
+					ResolveCollision(*space.asteroids[i], *spaceship);
+					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, spaceship->_tokens[collisionEventBetweenAsteroidAndSpaceshipID]);
+					dispatcher.Send(collisionAsteroidVsSpaceship, collisionEventBetweenAsteroidAndSpaceshipID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndSpaceship);
+				}
 
-				bulletSound->Get().play();
-            }
+				if (isReset)
+				{
+					isReset = false;
+					continue;
+				}
 
-            //Logic
-            space.Update(fixedTime);
-            spaceship->Update(fixedTime);
-            bulletManager.Update(fixedTime);
+				for (size_t j = 0; j < rocketSize; ++j)
+				{
+					if (Collided(*space.asteroids[i], *bulletManager.rockets[j]))
+					{
+						collisionAsteroidVsRocket._asteroid = space.asteroids[i];
+						collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
+						createExplosion.position = space.asteroids[i]->GetCoordinates();
+						ResolveCollision(*space.asteroids[i], *bulletManager.rockets[j]);
+						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndRocket);
+						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
+						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+						Scoring(space.asteroids[i]->_type);
+						ui.OnChangeScore(score);
 
-            fixedTime = sf::Time::Zero;
-        }
+						for (size_t k = 0; k < n; ++k) 
+						{
+							if (Collided(*space.asteroids[k], *bulletManager.rockets[j]))
+							{
+								collisionAsteroidVsRocket._asteroid = space.asteroids[k];
+								collisionAsteroidVsRocket._rocket = bulletManager.rockets[j];
+								ResolveCollision(*space.asteroids[k], *bulletManager.rockets[j]);
+								createExplosion.position = space.asteroids[k]->GetCoordinates();
+								dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
+								dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+								Scoring(space.asteroids[i]->_type);
+								ui.OnChangeScore(score);
+							}
+						}
+						bulletManager.DeleteRocket(bulletManager.rockets[j]);
+					}
+				}
 
-        rw.clear();
-        //Rendering update
-        //for (int i = 0; i < numOfObjects; ++i)
-        //{
-        //	rw.draw(circles[i]);
-        //}
-        //
-        //DebugConsole 
-        if (debugConsole.getActiveConsoleStatus())
-        {
-            debugConsole.Draw(rw);
-        }
-        drawableManager.DrawScene(rw);
-        //Display
-        rw.display();
-    }
+				for (auto bullet : bulletManager.bullets)
+				{
+					if (Collided(*space.asteroids[i], *bullet))
+					{
+						collisionAsteroidVsBullet._asteroid = space.asteroids[i];
+						collisionAsteroidVsBullet._bullet = bullet;
+						deleteBulletEvent._deletedBullet = bullet;
+						ResolveCollision(*space.asteroids[i], *bullet);
+						createExplosion.position = space.asteroids[i]->GetCoordinates();
+						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
+						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
+						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndBullet);
+						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet);
+						Scoring(space.asteroids[i]->_type);
+						ui.OnChangeScore(score);
+					}
+				}
+			}
+			{
+				for (auto asteroid : space.asteroids)
+				{
+					if (Collided(*asteroid, *space.ammunition))
+					{
+						collisionAmmunitionVsAsteroid.asteroid = asteroid;
+						collisionAmmunitionVsAsteroid.ammunition = space.ammunition;
+						ResolveCollision(*asteroid, *space.ammunition);
+						dispatcher.Send(collisionAmmunitionVsAsteroid, collisionEventID, asteroid->_tokens[collisionEventID]);
+						dispatcher.Send(collisionAmmunitionVsAsteroid, collisionEventBetweenAmmunitionAndAsteroidId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndAsteroidId]);
+					}
+				}
 
-    delete cm1;
-    return 0;
+				if (Collided(*spaceship, *space.ammunition))
+				{
+					collisionAmmunitionVsSpaceship.spaceship = spaceship;
+					collisionAmmunitionVsSpaceship.ammunition = space.ammunition;
+					ResolveCollision(*spaceship, *space.ammunition);
+					dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, spaceship->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
+					space.ammunition->capacity = 0;
+					dispatcher.Send(collisionAmmunitionVsSpaceship, collisionEventBetweenAmmunitionAndSpaceshipId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndSpaceshipId]);
+
+				}
+
+				for (auto rocket : bulletManager.rockets)
+				{
+					if (Collided(*rocket, *space.ammunition))
+					{
+						collisionAmmunitionVsRocket.rocket = rocket;
+						collisionAmmunitionVsRocket.ammunition = space.ammunition;
+						ResolveCollision(*rocket, *space.ammunition);
+						createExplosion.position = space.ammunition->GetCoordinates();
+						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
+						dispatcher.Send(collisionAmmunitionVsRocket, collisionEventBetweenAmmunitionAndRocketId, rocket->_tokens[collisionEventBetweenAmmunitionAndRocketId]);
+						dispatcher.Send(collisionAmmunitionVsRocket, collisionEventBetweenAmmunitionAndRocketId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndRocketId]);
+						bulletManager.DeleteRocket(rocket);
+					}
+					
+				}
+
+				for (auto bullet : bulletManager.bullets)
+				{
+					if (Collided(*bullet, *space.ammunition))
+					{
+						collisionAmmunitionVsBullet.bullet = bullet;
+						collisionAmmunitionVsBullet.ammunition = space.ammunition;
+						ResolveCollision(*bullet, *space.ammunition);
+						createExplosion.position = space.ammunition->GetCoordinates();
+						deleteBulletEvent._deletedBullet = bullet;
+						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
+						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet); 
+						dispatcher.Send(collisionAmmunitionVsBullet, collisionEventBetweenAmmunitionAndBulletId, space.ammunition->_tokens[collisionEventBetweenAmmunitionAndBulletId]);
+					}
+				}
+			}
+
+			space.Update(fixedTime.asSeconds());
+			spaceship->Update(fixedTime);
+			bulletManager.Update(fixedTime);
+			achievementsManager.Update(fixedTime, ui);
+			fixedTime = sf::Time::Zero;
+		}
+	
+		//Rendering update
+		//DebugConsole 
+		if (debugConsole.getActiveConsoleStatus())
+		{
+			debugConsole.Draw(rw);
+		}
+		drawableManager.DrawScene(rw);
+		ui.Render();
+	}
+	
+	if (leaderboard != nullptr) {
+		delete leaderboard;
+	}
+
+	dispatcher.Disconnect(gameOverEventID, gameOver);
+	delete cm1;
+	delete achievementCM;
+	return 0;
 }

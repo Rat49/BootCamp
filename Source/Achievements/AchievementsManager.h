@@ -7,24 +7,33 @@
 #include "UI.h"
 #include "ResourceManager.h"
 #include "SFML\Graphics.hpp"
+#include <algorithm>
 #include <vector>
 #include <map>
+#include <math.h>
 
 class AchievementsManager
 {
 private:
-	std::map<const std::string, std::vector<Achievement>> _achievementsStorage;
+	std::vector<Achievement> _achievementsStorage;
 	sf::Image* _achievementPicture;
-
-	Token_t _tokenForCollisionEventBetweenAsteroidAndBullet;
+	sf::Time _noDamageTimer;
+	sf::Time _destroyTimer;
+	sf::Time _afterFirstBigAsteroidFrag;
+	sf::Time _afterFirstMiddleAsteroidFrag;
+	sf::Time _afterFirstSmallAsteroidFrag;
+	AudioResource _audio;
 public:
-	AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture);
+	Token_t tokenForCollisionEventBetweenAsteroidAndBullet;
+	Token_t tokenForCollisionEventBetweenAsteroidAndRocket;
+	Token_t tokenForCollisionEventBetweenAsteroidAndSpaceship;
+	
+	AchievementsManager(ConfigManager* achievementCM, sf::Image* achievementPicture, AudioResource &audio);
 	~AchievementsManager();
 
-	void Update(const sf::Time& deltaTime);
-	void DestroyAchievementsHandler(const AsteroidType& type);
-	void TimeAchievementsHandler();
-	void DestroyAndTimeAchievementsHandler(const AsteroidType& type);
-	void ShowAchievement(UI& achievUI);
+	void DestroyAchievementsStatus(const AsteroidType& type);
+	void DestroyTimerCheck(const sf::Time& destroyTimer, const AsteroidType& type);
+	void ActiveStatusCheck(Achievement& achiev);
+	void Update(const sf::Time& deltaTime,UI& achievUI);
+	void Reset();
 };
-

@@ -1,38 +1,51 @@
 #pragma once
 #include "Particles.h"
-#include "Pool.h"
 class RocketParticle : public PoolElement
 {
 public:
 	ParticleSystem particles;
 
-	RocketParticle(unsigned int /*quantity*/, sf::Vector2u window) :
-		particles(700, window) {
-		particles.SetNormalDistrParams(0, 7);
+	RocketParticle(unsigned int quantity) :
+		particles(quantity)
+	{
+		particles.SetNormalDistrParams(0, 12);
 		particles.SetStandartColors();
-		particles.SetParticlesLifetime(700);
-		particles.SetRate(100);
+		particles.SetParticlesLifetime(400);
+		particles.SetRate(30);
 	}
 
-	RocketParticle() : RocketParticle(1000, sf::Vector2u(500, 500)) {}
+	RocketParticle() : RocketParticle(500) {}
 
 	void SetPosition(sf::Vector2f position) {
 		particles.SetEmitterPosition(position);
 	}
 
-	void SetVelocity(sf::Vector2f velocity) {
-		particles.SetEmitterVelocity(velocity);
-		particles.AddCircleForceBehind(0.5f, 20, -2);
-		particles.AddCircleForceBehind(1.5f, 20, 0.3f);
-		particles.AddCircleForceBehind(2.5f, 20, -2);
-		particles.AddCircleForceBehind(3.5f, 20, 0.5f);
+	void AddForces() {
+		particles.AddCircleForceBehind(0.2f, 20, -1);
+		particles.AddCircleForceBehind(0.4f, 20, 0.3f);
+		particles.AddCircleForceBehind(0.6f, 20, -1);
+		particles.AddCircleForceBehind(0.8f, 20, 0.5f);
 	}
 
-	void Reset(){}
+	void SetVelocity(sf::Vector2f velocity) {
+		particles.SetEmitterVelocity(velocity);
+	}
+
+	void Reset(){
+		particles.end = false;
+		particles.fading = false;
+		particles.SetRate(30);
+		particles.InitializeParticles();
+	}
+
+	void Play() {
+		particles.AddToDrawableManager();
+	}
 
 	void Stop() {
 		particles.SetRate(0);
 	}
+
 
 	void Update(sf::Time deltaTime) {
 		particles.Update(deltaTime);
@@ -43,19 +56,23 @@ public:
 	}
 };
 
-class ExplosionParticle {
+class ExplosionParticle : public PoolElement {
 public:
 	ParticleSystem particles;
 	sf::Time reccomendedLifeTime = sf::seconds(0.2f);
 
-	ExplosionParticle(unsigned int /*quantity*/, sf::Vector2u window) :
-		particles(1000, window) {
-		particles.SetRate(150);
+	ExplosionParticle(unsigned int quantity) :
+		particles(quantity) {
+		particles.SetRate(30);
 		particles.SetNormalDistrParams(0, 160);
-		particles.SetParticlesLifetime(500);
+		particles.SetParticlesLifetime(100);
 		particles.SetStandartColors();
-
+		particles.SetSpeed(400.f);
+		particles.AddToDrawableManager();
+		reccomendedLifeTime = sf::seconds(0.13f);
 	}
+
+	ExplosionParticle() : ExplosionParticle(500) {}
 
 	void SetPosition(sf::Vector2f position) {
 		particles.SetEmitterPosition(position);
@@ -63,6 +80,23 @@ public:
 
 	void Stop() {
 		particles.SetRate(0);
+	}
+
+	void Reset() {
+		particles.fading = false;
+		particles.end = false;
+		particles.SetRate(30);
+		particles.InitializeParticles();
+		reccomendedLifeTime = sf::seconds(0.2f);
+	}
+
+	void Play() {
+		particles.AddToDrawableManager();
+	/*	particles.fading = false;
+		particles.SetRate(150);
+		particles.InitializeParticles();
+		reccomendedLifeTime = sf::seconds(0.2f);
+		particles.Update(sf::seconds(0.2f));*/
 	}
 
 	void Update(sf::Time deltaTime) {
@@ -84,8 +118,8 @@ class SpaceshipParticle {
 public:
 	ParticleSystem particles;
 
-	SpaceshipParticle(unsigned int /*quantity*/, sf::Vector2u window) :
-		particles(1000, window) {
+	SpaceshipParticle(unsigned int /*quantity*/) :
+		particles(500) {
 		particles.SetParticlesLifetime(50);
 	}
 

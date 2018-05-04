@@ -1,34 +1,33 @@
 #pragma once
-#include <string>
-#include <SFML\System\Vector2.hpp>
-#include <SFML\Graphics\RenderWindow.hpp>
+#include <SFML\Graphics.hpp>
 
-class Widget
+class UI;
+class Widget 
 {
 public:
-	Widget(const std::string & name, const sf::Vector2f position, sf::RenderWindow & owner);
-	virtual ~Widget();
-
+	
+	const std::string _name;
+	
 	void SetPosition(const sf::Vector2f position);
 	void SetScale(const sf::Vector2f scale);
 
-	sf::Vector2f GetPosition() const;
+	sf::Vector2f GetPosition() const;	
 	sf::Vector2f GetScale() const;
 
 	void Resize();
-	virtual void Draw() {}
 
-protected:
-	void operator=(const Widget&) = delete;
-	Widget(const Widget&) = delete;
+	virtual void Draw() {};
 
-	virtual void OnResize() {}
-
-	sf::RenderWindow & _window;
-
+	virtual ~Widget();
 private:
 	sf::Vector2f _position;
 	sf::Vector2f _scale;
-	const std::string _name;
+protected:
+
+	void operator=(const Widget&) = delete;
+	Widget(const Widget&) = delete;
+	Widget(const std::string & name, const sf::Vector2f position, sf::RenderWindow & owner);
+	virtual void OnResize() {};
+	sf::RenderWindow & _window;
 };
 

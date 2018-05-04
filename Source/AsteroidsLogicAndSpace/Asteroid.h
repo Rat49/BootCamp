@@ -18,13 +18,15 @@ public:
 	Asteroid();
 
 	void Init(const sf::Sprite &sprite, const sf::Vector2u &size);
-	void InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &position, const AsteroidType type, const sf::Vector2u &size);
+	void InitFromCrash(const sf::Sprite &sprite, const sf::Vector2f &position, const AsteroidType type, const sf::Vector2u &size, bool isColliderVisible);
 	void Update(float time) override;
 	void Draw(sf::RenderWindow &window) override;
 	void Reset() override;
 	void AddToDrawableManager() override;
 	void Remove() override;
 	void OnCollisionHandler(const Event& cEvent);
+	sf::Vector2f GetCoordinates();
+
 
 	void OnRocketCollisionHandler(const Event & cEvent);
 

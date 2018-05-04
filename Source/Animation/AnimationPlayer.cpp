@@ -1,6 +1,5 @@
 #include "AnimationPlayer.h"
 #include <SFML\Graphics.hpp>
-#include <cassert>
 
 AnimationPlayer::AnimationPlayer()
 {

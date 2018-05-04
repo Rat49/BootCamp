@@ -1,22 +1,29 @@
 #pragma once
-#include "EventSystem.h"
-#include "CollisionEvent.h"
-#include "BulletManagerEvents.h"
 #include "AnimationPlayer.h"
+#include "Ammunition.h"
+#include "BulletManagerEvents.h"
+#include "CollisionEvent.h"
+#include "DrawableManager.h"
+#include "EventSystem.h"
+#include "GameOverEvent.h"
 #include "ImageSequenceResource.h"
 #include "Input.h"
+#include "Mathematics.h"
 #include "Physics.h"
 #include "Pool.h"
-#include "DrawableManager.h"
-#include "Mathematics.h"
+#include "SpaceshipRespawnEvent.h"
+#include "UpdateSpaceshipStateEvent.h"
+
 #include <math.h>
 #include <algorithm>
+
+static float coefficientOfAnimation = 2.5f;
 
 class Spaceship : public RigidBody, public Drawable
 {
 public:
-	Spaceship(const sf::Vector2f& position, const sf::Vector2f& speed, InputManager& input, 
-		ImageSequenceResource& spaceshipAnimationImseq, ImageSequenceResource& spaceshipFlickeringImseq);
+	Spaceship(const std::multimap<const std::string, const std::string>& spaceshipConfig, InputManager& input, ImageSequenceResource& spaceshipAnimationImseq,
+		ImageSequenceResource& spaceshipFlickeringImseq, ResourceManager &rm);
 	~Spaceship();
 
 	void Accelerate();
@@ -24,15 +31,19 @@ public:
 	void PowerfulShoot();
 	void OrdinaryShoot();
 	void RotateSpaceship(float angle);
+	void OnAmmunitionCollisionHandler(const Event & cEvent);
 	void Update(const sf::Time& deltaTime);
 	void AddToDrawableManager() override;
-
+	void SetDamage(unsigned int damage);
+	void Reset(const std::multimap<const std::string, const std::string>& spaceshipConfig);
+	
 private:
-	unsigned int _liveCount;
+	
 	bool _isDamaged;
 	const sf::Vector2f _initialDirection;
 	sf::Vector2f _spaceshipDirection;
 	sf::Vector2f _speedDirection;
+	sf::Vector2f _spaceshipSpeed;
 	sf::Sprite* _spaceshipSprite;
 	AnimationPlayer* _spaceshipAnimation;
 	ImageSequenceResource& _spaceshipAnimationImseq;
@@ -46,6 +57,7 @@ private:
 	const float _shotIndentValue;
 
 	Token_t _tokenForCollisionEventBetweenAsteroidAndSpaceship;
+	Token_t _tokenForCollisionEventBetweenAmmunitionAndSpaceship;
 	InputManager& _input;
 	const sf::Time _inputTime;
 	sf::Time _inputAccumulatedTime;
@@ -54,8 +66,23 @@ private:
 	const sf::Time _rechargeBulletTime;
 	sf::Time _timeAfterPowerfulShot;
 	sf::Time _timeAfterBulletShot;
+
 	const float _bulletRebound;
 	const float _rocketRebound;
+	const int _maxBulletCount = 90;
+	const int _maxRocketCount = 10;
+	const int _maxHP = 100;
+	unsigned int _bulletCount = 90;
+	unsigned int _rocketCount = 10;
+
+	const unsigned int _maxLifeCount;
+	unsigned int _liveCount;
+	int _HP;
+	unsigned int _damage;
+
+	AudioResource* _bulletSound;
+	AudioResource * _rocketSound;
+	AudioResource * _collisionSound;
 
 	void ControlSpeed(float deltaSpeed);
 	void GainRebound(float reboundValue);
@@ -63,4 +90,6 @@ private:
 	void SetNormalMode();
 	int GetZOrder() const override;
 	void Draw(sf::RenderWindow& window) override;
+	
+
 };
