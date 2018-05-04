@@ -13,7 +13,6 @@ enum class GameActions {
 	MoveLeft,
 	MoveRight,
 	Exit,
-	Choose,
 	Shoot,
 	SuperShoot,
 	Console,
