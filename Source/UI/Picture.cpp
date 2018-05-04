@@ -8,6 +8,7 @@ Picture::Picture(const sf::Texture & img, const sf::Vector2f position, const std
 	_texture(img)
 {
 	_sprite.setTexture(_texture);
+	_sprite.setOrigin(_sprite.getLocalBounds().width / 2, _sprite.getLocalBounds().height / 2);
 }
 
 

@@ -5,6 +5,8 @@ PictureButton::PictureButton(const sf::Texture& picture, const sf::Vector2f posi
 	_texture(picture)
 {
 	_body.setSize(static_cast<sf::Vector2f>(picture.getSize()));
+	_picture.setOrigin(_body.getLocalBounds().width / 2, _body.getLocalBounds().height / 2);
+	_body.setOrigin(_body.getLocalBounds().width / 2, _body.getLocalBounds().height / 2);
 	_picture.setTexture(_texture);
 }
 

@@ -41,7 +41,7 @@ UI::UI(sf::RenderWindow & window) :
 void UI::SetBackground(const sf::Texture & texture)
 {
 	const sf::Vector2f scale(_window.getSize().x / texture.getSize().x, _window.getSize().y / texture.getSize().y);
-	_background = new Picture(texture, sf::Vector2f(0, 0), "background", _window);
+	_background = new Picture(texture, RelativeCordToAbs(PercentXY(50,50)), "background", _window);
 	_background->SetScale(scale);
 	_background->OnResize();
 }

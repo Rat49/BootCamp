@@ -189,6 +189,9 @@ int main()
 	ui.CreatePictureButton(resetButton->Get(), PercentXY(35, 50), "resetButton");
 	ui.Get<PictureButton>("resetButton")->isVisible = false;
 
+	TextureResource* pause = rm->GetResource<TextureResource>("pause");
+	ui.CreatePicture(pause->Get(),PercentXY(50,50),"pause");
+	ui.Get<Picture>("pause")->_isVisible = false;
 
 	sf::Image* ptrAchievements = achievements->Get();
 	AchievementsManager achievementsManager(achievementCM, ptrAchievements, *achievementSound);
@@ -196,9 +199,11 @@ int main()
 	For Menu
 	*/
 	TextureResource* background = rm->GetResource<TextureResource>("rocket");
+	TextureResource* play = rm->GetResource<TextureResource>("startButton");
+	TextureResource* exit = rm->GetResource<TextureResource>("exitButton");
 	UI menu(rw);
-	menu.CreateButton(font, sf::Vector2f(100, 50), PercentXY(50, 50), "play");
-	menu.CreateButton(font, sf::Vector2f(100, 50), PercentXY(50, 60), "quit");
+	menu.CreatePictureButton(play->Get(), PercentXY(50, 50), "startButton");
+	menu.CreatePictureButton(exit->Get(), PercentXY(50, 65), "exitButton");
 	menu.SetBackground(background->Get());
 	/*
 	For Space
@@ -299,12 +304,12 @@ int main()
 				switch (sysEvent.type)
 				{
 				case sf::Event::MouseButtonPressed:
-					if(menu.Get<SfmlButton>("play")->IsClicked(sf::Mouse::getPosition(rw)))
+					if(menu.Get<SfmlButton>("startButton")->IsClicked(sf::Mouse::getPosition(rw)))
 					{
 						isGame = true;
 						clock.restart();
 					}
-					if (menu.Get<SfmlButton>("quit")->IsClicked(sf::Mouse::getPosition(rw)))
+					if (menu.Get<SfmlButton>("exitButton")->IsClicked(sf::Mouse::getPosition(rw)))
 					{
 						isGame = true;
 						rw.close();
@@ -322,11 +327,13 @@ int main()
 		fixedTime += deltaTime;
 
 		input.Update();
+		ui.Get<Picture>("pause")->_isVisible = false;
 		if (input.GetMode() == InputMode::GameOver) {
 			gameOverManager.Update(fixedTime);
 		}
 		if (input.GetMode() == InputMode::Paused || input.GetMode() == InputMode::PausedRaw)
 		{
+			ui.Get<Picture>("pause")->_isVisible = true;
 			fixedTime = sf::Time::Zero;	
 		}
 
