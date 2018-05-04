@@ -2,7 +2,7 @@
 
 
 
-MainMenu* MainMenu::Create(sf::Vector2<float> windowSize, UI& ui) {
+MainMenu* MainMenu::Create(sf::Vector2<float> windowSize, sf::Font& font, UI& ui) {
 
 	MainMenu *mm = new MainMenu();
 
@@ -14,18 +14,18 @@ MainMenu* MainMenu::Create(sf::Vector2<float> windowSize, UI& ui) {
 
 	sf::Vector2f buttonSize = {buttonWidth, buttonHight};
 
-	mm->loginButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 30), "Login"));
-	mm->registerButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 35), "Register"));
-	mm->newGameButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 40), "New Game"));
-	mm->optionsButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 45), "Options"));
-	mm->leaderboardButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 50), "Leaderboard"));
+	mm->loginButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 30), "Login"));
+	mm->registerButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 35), "Register"));
+	mm->newGameButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 40), "NewGame"));
+	mm->optionsButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 45), "Options"));
+	mm->leaderboardButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 50), "Leaderboard"));
 
-	mm->logInUserButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 60), "Log In"));
-	mm->registerUserButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 60), "Register"));
-	mm->goBackButton = dynamic_cast<SfmlButton*>(ui.CreateButton(buttonSize, PercentXY(50, 80), "Go Back"));
+	mm->logInUserButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 60), "LogIn"));
+	mm->registerUserButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 60), "Register"));
+	mm->goBackButton = dynamic_cast<SfmlButton*>(ui.CreateButton(font, buttonSize, PercentXY(50, 80), "GoBack"));
 
-	//mm->volumeLabel = dynamic_cast<Label*>(ui.CreateLabel("Set the volume of sounds", );
-	mm->volumeBar = dynamic_cast<ScrollBar*>(ui.CreateScrollBar(buttonWidth, PercentXY(50, 60), "Volume"));
+	mm->volumeLabel = dynamic_cast<Label*>(ui.CreateLabel("Set the volume of sounds", font, PercentXY(50, 40), "VolumeLabel"));
+	mm->volumeBar = dynamic_cast<ScrollBar*>(ui.CreateScrollBar(buttonWidth, PercentXY(50, 60), "VolumeBar"));
 
 	return mm;
 }
@@ -173,7 +173,7 @@ bool MainMenu::IsButtonPressed(Buttons buttonID) const{
 }
 
 void MainMenu::OnNewGameButtonPressed() {
-
+	currentStatus = GAME;
 }
 
 void MainMenu::OnLeaderboardButtonPressed() {
@@ -214,31 +214,33 @@ MainMenu::~MainMenu() {
 	if (loginButton != nullptr) {
 		delete loginButton;
 	}
-
 	if (registerButton != nullptr) {
 		delete registerButton;
 	}
-
 	if (newGameButton != nullptr) {
 		delete newGameButton;
 	}
-
 	if (optionsButton != nullptr) {
 		delete optionsButton;
 	}
-
 	if (leaderboardButton != nullptr) {
 		delete leaderboardButton;
 	}
-
+	if (logInUserButton != nullptr) {
+		delete logInUserButton;
+	}
+	if (registerUserButton != nullptr) {
+		delete registerUserButton;
+	}
+	if (goBackButton != nullptr) {
+		delete goBackButton;
+	}
 	if (volumeLabel != nullptr) {
 		delete volumeLabel;
 	}
-
 	if (volumeBar != nullptr) {
 		delete volumeBar;
 	}
-
 	if (lboard != nullptr) {
 		delete lboard;
 	}

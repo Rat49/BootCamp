@@ -18,6 +18,25 @@ std::string GetNameForState(ButtonsState bState) {
 	}
 }
 
+static int score = 0;
+
+void Scoring(AsteroidType type)
+	switch (type)
+{
+	{
+	case AsteroidType::Middle:
+
+	}
+};
+		break;
+		score += 10;
+	case AsteroidType::Big:
+	default:
+		break;
+		score += 20;
+	case AsteroidType::Small:
+		break;
+		score += 15;
 int main()
 {
 	/*
@@ -30,17 +49,14 @@ int main()
 	bool isReset = false;
 	Leaderboard *leaderboard = Leaderboard::Create();
 	bool createAccount = true;
-	leaderboard->Login("ok");
-	leaderboard->UpdateUserTitleDisplayName("ok1");
-	leaderboard->UpdatePlayerStatistic(1000);
-
-	leaderboard->UpdateLocalLeaderboard();
-	leaderboard->leaderboard;
-
-
-	if (leaderboard != NULL) {
-		delete leaderboard;
-	}
+	std::string name;
+	
+	std::cout << "Enter your name:" << std::endl;
+	std::cin >> name;
+	leaderboard->Login(name, createAccount);
+	leaderboard->Login(name);
+	//leaderboard->UpdateUserTitleDisplayName("ok1");
+	leaderboard->UpdatePlayerStatistic(score);
 
 
 	/*
@@ -252,6 +268,15 @@ int main()
 		spaceship->Reset(spaceshipConfig);
 		bulletManager.Reset();
 		achievementsManager.Reset();
+		leaderboard->UpdatePlayerStatistic(score);
+		leaderboard->UpdateLocalLeaderboard();
+		leaderboard->leaderboard;
+
+		if (leaderboard != nullptr) {
+			delete leaderboard;
+		}
+		score = 0;
+		ui.OnChangeScore(score);
 		isReset = true;
 	});
 
@@ -358,6 +383,8 @@ int main()
 						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndRocket);
 						dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 						dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, bulletManager.rockets[j]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
+						Scoring(space.asteroids[i]->_type);
+						ui.OnChangeScore(score);
 
 						for (size_t k = 0; k < n; ++k) 
 						{
@@ -369,7 +396,8 @@ int main()
 								createExplosion.position = space.asteroids[k]->GetCoordinates();
 								dispatcher.Send(createExplosion, createExplosionEvent, space._createExplosion);
 								dispatcher.Send(collisionAsteroidVsRocket, collisionEventBetweenAsteroidAndRocketID, space.asteroids[k]->_tokens[collisionEventBetweenAsteroidAndRocketID]);
-						
+								Scoring(space.asteroids[i]->_type);
+								ui.OnChangeScore(score);
 							}
 						}
 						bulletManager.DeleteRocket(bulletManager.rockets[j]);
@@ -389,6 +417,8 @@ int main()
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, space.asteroids[i]->_tokens[collisionEventBetweenAsteroidAndBulletID]);
 						dispatcher.Send(collisionAsteroidVsBullet, collisionEventBetweenAsteroidAndBulletID, achievementsManager.tokenForCollisionEventBetweenAsteroidAndBullet);
 						dispatcher.Send(deleteBulletEvent, deleteBulletEventID, bulletManager.deleteBullet);
+						Scoring(space.asteroids[i]->_type);
+						ui.OnChangeScore(score);
 					}
 				}
 			}
@@ -464,7 +494,7 @@ int main()
 		drawableManager.DrawScene(rw);
 		ui.Render();
 	}
-
+	
 	dispatcher.Disconnect(gameOverEventID, gameOver);
 	delete cm1;
 	delete achievementCM;
